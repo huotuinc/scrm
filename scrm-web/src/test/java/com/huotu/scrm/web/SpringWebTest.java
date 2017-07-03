@@ -24,6 +24,7 @@ public class SpringWebTest {
 
     @Before
     public void setup() {
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
         this.webClient = MockMvcWebClientBuilder
                 .mockMvcSetup(this.mockMvc)
