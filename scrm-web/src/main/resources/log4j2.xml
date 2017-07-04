@@ -17,7 +17,7 @@
         <RollingFile name="ServerDailyRollingFile" filename="logs/scrm/scrm.log"
                      filePattern="logs/scrm/$${date:yyyy-MM}/scrm-%d{yyyy-MM-dd-HH}-%i.log">
             <PatternLayout>
-                <pattern>%d - [%p]%m%n</pattern>
+                <pattern>%d - [%p]%C%L%m%n</pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="24" modulate="true"/>
