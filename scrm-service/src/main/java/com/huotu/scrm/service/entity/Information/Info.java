@@ -16,6 +16,10 @@ public class Info {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
 
+    /**
+     * 商户号
+     */
+    private int CustomId;
 
     /**
      * 资讯标题
