@@ -4,17 +4,19 @@ import com.huotu.scrm.service.Enum.InfoStatusEnum;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by luohaibo on 2017/7/5.
  */
 @Entity
 @Data
+@Table(name = "Scrm_Info")
 public class Info {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long Id;
+    private Long Id;
 
     /**
      * 商户号
@@ -42,7 +44,7 @@ public class Info {
      * 资讯创建时间
      */
     @Temporal(TemporalType.TIMESTAMP)
-    private String InfoCreateDate;
+    private Date InfoCreateDate;
 
 
     /**
@@ -60,7 +62,6 @@ public class Info {
     /**
      * 资讯外部链接
      */
-    @Temporal(TemporalType.TIMESTAMP)
     private String InfoOutLink;
 
 

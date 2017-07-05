@@ -16,7 +16,7 @@ public interface InforListRepository extends JpaRepository<Info,Long>{
      * @param id
      * @return
      */
-    Info findInfoById(long id);
+    Info findById(Long id);
 
 
 
