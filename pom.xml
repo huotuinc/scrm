@@ -82,6 +82,13 @@
             <version>2.3.0</version>
             <scope>test</scope>
         </dependency>
+        <!--jackson start-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <!--jackson end-->
         <!--selenium start-->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>

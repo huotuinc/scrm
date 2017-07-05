@@ -40,13 +40,6 @@
             <version>${thymeleaf.extras.version}</version>
         </dependency>
         <!--thymeleaf end-->
-        <!--jackson start-->
-        <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <!--jackson end-->
     </dependencies>
 
     <build>
