@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.entity.Information;
 
-import com.huotu.scrm.service.Enum.InfoStatusEnum;
+import com.huotu.scrm.service.enuma.InfoStatusEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -16,66 +16,67 @@ public class Info {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Column(name = "ID")
+    private Long id;
 
     /**
      * 商户号
      */
-    private int CustomId;
+    private int customId;
 
     /**
      * 资讯标题
      */
-    private String InfoTitle;
+    private String infoTitle;
 
 
     /**
      * 资讯简介
      */
-    private String InfoIntro;
+    private String infoIntro;
 
 
     /**
      * 资讯图
      */
-    private String InfoImageUrl;
+    private String infoImageUrl;
 
     /**
      * 资讯创建时间
      */
     @Temporal(TemporalType.TIMESTAMP)
-    private Date InfoCreateDate;
+    private Date infoCreateDate;
 
 
     /**
      * 资讯状态
      */
-    private InfoStatusEnum InfoStatus;
+    private InfoStatusEnum infoStatus;
 
 
     /**
      * 资讯推广状态
      */
-    private boolean  InfoExtend = false;
+    private boolean  infoExtend = false;
 
 
     /**
      * 资讯外部链接
      */
-    private String InfoOutLink;
+    private String infoOutLink;
 
 
     /**
      * 资讯转发记录
      */
-    private String InfoTurnUrl;
+    private String infoTurnUrl;
 
 
 
     /**
      * 资讯访问记录
      */
-    private String InfoVisitUrl;
+    private String infoVisitUrl;
 
 
 }

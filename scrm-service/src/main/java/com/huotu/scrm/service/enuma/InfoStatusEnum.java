@@ -1,6 +1,4 @@
-package com.huotu.scrm.service.Enum;
-
-import org.springframework.stereotype.Component;
+package com.huotu.scrm.service.enuma;
 
 /**
  * Created by luohaibo on 2017/7/4.
