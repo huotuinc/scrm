@@ -25,7 +25,7 @@ public class Info {
     /**
      * 商户号
      */
-    @Column(name = "CustomId")
+    @Column(name = "Custom_Id")
     private int customId;
 
     /**
