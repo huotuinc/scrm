@@ -29,56 +29,56 @@ public class Info {
      * 资讯标题
      */
     @Column(name = "Title")
-    private String infoTitle;
+    private String title;
 
 
     /**
      * 资讯简介
      */
     @Column(name = "Introduce")
-    private String infoIntro;
+    private String introduce;
 
 
     /**
      * 资讯详情
      */
     @Column(name = "Content")
-    private String infoContent;
+    private String content;
 
 
     /**
      * 资讯图
      */
     @Column(name = "Image")
-    private String infoImageUrl;
+    private String imageUrl;
 
 
     /**
      * 资讯缩略图
      */
-    @Column(name = "Thumbnail_image")
-    private String thumbnailImage;
+    @Column(name = "Thumbnail_Image")
+    private String thumbnailImageUrl;
 
     /**
      * 资讯创建时间
      */
     @Column(name = "Create_Date")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date infoCreateDate;
+    private Date createDate;
 
 
     /**
      * 资讯状态
      */
     @Column(name = "Status")
-    private InfoStatusEnum infoStatus;
+    private InfoStatusEnum status;
 
 
     /**
      * 资讯推广状态
      */
     @Column(name = "Extend")
-    private boolean  infoExtend = false;
+    private boolean  extend = false;
 
 
     /**
