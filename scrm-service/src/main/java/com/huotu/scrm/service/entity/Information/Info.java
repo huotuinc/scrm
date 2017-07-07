@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.entity.Information;
 
-import com.huotu.scrm.service.enuma.InfoStatusEnum;
+import com.huotu.scrm.service.ienum.InfoStatusEnum;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,7 +11,7 @@ import java.util.Date;
  */
 @Entity
 @Data
-@Table(name = "Scrm_Info")
+@Table(name = "SCRM_Info")
 public class Info {
 
     @Id
@@ -22,28 +22,47 @@ public class Info {
     /**
      * 商户号
      */
+    @Column(name = "CustomId")
     private int customId;
 
     /**
      * 资讯标题
      */
+    @Column(name = "Title")
     private String infoTitle;
 
 
     /**
      * 资讯简介
      */
+    @Column(name = "Introduce")
     private String infoIntro;
+
+
+    /**
+     * 资讯详情
+     */
+    @Column(name = "Content")
+    private String infoContent;
 
 
     /**
      * 资讯图
      */
+    @Column(name = "Image")
     private String infoImageUrl;
+
+
+    /**
+     * 资讯缩略图
+     */
+    @Column(name = "Thumbnail_image")
+    private String thumbnailImage;
 
     /**
      * 资讯创建时间
      */
+    @Column(name = "Create_Date")
     @Temporal(TemporalType.TIMESTAMP)
     private Date infoCreateDate;
 
@@ -51,32 +70,29 @@ public class Info {
     /**
      * 资讯状态
      */
+    @Column(name = "Status")
     private InfoStatusEnum infoStatus;
 
 
     /**
      * 资讯推广状态
      */
+    @Column(name = "Extend")
     private boolean  infoExtend = false;
 
 
     /**
-     * 资讯外部链接
+     * 资讯分享标题
      */
-    private String infoOutLink;
+    @Column(name = "Share_Title")
+    private String  shareTitle;
 
 
     /**
-     * 资讯转发记录
+     * 资讯分享详情
      */
-    private String infoTurnUrl;
-
-
-
-    /**
-     * 资讯访问记录
-     */
-    private String infoVisitUrl;
+    @Column(name = "Share_Description")
+    private String  shareDescription;
 
 
 }

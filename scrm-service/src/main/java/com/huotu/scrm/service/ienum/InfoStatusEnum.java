@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.enuma;
+package com.huotu.scrm.service.ienum;
 
 /**
  * Created by luohaibo on 2017/7/4.
@@ -7,8 +7,8 @@ package com.huotu.scrm.service.enuma;
 public enum InfoStatusEnum {
 
     published(1, "已发布"),
-    unpublished(-1, "未发布"),
-    delete(-2, "已删除");
+    unpublished(0, "未发布"),
+    delete(-1, "已删除");
 
     private final int value;
     private final String description;
