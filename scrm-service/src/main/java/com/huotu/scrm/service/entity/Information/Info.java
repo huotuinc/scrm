@@ -2,6 +2,8 @@ package com.huotu.scrm.service.entity.Information;
 
 import com.huotu.scrm.service.ienum.InfoStatusEnum;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,7 +12,8 @@ import java.util.Date;
  * Created by luohaibo on 2017/7/5.
  */
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "SCRM_Info")
 public class Info {
 
