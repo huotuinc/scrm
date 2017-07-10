@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.service.Impl;
 
-import com.huotu.scrm.service.repository.InforListRepository;
+import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.service.InforServer;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class InforServerImpl implements InforServer {
 
     @Autowired
-    private InforListRepository inforListRepository;
+    private InfoRepository infoRepository;
 
 
     public int inforListAllCount() {
-        return inforListRepository.findAll().size();
+        return infoRepository.findAll().size();
     }
 }

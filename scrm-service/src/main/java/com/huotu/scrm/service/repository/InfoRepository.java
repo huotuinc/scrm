@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by luohaibo on 2017/7/5.
  */
-public interface InforListRepository extends JpaRepository<Info,Long>{
+public interface InfoRepository extends JpaRepository<Info,Long>{
 
 
     /**
