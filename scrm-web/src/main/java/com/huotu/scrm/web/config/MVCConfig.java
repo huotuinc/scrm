@@ -3,6 +3,7 @@ package com.huotu.scrm.web.config;
 import com.huotu.scrm.service.config.ServiceConfig;
 import com.huotu.scrm.web.interceptor.HeaderInterceptor;
 import com.huotu.scrm.web.interceptor.MerchantInterceptor;
+import com.huotu.scrm.web.interceptor.UserInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,8 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private MerchantInterceptor merchantInterceptor;
     @Autowired
+    private UserInterceptor userInterceptor;
+    @Autowired
     private ThymeleafViewResolver thymeleafViewResolver;
 
     @Override
@@ -46,6 +49,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
         super.addInterceptors(registry);
         registry.addInterceptor(headerInterceptor).addPathPatterns("/mall/**");
         registry.addInterceptor(merchantInterceptor).addPathPatterns("/mall/**");
+        registry.addInterceptor(userInterceptor).addPathPatterns("/site/**");
     }
 
     @Override

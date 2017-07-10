@@ -1,6 +1,5 @@
 package com.huotu.scrm.web.controller.mall;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,9 +10,8 @@ import javax.servlet.http.HttpServletRequest;
  * 从request中获取attribute
  * Created by helloztt on 2017-06-27.
  */
-@Controller
 @RequestMapping("/mall")
-public class BaseController {
+public class MallBaseController {
     @ModelAttribute("merchantId")
     public long getMerchantId(HttpServletRequest request) {
         return Long.parseLong(request.getAttribute("merchantId").toString());

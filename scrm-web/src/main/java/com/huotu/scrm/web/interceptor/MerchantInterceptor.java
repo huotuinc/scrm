@@ -33,7 +33,7 @@ public class MerchantInterceptor extends HandlerInterceptorAdapter {
         while (paramKeys.hasMoreElements()) {
             String paramKey = paramKeys.nextElement();
             if (CUSTOMER_ID.equalsIgnoreCase(paramKey)) {
-                requestCustomerId = request.getParameter("customerId");
+                requestCustomerId = request.getParameter(paramKey);
                 break;
             }
         }
