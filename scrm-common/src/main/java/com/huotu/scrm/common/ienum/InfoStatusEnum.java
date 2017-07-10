@@ -10,13 +10,14 @@ public enum InfoStatusEnum implements ICommonEnum{
     UNPUBLISHED("未发布",0),
     DELETE("已删除",-1);
 
-    private  int code;
+    private  Integer code;
     private  String name;
 
     InfoStatusEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }
+
 
     public Object getCode() {
         return this.code;
@@ -25,5 +26,7 @@ public enum InfoStatusEnum implements ICommonEnum{
     public Object getValue() {
         return this.name;
     }
+
+
 
 }
