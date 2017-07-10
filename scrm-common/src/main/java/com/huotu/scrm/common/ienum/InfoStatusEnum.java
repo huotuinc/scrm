@@ -6,40 +6,24 @@ package com.huotu.scrm.common.ienum;
  */
 public enum InfoStatusEnum implements ICommonEnum{
 
-    published(1, "已发布"),
-    unpublished(0, "未发布"),
-    delete(-1, "已删除");
+    PUBLISHED("已发布", 1),
+    UNPUBLISHED("未发布",0),
+    DELETE("已删除",-1);
 
-//    private final int value;
-//    private final String description;
+    private  int code;
+    private  String name;
 
-    InfoStatusEnum (Integer value, String description) {
-        this.value = value;
-        this.description = description;
+    InfoStatusEnum(int code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
-
-
     public Object getCode() {
-        return null;
+        return this.code;
     }
 
     public Object getValue() {
-        return null;
+        return this.name;
     }
-
-    //    /**
-//     * @return 资讯状态值
-//     */
-//    public int getValue() {
-//        return this.value;
-//    }
-//
-//    /**
-//     * @return 资讯状态值描述
-//     */
-//    public String getDescription() {
-//        return this.description;
-//    }
 
 }
