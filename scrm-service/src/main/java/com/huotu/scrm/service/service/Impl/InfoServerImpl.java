@@ -25,7 +25,7 @@ public class InfoServerImpl implements InfoServer {
     }
 
     public List<Info> findListsByWord(String word) {
-        return null;
+        return infoRepository.findByTitleLike(word);
     }
 
     public Page<Info> infoSList(byte disable, Pageable pageable) {

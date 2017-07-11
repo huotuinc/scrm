@@ -25,34 +25,34 @@ public class InfoBrowse {
      * 资讯主键
      */
     @Column(name = "Info_Id")
-    private int infoId;
+    private Long infoId;
 
     /**
      * 资讯转发来源用户
      */
     @Column(name = "Info_Source_UserId")
-    private int sourceUserId;
+    private Long sourceUserId;
 
 
     /**
      * 资讯查看用户
      */
     @Column(name = "Info_Read_UserId")
-    private String readUserId;
+    private Long readUserId;
 
 
     /**
      * 商户Id
      */
     @Column(name = "Customer_Id")
-    private String customId;
+    private Long customerId;
 
 
     /**
      * 资讯创建时间
      */
-    @Column(name = "Brose_time")
+    @Column(name = "Brose_Time")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date broseTime;
+    private Date browseTime;
 
 }

@@ -6,6 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * Created by luohaibo on 2017/7/5.
@@ -18,7 +21,14 @@ public interface InfoRepository extends JpaRepository<Info,Long>{
 //
 //
 //
-//    Info findByTitleLike(String title);
+
+
+    @Query("select count(*) form Info where Disable == 0")
+    Long countOfNotDisable();
+
+
+
+    List<Info> findByTitleLike(String title);
 
 }
 
