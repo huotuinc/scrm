@@ -16,11 +16,11 @@ public class TestControllerTest extends CommonTestBase {
     private String baseUrl = "/mall/test";
     private String indexControllerUrl = baseUrl + "/index";
     private String htmlIndexControllerUrl = baseUrl + "/index/html";
-    private Long merchantId;
+    private Long customerId;
 
     @Before
     public void init() {
-        merchantId = Long.valueOf(random.nextInt(10000));
+        customerId = Long.valueOf(random.nextInt(10000));
     }
 
     @Test
@@ -29,7 +29,7 @@ public class TestControllerTest extends CommonTestBase {
         //case 1:post
         //expect:method not allowed
         mockMvc.perform(post(indexControllerUrl)
-                .param("customerId", String.valueOf(merchantId)))
+                .param("customerId", String.valueOf(customerId)))
                 .andExpect(status().isMethodNotAllowed());
 
         //case 2:no param
@@ -38,9 +38,9 @@ public class TestControllerTest extends CommonTestBase {
 
         //case 3: get with param
         //expect: return msg
-        String expectResultMsg = "hello scrm,merchantId:" + merchantId + " !";
+        String expectResultMsg = "hello scrm,customerId:" + customerId + " !";
         mockMvc.perform(get(indexControllerUrl)
-                .param("customerId", String.valueOf(merchantId)))
+                .param("customerId", String.valueOf(customerId)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").value(expectResultMsg));
@@ -52,7 +52,7 @@ public class TestControllerTest extends CommonTestBase {
         //case 1:post
         //expect:method not allowed
         mockMvc.perform(post(htmlIndexControllerUrl)
-                .param("customerId", String.valueOf(merchantId)))
+                .param("customerId", String.valueOf(customerId)))
                 .andExpect(status().isMethodNotAllowed());
 
         //case 2:no param
@@ -61,7 +61,7 @@ public class TestControllerTest extends CommonTestBase {
 
         //case 3:
         mockMvc.perform(get(htmlIndexControllerUrl)
-        .param("customerId", String.valueOf(merchantId)))
+        .param("customerId", String.valueOf(customerId)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("title"))
                 .andExpect(view().name("test"));
@@ -71,9 +71,9 @@ public class TestControllerTest extends CommonTestBase {
     @Test
     public void htmlIndexPageTest(){
         //test selenium
-        webDriver.get("http://localhost" + htmlIndexControllerUrl + "?customerId=" + merchantId);
+        webDriver.get("http://localhost" + htmlIndexControllerUrl + "?customerId=" + customerId);
         TestIndexPage textIndex = initPage(TestIndexPage.class);
-        textIndex.setMerchantId(merchantId);
+        textIndex.setCustomerId(customerId);
         textIndex.validate();
     }
 

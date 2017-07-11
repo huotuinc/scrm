@@ -14,11 +14,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
 
 /**
- * 嵌入伙伴商城的页面获取merchantId
+ * 嵌入伙伴商城的页面获取customerId
  * Created by helloztt on 2016/7/4.
  */
 @Component
-public class MerchantInterceptor extends HandlerInterceptorAdapter {
+public class CustomerInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private Environment environment;
@@ -55,7 +55,7 @@ public class MerchantInterceptor extends HandlerInterceptorAdapter {
             loginType = 1;
         }
         funcAuthorize = CookieUtils.getCookieVal(request, "MM_FuncAuthorize");
-        request.setAttribute("merchantId", customerId);
+        request.setAttribute("customerId", customerId);
         request.setAttribute("loginType", loginType);
         request.setAttribute("funAuthorize", funcAuthorize);
         return true;
