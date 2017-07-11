@@ -1,10 +1,9 @@
 package com.huotu.scrm.service.repository;
 
-import com.huotu.scrm.service.entity.Information.Info;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.huotu.scrm.service.entity.info.Info;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import java.util.List;
 
 
 /**
