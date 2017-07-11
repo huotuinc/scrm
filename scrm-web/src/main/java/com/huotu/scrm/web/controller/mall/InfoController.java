@@ -72,7 +72,7 @@ public class InfoController extends MallBaseController {
      * @return
      */
     @RequestMapping("saveInfo")
-    public String saveinfo(Info info){
+    public String saveInfo(Info info){
         infoServer.infoSave(info);
         return "index";
     }

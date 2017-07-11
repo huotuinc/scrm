@@ -3,6 +3,8 @@ package com.huotu.scrm.service.service.Impl;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.service.InfoServer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +23,9 @@ import java.util.List;
 @Service
 public class InfoServerImpl implements InfoServer {
 
+
+    private Log logger = LogFactory.getLog(InfoServerImpl.class);
+
     @Autowired
     private InfoRepository infoRepository;
 
@@ -34,23 +39,25 @@ public class InfoServerImpl implements InfoServer {
     }
 
 
-    public void infoSave(Info info) {
-        Info newinfo = null;
-        if (info.getId() != null || info.getId() != 0) {
-            newinfo = infoRepository.findOne(info.getId());
+    public Info infoSave(Info info) {
+        Info newInfo;
+        logger.info(info.getId());
+         if (info.getId() != null && info.getId() != 0) {
+            logger.info("test");
+            newInfo = infoRepository.findOne(info.getId());
         } else {
-            newinfo = new Info();
+            newInfo = new Info();
         }
-        newinfo.setTitle(info.getTitle());
-        newinfo.setIntroduce(info.getIntroduce());
-        newinfo.setContent(info.getContent());
-        newinfo.setImageUrl(info.getImageUrl());
-        newinfo.setThumbnailImageUrl(info.getThumbnailImageUrl());
-        newinfo.setCreateTime(info.getCreateTime());
-        newinfo.setStatus(info.isStatus());
-        newinfo.setDisable(info.isDisable());
-        newinfo.setExtend(info.isExtend());
-        infoRepository.save(newinfo);
+        newInfo.setTitle(info.getTitle());
+        newInfo.setIntroduce(info.getIntroduce());
+        newInfo.setContent(info.getContent());
+        newInfo.setImageUrl(info.getImageUrl());
+        newInfo.setThumbnailImageUrl(info.getThumbnailImageUrl());
+        newInfo.setCreateTime(info.getCreateTime());
+        newInfo.setStatus(info.isStatus());
+        newInfo.setDisable(info.isDisable());
+        newInfo.setExtend(info.isExtend());
+        return infoRepository.save(newInfo);
 
     }
 
