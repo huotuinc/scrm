@@ -16,5 +16,9 @@ public interface InfoRepository extends JpaRepository<Info,Long>{
     @Query("select i from Info i where i.disable = ?1 ")
     public Page<Info> findByDisable(Integer disable, Pageable pageable);
 
+
+
+    Info findByTitleLike(String title);
+
 }
 
