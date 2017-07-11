@@ -18,9 +18,9 @@
         <!--<property name="url" value="jdbc:jtds:sqlserver://115.28.160.96:1433;DatabaseName=HotPdMall_Test"/>-->
         <!--<property name="username" value="mall"/>-->
         <!--<property name="password" value="root123"/>-->
-        <property name="url" value="jdbc:jtds:sqlserver://192.168.1.146:1433;DatabaseName=Dev_HotPdmall"/>
-        <property name="username" value="hotdev"/>
-        <property name="password" value="hot@1234"/>
+        <property name="url" value="jdbc:jtds:sqlserver://192.168.1.36:1433;DatabaseName=test"/>
+        <property name="username" value="sa"/>
+        <property name="password" value="123456"/>
     </bean>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -35,7 +35,7 @@
         </property>
         <property name="jpaPropertyMap">
             <map>
-                <!--<entry key="javax.persistence.schema-generation.database.action" value="create"/>-->
+                <entry key="javax.persistence.schema-generation.database.action" value="create"/>
                 <entry key="eclipselink.weaving" value="false"/>
                 <entry key="eclipselink.logging.level" value="FINE"/>
             </map>
