@@ -14,13 +14,14 @@ public interface InfoServer {
 
     /**
      * 根据Disable字段查询行数
+     *
      * @return
      */
     long infoListsCount(boolean disable);
 
 
     /**
-     *  根据某一个模糊条件搜索标题查找相应的资讯列表
+     * 根据某一个模糊条件搜索标题查找相应的资讯列表
      */
     List<Info> findListsByWord(String title);
 

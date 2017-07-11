@@ -36,9 +36,9 @@ public class InfoServerImpl implements InfoServer {
 
     public void infoSave(Info info) {
         Info newinfo = null;
-        if (info.getId() != null || info.getId() != 0){
+        if (info.getId() != null || info.getId() != 0) {
             newinfo = infoRepository.findOne(info.getId());
-        }else {
+        } else {
             newinfo = new Info();
         }
         newinfo.setTitle(info.getTitle());
@@ -55,8 +55,6 @@ public class InfoServerImpl implements InfoServer {
     }
 
 
-
-
     public Page<Info> infoSList(boolean disable, Pageable pageable) {
 
         return infoRepository.findAll((root, query, cb) -> {
@@ -66,7 +64,6 @@ public class InfoServerImpl implements InfoServer {
         }, pageable);
 
     }
-
 
 
 }
