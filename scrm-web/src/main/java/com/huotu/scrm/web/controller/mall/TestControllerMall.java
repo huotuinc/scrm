@@ -17,15 +17,15 @@ public class TestControllerMall extends MallBaseController {
 
     @RequestMapping(value = "/test/index", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public ApiResult index(@ModelAttribute("merchantId") long merchantId) {
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "hello scrm,merchantId:" + merchantId + " !");
+    public ApiResult index(@ModelAttribute("customerId") long customerId) {
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "hello scrm,customerId:" + customerId + " !");
     }
 
     @RequestMapping(value = "/test/index/html", method = RequestMethod.GET)
-    public ModelAndView htmlIndex(@ModelAttribute("merchantId") long merchantId) {
+    public ModelAndView htmlIndex(@ModelAttribute("customerId") long customerId) {
         ModelAndView model = new ModelAndView();
         model.setViewName("test");
-        model.addObject("title", "hello scrm,merchantId:" + merchantId + " !");
+        model.addObject("title", "hello scrm,customerId:" + customerId + " !");
         return model;
     }
 }
