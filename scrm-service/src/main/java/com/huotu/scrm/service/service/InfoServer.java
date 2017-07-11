@@ -35,6 +35,7 @@ public interface InfoServer {
      * jpa 自带可以不用自己写  saveAndFlush
      * 创建资讯保存到数据库
      */
+    @Transactional
     void infoSave(Info info);
 
 

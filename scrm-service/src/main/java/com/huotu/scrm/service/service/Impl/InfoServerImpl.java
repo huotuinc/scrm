@@ -7,7 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.Column;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.criteria.Predicate;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,7 +35,23 @@ public class InfoServerImpl implements InfoServer {
 
 
     public void infoSave(Info info) {
-        infoRepository.saveAndFlush(info);
+        Info newinfo = null;
+        if (info.getId() != null || info.getId() != 0){
+            newinfo = infoRepository.findOne(info.getId());
+        }else {
+            newinfo = new Info();
+        }
+        newinfo.setTitle(info.getTitle());
+        newinfo.setIntroduce(info.getIntroduce());
+        newinfo.setContent(info.getContent());
+        newinfo.setImageUrl(info.getImageUrl());
+        newinfo.setThumbnailImageUrl(info.getThumbnailImageUrl());
+        newinfo.setCreateTime(info.getCreateTime());
+        newinfo.setStatus(info.isStatus());
+        newinfo.setDisable(info.isDisable());
+        newinfo.setExtend(info.isExtend());
+        infoRepository.save(newinfo);
+
     }
 
 
