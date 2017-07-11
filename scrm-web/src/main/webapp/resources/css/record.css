@@ -1,0 +1,81 @@
+html {
+    background-color: #f0f0f0;
+}
+#app {
+    background: none;
+}
+.tip {
+    position: relative;
+    height: .3rem;
+    font-size: .11rem;
+    background-image: url('../img/bg-3.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    line-height: .3rem;
+    margin-top: .05rem;
+    margin-bottom: .05rem;
+    color: #fff;
+    text-align: center;
+}
+.tip span {
+    margin-left: 0;
+    position: absolute;
+}
+.tip span:first-of-type {
+    left: 1.03rem;
+}
+.tip span:last-of-type {
+    left: 2.05rem;
+}
+
+.record-item {
+    overflow: hidden;
+    position: relative;
+    display: block;
+    padding: .1rem;
+    color: #333;
+    border-top: solid #eee 1px;
+    background-color: #fff;
+    background-image: url('../img/small.png');
+    background-position: 3rem -.51rem;
+    background-size: .13rem .92rem;
+    background-repeat: no-repeat;
+}
+.record-item:first-of-type {
+    border: none;
+}
+.record-item img {
+    width: .89rem;
+    height: .55rem;
+    margin-right: .125rem;
+}
+.record-info h3 {
+    font-size: .13rem;
+    font-weight: 400;
+    overflow: hidden;
+    width: 9em;
+    height: 1em;
+    margin-top: .06rem;
+    margin-bottom: .15rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.record-info span {
+    font-size: .11rem;
+    vertical-align: middle;
+    display: inline-block;
+}
+.noRecord {
+    display: none;
+    text-align: center;
+}
+.noRecord img {
+    display: inline-block;
+    margin-top: 50%;
+    width: .66rem;
+}
+.noRecord p {
+    font-size: .12rem;
+    padding: .05rem 0;
+}

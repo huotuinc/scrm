@@ -1,0 +1,363 @@
+html {
+    background: none;
+}
+
+.detail-main .main-box .infobar {
+    font-size: 14px !important;
+    line-height: 24px !important;
+}
+
+.detail-main .main-box .infobar {
+    font-size: 14px;
+    color: #000;
+    height: 26px;
+    line-height: 26px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+.detail-main .main-box .infobar .time-banner {
+    position: relative;
+    float: left;
+}
+
+.detail-main .main-box .infobar .time-banner .icon-time {
+    float: left;
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.detail-main .main-box .infobar .time-banner .ju-clock {
+    display: inline-block;
+}
+
+.detail-main .main-box .infobar .numOfPeople {
+    float: right;
+}
+
+.status-banner {
+    background: #e61414;
+    display: block;
+}
+
+.main-box .status-banner {
+    position: relative;
+    margin: 0px;
+    height: 50px;
+    line-height: 50px;
+}
+
+.main-box .status-banner:before {
+    position: absolute;
+    right: 136px;
+    top: 0;
+    content: "";
+    width: 0;
+    height: 50px;
+    font-size: 0;
+    border-left: 2px dotted rgba(0, 0, 0, .15);
+}
+
+.main-box .status-banner .currentPrice {
+    float: left;
+    height: 50px;
+    line-height: 50px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    font-weight: 700;
+    font-size: .2rem;
+    padding-left: 10px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.main-box .status-banner .currentPrice small {
+    font-size: .2rem;
+}
+
+.main-box .status-banner .oprice {
+    float: left;
+    padding-top: 5px;
+    margin-left: 5px;
+    height: 50px;
+}
+
+.main-box .status-banner .zgjicon {
+    position: relative;
+    height: 17px;
+    text-align: center;
+    line-height: 17px;
+    background: #fec33a;
+    color: #d21e3c;
+    font-size: 0;
+}
+
+.main-box .status-banner .zgjicon small {
+    display: inline-block;
+    padding: 0 3px;
+    position: relative;
+    font-size: 12px;
+    z-index: 2;
+}
+
+.main-box .status-banner .zgjicon:after {
+    position: absolute;
+    display: block;
+    bottom: -7px;
+    left: 5px;
+    content: "";
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    border-left: 12px solid #fec33a;
+    z-index: 1;
+}
+
+.main-box .status-banner .originPrice {
+    display: block;
+    font-size: 12px;
+    color: #fff;
+    line-height: 24px;
+    bottom: 3px;
+}
+
+.main-box .status-banner form {
+    height: 50px;
+}
+
+.main-box .buyaction {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    line-height: 0;
+    cursor: pointer;
+    background: 0 0;
+    z-index: 1000;
+    outline: 0;
+}
+
+.main-box .buyaction span {
+    display: block;
+    margin: 5px 2px 0 auto;
+    float: right;
+    _display: inline;
+    width: 120px;
+    height: 37px;
+    font-size: 18px;
+    line-height: 38px;
+    color: #e61414;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 4px;
+    border-bottom: 1px solid #f9ac00;
+    background: repeat-x #fee97d;
+    background-image: -webkit-linear-gradient(#fee97d 60%, #fde158 100%);
+    background-image: -o-linear-gradient(#fee97d 60%, #fde158 100%);
+    background-image: linear-gradient(#fee97d 60%, #fde158 100%);
+}
+
+.countdown {
+    width: 140px;
+    float: left
+}
+
+.countdown-container {
+    color: #e92626;
+    font-size: 14px;
+    margin-top: 2px;
+    margin-left: 7px;
+}
+
+.countdown-container span {
+    background: #e92626;
+    color: #fff;
+    height: 18px;
+    line-height: 18px;
+    border-radius: 4px;
+    padding: 0;
+    margin: 0;
+}
+
+.countdown-container p {
+    display: block;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+}
+
+.foot-wrapper {
+    position: relative;
+    background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: stretch;
+    -ms-flex-align: stretch;
+    align-items: stretch;
+    width: 100%;
+}
+
+.foot-wrapper .progress {
+    border: 1px solid #ffd02f;
+    border-radius: .025rem;
+    background-color: #fffcb8;
+    width: 121px;
+    height: 18px;
+    line-height: 16px;
+    text-align: center;
+    position: absolute;
+    right: 9px;
+    top: 4px;
+}
+
+.foot-wrapper .progress .progress-bg {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAG1BMVEX/1ED/0jb/zy//zCb/yRz/yRr/xhH/wwn/wAANxc2qAAAAZUlEQVR42p2RMQ4EMQgDDQmE/7/4msB5JWuLdTmKMpbBjVdn4581dBHdDcOJpnpqp+k8ZdkxJUtwRsYwIGTIAsmoAkhGFUAyqoDnCB518VJt4WqagprmmJomAXy5Q8y3+g72eocfZekGf5qW0YYAAAAASUVORK5CYII=);
+    height: 100%;
+    width: 0;
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0
+}
+
+.foot-wrapper .progress span {
+    font-size: .1rem;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, .7);
+    z-index: 9;
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%)
+}
+
+.faq-modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .6);
+    z-index: 998;
+}
+
+.faq-main {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    padding: .4rem .1rem .7rem;
+    z-index: 999;
+}
+
+.faq-content {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.faq-content .tab-head {
+    height: .5rem;
+    padding: .12rem .1rem 0;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    border-top-left-radius: .035rem;
+    border-top-right-radius: .035rem;
+    background: #e61414;
+}
+
+.faq-content .tab-head .item {
+    width: 1.375rem;
+    background: #f34c4c;
+    border-top-left-radius: .02rem;
+    border-top-right-radius: .02rem;
+    color: #fff;
+    font-size: .14rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.faq-content .tab-head .item.on {
+    background: #fff;
+    color: #e61414;
+}
+
+.faq-content .tab-content {
+    padding: .03rem .1rem .15rem;
+    border-bottom-left-radius: .035rem;
+    border-bottom-right-radius: .035rem;
+    background: #fff;
+    width: 100%;
+    height: 3rem;
+    overflow: hidden;
+    overflow-y: scroll;
+}
+.faq-content .tab-content .scroll-container {
+    overflow: auto;
+    overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    display: none;
+}
+.faq-content .tab-content .scroll-container.on {
+    display: block;
+}
+.faq-close {
+    position: absolute;
+    width: .24rem;
+    height: .24rem;
+    background-image: url('../img/close-2.png');
+    background-size: cover;
+    top: -.12rem;
+    right: -.2rem;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+.customer-btn {
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAAV1BMVEUAAABwcHBxcXFxcXFwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBxcXFwcHBwcHBwcHBwcHBwcHBwcHBwcHBxcXEMUNJnAAAAHXRSTlMAID9fn9//769/0HBAMBDPoIBgwE+wj/DgkL9Qb364XC8AAAGoSURBVHgB7NJdj9owEEbhYyCvl8Se2Mmm+eL//86SskQsBEp72z53kWZGOnL4a/+53ZnjTftDoV/8x57fOxYqqxAhhqqUPxovxVrJsbKsIvBCo9YBhM/jcb8DcJ2aV/MJcAf/1XCIQNaP5/MN2EHqu1w1OfXSwaBRxaboE7hafbNeGFREGBXZMpVgXslgleQjtAUbZgWsVuKbrNpwm+FFB1kdd5JGSMVGgQLme+OO9XLEjYqxh0qZB5VGGMb7gFoJSjkemAoYVczcOEjKoJINy5lG0sgq6GwmqGVDUrhMBK66y2dQZkO+LnRctdeF9HKh/b7Q4NSyoXtcqHSJ7j3QcGMGBtllorp9HKm73CLXa1yYRohqL5WlsYqDJKPRBFGaTjtzu1MtBUiqwEut49Y8JgeDArRalRA1QKMxsGWWN1ypL73DCjUwJZ4YVTss9Vok+/rfZzmeSfIzWJjnYBC8WjCfeK6Spr0B2OckJbC6NF5wS3Q9TfUSHcA+esdrMQ06G9IMuLqPvMEZC06+dLwp7typ0Mi7loY+G29bKow/kNs28s/7uUELAERbFsdgCF6YAAAAAElFTkSuQmCC);
+    background-size: 100% 100%;
+    width: .3rem;
+    height: .3rem;
+    position: fixed;
+    right: .1rem;
+    bottom: .8rem;
+    background-color: #fff;
+    border-radius: 50%;
+}
+.faq-content dt {
+    font-size: .14rem;
+    color: #333;
+    line-height: .2rem;
+    margin-top: .17rem;
+}
+.faq-content dd {
+    font-size: .12rem;
+    color: #666;
+    line-height: .18rem;
+}
+@media (device-height: 568px) and (-webkit-min-device-pixel-ratio: 2) {
+    .main-box .status-banner .zgjicon {
+        width: 74px;
+    }
+
+    .main-box .status-banner .zgjicon small {
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
