@@ -6,9 +6,9 @@ package com.huotu.scrm.common.ienum;
  */
 public enum InfoStatusEnum implements ICommonEnum{
 
-    PUBLISHED("已发布", 1),
-    UNPUBLISHED("未发布",0),
-    DELETE("已删除",-1);
+    PUBLISHED(1,"已发布"),
+    UNPUBLISHED(0,"未发布"),
+    DELETE(-1,"已删除");
 
     private  Integer code;
     private  String name;
