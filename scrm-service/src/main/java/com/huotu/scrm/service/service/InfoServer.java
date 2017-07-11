@@ -19,10 +19,10 @@ public interface InfoServer {
     long infoListsCount();
 
 
-
     /**
      *  根据某一个模糊条件搜索标题查找相应的资讯列表
      */
+    List<Info> findListsByWord(String word);
 
 
     /**
@@ -51,9 +51,13 @@ public interface InfoServer {
      * 根据资讯ID修改资讯的推广状态
      */
     @Transactional
-    void updateInfoExtendStatusById(Long id);
+    void updateInfoExtendById(Long id);
+
+
 
     /**
      * 根据资讯ID修改资讯的发布状态
      */
+    @Transactional
+    void updateInfoStatusById(Long id);
 }

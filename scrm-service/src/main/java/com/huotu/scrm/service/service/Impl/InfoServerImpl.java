@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Created by luohaibo on 2017/7/5.
  */
@@ -22,6 +24,10 @@ public class InfoServerImpl implements InfoServer {
         return infoRepository.count();
     }
 
+    public List<Info> findListsByWord(String word) {
+        return null;
+    }
+
     public Page<Info> infoSList(byte disable, Pageable pageable) {
         return null;
     }
@@ -34,7 +40,13 @@ public class InfoServerImpl implements InfoServer {
 
     }
 
-    public void updateInfoExtendStatusById(Long id) {
+    public void updateInfoExtendById(Long id) {
 
     }
+
+    public void updateInfoStatusById(Long id) {
+
+    }
+
+
 }
