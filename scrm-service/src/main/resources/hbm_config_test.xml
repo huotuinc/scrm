@@ -35,7 +35,7 @@
         </property>
         <property name="jpaPropertyMap">
             <map>
-                <!--<entry key="javax.persistence.schema-generation.database.action" value="create"/>-->
+                <entry key="javax.persistence.schema-generation.database.action" value="create"/>
                 <entry key="eclipselink.weaving" value="false"/>
                 <entry key="eclipselink.logging.level" value="FINE"/>
             </map>

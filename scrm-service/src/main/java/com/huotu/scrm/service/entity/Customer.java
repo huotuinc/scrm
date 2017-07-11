@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.context.annotation.Description;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -27,21 +28,20 @@ import java.util.Objects;
 @Getter
 @Cacheable(value = false)
 @Table(name = "Swt_CustomerManage")
+@Description("商户")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Merchant implements Serializable{
+public class Customer implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "SC_UserID")
     private Long id;
 
-
     /**
      * 登录名
      */
     @Column(name = "SC_UserLoginName", nullable = false, length = 50)
     private String loginName;
-
 
     /**
      * 密码
@@ -51,13 +51,11 @@ public class Merchant implements Serializable{
     @JsonIgnore
     private String loginPassword;
 
-
     /**
      * 昵称
      */
     @Column(name = "SC_UserNickName", length = 200)
     private String nickName;
-
 
     /**
      * 手机号
