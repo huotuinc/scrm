@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.entity.Information;
+package com.huotu.scrm.service.entity.info;
 
 import com.huotu.scrm.common.ienum.InfoStatusEnum;
 import lombok.Getter;
