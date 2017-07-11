@@ -1,19 +1,21 @@
 package com.huotu.scrm.service.service.Impl;
 
 import com.huotu.scrm.service.repository.InfoRepository;
-import com.huotu.scrm.service.service.InforServer;
+import com.huotu.scrm.service.service.InfoServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by luohaibo on 2017/7/5.
  */
-public class InforServerImpl implements InforServer {
+@Service
+public class InfoServerImpl implements InfoServer {
 
     @Autowired
     private InfoRepository infoRepository;
 
 
-    public int inforListAllCount() {
-        return infoRepository.findAll().size();
+    public long infoListsCount() {
+        return infoRepository.count();
     }
 }

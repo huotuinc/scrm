@@ -25,7 +25,7 @@ public class InfoBrowse {
      * 资讯主键
      */
     @Column(name = "Info_Id")
-    private int info_Id;
+    private int infoId;
 
     /**
      * 资讯转发来源用户
