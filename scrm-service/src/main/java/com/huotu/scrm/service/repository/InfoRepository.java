@@ -12,13 +12,13 @@ import org.springframework.data.jpa.repository.Query;
  */
 public interface InfoRepository extends JpaRepository<Info,Long>{
 
-    //带条件的分页查询
-    @Query("select i from Info i where i.disable = ?1 ")
-    public Page<Info> findByDisable(Integer disable, Pageable pageable);
-
-
-
-    Info findByTitleLike(String title);
+//    //带条件的分页查询
+//    @Query("select i from Info i where i.disable = ?1 ")
+//    public Page<Info> findByDisable(Integer disable, Pageable pageable);
+//
+//
+//
+//    Info findByTitleLike(String title);
 
 }
 
