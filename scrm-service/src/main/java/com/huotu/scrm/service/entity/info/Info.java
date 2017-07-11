@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.entity.Information;
+package com.huotu.scrm.service.entity.info;
 
 import com.huotu.scrm.common.ienum.InfoStatusEnum;
 import lombok.Getter;
@@ -25,7 +25,7 @@ public class Info {
      * 商户号
      */
     @Column(name = "Custom_Id")
-    private int customId;
+    private Long customerId;
 
     /**
      * 资讯标题
@@ -73,7 +73,7 @@ public class Info {
      * 资讯状态     1、 已发布  0、未发布
      */
     @Column(name = "Status")
-    private InfoStatusEnum status;
+    private boolean status;
 
 
     /**
@@ -87,7 +87,7 @@ public class Info {
      * 资讯是否删除  1、已删除  0、正常
      */
     @Column(name = "Disable")
-    private byte  Disable = 0;
+    private boolean  disable = false;
 
 
 }
