@@ -1,11 +1,9 @@
 package com.huotu.scrm.service.service;
 
-import com.huotu.scrm.service.entity.Information.Info;
+import com.huotu.scrm.service.entity.info.Info;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by luohaibo on 2017/7/5.

@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.service.Impl;
 
-import com.huotu.scrm.service.entity.Information.Info;
+import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.service.InfoServer;
 import org.springframework.beans.factory.annotation.Autowired;
