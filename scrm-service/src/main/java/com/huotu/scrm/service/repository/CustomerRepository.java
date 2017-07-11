@@ -1,12 +1,12 @@
 package com.huotu.scrm.service.repository;
 
-import com.huotu.scrm.service.entity.Merchant;
+import com.huotu.scrm.service.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * Created by helloztt on 2017-07-05.
  */
-public interface MerchantRepository extends JpaRepository<Merchant, Long> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Merchant findById(Long id);
+    Customer findById(Long id);
 }

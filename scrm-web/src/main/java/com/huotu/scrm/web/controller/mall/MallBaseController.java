@@ -12,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RequestMapping("/mall")
 public class MallBaseController {
-    @ModelAttribute("merchantId")
-    public long getMerchantId(HttpServletRequest request) {
-        return Long.parseLong(request.getAttribute("merchantId").toString());
+    @ModelAttribute("customerId")
+    public long getCustomerId(HttpServletRequest request) {
+        return Long.parseLong(request.getAttribute("customerId").toString());
     }
 
     @ModelAttribute("loginType")
