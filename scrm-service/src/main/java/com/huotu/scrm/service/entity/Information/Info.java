@@ -18,7 +18,7 @@ public class Info {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID")
+    @Column(name = "Info_Id")
     private Long id;
 
     /**
@@ -30,21 +30,21 @@ public class Info {
     /**
      * 资讯标题
      */
-    @Column(name = "Title")
+    @Column(name = "Title", length = 30)
     private String title;
 
 
     /**
      * 资讯简介
      */
-    @Column(name = "Introduce")
+    @Column(name = "Introduce", length = 50)
     private String introduce;
 
 
     /**
      * 资讯详情
      */
-    @Column(name = "Content")
+    @Column(name = "Content", length = 200)
     private String content;
 
 
@@ -64,37 +64,30 @@ public class Info {
     /**
      * 资讯创建时间
      */
-    @Column(name = "Create_Date")
+    @Column(name = "Create_Time")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date createDate;
+    private Date createTime;
 
 
     /**
-     * 资讯状态
+     * 资讯状态     1、 已发布  0、未发布
      */
     @Column(name = "Status")
     private InfoStatusEnum status;
 
 
     /**
-     * 资讯推广状态
+     * 资讯推广状态  1、 已推广  0、未推广
      */
     @Column(name = "Extend")
     private boolean  extend = false;
 
 
     /**
-     * 资讯分享标题
+     * 资讯是否删除  1、已删除  0、正常
      */
-    @Column(name = "Share_Title")
-    private String  shareTitle;
-
-
-    /**
-     * 资讯分享详情
-     */
-    @Column(name = "Share_Description")
-    private String  shareDescription;
+    @Column(name = "Disable")
+    private byte  Disable = 0;
 
 
 }
