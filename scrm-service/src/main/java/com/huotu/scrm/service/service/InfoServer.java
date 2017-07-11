@@ -13,22 +13,22 @@ import java.util.List;
 public interface InfoServer {
 
     /**
-     * 获取资讯总数
+     * 根据Disable字段查询行数
      * @return
      */
-    long infoListsCount();
+    long infoListsCount(boolean disable);
 
 
     /**
      *  根据某一个模糊条件搜索标题查找相应的资讯列表
      */
-    List<Info> findListsByWord(String word);
+    List<Info> findListsByWord(String title);
 
 
     /**
      * 根据分页条件查找到某一页的资讯列表
      */
-    Page<Info> infoSList(byte disable, Pageable pageable);
+    Page<Info> infoSList(boolean disable, Pageable pageable);
 
 
     /**
@@ -38,26 +38,4 @@ public interface InfoServer {
     void infoSave(Info info);
 
 
-
-    /**
-     * 根据对应到资讯ID逻辑删除相应的资讯
-     */
-    @Transactional
-    void deleteInfoById(Long id);
-
-
-
-    /**
-     * 根据资讯ID修改资讯的推广状态
-     */
-    @Transactional
-    void updateInfoExtendById(Long id);
-
-
-
-    /**
-     * 根据资讯ID修改资讯的发布状态
-     */
-    @Transactional
-    void updateInfoStatusById(Long id);
 }
