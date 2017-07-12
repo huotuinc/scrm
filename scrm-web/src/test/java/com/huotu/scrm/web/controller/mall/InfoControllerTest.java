@@ -7,7 +7,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -25,16 +31,32 @@ public class InfoControllerTest extends CommonTestBase{
 
     @Test
     public void searchInfoListTitleLike() throws Exception {
-
+        List<Info> info= infoServer.findListsByWord("李");
+        info.stream()
+                .forEach(System.out::println);
     }
 
     @Test
     public void getInfoListsAccount() throws Exception {
 
+        long count = infoServer.infoListsCount(false);
+        logger.info(count);
     }
 
     @Test
     public void getInfoListPageable() throws Exception {
+
+        Pageable pageable = new PageRequest(2, 4, null);
+        Page<Info> infoList = infoServer.infoSList(false,pageable);
+
+        List<Info> infoList1 =  infoList.getContent();
+        infoList1.stream()
+                .forEach(System.out::println);
+
+        for (Info info: infoList1
+             ) {
+            logger.info(info.getTitle()+"xxxx"+info.getContent());
+        }
 
     }
 
@@ -42,8 +64,8 @@ public class InfoControllerTest extends CommonTestBase{
     public void saveInfo() throws Exception {
 
         Info info = new Info();
-//        info.setTitle("李克强崎岖山路颠簸一小时考察脱贫攻坚");
-        info.setTitle("李");
+        info.setTitle("李克强崎岖");
+//        info.setTitle("李");
 //        info.setContent("【李克强崎岖山路颠簸一小时考察脱贫攻坚】沿着崎岖山路，李克强10日乘车颠簸一小时，深入陕西宝鸡坪头镇大湾河村考察脱贫攻坚。总理走访两户人家询问收入、医保等情况，坐在院子里与村民交流。该村已被列入易地扶贫搬迁计划，村民们都盼着尽快搬迁。总理说，期待你们搬迁后生活有奔头，过上好日子。");
         info.setContent("【李");
         Info saveInfo =  infoServer.infoSave(info);
