@@ -1,7 +1,7 @@
 package com.huotu.scrm.service.model;
 
-import com.huotu.scrm.service.entity.BusinessCard;
-import com.huotu.scrm.service.entity.HotUserBaseInfo;
+import com.huotu.scrm.service.entity.businesscard.BusinessCard;
+import com.huotu.scrm.service.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Setter
 public class UserBusinessCard implements Serializable{
 
-    private HotUserBaseInfo hotUserBaseInfo;
+    private User user;
 
     private BusinessCard businessCard;
 }

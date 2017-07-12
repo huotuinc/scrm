@@ -67,4 +67,19 @@ public class User {
     @Column(name = "UB_UserRegTime")
     private Date regTime;
 
+    /***
+     * 性别
+     */
+    @Column(name="UB_UserGender",length = 10)
+    private String userGender;
+    /***
+     * 手机
+     */
+    @Column(name="UB_UserMobile",length = 50)
+    private String userMobile;
+    /***
+     * 邮箱
+     */
+    @Column(name="UB_UserEmail",length = 50)
+    private String userEmail;
 }

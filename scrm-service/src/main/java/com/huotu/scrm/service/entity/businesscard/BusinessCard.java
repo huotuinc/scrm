@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.entity;
+package com.huotu.scrm.service.entity.businesscard;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,14 +20,14 @@ public class BusinessCard implements Serializable {
      * UserId
      */
     @Id
-    @Column(name = "UserId" )
-    private Integer userId;
+    @Column(name = "User_Id" )
+    private Long userId;
     /***
      * 商户Id
      */
     @Id
-    @Column(name = "CustomerId")
-    private Integer customerId;
+    @Column(name = "Customer_Id")
+    private Long customerId;
     /***
      * 名片头像地址
      */

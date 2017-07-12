@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service;
 
+import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.model.UserBusinessCard;
 
 /**
@@ -12,12 +13,23 @@ public interface BusinessCardService {
      * @param customerId
      * @return
      */
-    UserBusinessCard getUserBusinessCard(int userId , int customerId);
+    UserBusinessCard getUserBusinessCard( long userId , long customerId);
 
     /***
      * 更新名片信息
      * @param userBusinessCard
      * @return
      */
-    UserBusinessCard update(UserBusinessCard userBusinessCard);
+    UserBusinessCard updateBusinessCard(UserBusinessCard userBusinessCard);
+
+    /***
+     *
+     * @param customerId
+     * @param userId
+     * @param type
+     * @param text
+     * @return
+     */
+    BusinessCard updateBusinessCard(long customerId , long userId , int type , String text);
+
 }
