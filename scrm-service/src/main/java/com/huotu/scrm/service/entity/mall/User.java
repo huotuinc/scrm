@@ -30,6 +30,12 @@ public class User {
     private Long customerId;
 
     /**
+     * 用户等级
+     */
+    @Column(name = "UB_LevelID")
+    private int levelId;
+
+    /**
      * 登录名
      */
     @Column(name = "UB_UserLoginName", nullable = false, length = 50)
