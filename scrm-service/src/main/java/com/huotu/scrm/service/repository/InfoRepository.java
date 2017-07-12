@@ -1,24 +1,21 @@
 package com.huotu.scrm.service.repository;
 
-import com.huotu.scrm.service.entity.Information.Info;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.huotu.scrm.service.entity.info.Info;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import java.util.List;
 
 
 /**
  * Created by luohaibo on 2017/7/5.
  */
-public interface InfoRepository extends JpaRepository<Info,Long>{
+public interface InfoRepository extends JpaRepository<Info,Long>,JpaSpecificationExecutor<Info> {
 
-//    //带条件的分页查询
-//    @Query("select i from Info i where i.disable = ?1 ")
-//    public Page<Info> findByDisable(Integer disable, Pageable pageable);
-//
-//
-//
-//    Info findByTitleLike(String title);
+
+    long countByDisable(Boolean state);
+
+
+    List<Info> findByTitleLike(String title);
 
 }
 
