@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -62,14 +63,13 @@ public class InfoServerImpl implements InfoServer {
     }
 
 
-    public Page<Info> infoSList(boolean disable, Pageable pageable) {
-
+    public Page<Info> infoSList(boolean disable,  int page, int pageSize) {
+        Pageable pageable = new PageRequest(page,pageSize);
         return infoRepository.findAll((root, query, cb) -> {
             Predicate predicate = cb.isTrue(cb.literal(true));
             predicate = cb.and(predicate, cb.equal(root.get("disable").as(boolean.class), disable));
             return predicate;
         }, pageable);
-
     }
 
 

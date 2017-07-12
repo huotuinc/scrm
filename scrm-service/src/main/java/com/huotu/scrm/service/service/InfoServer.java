@@ -29,7 +29,7 @@ public interface InfoServer {
     /**
      * 根据分页条件查找到某一页的资讯列表
      */
-    Page<Info> infoSList(boolean disable, Pageable pageable);
+    Page<Info> infoSList(boolean disable, int page , int pageSize);
 
 
     /**

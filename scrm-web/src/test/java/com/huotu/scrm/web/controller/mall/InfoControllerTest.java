@@ -55,7 +55,7 @@ public class InfoControllerTest extends CommonTestBase{
 
         for (Info info: infoList1
              ) {
-            logger.info(info.getTitle()+"xxxx"+info.getContent());
+            logger.info(info.getTitle()+"----"+info.getContent());
         }
 
     }
