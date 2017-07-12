@@ -1,0 +1,92 @@
+body {
+    background: #f0f0f0;
+}
+a:hover, a:active {
+    text-decoration: none;
+}
+.item-wrapper {
+    width: 100%;
+    box-shadow: 0 1px 3px 1px rgba(221,221,221,.4);
+    padding: .1rem;
+    background: #fff;
+    margin-bottom: .1rem;
+}
+.item-wrapper .item-info .item-title h3 {
+    font-size: .16rem;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: .2rem;
+}
+.item-wrapper .item-date {
+    padding: .09rem 0;
+}
+.item-wrapper .item-date span {
+    color: #666;
+    font-size: .13rem;
+}
+.description {
+    box-shadow: 0 0 3px 1px rgba(221,221,221,.4);
+    background: #fff;
+    margin-bottom: .1rem;
+}
+.description > h3 {
+    margin: 0 .1rem;
+    padding: .1rem 0;
+    color: #999;
+    border-bottom: solid #eee 1px;
+    font-weight: 400;
+    font-size: .13rem;
+}
+.description .content {
+    font-size: .12rem;
+    line-height: 1.5;
+    padding: .1rem;
+    color: #333;
+    overflow: hidden;
+}
+.description .content h3 {
+    font-weight: 700;
+    color: rgb(9, 25, 41);
+    margin-bottom: .05rem;
+}
+.description .content p {
+    margin-bottom: .1rem;
+}
+.description .content img {
+    margin-bottom: .08rem;
+}
+.order-number {
+    padding: .09rem .1rem;
+    margin-bottom: .1rem;
+    line-height: .2rem;
+    font-size: .13rem;
+    border-top: solid #eee 1px;
+    background-color: #fcfcfc;
+}
+.order-number h3 {
+    font-weight: 400;
+    font-size: .13rem;
+    display: inline-block;
+}
+footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: .1rem;
+    background-color: #fff;
+    box-shadow: 0 -1px 3px 1px rgba(0,0,0,.2);
+}
+footer .submit {
+    font-size: .16rem;
+    cursor: pointer;
+    text-align: center;
+    border-radius: .05rem;
+    line-height: .44rem;
+    display: inline-block;
+    width: 100%;
+    color: #fff;
+    background: #C81558;
+}
