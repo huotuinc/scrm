@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
@@ -51,8 +49,8 @@ public class ReportMonth {
     /**
      * 是否是销售员（1：是 0：不是）
      */
-    @Column(name="Is_Salers")
-    private boolean isSale;
+    @Column(name="Is_Salesman")
+    private boolean  isSalesman;
 
     /**
      * 每月资讯转发量
@@ -94,6 +92,5 @@ public class ReportMonth {
      * 统计月份
      */
     @Column(name = "Report_Month")
-    @Temporal(TemporalType.DATE)
     private Date reportMonth;
 }

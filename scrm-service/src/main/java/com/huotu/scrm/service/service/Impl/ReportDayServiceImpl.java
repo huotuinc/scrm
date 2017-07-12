@@ -6,10 +6,10 @@ import com.huotu.scrm.service.entity.report.ReportDay;
 import com.huotu.scrm.service.repository.ReportDayRepository;
 import com.huotu.scrm.service.service.ReportDayService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +17,7 @@ import java.util.List;
 /**
  * Created by hxh on 2017-07-11.
  */
+@Service
 public class ReportDayServiceImpl implements ReportDayService {
 
     @Autowired
@@ -32,10 +33,10 @@ public class ReportDayServiceImpl implements ReportDayService {
         /*设置商户号*/
         /*设置等级*/
         /*设置是否为销售员*/
-        /*设置咨询转发量*/
+        /*设置每日咨询转发量*/
         /*设置每日访客量*/
-        /*设置每日推广积分*/
-        /*设置被关注量(销售员特有)*/
+        /*设置每日预计积分*/
+        /*设置每日被关注量(销售员特有)*/
         /*设置统计日期*/
         reportDay.setReportDay(date);
         /*保存数据*/
@@ -53,7 +54,7 @@ public class ReportDayServiceImpl implements ReportDayService {
             return scoreRankingResult;
         }
         /*设置每日关注排名（销售员特有）*/
-        if (reportDay.isSale()) {
+        if (reportDay.isSalesman()) {
             ApiResult followRankingResult = followRanking(userId, date);
             if (followRankingResult.getCode() == 2000) {
                 reportDay.setFollowRanking((Integer) followRankingResult.getData());
@@ -63,7 +64,7 @@ public class ReportDayServiceImpl implements ReportDayService {
         } else {
             reportDay.setFollowRanking(0);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "保存每日记录信息成功!");
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "保存每日记录信息成功!",null);
     }
 
     //    public int saveVisitorNum(int userId) {
@@ -84,7 +85,7 @@ public class ReportDayServiceImpl implements ReportDayService {
         /*默认只排200名*/
         for (int i = 0; i < sortAll.size(); i++) {
             if (sortAll.get(i).getUserId() == userId) {
-                return ApiResult.resultWith(ResultCodeEnum.SUCCESS, i + 1);
+                return ApiResult.resultWith(ResultCodeEnum.SUCCESS,i + 1);
             }
         }
         /*排名异常*/
@@ -100,7 +101,7 @@ public class ReportDayServiceImpl implements ReportDayService {
                 return ApiResult.resultWith(ResultCodeEnum.SUCCESS, i + 1);
             }
         }
-        /*推广积分排名异常*/
+        /*预计积分排名异常*/
         return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "推广积分排名异常", null);
     }
 
@@ -121,16 +122,12 @@ public class ReportDayServiceImpl implements ReportDayService {
      * @return
      */
     public Date getDay() {
-        Date now = new Date();
-        Date date = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String format = sdf.format(now);
-        try {
-            date = sdf.parse(format);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
+        Calendar calendar = Calendar.getInstance();//日历对象
+        calendar.setTime(new Date());//设置当前日期
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        return calendar.getTime();
     }
 
 }

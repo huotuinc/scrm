@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
@@ -51,8 +49,8 @@ public class ReportDay {
     /**
      * 是否是销售员（1：是 0：不是）
      */
-    @Column(name="Is_Salers")
-    private boolean isSale;
+    @Column(name="Is_Salesman")
+    private boolean  isSalesman;
 
     /**
      * 每日资讯转发量
@@ -73,7 +71,7 @@ public class ReportDay {
     private int visitorRanking;
 
     /**
-     * 每日推广积分
+     * 每日预计积分
      */
     @Column(name = "Extension_Score")
     private int extensionScore;
@@ -100,7 +98,6 @@ public class ReportDay {
      * 统计日期
      */
     @Column(name = "Report_Day")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date reportDay;
 
 }
