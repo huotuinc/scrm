@@ -35,12 +35,14 @@
                         <label class="">资讯筛选</label>
                     </div>
 
+
+
                     <div class="ibox-content p-m no-borders">
                         <div class="form-inline">
                             <div class="form-group m-r-sm">
                                 <label class="control-label" for="goodName">标题关键字：</label>
                                 <input type="text" class="form-control input-sm mb10" id="goodName" name="goodName" placeholder="资讯标题"/>
-                                <button type="button" onclick="orderListHandler.search(1)" class="btn btn-success">筛选</button>
+                                <button type="button" onclick="orderListHandler.search(1)" class="btn btn-success js-search">筛选</button>
                                 <button type="button" onclick="orderListHandler.searchAll()" class="btn btn-success">显示全部</button>
                             </div>
                         </div>
@@ -59,6 +61,11 @@
 
                     <div>
                         <label class="">资讯管理</label>
+                    </div>
+
+                    <!--添加资讯按钮-->
+                    <div style="text-align:right;">
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">添加资讯</button>
                     </div>
 
                     <div class="panel-body">
@@ -95,16 +102,29 @@
                                 <td>已发布</td>
                                 <td>是</td>
                                 <td>
+
+
                                     <span class="cursor-point">
-                                        <i class="fa fa-pencil tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i>
+                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i>
                                     </span>
                                     &nbsp;
+
+                                    <span class="cursor-point">
+                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="转发记录"></i>
+                                    </span>
+                                    &nbsp;
+
+                                    <span class="cursor-point">
+                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
+                                    </span>
+                                    &nbsp;
+
                                     <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
                                     &nbsp;
-                                    <span class="cursor-point"><i class="fa fa-credit-card" data-placement="top" data-toggle="tooltip" data-original-title="销量配置"></i></span>
+
                                 </td>
                             </tr>
                             </tbody>
@@ -139,7 +159,11 @@
 
 <script src="js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
 <script src="js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<!--<style>-->
+    <!--.btn-success{-->
 
+    <!--}-->
+<!--</style>-->
 <script type="text/javascript">
     var pageIndex = 1;
     var totalPage = 20;
@@ -160,6 +184,8 @@
             })
         }
     }
+
+//    $(".js-search")
 </script>
 </body>
 
