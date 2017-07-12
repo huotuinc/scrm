@@ -5,11 +5,11 @@ import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.report.ReportDay;
 import com.huotu.scrm.service.repository.ReportDayRepository;
 import com.huotu.scrm.service.service.ReportDayService;
+import com.huotu.scrm.service.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +26,8 @@ public class ReportDayServiceImpl implements ReportDayService {
     @Override
     @Transactional
     public ApiResult saveReportDay(long userId) {
-        Date date = getDay();
+        /*获取昨日日期*/
+        Date date = DateUtil.getLastDay();
         ReportDay reportDay = new ReportDay();
         /*设置用户ID*/
         reportDay.setUserId(userId);
@@ -104,19 +105,4 @@ public class ReportDayServiceImpl implements ReportDayService {
         }
         return ranking;
     }
-
-    /**
-     * 获取当天时间
-     *
-     * @return
-     */
-    public Date getDay() {
-        Calendar calendar = Calendar.getInstance();//日历对象
-        calendar.setTime(new Date());//设置当前日期
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar.getTime();
-    }
-
 }

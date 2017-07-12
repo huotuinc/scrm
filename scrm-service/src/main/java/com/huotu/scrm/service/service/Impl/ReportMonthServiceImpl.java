@@ -7,6 +7,7 @@ import com.huotu.scrm.service.entity.report.ReportMonth;
 import com.huotu.scrm.service.repository.ReportDayRepository;
 import com.huotu.scrm.service.repository.ReportMonthRepository;
 import com.huotu.scrm.service.service.ReportMonthService;
+import com.huotu.scrm.service.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -33,10 +33,10 @@ public class ReportMonthServiceImpl implements ReportMonthService {
     @Override
     @Transactional
     public ApiResult saveReportMonth(long userId) {
-        /*得到当前月份*/
-        Date month = getMonth();
-        /*得到当前月份第一天*/
-        Date monthDay = getMonthDay();
+        /*得到上月最后一天*/
+        Date month = DateUtil.getLastMonthLastDay();
+        /*得到上月第一天*/
+        Date monthDay = DateUtil.getLastMonthFirstDay();
         ReportMonth reportMonth = new ReportMonth();
         /*设置用户ID*/
         reportMonth.setUserId(userId);
@@ -114,7 +114,7 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      *
      * @param userId   用户ID
      * @param month    当前月份
-     * @param monthDay 当前月份第一天
+     * @param monthDay 上个月份第一天
      * @return
      */
     int getExtensionScore(long userId, Date month, Date monthDay) {
@@ -132,7 +132,7 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      *
      * @param userId   用户ID
      * @param month    当前月份
-     * @param monthDay 当前月份第一天
+     * @param monthDay 上个月份第一天
      * @return
      */
     int getFollowNum(long userId, Date month, Date monthDay) {
@@ -188,40 +188,6 @@ public class ReportMonthServiceImpl implements ReportMonthService {
             }
         }
         return ranking;
-    }
-
-    /**
-     * 获取上月月份最后一号
-     *
-     * @return
-     */
-    public Date getMonth() {
-        Calendar calendar = Calendar.getInstance();//日历对象
-        calendar.setTime(new Date());//设置当前日期
-        calendar.set(Calendar.MONTH, -1);
-        calendar.set(Calendar.DATE, 1);
-        calendar.add(Calendar.MONTH, 1);
-        calendar.add(Calendar.DATE, -1);
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar.getTime();
-    }
-
-    /**
-     * 获取上月1号
-     *
-     * @return
-     */
-    public Date getMonthDay() {
-        Calendar calendar = Calendar.getInstance();//日历对象
-        calendar.setTime(new Date());//设置当前日期
-        calendar.set(Calendar.MONTH, -1);
-        calendar.set(Calendar.DATE, 1);
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        return calendar.getTime();
     }
 
     public Specification<ReportDay> getSpecification(long userId, Date month, Date monthDay) {
