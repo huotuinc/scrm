@@ -12,5 +12,5 @@ public interface ReportDayService {
      *
      * @param userId 用户ID
      */
-    ApiResult saveReportDay(int userId);
+    ApiResult saveReportDay(long userId);
 }

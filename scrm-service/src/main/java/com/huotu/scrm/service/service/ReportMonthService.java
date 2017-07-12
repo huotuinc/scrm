@@ -2,6 +2,8 @@ package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.common.utils.ApiResult;
 
+import java.util.Date;
+
 /**
  * Created by hxh on 2017-07-12.
  */
@@ -12,5 +14,7 @@ public interface ReportMonthService {
      * @param userId 用户ID
      * @return
      */
-    ApiResult saveReportMonth(int userId);
+    ApiResult saveReportMonth(long userId);
+
+    Date getMonth();
 }

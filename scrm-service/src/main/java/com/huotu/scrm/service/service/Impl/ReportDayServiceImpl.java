@@ -25,7 +25,7 @@ public class ReportDayServiceImpl implements ReportDayService {
 
     @Override
     @Transactional
-    public ApiResult saveReportDay(int userId) {
+    public ApiResult saveReportDay(long userId) {
         Date date = getDay();
         ReportDay reportDay = new ReportDay();
         /*设置用户ID*/
@@ -42,29 +42,19 @@ public class ReportDayServiceImpl implements ReportDayService {
         /*保存数据*/
         reportDayRepository.save(reportDay);
         /*设置每日访客排名*/
-        ApiResult visitorRankingResult = visitorRanking(userId, date);
-        if (visitorRankingResult.getCode() == 2000) {
-            reportDay.setVisitorRanking((Integer) visitorRankingResult.getData());
-        }
+        int visitorRanking = visitorRanking(userId, date);
+        reportDay.setVisitorRanking(visitorRanking);
         /*设置每日积分排名*/
-        ApiResult scoreRankingResult = scoreRanking(userId, date);
-        if (scoreRankingResult.getCode() == 2000) {
-            reportDay.setScoreRanking((Integer) scoreRankingResult.getData());
-        } else {
-            return scoreRankingResult;
-        }
+        int scoreRanking = scoreRanking(userId, date);
+        reportDay.setScoreRanking(scoreRanking);
         /*设置每日关注排名（销售员特有）*/
         if (reportDay.isSalesman()) {
-            ApiResult followRankingResult = followRanking(userId, date);
-            if (followRankingResult.getCode() == 2000) {
-                reportDay.setFollowRanking((Integer) followRankingResult.getData());
-            } else {
-                return followRankingResult;
-            }
+            int followRanking = followRanking(userId, date);
+            reportDay.setFollowRanking(followRanking);
         } else {
-            reportDay.setFollowRanking(0);
+            reportDay.setFollowRanking(-1);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "保存每日记录信息成功!",null);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "保存每日记录信息成功!", null);
     }
 
     //    public int saveVisitorNum(int userId) {
@@ -79,41 +69,40 @@ public class ReportDayServiceImpl implements ReportDayService {
 //        return 0;
 //    }
 //
-    public ApiResult visitorRanking(int userId, Date date) {
-
+    public int visitorRanking(long userId, Date date) {
         List<ReportDay> sortAll = reportDayRepository.findOrderByVisitorNum(date);
-        /*默认只排200名*/
+        int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (sortAll.get(i).getUserId() == userId) {
-                return ApiResult.resultWith(ResultCodeEnum.SUCCESS,i + 1);
+                ranking = i + 1;
+                break;
             }
         }
-        /*排名异常*/
-        return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "访客排名异常", null);
+        return ranking;
     }
 
-    //
-
-    public ApiResult scoreRanking(int userId, Date date) {
-        List<ReportDay> sortAll = reportDayRepository.findOrderByExtensionScoce(date);
+    public int scoreRanking(long userId, Date date) {
+        List<ReportDay> sortAll = reportDayRepository.findOrderByExtensionScore(date);
+        int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (sortAll.get(i).getUserId() == userId) {
-                return ApiResult.resultWith(ResultCodeEnum.SUCCESS, i + 1);
+                ranking = i + 1;
+                break;
             }
         }
-        /*预计积分排名异常*/
-        return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "推广积分排名异常", null);
+        return ranking;
     }
 
-    public ApiResult followRanking(int userId, Date date) {
+    public int followRanking(long userId, Date date) {
         List<ReportDay> sortAll = reportDayRepository.findOrderByFollowNum(date);
+        int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (sortAll.get(i).getUserId() == userId) {
-                return ApiResult.resultWith(ResultCodeEnum.SUCCESS, i + 1);
+                ranking = i + 1;
+                break;
             }
         }
-        /*关注量排名异常*/
-        return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "关注排名异常", null);
+        return ranking;
     }
 
     /**

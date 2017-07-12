@@ -11,10 +11,10 @@ import java.util.List;
 /**
  * Created by hxh on 2017-07-11.
  */
-public interface ReportDayRepository extends JpaRepository<ReportDay, Integer>,JpaSpecificationExecutor<ReportDay> {
+public interface ReportDayRepository extends JpaRepository<ReportDay, Long>,JpaSpecificationExecutor<ReportDay> {
 
     @Query("select t from ReportDay t where t.reportDay = ?1 order by t.extensionScore")
-    List<ReportDay> findOrderByExtensionScoce(Date date);
+    List<ReportDay> findOrderByExtensionScore(Date date);
 
     @Query("select t from ReportDay  t where t.reportDay=?1 and t.isSalesman = true order by t.followNum")
     List<ReportDay> findOrderByFollowNum(Date date);
@@ -22,6 +22,5 @@ public interface ReportDayRepository extends JpaRepository<ReportDay, Integer>,J
     @Query("select t from ReportDay  t where t.reportDay=?1 order by t.visitorNum")
     List<ReportDay> findOrderByVisitorNum(Date date);
 
-    List<ReportDay> findByUserIdAndReportDay(int userId, Date date);
 
 }

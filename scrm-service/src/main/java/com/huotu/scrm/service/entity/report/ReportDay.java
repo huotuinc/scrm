@@ -26,19 +26,19 @@ public class ReportDay {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
-    private int id;
+    private Long id;
 
     /**
      * 用户ID
      */
     @Column(name = "User_Id")
-    private int userId;
+    private Long userId;
 
     /**
      * 商户号
      */
     @Column(name = "Customer_Id")
-    private int customerId;
+    private Long customerId;
 
     /**
      * 等级
@@ -71,7 +71,7 @@ public class ReportDay {
     private int visitorRanking;
 
     /**
-     * 每日预计积分
+     * 每日推广积分
      */
     @Column(name = "Extension_Score")
     private int extensionScore;

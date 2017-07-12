@@ -26,19 +26,19 @@ public class ReportMonth {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
-    private int id;
+    private Long id;
 
     /**
      * 用户ID
      */
     @Column(name = "User_Id")
-    private int userId;
+    private Long userId;
 
     /**
      * 商户号
      */
     @Column(name = "Customer_Id")
-    private int customerId;
+    private Long customerId;
 
     /**
      * 等级
