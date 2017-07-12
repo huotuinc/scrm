@@ -46,8 +46,7 @@ public class InfoControllerTest extends CommonTestBase{
     @Test
     public void getInfoListPageable() throws Exception {
 
-        Pageable pageable = new PageRequest(2, 4, null);
-        Page<Info> infoList = infoServer.infoSList(false,pageable);
+        Page<Info> infoList = infoServer.infoSList(false,2,4);
 
         List<Info> infoList1 =  infoList.getContent();
         infoList1.stream()

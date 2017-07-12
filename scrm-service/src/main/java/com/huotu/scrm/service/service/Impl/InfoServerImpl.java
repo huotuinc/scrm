@@ -42,9 +42,7 @@ public class InfoServerImpl implements InfoServer {
 
     public Info infoSave(Info info) {
         Info newInfo;
-        logger.info(info.getId());
          if (info.getId() != null && info.getId() != 0) {
-            logger.info("test");
             newInfo = infoRepository.findOne(info.getId());
         } else {
             newInfo = new Info();

@@ -6,8 +6,6 @@ import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.InfoServer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +32,8 @@ public class InfoController extends MallBaseController {
     @ResponseBody
     public ApiResult searchInfoListTitleLike(String condition){
         //todo
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",infoServer.findListsByWord(condition));
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",
+                infoServer.findListsByWord(condition));
 
     }
 
@@ -60,8 +59,10 @@ public class InfoController extends MallBaseController {
     @RequestMapping("/page")
     @ResponseBody
     public ApiResult getInfoListPageable(int page){
-        Pageable pageable = new PageRequest(page,pageSize);
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",infoServer.infoSList(false,pageable));
+
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",infoServer.infoSList(false,
+                page,pageSize)
+        );
 
     }
 
