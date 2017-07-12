@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.repository;
 
-import com.huotu.scrm.service.entity.Customer;
+import com.huotu.scrm.service.entity.mall.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
