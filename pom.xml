@@ -26,6 +26,7 @@
         <common.dbcp.version>1.4</common.dbcp.version>
         <log4j2.version>2.8.2</log4j2.version>
         <scrm.version>1.0-SNAPSHOT</scrm.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>

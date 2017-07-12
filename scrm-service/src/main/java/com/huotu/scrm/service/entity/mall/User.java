@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.entity;
+package com.huotu.scrm.service.entity.mall;
 
 import com.huotu.scrm.common.ienum.UserType;
 import lombok.Getter;
@@ -28,6 +28,12 @@ public class User {
      */
     @Column(name = "UB_CustomerID")
     private Long customerId;
+
+    /**
+     * 用户等级
+     */
+    @Column(name = "UB_LevelID")
+    private int levelId;
 
     /**
      * 登录名
@@ -60,6 +66,29 @@ public class User {
      */
     @Column(name = "UB_WxNickName")
     private String wxNickName;
+
+    /**
+     * 余额
+     */
+    @Column(name = "UB_UserBalance")
+    private Double userBalance;
+    /**
+     * 临时积分
+     */
+    @Column(name = "UB_UserTempIntegral")
+    private Integer userTempIntegral;
+
+    /**
+     * 冻结金额
+     */
+    @Column(name = "UB_LockedBalance")
+    private Double lockedBalance;
+
+    /**
+     * 冻结积分
+     */
+    @Column(name = "UB_LockedIntegral")
+    private Double lockedIntegral;
 
     /**
      * 注册时间
