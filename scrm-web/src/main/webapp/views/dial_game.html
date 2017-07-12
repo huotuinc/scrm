@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" class="yellow-bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+    <title>大奖送给你</title>
+    <script>!function (e, i) {
+        var t = e.documentElement, n = navigator.userAgent.match(/iphone|ipod|ipad/gi),
+            a = n ? Math.min(i.devicePixelRatio, 3) : 1,
+            m = "orientationchange" in window ? "orientationchange" : "resize";
+        t.dataset.dpr = a;
+        for (var d, l, c = !1, o = e.getElementsByTagName("meta"), r = 0; r < o.length; r++)l = o[r], "viewport" == l.name && (c = !0, d = l);
+        if (c) d.content = "width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no"; else {
+            var o = e.createElement("meta");
+            o.name = "viewport", o.content = "width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no", t.firstElementChild.appendChild(o)
+        }
+        var s = function () {
+            var e = t.clientWidth;
+            e / a > 640 && (e = 640 * a), window.remScale = e / 640, t.style.fontSize = 200 * (e / 640) + "px"
+        };
+        s(), e.addEventListener && i.addEventListener(m, s, !1)
+    }(document, window);
+    </script>
+    <link rel="stylesheet" href="../resources/css/index.css">
+</head>
+<body>
+<section id="app">
+    <a class="record" href="../views/goods_list.html"></a>
+    <div class="banner">
+        <img src="../resources/image/theme.png">
+        <div class="rule" id="J_ruleBtn"></div>
+    </div>
+    <div class="game-time">
+        <p>游戏次数： <span>8</span>次</p>
+        <input type="hidden" value="7" id="J_RemainTimes">
+    </div>
+    <!--6.29更新-->
+    <div class="game-body">
+        <div class="game-body_wrapper">
+            <div class="turntable-border"></div>
+            <div class="radius-group default"></div>
+            <div class="circle" id="J_circle">
+                <div class="circle-box">
+                    <div class="prize" data-index="0" data-id="200" data-type="1">
+                        <div class="prize-dialog">
+                            <p>谢谢参与</p>
+                            <img src="../resources/image/prize-xxcy.png">
+                        </div>
+                    </div>
+                    <div class="prize prize-packet"  data-index="1" data-id="401" data-level="3" data-type="packet">
+                        <div class="prize-dialog">
+                            <p>100元话费</p>
+                            <img src="../resources/image/prize1.png">
+                        </div>
+                    </div>
+                    <div class="prize prize-packet"  data-index="2" data-id="402" data-level="4" data-type="packet">
+                        <div class="prize-dialog">
+                            <p>66元现金红包</p>
+                            <img src="../resources/image/prize2.png">
+                        </div>
+                    </div>
+                    <div class="prize" data-index="3" data-id="300" data-type="0">
+                        <div class="prize-dialog">
+                            <p>幸运袋</p>
+                            <img src="../resources/image/prize-fd.png">
+                        </div>
+                    </div>
+                    <div class="prize prize-packet" data-index="4" data-level="1" data-id="403" data-type="packet">
+                        <div class="prize-dialog">
+                            <p>华为智能手环</p>
+                            <img src="../resources/image/prize3.png" data-type="packet">
+                        </div>
+                    </div>
+                    <div class="prize prize-packet" data-id="404" data-level="2" data-index="5" data-type="packet">
+                        <div class="prize-dialog">
+                            <p>蓝牙耳机</p>
+                            <img src="../resources/image//prize4.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="start" id="J_start"></div>
+        </div>
+        <div class="point"></div>
+    </div>
+    <!--6.29更新-->
+</section>
+<div class="guide" style="left: 1.69rem;top: 2.925rem; display: block;" id="J_guide">
+    <span class="guide-circle"></span>
+    <span class="guide-hand"></span>
+</div>
+<div class="recommend-modal" id="J_recommend" >
+    <div class="recommend-modal-dialog">
+        <i class="icon close"></i>
+        <i class="icon points"></i>
+        <div class="recommend-header"></div>
+        <div class="recommend-body">
+            <img class="recommend-over2" src="../resources/image/over2.png">
+        </div>
+    </div>
+</div>
+<!--6.29更新-->
+<div class="prize-detail-modal" id="J_prizeModal">
+    <div class="prize-detail-dialog">
+        <div class="prize-detail-slidebox">
+            <div class="prize-detail-content on" data-level="4">
+                <div class="prize-detail-info">
+                    <h3>66元现金红包</h3>
+                </div>
+                <div class="prize-detail-description">
+                    <h3><b>66元现金红包，支付宝直充你账户，随你花！</b></h3>
+                    <h3><br></h3>
+                    <p>【商品详情】</p>
+                    <p>商品名称：66元现金红包</p>
+                    <p>&nbsp;</p>
+                    <p>【领取说明】</p>
+                    <p>获奖后，请详细填写个人手机号（将作为支付宝充值号码），我们会在5-10个工作日内为您充值，若因个人原因导致号码错误、误充错充，不会进行补充，敬请谅解</p>
+                    <p>&nbsp;</p>
+                    <p>【特别说明】</p>
+                    <p>暂无</p>
+                </div>
+            </div>
+            <div class="prize-detail-content" data-level="3">
+                <div class="prize-detail-info">
+                    <h3>100元话费</h3>
+                </div>
+                <div class="prize-detail-description">
+                    <h3><b>100元话费</b></h3>
+                    <h3><br></h3>
+                    <p>【商品详情】</p>
+                    <p>商品名称：100元话费充值卡</p>
+                    <p>&nbsp;</p>
+                    <p>【领取说明】</p>
+                    <p>获奖后，请详细填写个人手机号（将作为支付宝充值号码），我们会在5-10个工作日内为您充值，若因个人原因导致号码错误、误充错充，不会进行补充，敬请谅解</p>
+                    <p>&nbsp;</p>
+                    <p>【特别说明】</p>
+                    <p>暂无</p>
+                </div>
+            </div>
+            <div class="prize-detail-content" data-level="2">
+                <div class="prize-detail-info">
+                    <h3>蓝牙耳机</h3>
+                </div>
+                <div class="prize-detail-description">
+                    <h3><b>蓝牙耳机</b></h3>
+                    <h3><br></h3>
+                    <p>【商品详情】</p>
+                    <p>商品名称：蓝牙耳机</p>
+                    <p>&nbsp;</p>
+                    <p>【领取说明】</p>
+                    <p>获奖后，请详细填写个人手机号（将作为支付宝充值号码），我们会在5-10个工作日内为您充值，若因个人原因导致号码错误、误充错充，不会进行补充，敬请谅解</p>
+                    <p>&nbsp;</p>
+                    <p>【特别说明】</p>
+                    <p>暂无</p>
+                </div>
+            </div>
+            <div class="prize-detail-content" data-level="1">
+                <div class="prize-detail-info">
+                    <h3>华为智能手环</h3>
+                </div>
+                <div class="prize-detail-description">
+                    <h3><b>华为智能手环</b></h3>
+                    <h3><br></h3>
+                    <p>【商品详情】</p>
+                    <p>商品名称：华为智能手环</p>
+                    <p>&nbsp;</p>
+                    <p>【领取说明】</p>
+                    <p>获奖后，请详细填写个人手机号（将作为支付宝充值号码），我们会在5-10个工作日内为您充值，若因个人原因导致号码错误、误充错充，不会进行补充，敬请谅解</p>
+                    <p>&nbsp;</p>
+                    <p>【特别说明】</p>
+                    <p>暂无</p>
+                </div>
+            </div>
+        </div>
+        <i class="prize-detail-slideup" id="J_slideUp"></i>
+    </div>
+</div>
+<!--6.29更新-->
+<!--6.29更新-->
+<div class="rule-modal" id="J_ruleModal">
+    <div class="rule-modal-dialog">
+        <header><i></i><span>活动说明</span></header>
+        <section>
+            <div class="description">
+                <div class="description-scroller"><h3>
+                    今天有惊喜，现金红包送你，快领个红包放肆吃喝玩乐吧！</h3>
+                    <h3>活动说明：参与活动即有机会获得幸运奖，每天8次免费抽奖机会。此活动为概率中奖，奖品数量有限，祝好运。</h3>
+                    <p><br></p>
+                    <p>惊喜一：华为智能手环</p>
+                    <p>惊喜二：蓝牙耳机</p>
+                    <p>惊喜三：100元话费</p>
+                    <p>惊喜四：66元现金红包</p>
+                    <p>惊喜五：幸运奖</p>
+                    <p>－－－－－－－－－－－－－－－－</p>
+                    <p>重要声明</p>
+                    <p>1、实物类奖品将在活动结束后5-10个工作日安排发货，请耐心等待</p>
+                    <p>2、优惠券类奖品的使用规则详见每个优惠券的介绍页</p>
+                    <p>3、请兑换后仔细阅读使用流程，如有疑问，可直接联系客服专线：400-006-6855或客服QQ：4000066855（工作日9:00至18:00）</p>
+                    <p>4、通过非法途径获得奖品的，主办方有权不提供奖品</p>
+                    <p>5、本页面广告/内容由第三方提供并承担责任。</p></div>
+            </div>
+            <div class="probability">
+                <div class="nav"><span>更多概率说明</span><i></i></div>
+                <div class="text">
+                    <div class="probability-wrapper">
+                        <ul>
+                            <li>华为智能手环，共2份，中奖概率0.01%<br></li>
+                            <li>蓝牙耳机，共4份，中奖概率0.02%<br></li>
+                            <li>100元话费，共6份，中奖概率0.03%<br></li>
+                            <li>幸运奖，共20份，中奖概率1%</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="close"></div>
+    </div>
+</div>
+<!--6.29更新-->
+<div class="error-modal" id="J_errorModal">
+    <div class="error-wrapper">
+        <div class="error-header">
+            <div class="error-close js-errorClose"></div>
+            <h4 class="error-title">网络解析错误！</h4>
+        </div>
+        <div class="error-bg">
+            <img src="../resources/image/error.png">
+        </div>
+        <div class="error-footer">
+            <a href="javascript:;" class="error-btn js-errorClose">再试一遍</a>
+        </div>
+    </div>
+</div>
+<div class="loading-modal" id="J_loadingModal">
+    <div class="loading-bg"></div>
+</div>
+<div class="pre-loader"></div>
+</body>
+<script src="http://resali.huobanplus.com/cdn/zepto/1.2.0/zepto.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/game/imagesloaded.pkgd.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
+<script src="http://resali.huobanplus.com/cdn/game/awardRotate.js"></script>
+<!--正式删除-->
+<script src="../resources/js/mock/mock-min.js"></script>
+<script src="../resources/js/mock/api.js"></script>
+<!--正式删除-->
+<script src="../resources/js/dial_game.js"></script>
+</html>
