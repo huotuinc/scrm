@@ -9,6 +9,8 @@
 
 package com.huotu.scrm.web.controller.common;
 
+import com.huotu.scrm.common.ienum.EnumHelper;
+import com.huotu.scrm.common.ienum.UploadResourceEnum;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.apache.http.client.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +35,21 @@ public class UploadController {
     @Autowired
     private StaticResourceService resourceServer;
 
+    /**
+     * 上传图片/文件
+     *
+     * @param customerId 商户ID
+     * @param id         各种信息的主键，如果上传资讯相关文件则为资讯主键；如果上传名片相关图片则为名片主键
+     * @param uploadType 参考{@link UploadResourceEnum}
+     * @param files      文件信息
+     * @return
+     */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public Map<Object, Object> upLoad(
-            @RequestParam(value = "customerId")Long customerId,
-            @RequestParam(value = "userId",required = false)Long userId,
-            @RequestParam(value = "infoId",required = false)Long infoId,
+            @RequestParam(value = "customerId") Long customerId,
+            @RequestParam(value = "id", required = false) Long id,
+            @RequestParam(value = "uploadType", required = false) Integer uploadType,
             @RequestParam(value = "btnFile", required = false) MultipartFile files) {
         int result = 0;
         Map<Object, Object> responseData = new HashMap<Object, Object>();
@@ -47,15 +58,18 @@ public class UploadController {
             String fileName = files.getOriginalFilename();
             String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
             String path;
-            if(userId != null){
-                path = StaticResourceService.IMG + customerId + "/user/" + userId + "." + prefix;
-            }else if(infoId != null){
-                path = StaticResourceService.IMG + customerId + "/info/" + infoId + "." + prefix;
-            }else {
-                path = StaticResourceService.IMG + customerId + "/" + DateUtils.formatDate(now,"yyyyMMdd") + "/"
+            UploadResourceEnum uploadResourceEnum = null;
+            if (uploadType != null) {
+                uploadResourceEnum = EnumHelper.getEnumType(UploadResourceEnum.class, uploadType);
+            }
+            if (id != null && uploadType != null) {
+                //如果有某一类的主键
+                path = StaticResourceService.IMG + customerId + "/" + uploadResourceEnum.getValue() + "/" + id + "." + prefix;
+            } else {
+                path = StaticResourceService.IMG + customerId + "/" + DateUtils.formatDate(now, "yyyyMMdd") + "/"
                         + DateUtils.formatDate(now, "yyyyMMddHHmmSS") + "." + prefix;
             }
-            URI uri = resourceServer.uploadResource(null,path, files.getInputStream());
+            URI uri = resourceServer.uploadResource(null, path, files.getInputStream());
             responseData.put("fileUrl", uri);
             responseData.put("fileUri", path);
             result = 1;
