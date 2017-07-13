@@ -1,5 +1,7 @@
 package com.huotu.scrm.service.config;
 
+import com.huotu.scrm.common.SysConstant;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -14,10 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         "com.huotu.scrm.service",
         "com.huotu.scrm.common"
 })
-@EnableJpaRepositories(
-        basePackages = "com.huotu.scrm.service.repository"
-
-)
+@EnableJpaRepositories(basePackages = "com.huotu.scrm.service.repository")
 @EnableTransactionManagement
 @ImportResource({"classpath:hbm_config_prod.xml", "classpath:hbm_config_test.xml"})
 public class ServiceConfig {

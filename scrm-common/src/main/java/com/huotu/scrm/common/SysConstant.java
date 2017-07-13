@@ -7,13 +7,15 @@ import org.springframework.stereotype.Component;
 /**
  * Created by helloztt on 2017-06-27.
  */
-@Component
+@Component("sysConstant")
 public class SysConstant {
     public static String COOKIE_DOMAIN;
+    public static String HUOBANMALL_RESOURCE_HOST;
 
     @Autowired
     public SysConstant(Environment env){
         COOKIE_DOMAIN = env.getProperty("cookie.domain", ".pdmall.com");
+        HUOBANMALL_RESOURCE_HOST = env.getProperty("huobanmall.resourceUrl", "http://res.pdmall.com");
 
     }
 }

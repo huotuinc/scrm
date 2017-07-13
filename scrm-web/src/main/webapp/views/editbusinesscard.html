@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>名片设置</title>
+    <link type="text/css" rel="stylesheet" href="../css/cropper.min.css" >
+    <!--<link rel="stylesheet" href="http://resali.huobanplus.com/cdn/hotui/css/plugins/cropper/cropper.min.css" >-->
+    <style>
+
+        .imagecontainer{
+            background-color: #f7f7f7;
+            width: 100%;
+            text-align: center;
+            max-height: 469px;
+            margin-bottom: 1rem;
+            min-height: 469px;
+        }
+
+    </style>
+
+</head>
+<body >
+   <h3>哈哈哈！！！</h3>
+   <!--<div th:if="${user.user}">-->
+       <!--<label th:text="${user.user.getId()}" />-->
+       <!--<label th:text="${user.user.getNickName()}" />-->
+       <!--<label th:text="${user.user.getWxNickName()}" />-->
+       <!--<img th:src="${user.user.getWeixinImageUrl()}" />-->
+   <!--</div>-->
+
+
+   <form name="avform" action="/common/upload?customerId=1&userId=1" method="post" enctype="multipart/form-data">
+
+    <div>
+        <input type="hidden" name="uploaddata" >
+        <img id="simage" src="" class="imagecontainer"/>
+        <input type="file" id="btnFile" name="btnFile" accept="image/*" />
+    </div>
+   <div class=".img-preview"></div>
+
+   <input type="submit" id="uploadavator" value="上传头像" />
+
+
+       <input type="text" id="companyname">
+       <input type="button" id="updatecompanyname" js-datatype="1" value="修改企业名">
+
+       <input type="text" id="qq">
+       <input type="button" id="updateqq" value="修改QQ" js-datatype="2">
+
+       <input type="text" id="tel">
+       <input type="button" id="updatetel" value="修改固定电话" js-datatype="3">
+
+   </form>
+
+
+
+   <script  src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js" ></script>
+   <script  src="../js/cropper.min.js" ></script>
+   <script  src="../js/businesscardJs/businesscard.js" ></script>
+
+</body>
+
+
+</html>
