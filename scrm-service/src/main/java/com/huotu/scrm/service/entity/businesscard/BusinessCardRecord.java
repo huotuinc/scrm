@@ -11,7 +11,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Created by Administrator on 2017/7/12.
+ * 销售员名片关注表
+ * Created by jinxiangdong on 2017/7/12.
  */
 @Getter
 @Setter

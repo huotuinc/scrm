@@ -29,7 +29,7 @@ public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
-    private long actId;
+    private Long actId;
 
     /**
      * 商户Id

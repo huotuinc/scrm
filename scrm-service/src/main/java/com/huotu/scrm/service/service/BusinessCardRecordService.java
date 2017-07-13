@@ -11,13 +11,21 @@ public interface BusinessCardRecordService {
      * @param userId
      * @return
      */
-    int getFollowCountByCustomerIdAndUserId(long customerId , long userId);
+    int getFollowCountByCustomerIdAndUserId(Long customerId , Long userId);
 
     /***
      * 删除关注信息
      * @param customerId
      * @param userId
      */
-    void deleteByCustomerIdAndUserIdAndFollowId(long customerId , long userId , long followId );
+    void deleteByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId );
 
+    /***
+     * 是否关注了指定的销售员名片
+     * @param customerId
+     * @param userId
+     * @param followId
+     * @return
+     */
+    boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId);
 }

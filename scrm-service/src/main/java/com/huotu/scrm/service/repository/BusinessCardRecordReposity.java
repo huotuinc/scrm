@@ -9,7 +9,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface BusinessCardRecordReposity extends JpaRepository<BusinessCardRecord , Long > {
 
-    void deleteByCustomerIdAndUserIdAndFollowId(long customerId , long userId , long followId);
+    void deleteByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId);
 
-    int getFollowCountByCustomerIdAndUserId(long customerId , long userId );
+    Integer getNumberOfFollowerByCustomerIdAndUserId(Long customerId , Long userId );
+
+    /***
+     * 是否关注了指定的销售员名片
+     * @param customerId
+     * @param userId
+     * @param followId
+     * @return
+     */
+    Boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId);
 }

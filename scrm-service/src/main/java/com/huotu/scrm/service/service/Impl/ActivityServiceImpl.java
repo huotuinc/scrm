@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service.Impl;
+package com.huotu.scrm.service.service.impl;
 
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;

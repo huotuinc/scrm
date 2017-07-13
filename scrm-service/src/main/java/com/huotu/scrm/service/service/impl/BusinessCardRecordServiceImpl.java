@@ -15,12 +15,17 @@ public class BusinessCardRecordServiceImpl implements BusinessCardRecordService 
     BusinessCardRecordReposity businessCardRecordReposity;
 
     @Override
-    public int getFollowCountByCustomerIdAndUserId(long customerId, long userId) {
-        return businessCardRecordReposity.getFollowCountByCustomerIdAndUserId(customerId , userId);
+    public int getFollowCountByCustomerIdAndUserId(Long customerId, Long userId) {
+        return businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId , userId);
     }
 
     @Override
-    public void deleteByCustomerIdAndUserIdAndFollowId(long customerId, long userId, long followId) {
+    public void deleteByCustomerIdAndUserIdAndFollowId(Long customerId,Long userId, Long followId) {
         businessCardRecordReposity.deleteByCustomerIdAndUserIdAndFollowId(customerId,userId, followId);
+    }
+
+    @Override
+    public boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId) {
+        return businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId, userId,followId);
     }
 }

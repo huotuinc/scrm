@@ -24,7 +24,7 @@ public class ActPrize {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Prize_Id")
-    private long prizeId;
+    private Long prizeId;
 
     @Column(name ="Prize_Name")
     private String prizeName;

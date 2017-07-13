@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * 名片信息表
- * Created by Administrator on 2017/7/11.
+ * 销售员名片信息表
+ * Created by jinxiangdong on 2017/7/11.
  */
 @Table(name = "SCRM_BusinessCard" )
 @Getter
