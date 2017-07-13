@@ -43,7 +43,7 @@ public class BusinessCardController extends MallBaseController{
     public String editBusinessCard(HttpServletRequest request , long salesmanId , Model model ){
         BusinessCard businessCard = businessCardService.getBusinessCard(salesmanId , getCustomerId(request));
         model.addAttribute("businessCard", businessCard);
-        return "views/editbusinesscard";
+        return "businesscard/editbusinesscard";
     }
 
 
