@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.util.StreamUtils;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public abstract class AbstractStaticResourceService implements StaticResourceSer
     protected URI uriPrefix;
     protected URI fileHome;
     protected URI huobanmallPrefix;
-//    protected URI ftpPrefix;
+    //    protected URI ftpPrefix;
 //    protected URI ftpHome;
     @Autowired
     private VFSHelper vfsHelper;
@@ -43,11 +44,11 @@ public abstract class AbstractStaticResourceService implements StaticResourceSer
     }
 
     @Override
-    public URI uploadResource(String mode , String path, InputStream data) throws IOException, IllegalStateException, URISyntaxException {
+    public URI uploadResource(String mode, String path, InputStream data) throws IOException, IllegalStateException, URISyntaxException {
         StringBuilder stringBuilder;
-        if(this.huobanmallMode.equals(mode)){
+        if (this.huobanmallMode.equals(mode)) {
             stringBuilder = new StringBuilder(huobanmallPrefix.toString());
-        }else{
+        } else {
             stringBuilder = new StringBuilder(fileHome.toString());
         }
         if (!stringBuilder.toString().endsWith("/") && !path.startsWith("/"))
@@ -71,15 +72,15 @@ public abstract class AbstractStaticResourceService implements StaticResourceSer
                 }
             }
         });
-        return getResource(mode,path);
+        return getResource(mode, path);
     }
 
     @Override
-    public URI getResource(String mode,String path) throws URISyntaxException {
+    public URI getResource(String mode, String path) throws URISyntaxException {
         StringBuilder stringBuilder;
-        if(this.huobanmallMode.equals(mode)){
+        if (this.huobanmallMode.equals(mode)) {
             stringBuilder = new StringBuilder(huobanmallPrefix.toString());
-        }else {
+        } else {
             stringBuilder = new StringBuilder(uriPrefix.toString());
         }
         if (!stringBuilder.toString().endsWith("/") && !path.startsWith("/"))

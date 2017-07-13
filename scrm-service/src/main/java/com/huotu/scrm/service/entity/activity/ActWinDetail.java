@@ -28,7 +28,7 @@ public class ActWinDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    private long winDetailId;
+    private Long winDetailId;
 
     @Column(name = "User_Id")
     private long userId;

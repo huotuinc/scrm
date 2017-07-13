@@ -1,6 +1,6 @@
 package com.huotu.scrm.web.service.impl;
 
-import com.huotu.hotsupplier.common.SysConstant;
+import com.huotu.scrm.common.SysConstant;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
