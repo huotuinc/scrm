@@ -23,6 +23,8 @@ public class ReportDayServiceImpl implements ReportDayService {
     @Autowired
     private ReportDayRepository reportDayRepository;
 
+    private
+
     @Override
     @Transactional
     public ApiResult saveReportDay(long userId) {
