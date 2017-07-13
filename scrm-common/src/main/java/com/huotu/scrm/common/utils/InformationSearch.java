@@ -13,7 +13,7 @@ public class InformationSearch {
     private int status = 1;
     private int disable = 0;
     private int pageNo = 1;
-    private int pageSize = 10;
+    private int pageSize = 5;
     private String searchCondition;
 
     @Override
