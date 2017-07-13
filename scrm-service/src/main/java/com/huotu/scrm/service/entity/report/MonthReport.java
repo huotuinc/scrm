@@ -17,8 +17,8 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-@Table(name = "SCRM_DayReport")
-public class ReportDay {
+@Table(name = "SCRM_MonthReport")
+public class MonthReport {
 
     /**
      * 自增编号
@@ -53,51 +53,44 @@ public class ReportDay {
     private boolean  isSalesman;
 
     /**
-     * 每日资讯转发量
+     * 每月资讯转发量
      */
     @Column(name = "Forward_Num")
     private int forwardNum;
 
     /**
-     * 每日访客量（转发页面的今日访问量）
+     * 每月访客量（转发页面的今月访问量）
      */
     @Column(name = "Visitor_Num")
     private int visitorNum;
 
     /**
-     * 每日访客排名
-     */
-    @Column(name = "Visitor_Ranking")
-    private int visitorRanking;
-
-    /**
-     * 每日推广积分
+     * 每月推广积分
      */
     @Column(name = "Extension_Score")
     private int extensionScore;
 
     /**
-     * 每日积分排名
+     * 每月积分排名
      */
     @Column(name = "Score_Ranking")
     private int scoreRanking;
 
     /**
-     * 每日被关注量（销售员特有）
+     * 每月被关注量（销售员特有）
      */
     @Column(name = "Follow_Num")
     private int followNum;
 
     /**
-     * 每日关注排名（销售员特有）
+     * 每月关注排名（销售员特有）
      */
     @Column(name = "Follow_Ranking")
     private int followRanking;
 
     /**
-     * 统计日期
+     * 统计月份
      */
-    @Column(name = "Report_Day")
-    private Date reportDay;
-
+    @Column(name = "Report_Month")
+    private Date reportMonth;
 }

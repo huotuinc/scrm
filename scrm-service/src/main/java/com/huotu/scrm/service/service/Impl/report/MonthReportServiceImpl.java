@@ -1,12 +1,10 @@
-package com.huotu.scrm.service.service.Impl;
+package com.huotu.scrm.service.service.Impl.report;
 
-import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.ResultCodeEnum;
-import com.huotu.scrm.service.entity.report.ReportDay;
-import com.huotu.scrm.service.entity.report.ReportMonth;
-import com.huotu.scrm.service.repository.ReportDayRepository;
-import com.huotu.scrm.service.repository.ReportMonthRepository;
-import com.huotu.scrm.service.service.ReportMonthService;
+import com.huotu.scrm.service.entity.report.DayReport;
+import com.huotu.scrm.service.entity.report.MonthReport;
+import com.huotu.scrm.service.repository.report.ReportDayRepository;
+import com.huotu.scrm.service.repository.report.ReportMonthRepository;
+import com.huotu.scrm.service.service.MonthReportService;
 import com.huotu.scrm.service.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,7 +20,7 @@ import java.util.List;
  * Created by hxh on 2017-07-12.
  */
 @Service
-public class ReportMonthServiceImpl implements ReportMonthService {
+public class MonthReportServiceImpl implements MonthReportService {
 
     @Autowired
     private ReportDayRepository reportDayRepository;
@@ -32,12 +30,12 @@ public class ReportMonthServiceImpl implements ReportMonthService {
 
     @Override
     @Transactional
-    public ApiResult saveReportMonth(long userId) {
+    public void saveReportMonth(Long userId) {
         /*得到上月最后一天*/
         Date month = DateUtil.getLastMonthLastDay();
         /*得到上月第一天*/
         Date monthDay = DateUtil.getLastMonthFirstDay();
-        ReportMonth reportMonth = new ReportMonth();
+        MonthReport reportMonth = new MonthReport();
         /*设置用户ID*/
         reportMonth.setUserId(userId);
         /*设置商户ID*/
@@ -70,7 +68,6 @@ public class ReportMonthServiceImpl implements ReportMonthService {
         /*设置每月关注量排名*/
         int followRanking = getFollowRanking(userId, monthDay);
         reportMonth.setFollowRanking(followRanking);
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "每月统计信息成功", null);
     }
 
     /**
@@ -81,11 +78,11 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      * @param monthDay 当前月份第一天
      * @return
      */
-    int getForwardNum(long userId, Date month, Date monthDay) {
-        Specification<ReportDay> specification = getSpecification(userId, month, monthDay);
-        List<ReportDay> visitorNumList = reportDayRepository.findAll(specification);
+    int getForwardNum(Long userId, Date month, Date monthDay) {
+        Specification<DayReport> specification = getSpecification(userId, month, monthDay);
+        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
         int num = 0;
-        for (ReportDay reportDay : visitorNumList) {
+        for (DayReport reportDay : visitorNumList) {
             num += reportDay.getForwardNum();
         }
         return num;
@@ -99,11 +96,11 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      * @param monthDay 当前月份第一天
      * @return
      */
-    int getVisitorNum(long userId, Date month, Date monthDay) {
-        Specification<ReportDay> specification = getSpecification(userId, month, monthDay);
-        List<ReportDay> visitorNumList = reportDayRepository.findAll(specification);
+    int getVisitorNum(Long userId, Date month, Date monthDay) {
+        Specification<DayReport> specification = getSpecification(userId, month, monthDay);
+        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
         int num = 0;
-        for (ReportDay reportDay : visitorNumList) {
+        for (DayReport reportDay : visitorNumList) {
             num += reportDay.getVisitorNum();
         }
         return num;
@@ -117,11 +114,11 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      * @param monthDay 上个月份第一天
      * @return
      */
-    int getExtensionScore(long userId, Date month, Date monthDay) {
-        Specification<ReportDay> specification = getSpecification(userId, month, monthDay);
-        List<ReportDay> visitorNumList = reportDayRepository.findAll(specification);
+    int getExtensionScore(Long userId, Date month, Date monthDay) {
+        Specification<DayReport> specification = getSpecification(userId, month, monthDay);
+        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
         int num = 0;
-        for (ReportDay reportDay : visitorNumList) {
+        for (DayReport reportDay : visitorNumList) {
             num += reportDay.getExtensionScore();
         }
         return num;
@@ -135,8 +132,8 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      * @param monthDay 上个月份第一天
      * @return
      */
-    int getFollowNum(long userId, Date month, Date monthDay) {
-        Specification<ReportDay> specification = ((root, query, cb) -> {
+    int getFollowNum(Long userId, Date month, Date monthDay) {
+        Specification<DayReport> specification = ((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("userId").as(Long.class), userId));
             predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(Date.class), month));
@@ -144,9 +141,9 @@ public class ReportMonthServiceImpl implements ReportMonthService {
             predicates.add(cb.equal(root.get("isSalesman").as(boolean.class), true));
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         });
-        List<ReportDay> visitorNumList = reportDayRepository.findAll(specification);
+        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
         int num = 0;
-        for (ReportDay reportDay : visitorNumList) {
+        for (DayReport reportDay : visitorNumList) {
             num += reportDay.getFollowNum();
         }
         return num;
@@ -159,8 +156,8 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      * @param month  统计月份
      * @return
      */
-    public int getScoreRanking(long userId, Date month) {
-        List<ReportMonth> sortAll = reportMonthRepository.findOrderByExtensionScore(month);
+    public int getScoreRanking(Long userId, Date month) {
+        List<MonthReport> sortAll = reportMonthRepository.findOrderByExtensionScore(month);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (sortAll.get(i).getUserId() == userId) {
@@ -178,8 +175,8 @@ public class ReportMonthServiceImpl implements ReportMonthService {
      * @param month  统计月份
      * @return
      */
-    public int getFollowRanking(long userId, Date month) {
-        List<ReportMonth> sortAll = reportMonthRepository.findOrderByFollowNum(month);
+    public int getFollowRanking(Long userId, Date month) {
+        List<MonthReport> sortAll = reportMonthRepository.findOrderByFollowNum(month);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (sortAll.get(i).getUserId() == userId) {
@@ -190,8 +187,8 @@ public class ReportMonthServiceImpl implements ReportMonthService {
         return ranking;
     }
 
-    public Specification<ReportDay> getSpecification(long userId, Date month, Date monthDay) {
-        Specification<ReportDay> specification = ((root, query, cb) -> {
+    public Specification<DayReport> getSpecification(Long userId, Date month, Date monthDay) {
+        Specification<DayReport> specification = ((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("userId").as(Long.class), userId));
             predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(Date.class), month));
