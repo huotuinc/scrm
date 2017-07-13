@@ -89,6 +89,7 @@ public class Activity {
 
     /**
      * 是否删除
+     *
      * 0:已删除，1:未删除 默认是1
      */
     @Column(name = "Is_Delete")

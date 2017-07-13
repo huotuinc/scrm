@@ -22,20 +22,20 @@
 </head>
 <body >
    <h3>哈哈哈！！！</h3>
-   <div th:if="${user.user}">
-       <label th:text="${user.user.getId()}" />
-       <label th:text="${user.user.getNickName()}" />
-       <label th:text="${user.user.getWxNickName()}" />
-       <img th:src="${user.user.getWeixinImageUrl()}" />
-   </div>
+   <!--<div th:if="${user.user}">-->
+       <!--<label th:text="${user.user.getId()}" />-->
+       <!--<label th:text="${user.user.getNickName()}" />-->
+       <!--<label th:text="${user.user.getWxNickName()}" />-->
+       <!--<img th:src="${user.user.getWeixinImageUrl()}" />-->
+   <!--</div>-->
 
 
-   <form name="avform" action="/mall/uploadAvator?customerId=1" method="post" enctype="multipart/form-data">
+   <form name="avform" action="/common/upload?customerId=1&userId=1" method="post" enctype="multipart/form-data">
 
     <div>
         <input type="hidden" name="uploaddata" >
         <img id="simage" src="" class="imagecontainer"/>
-        <input type="file" id="uploadimage" name="uploadImage" accept="image/*" />
+        <input type="file" id="btnFile" name="btnFile" accept="image/*" />
     </div>
    <div class=".img-preview"></div>
 

@@ -22,28 +22,28 @@ $(function () {
 
     URL = window.URL || window.webkitURL;
 
-    var options = {
-        aspectRatio: 16 / 9,
-        preview: '.img-preview',
-        crop: function (e) {
-            // $dataX.val(Math.round(e.x));
-            // $dataY.val(Math.round(e.y));
-            // $dataHeight.val(Math.round(e.height));
-            // $dataWidth.val(Math.round(e.width));
-            // $dataRotate.val(e.rotate);
-            // $dataScaleX.val(e.scaleX);
-            // $dataScaleY.val(e.scaleY);
-            // console.log(Math.round(e.x));
-            // console.log(Math.round(e.y));
-            // console.log(Math.round(e.height));
-            // console.log(Math.round(e.width));
-            // console.log(e.rotate);
-            // console.log(e.scaleX);
-            // console.log(e.scaleY);
-        }
-    };
+    // var options = {
+    //     aspectRatio: 16 / 9,
+    //     preview: '.img-preview',
+    //     crop: function (e) {
+    //         // $dataX.val(Math.round(e.x));
+    //         // $dataY.val(Math.round(e.y));
+    //         // $dataHeight.val(Math.round(e.height));
+    //         // $dataWidth.val(Math.round(e.width));
+    //         // $dataRotate.val(e.rotate);
+    //         // $dataScaleX.val(e.scaleX);
+    //         // $dataScaleY.val(e.scaleY);
+    //         // console.log(Math.round(e.x));
+    //         // console.log(Math.round(e.y));
+    //         // console.log(Math.round(e.height));
+    //         // console.log(Math.round(e.width));
+    //         // console.log(e.rotate);
+    //         // console.log(e.scaleX);
+    //         // console.log(e.scaleY);
+    //     }
+    // };
 
-    var $uploadimage = $("#uploadimage");
+    var $uploadimage = $("#btnFile");
 
     $uploadimage.change(uploadimage);
 
@@ -107,13 +107,13 @@ $(function () {
 
         //$simage.cropper('destroy').attr('src', uploadImageFileUrl).cropper(options);
 
-        //$simage.attr("src", uploadImageFileUrl);
+        $simage.attr("src", uploadImageFileUrl);
 
         console.log("set image");
 
-        $simage.cropper("replace", uploadImageFileUrl);
+        //$simage.cropper("replace", uploadImageFileUrl);
 
-        initCropper();
+        //initCropper();
 
 
     }
@@ -124,7 +124,7 @@ $(function () {
         //var data = $simage.cropper("getCroppedCanvas").toDataURL();
 
         //console.log( data);
-        var $uploadimage = $("#uploadimage");
+        var $uploadimage = $("#btnFile");
         if( !$uploadimage.val()  ) return false;
 
         alert("upload222");

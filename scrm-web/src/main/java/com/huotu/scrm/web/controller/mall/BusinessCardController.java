@@ -47,9 +47,9 @@ public class BusinessCardController extends MallBaseController{
     }
 
 
-//    @RequestMapping(value = "/uploadAvator" , method = RequestMethod.POST )
-//    @ResponseBody
-//    public ApiResult uploadAvator(HttpServletRequest request , MultipartFile uploadImage ){
+    @RequestMapping(value = "/uploadAvator" , method = RequestMethod.POST )
+    @ResponseBody
+    public ApiResult uploadAvator(HttpServletRequest request , MultipartFile uploadImage ){
 //
 //        try {
 //            if( uploadImage == null || uploadImage.getSize() ==0 || uploadImage.isEmpty()){
@@ -85,12 +85,12 @@ public class BusinessCardController extends MallBaseController{
 //            inputStream.close();
 //            fileOutputStream.close();
 //
-//            return  new ApiResult( ResultCodeEnum.SUCCESS.getResultMsg() , ResultCodeEnum.SUCCESS.getResultCode() );
+            return  new ApiResult( ResultCodeEnum.SUCCESS.getResultMsg() , ResultCodeEnum.SUCCESS.getResultCode() );
 //        }catch (IOException ioEx){
 //            return new ApiResult(ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultMsg() , ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultCode());
 //        }
-//    }
-//
+    }
+
 
     @RequestMapping(value = "/updateBusinessCardInfo" , method = RequestMethod.POST)
     @ResponseBody

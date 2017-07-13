@@ -32,7 +32,8 @@ import java.util.List;
 @EnableWebMvc
 @ComponentScan({
         "com.huotu.scrm.web.controller",
-        "com.huotu.scrm.web.interceptor"
+        "com.huotu.scrm.web.interceptor",
+        "com.huotu.scrm.web.service"
 })
 @Import({MVCConfig.ThymeleafConfig.class, ServiceConfig.class})
 public class MVCConfig extends WebMvcConfigurerAdapter {
