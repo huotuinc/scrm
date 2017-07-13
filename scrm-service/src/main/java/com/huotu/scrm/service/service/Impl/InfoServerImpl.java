@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.Impl;
 
+import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.service.InfoServer;
@@ -11,11 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.criteria.Predicate;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -45,6 +42,7 @@ public class InfoServerImpl implements InfoServer {
         } else {
             newInfo = new Info();
         }
+        newInfo.setCustomerId(info.getCustomerId());
         newInfo.setTitle(info.getTitle());
         newInfo.setIntroduce(info.getIntroduce());
         newInfo.setContent(info.getContent());
@@ -58,11 +56,13 @@ public class InfoServerImpl implements InfoServer {
 
     }
 
-    public Page<Info> infoSList(boolean disable,  int page, int pageSize) {
-        Pageable pageable = new PageRequest(page,pageSize);
-        return infoRepository.findAll((root, query, cb) -> {
-            Predicate predicate = cb.isTrue(cb.literal(true));
-            predicate = cb.and(predicate, cb.equal(root.get("disable").as(boolean.class), disable));
+    public Page<Info> infoSList(InformationSearch informationSearch) {
+        Pageable pageable = new PageRequest(informationSearch.getPageNo(), informationSearch.getPageSize());
+        return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+            Predicate predicate = criteriaBuilder.isTrue(criteriaBuilder.literal(true));
+
+            if (StringU)
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("disable").as(boolean.class), informationSearch.getDisable()));
             return predicate;
         }, pageable);
     }

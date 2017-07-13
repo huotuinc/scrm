@@ -25,7 +25,9 @@
 
 <body class="gray-bg" data-unitTest="false" data-prototype="true"
       data-url-infoListsCount="../assets/mock/infoLists.json"
-      th:attr="data-url-infoLists=@{/mall/count}"
+      data-url-edit="infoEdit.html"
+      th:attr="data-url-infoLists=@{/mall/count}
+      ,data-url-edit=@{/mall/edit}"
 >
 
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
@@ -44,10 +46,10 @@
                     <div class="ibox-content p-m no-borders">
                         <div class="form-inline">
                             <div class="form-group m-r-sm">
-                                <label class="control-label" for="goodName">标题关键字：</label>
-                                <input type="text" class="form-control input-sm mb10" id="goodName" name="goodName" placeholder="资讯标题"/>
-                                <button type="button" onclick="orderListHandler.search(1)" class="btn btn-success js-search">筛选</button>
-                                <button type="button" onclick="orderListHandler.searchAll()" class="btn btn-success">显示全部</button>
+                                <label class="control-label" for="infoName">标题关键字：</label>
+                                <input type="text" class="form-control input-sm mb10" id="infoName" name="infoName" placeholder="资讯标题"/>
+                                <button type="button"  class="btn btn-success js-search">筛选</button>
+                                <button type="button"  class="btn btn-success js-searchAll">显示全部</button>
                             </div>
                         </div>
                     </div>
@@ -93,9 +95,13 @@
                                 <td style="width: 20%;">
                                     <p style="width: 100%; height: 50px;">
                                         <!--资讯标题-->
-                                        <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
+
+                                        <a>
+                                            <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
                                                 习近平对司法体制改革作出重要指示引起热烈反响
-                                        </span>
+                                            </span>
+                                        </a>
+
                                     </p>
                                 </td>
                                 <td style="width: 20%;">
@@ -109,8 +115,7 @@
                                 <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
                                     <span class="cursor-point">
-                                        <a href="infoEdit.html"></a>
-                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i>
+                                        <a href="infoEdit.html" th:href="@{/mall/edit}"><i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i></a>
                                     </span>
                                     &nbsp;
 

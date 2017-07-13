@@ -43,21 +43,21 @@ public class InfoControllerTest extends CommonTestBase{
         logger.info(count);
     }
 
-    @Test
-    public void getInfoListPageable() throws Exception {
-
-        Page<Info> infoList = infoServer.infoSList(false,2,4);
-
-        List<Info> infoList1 =  infoList.getContent();
-        infoList1.stream()
-                .forEach(System.out::println);
-
-        for (Info info: infoList1
-             ) {
-            logger.info(info.getTitle()+"----"+info.getContent());
-        }
-
-    }
+//    @Test
+//    public void getInfoListPageable() throws Exception {
+//
+//        Page<Info> infoList = infoServer.infoSList(false,2,4);
+//
+//        List<Info> infoList1 =  infoList.getContent();
+//        infoList1.stream()
+//                .forEach(System.out::println);
+//
+//        for (Info info: infoList1
+//             ) {
+//            logger.info(info.getTitle()+"----"+info.getContent());
+//        }
+//
+//    }
 
     @Test
     public void saveInfo() throws Exception {

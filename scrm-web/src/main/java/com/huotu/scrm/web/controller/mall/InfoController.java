@@ -3,6 +3,7 @@ package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
+import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.InfoServer;
 import org.apache.commons.logging.Log;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,47 +27,65 @@ import java.util.Map;
 public class InfoController extends MallBaseController {
 
     private Log logger = LogFactory.getLog(InfoController.class);
-
+    private static final  int pageSize = 5;
 
     @Autowired
     InfoServer infoServer;
-    private static final  int pageSize = 5;
+
 
     /***
      * 展示资讯首页内容
      * @param model
      * @return
      */
-    @RequestMapping(value = "/infoHome")
-    public String infoHomeLists(Model model){
-        Page<Info> page = infoServer.infoSList(false,
-                0,pageSize);
+    @RequestMapping(value = "/infoLists")
+    public String infoHomeLists(InformationSearch informationSearch, Model model){
+
+        logger.info(informationSearch);
+
+        Page<Info> page = infoServer.infoSList(informationSearch);
         model.addAttribute("infoLists",page.getContent());
 
-        page.getContent().stream()
-                .forEach(System.out::println);
         long account = infoServer.infoListsCount(false);
         model.addAttribute("totalAccount",account);
-
         return "info_list";
     }
 
 
-
-
     /**
-     * 通过资讯标题模糊搜索相应的资讯列表
-     * @param condition
+     *
+     * @param model
      * @return
      */
-    @RequestMapping("/search")
-    @ResponseBody
-    public ApiResult searchInfoListTitleLike(String condition){
-        //todo
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",
-                infoServer.findListsByWord(condition));
+    @RequestMapping(value = "/edit")
+    public String infoEditPage(Model model){
 
+
+        return "infoEdit";
     }
+
+
+
+
+//    /**
+//     * 通过资讯标题模糊搜索相应的资讯列表
+//     * @param condition
+//     * @return
+//     */
+//    @RequestMapping("/search")
+//    public String searchInfoListTitleLike(int page ,String condition,Model model){
+//
+//        List<Info> infos;
+//        if (condition.length() >0 ){
+//            infos= infoServer.findListsByWord(condition);
+//        }
+//
+//        model.addAttribute("infoLists",infos);
+//
+//        model.addAttribute("searchAmount",infos.size());
+//        return "info_list";
+//
+//    }
 
 
     /**
@@ -86,20 +106,20 @@ public class InfoController extends MallBaseController {
 
     }
 
-    /**
-     * 获取当前页的记录数
-     * @param page
-     * @return
-     */
-    @RequestMapping("/page")
-    @ResponseBody
-    public ApiResult getInfoListPageable(int page){
-
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",infoServer.infoSList(false,
-                page,pageSize)
-        );
-
-    }
+//    /**
+//     * 获取当前页的记录数
+//     * @param page
+//     * @return
+//     */
+//    @RequestMapping("/page")
+//    @ResponseBody
+//    public ApiResult getInfoListPageable(int page){
+//
+//        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",infoServer.infoSList(false,
+//                page,pageSize)
+//        );
+//
+//    }
 
     /**
      * 保存修改资讯
