@@ -3,8 +3,10 @@ package com.huotu.scrm.service.entity.info;
 import com.huotu.scrm.common.ienum.InfoStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -66,6 +68,7 @@ public class Info {
      */
     @Column(name = "Create_Time")
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
 
@@ -83,6 +86,7 @@ public class Info {
     private boolean  extend = false;
 
 
+
     /**
      * 资讯是否删除  1、已删除  0、正常
      */
@@ -90,5 +94,21 @@ public class Info {
     private boolean  disable = false;
 
 
+    @Override
+    public String toString() {
+        return "Info{" +
+                "id=" + id +
+                ", customerId=" + customerId +
+                ", title='" + title + '\'' +
+                ", introduce='" + introduce + '\'' +
+                ", content='" + content + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", thumbnailImageUrl='" + thumbnailImageUrl + '\'' +
+                ", createTime=" + createTime +
+                ", status=" + status +
+                ", extend=" + extend +
+                ", disable=" + disable +
+                '}';
+    }
 
 }

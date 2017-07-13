@@ -20,7 +20,6 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,6 +50,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
         registry.addInterceptor(customerInterceptor).addPathPatterns("/mall/**");
         registry.addInterceptor(userInterceptor).addPathPatterns("/site/**");
     }
+
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -84,7 +84,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
             // resource resolution infrastructure, which is highly recommended.
             SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
             templateResolver.setApplicationContext(this.applicationContext);
-            templateResolver.setPrefix("/");
+            templateResolver.setPrefix("/view/");
             templateResolver.setSuffix(".html");
             // HTML is the default value, added here for the sake of clarity.
             templateResolver.setTemplateMode(TemplateMode.HTML);

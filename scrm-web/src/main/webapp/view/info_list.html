@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
 
 <head>
 
@@ -23,7 +23,11 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
 
-<body class="gray-bg">
+<body class="gray-bg" data-unitTest="false" data-prototype="true"
+      data-url-infoLists="../assets/mock/infoLists.json"
+      th:attr="data-url-infoLists=@{/}"
+>
+
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
     <form role="form" class="search-panel">
@@ -68,6 +72,7 @@
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">添加资讯</button>
                     </div>
 
+
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
@@ -81,29 +86,28 @@
                                 <th>操作</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td>1</td>
+                            <tbody th:remove="all-but-first">
+                            <!--/*@thymesVar id="infoLists" type="java.util.List<com.huotu.scrm.service.entity.info.Info>"*/-->
+                            <tr th:each="info ,infoState: ${infoLists}">
+                                <td th:text="${infoState.index+1}">1</td>
                                 <td style="width: 20%;">
                                     <p style="width: 100%; height: 50px;">
                                         <!--资讯标题-->
-                                            <span class="font-hidden" style="width: 95%;float: left;">
+                                        <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
                                                 习近平对司法体制改革作出重要指示引起热烈反响
-                                            </span>
+                                        </span>
                                     </p>
                                 </td>
                                 <td style="width: 20%;">
-                                    <span class="font-hidden" style="width: 95%;float: left;">
+                                    <span class="font-hidden" style="width: 95%;float: left;" th:text="${info.content}">
                                                 连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
                                         总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
                                     </span>
                                 </td>
-                                <td>2017-07-12 12:12:34</td>
-                                <td>已发布</td>
-                                <td>是</td>
+                                <td th:text="${#dates.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
+                                <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
+                                <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
-
-
                                     <span class="cursor-point">
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i>
                                     </span>
@@ -127,6 +131,51 @@
 
                                 </td>
                             </tr>
+
+                            <tr>
+                                <td>2</td>
+                                <td style="width: 20%;">
+                                    <p style="width: 100%; height: 50px;">
+                                        <!--资讯标题-->
+                                            <span class="font-hidden" style="width: 95%;float: left;">
+                                                习近平对司法体制改革作出重要指示引起热烈反响
+                                            </span>
+                                    </p>
+                                </td>
+                                <td style="width: 20%;">
+                                    <span class="font-hidden" style="width: 95%;float: left;">
+                                                连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
+                                        总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
+                                    </span>
+                                </td>
+                                <td>2017-07-12 12:12:34</td>
+                                <td>已发布</td>
+                                <td>是</td>
+                                <td>
+                                    <span class="cursor-point">
+                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i>
+                                    </span>
+                                    &nbsp;
+
+                                    <span class="cursor-point">
+                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="转发记录"></i>
+                                    </span>
+                                    &nbsp;
+
+                                    <span class="cursor-point">
+                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
+                                    </span>
+                                    &nbsp;
+
+                                    <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
+                                        <i class="fa fa-trash tooltips"
+                                           data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
+                                    </span>
+                                    &nbsp;
+
+                                </td>
+                            </tr>
+
                             </tbody>
                         </table>
                         <p style="float: left; margin: 20px 0;">共1条记录，当前第1/1，每页20条记录</p>
@@ -145,20 +194,37 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
 
 <!--日期选择-->
-<script src="js/plugins/datetimepick/js/moment.js"></script>
-<script src="js/plugins/datetimepick/js/daterangepicker.js"></script>
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/js/moment.js"></script>-->
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/js/daterangepicker.js"></script>-->
 <!--file-->
-<script src="js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
 <!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
-<script src="js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 
-<script src="js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
-<script src="js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="../js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+
+
+<!--luohaibo-->
+<script src="../js/infoJs/infoLists.js"></script>
+
+<!--<script th:inline="javascript">-->
+    <!--/*<![CDATA[*/-->
+    <!--var SIGN_IN = /*[[@{/passwordAuth}]]*/ '/portal/signIn';-->
+    <!--var REGISTER = /*[[@{/portal/registerHotUser}]]*/ '/portal/register';-->
+    <!--var MODIFY_PASS = /*[[@{/portal/modifyPassword}]]*/ '/portal/modify/password';-->
+    <!--var VALID_MOBILE = /*[[@{/portal/validLoginName}]]*/ '/portal/validLoginName';-->
+    <!--var SEND_AUTH_CODE = /*[[@{/portal/sendAuthCode}]]*/ '/portal/sendAuthCode';-->
+    <!--var IMAGE_CODE = /*[[@{/portal/getImage}]]*/ 'http://www.huotaolianmeng.com/portal/getImage';-->
+    <!--/*]]>*/-->
+<!--</script>-->
+
+
 <!--<style>-->
     <!--.btn-success{-->
 

@@ -30,7 +30,6 @@ public class InfoServerImpl implements InfoServer {
     @Autowired
     private InfoRepository infoRepository;
 
-
     public long infoListsCount(boolean disable) {
         return infoRepository.countByDisable(disable);
     }
@@ -38,7 +37,6 @@ public class InfoServerImpl implements InfoServer {
     public List<Info> findListsByWord(String title) {
         return infoRepository.findByTitleLike(title);
     }
-
 
     public Info infoSave(Info info) {
         Info newInfo;
@@ -59,7 +57,6 @@ public class InfoServerImpl implements InfoServer {
         return infoRepository.save(newInfo);
 
     }
-
 
     public Page<Info> infoSList(boolean disable,  int page, int pageSize) {
         Pageable pageable = new PageRequest(page,pageSize);

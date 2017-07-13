@@ -5,8 +5,12 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.InfoServer;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -17,11 +21,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class InfoController extends MallBaseController {
 
+    private Log logger = LogFactory.getLog(InfoController.class);
+
+
     @Autowired
     InfoServer infoServer;
-
-
     private static final  int pageSize = 5;
+
+    /***
+     * 展示资讯首页内容
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/infoHome")
+    public String infoHomeLists(Model model){
+        Page<Info> page = infoServer.infoSList(false,
+                0,pageSize);
+        model.addAttribute("infoLists",page.getContent());
+
+        page.getContent().stream()
+                .forEach(System.out::println);
+        long account = infoServer.infoListsCount(false);
+        model.addAttribute("totalAccount",account);
+
+        return "info_list";
+    }
+
+
+
 
     /**
      * 通过资讯标题模糊搜索相应的资讯列表
@@ -50,7 +77,6 @@ public class InfoController extends MallBaseController {
 
     }
 
-
     /**
      * 获取当前页的记录数
      * @param page
@@ -65,7 +91,6 @@ public class InfoController extends MallBaseController {
         );
 
     }
-
 
     /**
      * 保存修改资讯
