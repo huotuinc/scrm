@@ -24,8 +24,8 @@
 </head>
 
 <body class="gray-bg" data-unitTest="false" data-prototype="true"
-      data-url-infoLists="../assets/mock/infoLists.json"
-      th:attr="data-url-infoLists=@{/}"
+      data-url-infoListsCount="../assets/mock/infoLists.json"
+      th:attr="data-url-infoLists=@{/mall/count}"
 >
 
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
@@ -109,6 +109,7 @@
                                 <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
                                     <span class="cursor-point">
+                                        <a href="infoEdit.html"></a>
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i>
                                     </span>
                                     &nbsp;
@@ -178,7 +179,7 @@
 
                             </tbody>
                         </table>
-                        <p style="float: left; margin: 20px 0;">共1条记录，当前第1/1，每页20条记录</p>
+                        <p id="infoListAmount" style="float: left; margin: 20px 0;">共1条记录，当前第1/1，每页5条记录</p>
                         <ul style="float: right;" class="pagination pagination-split">
                         </ul>
                     </div>
@@ -233,15 +234,42 @@
 <script type="text/javascript">
     var pageIndex = 1;
     var totalPage = 20;
+    var pageSize = 5;
 
     $(function () {
-        //初始化分页
-        var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
-        pageinate.init(function (p) {
+        var url = $("body").attr("data-url-infoLists");
+        $.ajax({
+            type: 'GET',
+            url: url,
+            data: {
+                page:0
+            },
+            dataType: 'json',
+            success: function (data) {
+                var amount = data.data.amount;
 
+
+                $("#infoListAmount").text("共"+amount+"条记录，当前第1/"+Math.ceil(amount/pageSize)+"，每页5条记录");
+                //初始化分页
+                var pageinate = new hot.paging(".pagination", pageIndex, (amount / pageSize), (amount / pageSize));
+
+                pageinate.init(function (p) {
+
+                    $("#infoListAmount").text("共"+amount+"条记录，当前第"+p+"/"+Math.ceil(amount/pageSize)+"，每页5条记录");
+                });
+
+            },
+            error: function (jqXHR, textStatus) {
+
+            }
         });
+
+
+
     });
+
+
 
     var goodListHandler = {
         deleteGood: function (goodId) {
@@ -251,7 +279,6 @@
         }
     }
 
-//    $(".js-search")
 </script>
 </body>
 

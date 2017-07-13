@@ -14,6 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 资讯管理控制器
  * Created by luohaibo on 2017/7/10.
@@ -72,8 +75,14 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping("/count")
     @ResponseBody
-    public ApiResult getInfoListsAccount(boolean disable){
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",infoServer.infoListsCount(disable));
+    public ApiResult getInfoListsAccount(boolean disable,int page){
+
+        logger.info(infoServer.infoListsCount(disable)+"+++"+page);
+        Map<String,Long> map = new HashMap<>();
+        map.put("amount",infoServer.infoListsCount(disable));
+        ApiResult apiResult = ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",map);
+        logger.info(apiResult);
+        return  apiResult;
 
     }
 
