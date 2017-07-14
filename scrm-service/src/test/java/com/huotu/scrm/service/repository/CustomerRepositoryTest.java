@@ -14,7 +14,7 @@ public class CustomerRepositoryTest extends CommonTestBase {
     @Test
     public void findById() throws Exception {
         Long id = 3447L;
-        Customer customer = customerRepository.findById(id);
+        Customer customer = customerRepository.findOne(id);
         System.out.println(customer.getLoginName());
     }
 

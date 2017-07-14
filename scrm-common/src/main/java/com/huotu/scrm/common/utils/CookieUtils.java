@@ -8,6 +8,12 @@ import javax.servlet.http.HttpServletRequest;
  * Created by helloztt on 2017-06-27.
  */
 public class CookieUtils {
+    /**
+     * 根据 key 从 cookies 获取 Integer 的值
+     * @param request 请求数据
+     * @param key 键名
+     * @return
+     */
     public static int getCookieValInteger(HttpServletRequest request, String key) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length > 0) {
@@ -20,6 +26,12 @@ public class CookieUtils {
         return 0;
     }
 
+    /**
+     *  根据 key 从 cookies 获取值
+     * @param request 请求数据
+     * @param key 键名
+     * @return
+     */
     public static String getCookieVal(HttpServletRequest request, String key){
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length > 0) {

@@ -22,7 +22,7 @@ public class CustomerInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private Environment environment;
-    private static final String CUSTOMER_ID = "customerId";
+    public static final String CUSTOMER_ID = "customerId";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -40,7 +40,7 @@ public class CustomerInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isEmpty(requestCustomerId)) {
             customerId = CookieUtils.getCookieValInteger(request, "UserID");
             if (customerId <= 1 && environment.acceptsProfiles("development")) {
-                customerId = 4886;
+                customerId = 4421;
             }
             if (customerId == 0) {
                 response.sendRedirect("http://login." + SysConstant.COOKIE_DOMAIN);

@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service.Impl;
+package com.huotu.scrm.service.service.impl;
 
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
