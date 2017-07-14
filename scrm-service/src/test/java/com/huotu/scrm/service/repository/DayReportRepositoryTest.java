@@ -29,6 +29,7 @@ public class DayReportRepositoryTest extends CommonTestBase {
     public void testDateUtil() {
         System.out.println("前天日期(时分秒默认为最大):" + DateUtil.getBeforeLastDay());
         System.out.println("昨天日期(时分秒默认最大):" + DateUtil.getLastDayMax());
+        System.out.println("");
     }
 
     /**
