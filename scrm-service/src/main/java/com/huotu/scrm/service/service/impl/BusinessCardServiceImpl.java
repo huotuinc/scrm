@@ -64,6 +64,8 @@ public class BusinessCardServiceImpl implements BusinessCardService{
             model.setQq(text);
         }else if(type== BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYADDRESS){
             model.setCompanyAddress(text);
+        }else if(type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_EMAIL){
+            model.setEmail(text);
         }
 
         model = businessCardReposity.saveAndFlush(model);

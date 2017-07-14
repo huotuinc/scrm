@@ -42,8 +42,14 @@ public class BusinessCardController extends MallBaseController{
     @RequestMapping("/editBusinessCard")
     public String editBusinessCard(HttpServletRequest request , long salesmanId , Model model ){
         BusinessCard businessCard = businessCardService.getBusinessCard(salesmanId , getCustomerId(request));
+
+        if(businessCard==null){
+            businessCard=new BusinessCard();
+            businessCard.setUserId(salesmanId);
+        }
+
         model.addAttribute("businessCard", businessCard);
-        return "views/editbusinesscard";
+        return "views/edit_businesscard";
     }
 
 
@@ -94,7 +100,9 @@ public class BusinessCardController extends MallBaseController{
 
     @RequestMapping(value = "/updateBusinessCardInfo" , method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult updateBusinessCardInfo( int type , String value ){
+    public ApiResult updateBusinessCardInfo( int userId , int type , String value ){
+
+        //businessCardService.updateBusinessCard( )
 
         return new ApiResult(ResultCodeEnum.SUCCESS.getResultMsg(), ResultCodeEnum.SUCCESS.getResultCode());
 
