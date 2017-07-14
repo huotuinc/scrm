@@ -43,8 +43,8 @@ public class InfoServerImpl implements InfoServer {
             newInfo = infoRepository.findOne(info.getId());
         } else {
             newInfo = new Info();
+             newInfo.setCustomerId(info.getCustomerId());
         }
-        newInfo.setCustomerId(info.getCustomerId());
         newInfo.setTitle(info.getTitle());
         newInfo.setIntroduce(info.getIntroduce());
         newInfo.setContent(info.getContent());
@@ -58,13 +58,14 @@ public class InfoServerImpl implements InfoServer {
 
     }
 
-    public Page<Info> infoSList(InformationSearch informationSearch) {
+    public Page<Info> infoSList(InformationSearch informationSearch,Long customerId) {
         Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize());
         return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(informationSearch.getSearchCondition())){
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + informationSearch.getSearchCondition() + "%"));
             }
+            list.add(criteriaBuilder.equal(root.get("customerId").as(Long.class), customerId));
             list.add(criteriaBuilder.equal(root.get("disable").as(boolean.class), informationSearch.getDisable()));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));

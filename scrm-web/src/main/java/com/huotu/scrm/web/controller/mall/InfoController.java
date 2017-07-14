@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
@@ -37,11 +38,11 @@ public class InfoController extends MallBaseController {
      * @return
      */
     @RequestMapping(value = "/infoLists")
-    public String infoHomeLists(InformationSearch informationSearch, Model model){
+    public String infoHomeLists(InformationSearch informationSearch, @ModelAttribute("customerId") Long customerId , Model model){
 
         logger.info(informationSearch);
-
-        Page<Info> page = infoServer.infoSList(informationSearch);
+        logger.info(customerId);
+        Page<Info> page = infoServer.infoSList(informationSearch,customerId);
         model.addAttribute("infoListsPage",page);
 
         long account = infoServer.infoListsCount(false);
