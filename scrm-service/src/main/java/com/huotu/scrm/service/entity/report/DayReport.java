@@ -18,13 +18,13 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "SCRM_DayReport")
-public class ReportDay {
+public class DayReport {
 
     /**
      * 自增编号
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
 
@@ -100,4 +100,22 @@ public class ReportDay {
     @Column(name = "Report_Day")
     private Date reportDay;
 
+    @Override
+    public String toString() {
+        return "DayReport{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", customerId=" + customerId +
+                ", levelId=" + levelId +
+                ", isSalesman=" + isSalesman +
+                ", forwardNum=" + forwardNum +
+                ", visitorNum=" + visitorNum +
+                ", visitorRanking=" + visitorRanking +
+                ", extensionScore=" + extensionScore +
+                ", scoreRanking=" + scoreRanking +
+                ", followNum=" + followNum +
+                ", followRanking=" + followRanking +
+                ", reportDay=" + reportDay +
+                '}';
+    }
 }

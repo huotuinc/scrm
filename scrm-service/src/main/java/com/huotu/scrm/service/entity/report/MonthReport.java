@@ -18,13 +18,13 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "SCRM_MonthReport")
-public class ReportMonth {
+public class MonthReport {
 
     /**
      * 自增编号
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long id;
 
