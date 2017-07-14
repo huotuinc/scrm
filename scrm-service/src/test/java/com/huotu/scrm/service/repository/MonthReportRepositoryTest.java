@@ -11,10 +11,13 @@ import java.util.Date;
 /**
  * Created by hxh on 2017-07-12.
  */
-public class MonthReportServiceTest extends CommonTestBase {
+public class MonthReportRepositoryTest extends CommonTestBase {
 
     @Autowired
     private MonthReportService reportMonthService;
+
+    @Autowired
+    private InfoBrowseRepository infoBrowseRepository;
 
     @Test
     public void testDate() {
@@ -24,5 +27,7 @@ public class MonthReportServiceTest extends CommonTestBase {
         System.out.println("昨日日期："+lastDay);
         System.out.println("上月第一天："+lastMonthFirstDay);
         System.out.println("上月最后一天："+lastMonthLastDay);
+        Long id = Long.valueOf(123456);
+        System.out.println(infoBrowseRepository.countBySourceUserId(id));
     }
 }

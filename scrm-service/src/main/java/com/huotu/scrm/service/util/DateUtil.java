@@ -56,4 +56,31 @@ public class DateUtil {
         return calendar.getTime();
     }
 
+    /**
+     * 获取昨日日期(时分秒默认最大)
+     * @return
+     */
+    public static Date getLastDayMax(){
+        Calendar calendar = Calendar.getInstance();//日历对象
+        calendar.setTime(new Date());//设置当前日期
+        calendar.add(Calendar.DATE, -1);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取前天时间（默认时分秒最大）
+     * @return
+     */
+    public static Date getBeforeLastDay(){
+        Calendar calendar = Calendar.getInstance();//日历对象
+        calendar.setTime(new Date());//设置当前日期
+        calendar.add(Calendar.DATE, -2);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        return calendar.getTime();
+    }
 }

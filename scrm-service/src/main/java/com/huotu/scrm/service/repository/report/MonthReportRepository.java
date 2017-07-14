@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by hxh on 2017-07-12.
  */
-public interface ReportMonthRepository extends JpaRepository<MonthReport, Long> {
+public interface MonthReportRepository extends JpaRepository<MonthReport, Long> {
     @Query("select t from MonthReport t where t.reportMonth = ?1 order by t.extensionScore")
     List<MonthReport> findOrderByExtensionScore(Date date);
 

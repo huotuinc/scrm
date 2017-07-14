@@ -1,9 +1,13 @@
-package com.huotu.scrm.service.service.Impl.report;
+package com.huotu.scrm.service.service.impl.report;
 
+import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
-import com.huotu.scrm.service.repository.report.ReportDayRepository;
-import com.huotu.scrm.service.repository.report.ReportMonthRepository;
+import com.huotu.scrm.service.repository.mall.UserLevelRepository;
+import com.huotu.scrm.service.repository.mall.UserRepository;
+import com.huotu.scrm.service.repository.report.DayReportRepository;
+import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.MonthReportService;
 import com.huotu.scrm.service.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +27,21 @@ import java.util.List;
 public class MonthReportServiceImpl implements MonthReportService {
 
     @Autowired
-    private ReportDayRepository reportDayRepository;
+    private DayReportRepository reportDayRepository;
 
     @Autowired
-    private ReportMonthRepository reportMonthRepository;
+    private MonthReportRepository reportMonthRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserLevelRepository userLevelRepository;
 
     @Override
     @Transactional
     public void saveReportMonth(Long userId) {
+        User user = userRepository.findOne(userId);
         /*得到上月最后一天*/
         Date month = DateUtil.getLastMonthLastDay();
         /*得到上月第一天*/
@@ -39,8 +50,12 @@ public class MonthReportServiceImpl implements MonthReportService {
         /*设置用户ID*/
         reportMonth.setUserId(userId);
         /*设置商户ID*/
+        reportMonth.setCustomerId(user.getCustomerId());
         /*设置等级*/
+        reportMonth.setLevelId(user.getLevelId());
          /*设置是否为销售员*/
+        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        reportMonth.setSalesman(userLevel.isSalesman());
         /*设置每月咨询转发量*/
         int forwardNum = getForwardNum(userId, month, monthDay);
         reportMonth.setFollowNum(forwardNum);
