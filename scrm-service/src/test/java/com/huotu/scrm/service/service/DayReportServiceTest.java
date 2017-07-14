@@ -8,13 +8,17 @@ import org.springframework.test.annotation.Rollback;
 /**
  * Created by hxh on 2017-07-14.
  */
-public class DayReportServiceTest extends CommonTestBase{
+public class DayReportServiceTest extends CommonTestBase {
 
     @Autowired
     private DayReportService dayReportService;
+
+    /**
+     * 测试保存每日统计信息
+     */
     @Test
     @Rollback(false)
-    public void testDayReportService(){
+    public void testDayReportService() {
         dayReportService.saveReportDay();
     }
 }
