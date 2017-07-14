@@ -48,7 +48,7 @@ public class InfoController extends MallBaseController {
 
         long account = infoServer.infoListsCount(false);
         model.addAttribute("totalAccount",account);
-        return "info_list";
+        return "info/info_list";
     }
 
 
