@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -58,12 +59,11 @@ public class InfoServerImpl implements InfoServer {
     }
 
     public Page<Info> infoSList(InformationSearch informationSearch) {
-        Pageable pageable = new PageRequest(informationSearch.getPageNo(), informationSearch.getPageSize());
+        Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize());
         return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
-            if (informationSearch.getSearchCondition() != null && informationSearch.getSearchCondition().length() > 0){
+            if (!StringUtils.isEmpty(informationSearch.getSearchCondition())){
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + informationSearch.getSearchCondition() + "%"));
-
             }
             list.add(criteriaBuilder.equal(root.get("disable").as(boolean.class), informationSearch.getDisable()));
             Predicate[] p = new Predicate[list.size()];

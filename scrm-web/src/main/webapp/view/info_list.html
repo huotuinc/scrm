@@ -32,8 +32,10 @@
 
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
-    <form role="form" class="search-panel">
+    <!--<form role="form" class="search-panel">-->
         <div class="row">
+
+
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
 
@@ -41,22 +43,25 @@
                         <label class="">资讯筛选</label>
                     </div>
 
-
-
-                    <div class="ibox-content p-m no-borders">
-                        <div class="form-inline">
-                            <div class="form-group m-r-sm">
-                                <label class="control-label" for="infoName">标题关键字：</label>
-                                <input type="text" class="form-control input-sm mb10" id="infoName" name="infoName" placeholder="资讯标题"/>
-                                <button type="button"  class="btn btn-success js-search">筛选</button>
-                                <button type="button"  class="btn btn-success js-searchAll">显示全部</button>
+                    <!--/*@thymesVar id="informationSearch" type="com.huotu.scrm.common.utils.InformationSearch"*/-->
+                    <form class="search-panel" method="get" action="#" th:action="@{/mall/infoLists}" id="searchForm">
+                        <div class="ibox-content p-m no-borders">
+                            <div class="form-inline ">
+                                <div class="form-group m-r-sm">
+                                    <label class="control-label" for="searchCondition">标题关键字：</label>
+                                    <input type="text" class="form-control input-sm mb10" id="searchCondition" name="searchCondition"
+                                       th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>
+                                    <button type="button"  class="btn btn-success js-search">筛选</button>
+                                    <button type="button"  class="btn btn-success js-searchAll">显示全部</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                     </form>
+
                 </div>
             </div>
         </div>
-    </form>
+    <!--</form>-->
     <!--search-->
 
     <!--list-->

@@ -3,53 +3,15 @@
  */
 
 
-// var ajaxTool = function(hosturl, parame ,callBack){
-//
-//     $.ajax({
-//         type: 'GET',
-//         url: url,
-//         data: {
-//             page:0
-//         },
-//         dataType: 'json',
-//         success: function (data) {
-//             var amount = data.data.amount;
-//
-//
-//             $("#infoListAmount").text("共"+amount+"条记录，当前第1/"+Math.ceil(amount/pageSize)+"，每页5条记录");
-//             //初始化分页
-//             var pageinate = new hot.paging(".pagination", pageIndex, (amount / pageSize), (amount / pageSize));
-//
-//             pageinate.init(function (p) {
-//
-//                 $("#infoListAmount").text("共"+amount+"条记录，当前第"+p+"/"+Math.ceil(amount/pageSize)+"，每页5条记录");
-//             });
-//
-//         },
-//         error: function (jqXHR, textStatus) {
-//
-//         }
-//     });
-//
-// }
-
-
 
 var infoListHandler = {
-
-
-    search:function(){
-        var condition = $('#infoName').text;
-
+    search:function() {
+        var search = $("input:text[name='infoName']").val();
+        $('#searchForm').submit();
     },
-
-
     searchAll:function(){
-
-        alert("1");
-    },
-
-
+        window.location.href = "/mall/infoLists";
+    }
 }
 
 $('.js-search').click(function () {
@@ -57,7 +19,7 @@ $('.js-search').click(function () {
 });
 
 
-$('.jjs-searchAll').click(function(){
+$('.js-searchAll').click(function(){
     infoListHandler.searchAll();
 });
 
