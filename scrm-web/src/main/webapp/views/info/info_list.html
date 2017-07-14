@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
     <title>资讯列表</title>
-
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Morris -->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
-
     <!--checkbox-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
-
     <!--datetimepick-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
@@ -29,22 +22,21 @@
       th:attr="data-url-infoLists=@{/mall/count}
       ,data-url-edit=@{/mall/edit}"
 >
-
+<!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
+<!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
+<!--/*@thymesVar id="informationSearch" type="com.huotu.scrm.common.utils.InformationSearch"*/-->
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
     <!--<form role="form" class="search-panel">-->
         <div class="row">
-
-
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
-
                     <div>
                         <label class="">资讯筛选</label>
                     </div>
-
-                    <!--/*@thymesVar id="informationSearch" type="com.huotu.scrm.common.utils.InformationSearch"*/-->
                     <form class="search-panel" method="get" action="#" th:action="@{/mall/infoLists}" id="searchForm">
+                        <!--用来传递页码-->
+                        <input type="hidden" name="pageNo" value="1" th:value="${informationSearch.pageNo}" />
                         <div class="ibox-content p-m no-borders">
                             <div class="form-inline ">
                                 <div class="form-group m-r-sm">
@@ -57,29 +49,23 @@
                             </div>
                         </div>
                      </form>
-
                 </div>
             </div>
         </div>
     <!--</form>-->
     <!--search-->
-
     <!--list-->
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
                 <div class="ibox-content p-xxs no-top-border">
-
                     <div>
                         <label class="">资讯管理</label>
                     </div>
-
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">添加资讯</button>
                     </div>
-
-
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
@@ -94,20 +80,17 @@
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
-                            <!--/*@thymesVar id="infoLists" type="java.util.List<com.huotu.scrm.service.entity.info.Info>"*/-->
-                            <tr th:each="info ,infoState: ${infoLists}">
-                                <td th:text="${infoState.index+1}">1</td>
+                            <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
+                            <tr th:each="info ,infoState: ${infoListsPage.content}">
+                                <td th:text="${info.id}">1</td>
                                 <td style="width: 20%;">
-                                    <p style="width: 100%; height: 50px;">
-                                        <!--资讯标题-->
-
-                                        <a>
-                                            <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
+                                    <a>
+                                        <p  style="width: 100%; height: 50px;">
+                                        <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
                                                 习近平对司法体制改革作出重要指示引起热烈反响
-                                            </span>
-                                        </a>
-
-                                    </p>
+                                        </span>
+                                        </p>
+                                    </a>
                                 </td>
                                 <td style="width: 20%;">
                                     <span class="font-hidden" style="width: 95%;float: left;" th:text="${info.content}">
@@ -123,26 +106,21 @@
                                         <a href="infoEdit.html" th:href="@{/mall/edit}"><i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i></a>
                                     </span>
                                     &nbsp;
-
                                     <span class="cursor-point">
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="转发记录"></i>
                                     </span>
                                     &nbsp;
-
                                     <span class="cursor-point">
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
                                     </span>
                                     &nbsp;
-
                                     <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
                                     &nbsp;
-
                                 </td>
                             </tr>
-
                             <tr>
                                 <td>2</td>
                                 <td style="width: 20%;">
@@ -167,29 +145,32 @@
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="编辑"></i>
                                     </span>
                                     &nbsp;
-
                                     <span class="cursor-point">
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="转发记录"></i>
                                     </span>
                                     &nbsp;
-
                                     <span class="cursor-point">
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
                                     </span>
                                     &nbsp;
-
                                     <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
                                     &nbsp;
-
                                 </td>
                             </tr>
-
                             </tbody>
                         </table>
-                        <p id="infoListAmount" style="float: left; margin: 20px 0;">共1条记录，当前第1/1，每页5条记录</p>
+                        共
+                        <th:block th:text="${infoListsPage.totalElements}">100</th:block>
+                        条记录，当前第
+                        <th:block th:text="${informationSearch.pageNo}">1</th:block>
+                        /
+                        <th:block th:text="${infoListsPage.totalPages}">15</th:block>
+                        ，每页
+                        <th:block th:text="${informationSearch.pageSize}">10</th:block>
+                        条记录
                         <ul style="float: right;" class="pagination pagination-split">
                         </ul>
                     </div>
@@ -203,92 +184,49 @@
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
-
-<!--日期选择-->
-<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/js/moment.js"></script>-->
-<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/js/daterangepicker.js"></script>-->
-<!--file-->
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
-<!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
-
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-
-<script src="../js/plugins/hot/bootstrap.hot.extra-utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
-
-
-<!--luohaibo-->
 <script src="../js/infoJs/infoLists.js"></script>
 
-<!--<script th:inline="javascript">-->
-    <!--/*<![CDATA[*/-->
-    <!--var SIGN_IN = /*[[@{/passwordAuth}]]*/ '/portal/signIn';-->
-    <!--var REGISTER = /*[[@{/portal/registerHotUser}]]*/ '/portal/register';-->
-    <!--var MODIFY_PASS = /*[[@{/portal/modifyPassword}]]*/ '/portal/modify/password';-->
-    <!--var VALID_MOBILE = /*[[@{/portal/validLoginName}]]*/ '/portal/validLoginName';-->
-    <!--var SEND_AUTH_CODE = /*[[@{/portal/sendAuthCode}]]*/ '/portal/sendAuthCode';-->
-    <!--var IMAGE_CODE = /*[[@{/portal/getImage}]]*/ 'http://www.huotaolianmeng.com/portal/getImage';-->
-    <!--/*]]>*/-->
-<!--</script>-->
-
-
-<!--<style>-->
-    <!--.btn-success{-->
-
-    <!--}-->
-<!--</style>-->
 <script type="text/javascript">
-    var pageIndex = 1;
-    var totalPage = 20;
-    var pageSize = 5;
+    var pageIndex = [[${informationSearch.pageNo}]];
+    var totalPage = [[${infoListsPage.totalPages}]];
+    //初始化分页
+    var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
-    $(function () {
-
-        var url = $("body").attr("data-url-infoLists");
-        $.ajax({
-            type: 'GET',
-            url: url,
-            data: {
-                page:0
-            },
-            dataType: 'json',
-            success: function (data) {
-                var amount = data.data.amount;
-
-
-                $("#infoListAmount").text("共"+amount+"条记录，当前第1/"+Math.ceil(amount/pageSize)+"，每页5条记录");
-                //初始化分页
-                var pageinate = new hot.paging(".pagination", pageIndex, (amount / pageSize), (amount / pageSize));
-
-                pageinate.init(function (p) {
-
-                    $("#infoListAmount").text("共"+amount+"条记录，当前第"+p+"/"+Math.ceil(amount/pageSize)+"，每页5条记录");
-                });
-
-            },
-            error: function (jqXHR, textStatus) {
-
-            }
-        });
-
-
-
+    pageinate.init(function (p) {
+        infoListHandler.search(p);
     });
 
+    var infoListHandler = {
+        search:function(pageNo) {
+            var search = $("input:text[name='infoName']").val(pageIndex);
+            $('#searchForm').submit();
+        },
 
+        searchAll:function(){
+            window.location.href = "/mall/infoLists";
+        },
 
-    var goodListHandler = {
-        deleteGood: function (goodId) {
-            hot.confirm("确定要删除该商品?", function () {
-                hot.tip.success("删除成功");
-            })
-        }
+        search: function(pageNo){
+            $("input[name=pageNo]").val(pageNo);
+            $('#searchForm').submit();
+        },
     }
 
+    $('.js-search').click(function () {
+        infoListHandler.search(1);
+    });
+
+    $('.js-searchAll').click(function(){
+        infoListHandler.searchAll();
+    });
 </script>
 </body>
 

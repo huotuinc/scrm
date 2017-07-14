@@ -14,9 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,7 +42,7 @@ public class InfoController extends MallBaseController {
         logger.info(informationSearch);
 
         Page<Info> page = infoServer.infoSList(informationSearch);
-        model.addAttribute("infoLists",page.getContent());
+        model.addAttribute("infoListsPage",page);
 
         long account = infoServer.infoListsCount(false);
         model.addAttribute("totalAccount",account);
