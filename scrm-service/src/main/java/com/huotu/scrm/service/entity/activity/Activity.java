@@ -3,10 +3,9 @@ package com.huotu.scrm.service.entity.activity;
 import com.huotu.scrm.common.ienum.ActEnum;
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -27,7 +26,6 @@ public class Activity {
      * 自增Id
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long actId;
 
@@ -35,7 +33,7 @@ public class Activity {
      * 商户Id
      */
     @Column(name = "Customer_Id")
-    private long customerId;
+    private Long customerId;
 
     /**
      * 活动标题
@@ -64,10 +62,10 @@ public class Activity {
 
     /**
      * 开启状态
-     * 0:启用，1:禁用
+     * 0:禁用, 1:启用
      */
     @Column(name = "Open_Status")
-    private ActEnum.ActOpenStatus openStatus;
+    private boolean openStatus;
 
     /**
      * 每次游戏消耗积分
@@ -87,13 +85,12 @@ public class Activity {
     @Column(name = "Rate_Desc")
     private String rateDesc;
 
-    /**
+   /**
      * 是否删除
-     *
-     * 0:已删除，1:未删除 默认是1
+     * 0:未删除,1:已删除，默认是0
      */
     @Column(name = "Is_Delete")
-    private int isDelete;
+    private boolean isDelete ;
 
 
 }

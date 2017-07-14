@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ActPrizeRepository extends JpaRepository<ActPrize,Long>,JpaSpecificationExecutor<ActPrize>{
 
+    ActPrize findByPrizeType (boolean prizeType);
 }
