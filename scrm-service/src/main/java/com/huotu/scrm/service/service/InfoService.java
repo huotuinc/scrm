@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by luohaibo on 2017/7/5.
  */
-public interface InfoServer {
+public interface InfoService {
 
     /**
      * 根据Disable字段查询行数
@@ -29,7 +29,7 @@ public interface InfoServer {
     /**
      * 根据分页条件查找到某一页的资讯列表
      */
-    Page<Info> infoSList(InformationSearch informationSearch,Long customerId);
+    Page<Info> infoSList(InformationSearch informationSearch);
 
 
     /**

@@ -1,21 +1,14 @@
 package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.service.entity.info.Info;
-import com.huotu.scrm.service.service.InfoServer;
+import com.huotu.scrm.service.service.InfoService;
 import com.huotu.scrm.web.CommonTestBase;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Rollback;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by luohaibo on 2017/7/11.
@@ -26,7 +19,7 @@ public class InfoControllerTest extends CommonTestBase{
     private Log logger = LogFactory.getLog(InfoControllerTest.class);
 
     @Autowired
-    InfoServer infoServer;
+    InfoService infoServer;
 
 
     @Test

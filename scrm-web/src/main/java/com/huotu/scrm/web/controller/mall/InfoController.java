@@ -5,7 +5,7 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
-import com.huotu.scrm.service.service.InfoServer;
+import com.huotu.scrm.service.service.InfoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class InfoController extends MallBaseController {
     private static final  int pageSize = 5;
 
     @Autowired
-    InfoServer infoServer;
+    InfoService infoServer;
 
 
     /***
@@ -42,7 +42,8 @@ public class InfoController extends MallBaseController {
 
         logger.info(informationSearch);
         logger.info(customerId);
-        Page<Info> page = infoServer.infoSList(informationSearch,customerId);
+        informationSearch.setCustomerId(customerId);
+        Page<Info> page = infoServer.infoSList(informationSearch);
         model.addAttribute("infoListsPage",page);
 
         long account = infoServer.infoListsCount(false);

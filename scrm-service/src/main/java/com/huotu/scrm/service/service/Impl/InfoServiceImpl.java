@@ -3,7 +3,7 @@ package com.huotu.scrm.service.service.impl;
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.repository.InfoRepository;
-import com.huotu.scrm.service.service.InfoServer;
+import com.huotu.scrm.service.service.InfoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ import java.util.List;
  * Created by luohaibo on 2017/7/5.
  */
 @Service
-public class InfoServerImpl implements InfoServer {
+public class InfoServiceImpl implements InfoService {
 
 
-    private Log logger = LogFactory.getLog(InfoServerImpl.class);
+    private Log logger = LogFactory.getLog(InfoServiceImpl.class);
 
     @Autowired
     private InfoRepository infoRepository;
@@ -58,14 +58,14 @@ public class InfoServerImpl implements InfoServer {
 
     }
 
-    public Page<Info> infoSList(InformationSearch informationSearch,Long customerId) {
+    public Page<Info> infoSList(InformationSearch informationSearch) {
         Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize());
         return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(informationSearch.getSearchCondition())){
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + informationSearch.getSearchCondition() + "%"));
             }
-            list.add(criteriaBuilder.equal(root.get("customerId").as(Long.class), customerId));
+            list.add(criteriaBuilder.equal(root.get("customerId").as(Long.class), informationSearch.getCustomerId()));
             list.add(criteriaBuilder.equal(root.get("disable").as(boolean.class), informationSearch.getDisable()));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));

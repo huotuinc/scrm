@@ -15,7 +15,7 @@ public class InformationSearch {
     private int pageNo = 1;
     private int pageSize = 5;
     private String searchCondition;
-
+    private Long customerId;
     @Override
     public String toString() {
         return "InformationSearch{" +
