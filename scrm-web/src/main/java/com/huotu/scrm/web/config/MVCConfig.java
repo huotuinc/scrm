@@ -64,8 +64,8 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler("/resource/**/*", "/image/**/*", "/js/**/*", "/**/*.html")
-                .addResourceLocations("/resource/", "/image/", "/js/", "/");
+        registry.addResourceHandler("/resources/**/*", "/image/**/*", "/js/**/*", "/**/*.html")
+                .addResourceLocations("/resources/", "/image/", "/js/", "/");
     }
 
     @Override
