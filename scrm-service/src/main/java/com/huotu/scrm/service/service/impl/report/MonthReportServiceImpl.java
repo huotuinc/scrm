@@ -9,15 +9,15 @@ import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.MonthReportService;
-import com.huotu.scrm.service.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,71 +33,77 @@ public class MonthReportServiceImpl implements MonthReportService {
     private MonthReportRepository reportMonthRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserLevelRepository userLevelRepository;
 
     @Autowired
-    private UserLevelRepository userLevelRepository;
+    private UserRepository userRepository;
 
     @Override
     @Transactional
-    public void saveReportMonth(Long userId) {
-        User user = userRepository.findOne(userId);
-        /*得到上月最后一天*/
-        Date month = DateUtil.getLastMonthLastDay();
+    public void saveReportMonth() {
+        LocalDate today = LocalDate.now();
+        //获取本月第一天
+        LocalDate firstDay = today.with(TemporalAdjusters.firstDayOfMonth());
         /*得到上月第一天*/
-        Date monthDay = DateUtil.getLastMonthFirstDay();
-        MonthReport reportMonth = new MonthReport();
-        /*设置用户ID*/
-        reportMonth.setUserId(userId);
-        /*设置商户ID*/
-        reportMonth.setCustomerId(user.getCustomerId());
-        /*设置等级*/
-        reportMonth.setLevelId(user.getLevelId());
-         /*设置是否为销售员*/
-        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-        reportMonth.setSalesman(userLevel.isSalesman());
-        /*设置每月咨询转发量*/
-        int forwardNum = getForwardNum(userId, month, monthDay);
-        reportMonth.setFollowNum(forwardNum);
-        /*设置每月访客量*/
-        int visitorNum = getVisitorNum(userId, month, monthDay);
-        reportMonth.setVisitorNum(visitorNum);
-        /*设置每月推广积分*/
-        int extensionScore = getExtensionScore(userId, month, monthDay);
-        reportMonth.setExtensionScore(extensionScore);
-        /*设置每月被关注量(销售员特有)*/
-        if (reportMonth.isSalesman()) {
-            int followNum = getFollowNum(userId, month, monthDay);
-            reportMonth.setFollowNum(followNum);
-        } else {
-            reportMonth.setFollowNum(-1);
+        LocalDate lastFirstDay = firstDay.minusMonths(1);
+        /*得到上月最后一天*/
+        LocalDate lastEndDay = today.with(TemporalAdjusters.lastDayOfMonth()).minusMonths(1);
+        List<Long> userIdList = reportDayRepository.findByUserId();
+        for (long userId : userIdList) {
+            User user = userRepository.findOne(userId);
+            MonthReport reportMonth = new MonthReport();
+            //设置用户ID
+            reportMonth.setUserId(userId);
+            //设置商户号
+            reportMonth.setCustomerId(user.getCustomerId());
+            //设置等级
+            reportMonth.setLevelId(user.getLevelId());
+            //设置是否为销售员
+            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+            reportMonth.setSalesman(userLevel.isSalesman());
+            //设置每月咨询转发量
+            int forwardNum = getForwardNum(userId, lastFirstDay, lastEndDay);
+            reportMonth.setForwardNum(forwardNum);
+            //设置每月访客量
+            int visitorNum = getVisitorNum(userId, lastFirstDay, lastEndDay);
+            reportMonth.setVisitorNum(visitorNum);
+            //设置每月推广积分
+            int extensionScore = getExtensionScore(userId, lastFirstDay, lastEndDay);
+            reportMonth.setExtensionScore(extensionScore);
+            //设置每月被关注量(销售员特有)
+            if (reportMonth.isSalesman()) {
+                int followNum = getFollowNum(userId, lastFirstDay, lastEndDay);
+                reportMonth.setFollowNum(followNum);
+            } else {
+                reportMonth.setFollowNum(-1);
+            }
+            //设置统计月份
+            reportMonth.setReportMonth(lastFirstDay);
+            //保存数据
+            reportMonthRepository.save(reportMonth);
+            //设置每月积分排名
+            int scoreRanking = getScoreRanking(userId, lastFirstDay);
+            reportMonth.setScoreRanking(scoreRanking);
+            //设置每月关注量排名
+            int followRanking = getFollowRanking(userId, lastFirstDay);
+            reportMonth.setFollowRanking(followRanking);
+            reportMonthRepository.save(reportMonth);
         }
-        /*设置统计月份*/
-        reportMonth.setReportMonth(monthDay);
-         /*保存数据*/
-        reportMonthRepository.save(reportMonth);
-        /*设置每日积分排名*/
-        int scoreRanking = getScoreRanking(userId, monthDay);
-        reportMonth.setScoreRanking(scoreRanking);
-        reportMonthRepository.save(reportMonth);
-        /*设置每月关注量排名*/
-        int followRanking = getFollowRanking(userId, monthDay);
-        reportMonth.setFollowRanking(followRanking);
     }
 
     /**
      * 统计每月资讯转发量
      *
-     * @param userId   用户ID
-     * @param month    当前月份
-     * @param monthDay 当前月份第一天
+     * @param userId       用户ID
+     * @param lastFirstDay 上月第一天
+     * @param lastEndDay   上月最后一天
      * @return
      */
-    int getForwardNum(Long userId, Date month, Date monthDay) {
-        Specification<DayReport> specification = getSpecification(userId, month, monthDay);
-        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
+    int getForwardNum(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
+        Specification<DayReport> specification = getSpecification(userId, lastFirstDay, lastEndDay);
+        List<DayReport> sortAll = reportDayRepository.findAll(specification);
         int num = 0;
-        for (DayReport reportDay : visitorNumList) {
+        for (DayReport reportDay : sortAll) {
             num += reportDay.getForwardNum();
         }
         return num;
@@ -106,16 +112,16 @@ public class MonthReportServiceImpl implements MonthReportService {
     /**
      * 统计每月访客量
      *
-     * @param userId   用户ID
-     * @param month    当前月份
-     * @param monthDay 当前月份第一天
+     * @param userId       用户ID
+     * @param lastFirstDay 上月第一天
+     * @param lastEndDay   上月最后一天
      * @return
      */
-    int getVisitorNum(Long userId, Date month, Date monthDay) {
-        Specification<DayReport> specification = getSpecification(userId, month, monthDay);
-        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
+    int getVisitorNum(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
+        Specification<DayReport> specification = getSpecification(userId, lastFirstDay, lastEndDay);
+        List<DayReport> sortAll = reportDayRepository.findAll(specification);
         int num = 0;
-        for (DayReport reportDay : visitorNumList) {
+        for (DayReport reportDay : sortAll) {
             num += reportDay.getVisitorNum();
         }
         return num;
@@ -124,41 +130,41 @@ public class MonthReportServiceImpl implements MonthReportService {
     /**
      * 统计每月推广积分
      *
-     * @param userId   用户ID
-     * @param month    当前月份
-     * @param monthDay 上个月份第一天
+     * @param userId       用户ID
+     * @param lastFirstDay 上月第一天
+     * @param lastEndDay   上月最后一天
      * @return
      */
-    int getExtensionScore(Long userId, Date month, Date monthDay) {
-        Specification<DayReport> specification = getSpecification(userId, month, monthDay);
-        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
+    int getExtensionScore(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
+        Specification<DayReport> specification = getSpecification(userId, lastFirstDay, lastEndDay);
+        List<DayReport> sortAll = reportDayRepository.findAll(specification);
         int num = 0;
-        for (DayReport reportDay : visitorNumList) {
+        for (DayReport reportDay : sortAll) {
             num += reportDay.getExtensionScore();
         }
         return num;
     }
 
     /**
-     * 统计每月别关注量（销售员特有）
+     * 统计每月关注量（销售员特有）
      *
-     * @param userId   用户ID
-     * @param month    当前月份
-     * @param monthDay 上个月份第一天
+     * @param userId       用户ID
+     * @param lastFirstDay 上月第一天
+     * @param lastEndDay   上月最后一天
      * @return
      */
-    int getFollowNum(Long userId, Date month, Date monthDay) {
+    int getFollowNum(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
         Specification<DayReport> specification = ((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("userId").as(Long.class), userId));
-            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(Date.class), month));
-            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(Date.class), monthDay));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastFirstDay));
+            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastEndDay));
             predicates.add(cb.equal(root.get("isSalesman").as(boolean.class), true));
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         });
-        List<DayReport> visitorNumList = reportDayRepository.findAll(specification);
+        List<DayReport> sortAll = reportDayRepository.findAll(specification);
         int num = 0;
-        for (DayReport reportDay : visitorNumList) {
+        for (DayReport reportDay : sortAll) {
             num += reportDay.getFollowNum();
         }
         return num;
@@ -171,11 +177,11 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @param month  统计月份
      * @return
      */
-    public int getScoreRanking(Long userId, Date month) {
+    public int getScoreRanking(Long userId, LocalDate month) {
         List<MonthReport> sortAll = reportMonthRepository.findOrderByExtensionScore(month);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
-            if (sortAll.get(i).getUserId() == userId) {
+            if (userId.equals(sortAll.get(i).getUserId())) {
                 ranking = i + 1;
                 break;
             }
@@ -190,11 +196,11 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @param month  统计月份
      * @return
      */
-    public int getFollowRanking(Long userId, Date month) {
+    public int getFollowRanking(Long userId, LocalDate month) {
         List<MonthReport> sortAll = reportMonthRepository.findOrderByFollowNum(month);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
-            if (sortAll.get(i).getUserId() == userId) {
+            if (userId.equals(sortAll.get(i).getUserId())) {
                 ranking = i + 1;
                 break;
             }
@@ -202,12 +208,12 @@ public class MonthReportServiceImpl implements MonthReportService {
         return ranking;
     }
 
-    public Specification<DayReport> getSpecification(Long userId, Date month, Date monthDay) {
+    public Specification<DayReport> getSpecification(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
         Specification<DayReport> specification = ((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("userId").as(Long.class), userId));
-            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(Date.class), month));
-            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(Date.class), monthDay));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastFirstDay));
+            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastEndDay));
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         });
         return specification;
