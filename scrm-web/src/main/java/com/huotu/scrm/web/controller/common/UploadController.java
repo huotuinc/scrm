@@ -9,9 +9,14 @@
 
 package com.huotu.scrm.web.controller.common;
 
+import com.alibaba.fastjson.JSONObject;
+import com.huotu.scrm.common.SysConstant;
+import com.huotu.scrm.common.httputil.HttpClientUtil;
+import com.huotu.scrm.common.httputil.HttpResult;
 import com.huotu.scrm.common.ienum.EnumHelper;
 import com.huotu.scrm.common.ienum.UploadResourceEnum;
 import com.huotu.scrm.web.service.StaticResourceService;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,11 +25,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by Administrator on 2015/5/19.
@@ -42,7 +51,7 @@ public class UploadController {
      * @param id         各种信息的主键，如果上传资讯相关文件则为资讯主键；如果上传名片相关图片则为名片主键
      * @param uploadType 参考{@link UploadResourceEnum}
      * @param files      文件信息
-     * @return
+     * @return 文件信息
      */
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
@@ -52,7 +61,7 @@ public class UploadController {
             @RequestParam(value = "uploadType", required = false) Integer uploadType,
             @RequestParam(value = "btnFile", required = false) MultipartFile files) {
         int result = 0;
-        Map<Object, Object> responseData = new HashMap<Object, Object>();
+        Map<Object, Object> responseData = new HashMap<>();
         try {
             Date now = new Date();
             String fileName = files.getOriginalFilename();
@@ -62,7 +71,7 @@ public class UploadController {
             if (uploadType != null) {
                 uploadResourceEnum = EnumHelper.getEnumType(UploadResourceEnum.class, uploadType);
             }
-            if (id != null && uploadType != null) {
+            if (id != null && uploadResourceEnum != null) {
                 //如果有某一类的主键
                 path = StaticResourceService.IMG + customerId + "/" + uploadResourceEnum.getValue() + "/" + id + "." + prefix;
             } else {
@@ -77,6 +86,65 @@ public class UploadController {
             responseData.put("msg", e.getMessage());
         }
         responseData.put("result", result);
+        return responseData;
+    }
+
+    @RequestMapping(value = "/mall/upload",method = RequestMethod.POST)
+    @ResponseBody
+    public Map<Object, Object> upLoadToMall(
+            @RequestParam(value = "customerId") Long customerId,
+            @RequestParam(value = "btnFile", required = false) MultipartFile files){
+        int result = 0;
+        Map<Object, Object> responseData = new HashMap<>();
+        try {
+            String fileName = files.getOriginalFilename();
+            String prefix = fileName.substring(fileName.lastIndexOf("."));
+            BufferedImage image = ImageIO.read(files.getInputStream());
+            BASE64Encoder encoder = new BASE64Encoder();
+            String imgStr = encoder.encode(files.getBytes());
+            boolean isSave = false;
+            if (image != null) {
+                int width = image.getWidth();
+                int height = image.getHeight();
+                Map<String, Object> map = new TreeMap<>();
+                map.put("customid",customerId);
+                map.put("base64Image",imgStr);
+                map.put("size",width + "x" + height);
+                map.put("extenName",prefix);
+
+                HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/gallery/uploadPhoto", map);
+                if (httpResult.getHttpStatus() == HttpStatus.SC_OK) {
+                    JSONObject obj = JSONObject.parseObject(httpResult.getHttpContent());
+                    if(obj.getIntValue("code") == 200){
+                        String fileUri = obj.getString("data");
+                        URI uri = resourceServer.getResource(StaticResourceService.huobanmallMode,fileUri);
+                        responseData.put("fileUrl", uri);
+                        responseData.put("fileUri", fileUri);
+                        responseData.put("msg", "上传成功！");
+                        responseData.put("code", 200);
+                        //ueidtor上传图片所需参数
+                        responseData.put("url", uri);
+                        responseData.put("title", fileUri);
+                        responseData.put("original", fileUri);
+                        responseData.put("state", "SUCCESS");
+
+                        result = 1;
+                        isSave = true;
+                    }
+                } else {
+                    result = 0;
+                    isSave = false;
+                }
+            }
+            if (!isSave) {
+                responseData.put("code", 500);
+                responseData.put("msg", "请上传正方形文件");
+            }
+        } catch (Exception e) {
+            responseData.put("msg", e.getMessage());
+        }
+        responseData.put("result", result);
+
         return responseData;
     }
 
