@@ -33,7 +33,7 @@ public interface ActivityService {
      * @param actId 活动Id
      * @param isDelete 删除
      */
-    void deleteActivity(Long actId, boolean isDelete);
+    void updateActivity(Long actId, boolean isDelete);
 
 
 

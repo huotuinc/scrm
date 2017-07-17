@@ -58,8 +58,8 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void deleteActivity(Long actId,boolean isDelete) {
-          activityRepository.deleteActivityByActId(isDelete,actId);
+    public void updateActivity(Long actId,boolean isDelete) {
+          activityRepository.updateActivityByActId(isDelete,actId);
     }
 
 

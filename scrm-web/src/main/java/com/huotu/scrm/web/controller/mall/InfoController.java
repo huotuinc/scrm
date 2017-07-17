@@ -29,7 +29,7 @@ public class InfoController extends MallBaseController {
     private static final  int pageSize = 5;
 
     @Autowired
-    InfoService infoServer;
+     InfoService infoServer;
 
 
     /***

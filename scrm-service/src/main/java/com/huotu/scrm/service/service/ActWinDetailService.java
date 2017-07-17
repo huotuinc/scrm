@@ -33,5 +33,4 @@ public interface ActWinDetailService {
      */
     ActWinDetail saveActWinDetail(ActWinDetail actWinDetail);
 
-
 }

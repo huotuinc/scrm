@@ -19,7 +19,7 @@ import java.util.Date;
  *
  * Created by montage on 2017/7/13.
  */
-public class StringUtil {
+public class DateUtil {
     /**
      *
      * 字符串转日期
