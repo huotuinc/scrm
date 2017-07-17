@@ -31,7 +31,7 @@ import java.util.Set;
  */
 
 @Controller
-@RequestMapping("/Act")
+@RequestMapping("/act")
 public class ActController {
     @Autowired
     private ActivityService activityService;
