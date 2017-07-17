@@ -5,15 +5,16 @@
 $(function () {
     'use strict';
 
-    var updateurl = "/mall/updateBusinessCardInfo?customerId=2";
-    var uploadImageFileUrl;
-    var URL;
-    var $simage=$("#simage");
+    //var updateurl = "/site/updateBusinessCardInfo?customerId=2";
+    //var uploadImageFileUrl;
+    //var URL;
+    var $customerId = $("#customerId");
+    var $userId = $("#userId");
 
-    //var $avform = $("#avform");
-    //$avform.on('submit', uploadAvator());
+    var $avatarForm = $("#avatarForm");
+    //$avatarForm.on('submit', uploadAvator);
 
-    var $weuishow_avatar = $("#weuishow_avatar");
+    //var $weuishow_avatar = $("#weuishow_avatar");
     var $weuishow_companyname=$("#weuishow_companyname");
     var $weuishow_qq=$("#weuishow_qq");
     var $weuishow_tel=$("#weuishow_tel");
@@ -29,7 +30,10 @@ $(function () {
     $weuishow_qq.click(showTip);
     $weuishow_tel.click(showTip);
 
-    URL = window.URL || window.webkitURL;
+    //URL = window.URL || window.webkitURL;
+
+    var $btnFile = $("#btnInput");
+    $btnFile.change(uploadImage);
 
 
     // var $uploadimage = $("#btnFile");
@@ -37,20 +41,30 @@ $(function () {
     // $uploadimage.change(uploadimage);
 
 
-    function uploadimage() {
-
+    function uploadImage() {
 
         var files = this.files;
         var file;
         if (files && files.length) {
             file = files[0];
+        }else{
+            return false;
         }
 
-        if (uploadImageFileUrl) {
-            URL.revokeObjectURL(uploadImageFileUrl);
-        }
+        console.log("sssbbbbbs");
 
-        uploadImageFileUrl = URL.createObjectURL(file);
+        //$("#avatarForm").submit();
+
+        uploadAvator();
+
+        //return false;
+        //$avatarForm.submit();
+
+        // if (uploadImageFileUrl) {
+        //     URL.revokeObjectURL(uploadImageFileUrl);
+        // }
+
+        // uploadImageFileUrl = URL.createObjectURL(file);
 
         //alert(uploadImageFileUrl);
 
@@ -60,14 +74,13 @@ $(function () {
 
         //$simage.cropper('destroy').attr('src', uploadImageFileUrl).cropper(options);
 
-        $simage.attr("src", uploadImageFileUrl);
+        //$simage.attr("src", uploadImageFileUrl);
 
-        console.log("set image");
+        //console.log("set image");
 
         //$simage.cropper("replace", uploadImageFileUrl);
 
         //initCropper();
-
 
     }
 
@@ -76,25 +89,38 @@ $(function () {
 
         //var data = $simage.cropper("getCroppedCanvas").toDataURL();
 
-        //console.log( data);
-        var $uploadimage = $("#btnFile");
+        console.log( "1111");
+        var $uploadimage = $("#btnInput");
         if( !$uploadimage.val()  ) return false;
 
-        alert("upload222");
+        //alert("upload222");
+        console.log( $uploadimage.val() );
 
 
-        var $form = $("#avform");
-        var url = $form.attr("action");
+        //var $form = $("#avform");
+        var url = $avatarForm.attr("action");
 
-        var data = new FormData( $form[0] );
+        console.log("url="+ url);
+
+        var data = new FormData( $avatarForm[0] );
+
         console.log(data);
 
         $.ajax(url,{
-            type:"post",
+            method:"post",
             data:data,
             dataType:'json',
+            processData: false,
+            contentType: false,
             success:function (data) {
                 console.log(data);
+
+                var $img_avatar= $("#img_avatar");
+
+                console.log("src=" + data.data.avatar);
+
+                $img_avatar.attr("src" , data.data.avatar);
+
             },
             error:function (error) {
                 console.log(error);
@@ -103,13 +129,6 @@ $(function () {
 
     }
 
-
-    // var $updatecompanyname = $("#updatecompanyname");
-    // $updatecompanyname.click(updateBusinessCard);
-    // var $updateqq=$("#updateqq");
-    // $updateqq.click(updateBusinessCard);
-    // var $updatetel = $("#updatetel");
-    // $updatetel.click(updateBusinessCard);
 
     function updateBusinessCard() {
         var type= $(this).attr("js-datatype");
@@ -132,7 +151,6 @@ $(function () {
     }
 
     function showTip() {
-        var userid = 99999999;
         var datatype= $(this).attr("js-data-type");
         var title = $(this).attr("js-data-hint");
         var $ele = $(this).find(".ui-data-ele");
@@ -145,7 +163,7 @@ $(function () {
             onOK: function (text) {
                 //$.alert("姓名:" + text, "填写成功");
                 $ele.val(text);
-                ajaxRequest(userid , datatype , text );
+                ajaxRequest( datatype , text );
                 $ele.text(text);
             },
             onCancel: function () {
@@ -157,9 +175,11 @@ $(function () {
     }
 
 
-    function ajaxRequest( userId , updatetype , text ) {
-        var url = "/mall/updateBusinessCardInfo";
-        var data ={userId:userId , type: updatetype , value:text};
+    function ajaxRequest(  updatetype , text ) {
+        var url = "/site/updateBusinessCardInfo";
+        var customerId = $customerId.val();
+        var userid = $userId.val();
+        var data ={ customerId : customerId , userId:userid , type: updatetype , value:text};
 
         console.log("ssss");
 
