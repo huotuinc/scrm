@@ -18,6 +18,7 @@
 
 <body class="gray-bg" data-unitTest="false" data-prototype="true">
 <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
+<!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
 <!--/*@thymesVar id="informationSearch" type="com.huotu.scrm.common.utils.InformationSearch"*/-->
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
@@ -65,8 +66,8 @@
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th class="col-sm-2">资讯标题</th>
-                                <th class="col-sm-3">资讯简介</th>
+                                <th>资讯标题</th>
+                                <th>资讯简介</th>
                                 <th>创建时间</th>
                                 <th>发布状态</th>
                                 <th>推广状态</th>
@@ -74,17 +75,24 @@
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
+                            <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
                             <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
                             <tr th:each="info ,infoState: ${infoListsPage.content}">
                                 <td th:text="${info.id}">1</td>
-                                <td>
-                                    <a th:text="${info.title}">
-                                        习近平对司法体制改革作出重要指示引起热烈反响
+                                <td style="width: 20%;">
+                                    <a>
+                                        <p  style="width: 100%; height: 50px;">
+                                        <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
+                                                习近平对司法体制改革作出重要指示引起热烈反响
+                                        </span>
+                                        </p>
                                     </a>
                                 </td>
-                                <td  th:text="${info.content}">
-                                    连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
-                                    总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
+                                <td style="width: 20%;">
+                                    <span class="font-hidden" style="width: 95%;float: left;" th:text="${info.content}">
+                                                连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
+                                        总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
+                                    </span>
                                 </td>
                                 <td th:text="${#dates.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
                                 <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
@@ -111,15 +119,19 @@
                             </tr>
                             <tr>
                                 <td>2</td>
-                                <td>
-                                    <a>
+                                <td style="width: 20%;">
+                                    <p style="width: 100%; height: 50px;">
                                         <!--资讯标题-->
-                                        习近平对司法体制改革作出重要指示引起热烈反响
-                                    </a>
+                                            <span class="font-hidden" style="width: 95%;float: left;">
+                                                习近平对司法体制改革作出重要指示引起热烈反响
+                                            </span>
+                                    </p>
                                 </td>
-                                <td>
-                                    连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
-                                    总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
+                                <td style="width: 20%;">
+                                    <span class="font-hidden" style="width: 95%;float: left;">
+                                                连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
+                                        总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
+                                    </span>
                                 </td>
                                 <td>2017-07-12 12:12:34</td>
                                 <td>已发布</td>
@@ -178,9 +190,9 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 <script src="../js/infoJs/infoLists.js"></script>
 
-<script type="text/javascript"  th:inline="javascript">
-    var pageIndex = /*[[${informationSearch.pageNo}]]*/ 1;
-    var totalPage = /*[[${infoListsPage.totalPages}]]*/ 20;
+<script type="text/javascript">
+    var pageIndex = [[${informationSearch.pageNo}]];
+    var totalPage = [[${infoListsPage.totalPages}]];
     //初始化分页
     var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
