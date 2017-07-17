@@ -2,12 +2,14 @@ package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,6 +23,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Autowired
     private InfoRepository infoRepository;
+
+    @Autowired
+    private InfoBrowseRepository infoBrowseRepository;
 
     @Override
     public int getUserType(Long userId) {
@@ -45,17 +50,44 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             infoModel.setTitle(info.getTitle());
             infoModel.setIntroduce(info.getIntroduce());
             infoModel.setThumbnailImageUrl(info.getThumbnailImageUrl());
-//            infoModel.setForwardNum();
-//            infoModel.setBrowseNum();
-//            infoModel.setReleaseTime();
+            infoModel.setForwardNum(getInfoForwardNum(info.getId()));
+            infoModel.setVisitorNum(getVisitorNum(info.getId()));
+            infoModel.setReleaseTime(getReleaseTime(info.getId()));
         });
         return null;
     }
 
-    @Override
+    /**
+     * 统计资讯转发量
+     *
+     * @param infoId 资讯ID
+     * @return
+     */
     public int getInfoForwardNum(Long infoId) {
-        return 0;
+        return infoBrowseRepository.findInfoForwardNum(infoId);
     }
 
+    /**
+     * 统计访客量（咨询转发浏览量）
+     *
+     * @param infoId 咨询ID
+     * @return
+     */
+    public int getVisitorNum(Long infoId) {
+        return (int) infoBrowseRepository.countByInfoId(infoId);
+    }
+
+    /**
+     * 获取咨询发布时间距现在多少时间，默认小时数
+     *
+     * @param infoId
+     * @return
+     */
+    public int getReleaseTime(Long infoId) {
+        Date createTime = infoRepository.findOne(infoId).getCreateTime();
+        Date now = new Date();
+        long releaseTime = (now.getTime() - createTime.getTime()) / (60 * 60 * 1000);
+        return (int) releaseTime;
+    }
 
 }

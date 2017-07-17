@@ -28,4 +28,9 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     //根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
     @Query("select count(distinct t.infoId) from InfoBrowse t where t.sourceUserId=?1 and t.browseTime=?2")
     int findForwardNumBySourceUserId(Long userId, LocalDate date);
+
+    //查询咨询的转发量
+    @Query("select count(distinct t.infoId) from InfoBrowse t")
+    int findInfoForwardNum(Long infoId);
+
 }

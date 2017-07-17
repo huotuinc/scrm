@@ -36,7 +36,7 @@ public class InfoModel implements Serializable {
     /**
      * 资讯浏览量
      */
-    private int browseNum;
+    private int visitorNum;
 
     /**
      * 发布时间距现在多少时间，默认小时数

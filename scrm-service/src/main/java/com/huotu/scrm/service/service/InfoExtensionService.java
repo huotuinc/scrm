@@ -24,12 +24,4 @@ public interface InfoExtensionService {
      * @return
      */
     List<InfoModel> findInfo(Long userId, int userType);
-
-    /**
-     * 统计资讯转发量
-     *
-     * @param infoId
-     * @return
-     */
-    int getInfoForwardNum(Long infoId);
 }
