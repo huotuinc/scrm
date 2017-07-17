@@ -1,7 +1,9 @@
 package com.huotu.scrm.service.entity.report;
 
+import com.huotu.scrm.service.entity.support.LocalDateAttributeConverter;
 import lombok.Getter;
 import lombok.Setter;
+import org.eclipse.persistence.annotations.Converter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,7 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 /**
  * Created by hxh on 2017-07-11.
@@ -49,8 +52,8 @@ public class DayReport {
     /**
      * 是否是销售员（1：是 0：不是）
      */
-    @Column(name="Is_Salesman")
-    private boolean  isSalesman;
+    @Column(name = "Is_Salesman")
+    private boolean isSalesman;
 
     /**
      * 每日资讯转发量
@@ -97,25 +100,15 @@ public class DayReport {
     /**
      * 统计日期
      */
-    @Column(name = "Report_Day")
-    private Date reportDay;
+    @Column(name = "Report_Day", columnDefinition = "date")
+    @Converter(name = "",converterClass = LocalDateAttributeConverter.class)
+    private LocalDate reportDay;
+
 
     @Override
     public String toString() {
         return "DayReport{" +
                 "id=" + id +
-                ", userId=" + userId +
-                ", customerId=" + customerId +
-                ", levelId=" + levelId +
-                ", isSalesman=" + isSalesman +
-                ", forwardNum=" + forwardNum +
-                ", visitorNum=" + visitorNum +
-                ", visitorRanking=" + visitorRanking +
-                ", extensionScore=" + extensionScore +
-                ", scoreRanking=" + scoreRanking +
-                ", followNum=" + followNum +
-                ", followRanking=" + followRanking +
-                ", reportDay=" + reportDay +
                 '}';
     }
 }

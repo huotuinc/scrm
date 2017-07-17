@@ -1,14 +1,16 @@
 package com.huotu.scrm.service.repository;
 
 import com.huotu.scrm.service.CommonTestBase;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
+import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.util.DateUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -22,6 +24,9 @@ public class DayReportRepositoryTest extends CommonTestBase {
     @Autowired
     private InfoBrowseRepository infoBrowseRepository;
 
+    @Autowired
+    private UserLevelRepository userLevelRepository;
+
     /**
      * 测试日期工具类
      */
@@ -29,36 +34,34 @@ public class DayReportRepositoryTest extends CommonTestBase {
     public void testDateUtil() {
         System.out.println("前天日期(时分秒默认为最大):" + DateUtil.getBeforeLastDay());
         System.out.println("昨天日期(时分秒默认最大):" + DateUtil.getLastDayMax());
+        System.out.println("");
     }
 
-    /**
-     * 测试保存每日统计信息
-     */
-    @Test
-    @Rollback(false)
-    public void testDayReportRepository() {
-        //保存一天数据到每日统计表
-        Date lastDay = DateUtil.getLastDay();
-        DayReport dayReport = new DayReport();
-//        dayReport.setId(1L);
-        dayReport.setLevelId(1);
-        dayReport.setUserId(1L);
-        dayReport.setSalesman(true);
-        dayReport.setFollowNum(1);
-        dayReport.setExtensionScore(1);
-        dayReport.setReportDay(lastDay);
-        dayReportRepository.save(dayReport);
-        List<DayReport> all1 = dayReportRepository.findAll();
-        for (DayReport dayReport1 : all1) {
-            System.out.println(dayReport1.toString());
-        }
 
-        //测试统计排名访客数据
-        List<DayReport> orderByVisitorNum = dayReportRepository.findOrderByVisitorNum(DateUtil.getBeforeLastDay(), DateUtil.getLastDayMax());
-        System.out.println("。。。。。。。。。。。。。。。。。。：" + orderByVisitorNum.size());
-        for (DayReport d : orderByVisitorNum
-                ) {
-            System.out.println(d.getUserId().equals(687500L));
+
+//
+    @Test
+   @Rollback(false)
+    public void testDayReportRepository() {
+        LocalDate now = LocalDate.now();
+//        LocalDate date = now.minusDays(1);
+//        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(date, now);
+//        for (DayReport d : orderByExtensionScore
+//                ) {
+//            System.out.println(d.toString());
+//        }
+        DayReport dayReport = new DayReport();
+       dayReport.setReportDay(now);
+////       dayReportRepository.save(dayReport);
+//        List<DayReport> byReportDay = dayReportRepository.findByReportDay(now);
+//        System.out.println(byReportDay.size());
+        System.out.println(now.minusDays(1));
+        System.out.println(now.plusDays(1));
+        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(now.minusDays(2), now);
+        System.out.println(orderByExtensionScore.size());
+        for (DayReport d: orderByExtensionScore
+             ) {
+            System.out.println(d.getId());
         }
     }
 
@@ -71,5 +74,11 @@ public class DayReportRepositoryTest extends CommonTestBase {
         for (long infoBrowse : bySourceUserId) {
             System.out.println(infoBrowse);
         }
+    }
+
+    @Test
+    public void testUserLevelRepository() {
+        UserLevel byLevelAndCustomerId = userLevelRepository.findByLevelAndCustomerId(1, 842L);
+        System.out.println(byLevelAndCustomerId.getId());
     }
 }

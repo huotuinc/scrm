@@ -7,9 +7,9 @@ public interface MonthReportService {
 
     /**
      * 保存每月统计信息
-     * @param userId 用户ID
+     *
      * @return
      */
-    void saveReportMonth(Long userId);
+    void saveReportMonth();
 
 }

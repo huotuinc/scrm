@@ -11,12 +11,11 @@ import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.service.DayReportService;
-import com.huotu.scrm.service.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -47,12 +46,12 @@ public class DayReportServiceImpl implements DayReportService {
     @Override
     @Transactional
     public void saveReportDay() {
-        //获取昨日日期(时分秒默认为0）
-        Date lastDay = DateUtil.getLastDay();
-        //获取前天日期(时分秒默认最大)
-        Date dateMin = DateUtil.getBeforeLastDay();
-        //获取昨日日期(时分秒默认最大)
-        Date dateMax = DateUtil.getLastDayMax();
+        //获取今日日期
+        LocalDate today = LocalDate.now();
+        //获取昨日日期
+        LocalDate lastDay = today.minusDays(1);
+        //获取前天日期
+        LocalDate beforeLastDay = today.minusDays(2);
         List<Long> bySourceUserIdList = infoBrowseRepository.findBySourceUserId();
         for (long sourceUserId : bySourceUserIdList) {
             DayReport reportDay = new DayReport();
@@ -74,29 +73,8 @@ public class DayReportServiceImpl implements DayReportService {
             reportDay.setVisitorNum((int) countBySourceUserId);
             //设置每日推广积分（咨询转发奖励和转发咨询浏览奖励）
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
-            //获取转发咨询浏览量奖励积分
-            int forwardScore = 0;
-            //获取咨询转发转换比例
-            int rewardScore = infoConfigure.getRewardScore();
-            //判断是否开启咨询转发积分奖励
-            if (infoConfigure.getIsReward()) {
-                //判断小伙伴是否开启咨询转发奖励
-                int rewardUserType = infoConfigure.getRewardUserType();
-                //rewardUserType 1：小伙伴 2：小伙伴 + 会员
-                if (rewardUserType == 1 || rewardUserType == 2) {
-                    //判断是否开启奖励次数限制
-                    if (infoConfigure.isReward_Limit()) {
-                        int rewardLimitNum = infoConfigure.getRewardLimitNum();
-                        if (rewardLimitNum < forwardNumBySourceUserId) {
-                            forwardScore = rewardLimitNum * rewardScore;
-                        } else {
-                            forwardScore = forwardNumBySourceUserId * rewardScore;
-                        }
-                    } else {
-                        forwardScore = forwardNumBySourceUserId * rewardScore;
-                    }
-                }
-            }
+            //获取转发资讯奖励积分
+            int forwardScore = getEstimateScore(sourceUserId);
             //获取每日访客量奖励积分
             int visitorScore = 0;
             //获取访客量转换比例
@@ -123,19 +101,56 @@ public class DayReportServiceImpl implements DayReportService {
             //保存数据
             reportDayRepository.save(reportDay);
             //设置每日访客排名
-            int visitorRanking = visitorRanking(sourceUserId, dateMin, dateMax);
+            int visitorRanking = visitorRanking(sourceUserId, beforeLastDay, today);
             reportDay.setVisitorRanking(visitorRanking);
             //设置每日积分排名
-            int scoreRanking = scoreRanking(sourceUserId, dateMin, dateMax);
+            int scoreRanking = scoreRanking(sourceUserId, beforeLastDay, today);
             reportDay.setScoreRanking(scoreRanking);
             //设置每日关注排名（销售员特有）
             if (reportDay.isSalesman()) {
-                int followRanking = followRanking(sourceUserId, dateMin, dateMax);
+                int followRanking = followRanking(sourceUserId, beforeLastDay, today);
                 reportDay.setFollowRanking(followRanking);
             } else {
                 reportDay.setFollowRanking(-1);
             }
         }
+    }
+
+    /**
+     * 统计预计积分
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    @Override
+    public int getEstimateScore(Long userId) {
+        User user = userRepository.findOne(userId);
+        int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(userId);
+        InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
+        //获取转发咨询浏览量奖励积分
+        int forwardScore = 0;
+        //获取咨询转发转换比例
+        int rewardScore = infoConfigure.getRewardScore();
+        //判断是否开启咨询转发积分奖励
+        if (infoConfigure.getIsReward()) {
+            //判断小伙伴是否开启咨询转发奖励
+            int rewardUserType = infoConfigure.getRewardUserType();
+            //rewardUserType 1：小伙伴 2：小伙伴 + 会员
+            if (rewardUserType == 1 || rewardUserType == 2) {
+                //判断是否开启奖励次数限制
+                if (infoConfigure.isReward_Limit()) {
+                    int rewardLimitNum = infoConfigure.getRewardLimitNum();
+                    if (rewardLimitNum < forwardNumBySourceUserId) {
+                        forwardScore = rewardLimitNum * rewardScore;
+                    } else {
+                        forwardScore = forwardNumBySourceUserId * rewardScore;
+                    }
+                } else {
+                    forwardScore = forwardNumBySourceUserId * rewardScore;
+                }
+            }
+        }
+        return forwardScore;
     }
 
     /**
@@ -146,7 +161,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @param dateMax 统计最大时间
      * @return
      */
-    public int visitorRanking(Long userId, Date dateMin, Date dateMax) {
+    public int visitorRanking(Long userId, LocalDate dateMin, LocalDate dateMax) {
         List<DayReport> sortAll = reportDayRepository.findOrderByVisitorNum(dateMin, dateMax);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
@@ -168,7 +183,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @param dateMax 统计最大时间
      * @return
      */
-    public int scoreRanking(Long userId, Date dateMin, Date dateMax) {
+    public int scoreRanking(Long userId, LocalDate dateMin, LocalDate dateMax) {
         List<DayReport> sortAll = reportDayRepository.findOrderByExtensionScore(dateMin, dateMax);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
@@ -188,7 +203,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @param dateMax 统计最大时间
      * @return
      */
-    public int followRanking(Long userId, Date dateMin, Date dateMax) {
+    public int followRanking(Long userId, LocalDate dateMin, LocalDate dateMax) {
         List<DayReport> sortAll = reportDayRepository.findOrderByFollowNum(dateMin, dateMax);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
