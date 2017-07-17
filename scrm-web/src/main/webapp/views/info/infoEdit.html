@@ -129,9 +129,9 @@
 
         $(function(){
               $('#summerNote').summernote({
-        height: 400,
-        minHeight: 300,
-        maxHeight: 500,
+        height: 300,
+        minHeight: 200,
+        maxHeight: 400,
         focus: true,
         lang:'zh-CN',
         // 重写图片上传
@@ -148,7 +148,7 @@
 
             uploadFile:function(obj, type) {
 
-                alert(0);
+                alert(obj);
                 $.jBox.tip("正在上传...", "loading");
                 $.ajaxFileUpload({
                     url : "/common/upload",
