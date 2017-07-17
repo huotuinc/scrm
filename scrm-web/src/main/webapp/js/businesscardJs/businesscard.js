@@ -5,7 +5,7 @@
 $(function () {
     'use strict';
 
-    //var updateurl = "/site/updateBusinessCardInfo?customerId=2";
+    var updateurl = "/site/updateBusinessCardInfo";
     //var uploadImageFileUrl;
     //var URL;
     var $customerId = $("#customerId");

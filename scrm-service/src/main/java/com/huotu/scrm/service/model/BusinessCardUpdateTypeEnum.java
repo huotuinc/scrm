@@ -3,7 +3,8 @@ package com.huotu.scrm.service.model;
 import com.huotu.scrm.common.ienum.ICommonEnum;
 
 /**
- * Created by Administrator on 2017/7/13.
+ * 销售员名片实体更新类型
+ * Created by Jinxiangdong on 2017/7/13.
  */
 public enum BusinessCardUpdateTypeEnum implements ICommonEnum{
 

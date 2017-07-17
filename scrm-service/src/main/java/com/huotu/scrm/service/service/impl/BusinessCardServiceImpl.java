@@ -28,7 +28,7 @@ public class BusinessCardServiceImpl implements BusinessCardService{
         return businessCard;
     }
 
-    public SalesmanBusinessCard getSalesmanBusinessCard(Long salesmanId , Long customerId , Long followerId ) {
+    public SalesmanBusinessCard getSalesmanBusinessCard( Long customerId ,Long salesmanId , Long followerId ) {
         BusinessCard businessCard = businessCardReposity.getByUserIdAndCustomerId(salesmanId , customerId);
         User user = userReposity.getByIdAndCustomerId(salesmanId , customerId);
         Integer numberOfFollowers = businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);

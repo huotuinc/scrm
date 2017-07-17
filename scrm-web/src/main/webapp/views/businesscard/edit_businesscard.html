@@ -1,5 +1,5 @@
 <!doctype html>
-<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport"
           content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
@@ -33,7 +33,7 @@
     </style>
 </head>
 
-<body class="ddbg">
+<body class="ddbg" >
 <form name="avatarForm" id="avatarForm" action="/site/uploadAvator" method="post" enctype="multipart/form-data">
     <input type="hidden" id="customerId" name="customerId" th:value="${businessCard.getCustomerId()}">
     <input type="hidden" id="userId" name="userId" th:value="${businessCard.getUserId()}">

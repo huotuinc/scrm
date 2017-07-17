@@ -5,7 +5,10 @@ import com.huotu.scrm.common.ienum.UploadResourceEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
+import com.huotu.scrm.service.model.SalesmanBusinessCard;
+import com.huotu.scrm.service.service.BusinessCardRecordService;
 import com.huotu.scrm.service.service.BusinessCardService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Date;
 
 
 /**
@@ -28,49 +32,42 @@ import java.net.URISyntaxException;
 //@RequestMapping("/businessCard")
 @Controller
 public class BusinessCardController extends SiteBaseController {
-
     @Autowired
     private BusinessCardService businessCardService;
-
+    @Autowired
+    private BusinessCardRecordService businessCardRecordService;
     @Autowired
     private StaticResourceService staticResourceService;
 
-
     /***
      * 编辑销售员名片信息
-     * @param request
      * @param salesmanId
      * @param model
      * @return
      */
     @RequestMapping("/editBusinessCard")
-    public String editBusinessCard(HttpServletRequest request , long customerId ,  long salesmanId , Model model ){
+    public String editBusinessCard( long customerId ,  long salesmanId , Model model ){
         BusinessCard businessCard = businessCardService.getBusinessCard(salesmanId , customerId );
-
         if(businessCard==null){
             businessCard=new BusinessCard();
             businessCard.setCustomerId(customerId);
             businessCard.setUserId(salesmanId);
         }
-
         model.addAttribute("businessCard", businessCard);
 
         return "businesscard/edit_businesscard";
     }
 
-
     /***
-     * 上传头像接口
-     * @param request
+     * 上传名片头像接口
      * @param customerId
      * @param userId
      * @param btnFile
      * @return
      */
-    @RequestMapping(value = "/uploadAvator" , method = RequestMethod.POST )
+    @RequestMapping(value = "/uploadAvatar" , method = RequestMethod.POST )
     @ResponseBody
-    public ApiResult uploadAvator(HttpServletRequest request , Long customerId , Long userId , MultipartFile btnFile ){
-
+    public ApiResult uploadAvatar( Long customerId , Long userId , MultipartFile btnFile ){
         try {
             UploadResourceEnum uploadResourceType = UploadResourceEnum.USER;
             String fileName = btnFile.getOriginalFilename();
@@ -81,12 +78,10 @@ public class BusinessCardController extends SiteBaseController {
             staticResourceService.deleteResource(path);
             //再上传最新的图片
             URI uri = staticResourceService.uploadResource(mode , path , btnFile.getInputStream());
-            //然后保存图片的uri地址
+            //然后保存图片的uri地址到数据库
             BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR , uri.toString() );
 
-            ApiResult<BusinessCard> result = new ApiResult<>(ResultCodeEnum.SUCCESS.getResultMsg() , ResultCodeEnum.SUCCESS.getResultCode());
-            result.setData( businessCard );
-            return result;
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS , businessCard);
         }catch (IOException ioEx){
             return new ApiResult( ioEx.getMessage() , ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultCode());
         }catch (URISyntaxException uriEx){
@@ -133,6 +128,24 @@ public class BusinessCardController extends SiteBaseController {
 //        }
     }
 
+//    /***
+//     *
+//     * @param request
+//     * @param type
+//     * @param value
+//     * @return
+//     */
+//    @RequestMapping(value = "/updateBusinessCardInfo" , method = RequestMethod.POST)
+//    @ResponseBody
+//    public ApiResult updateBusinessCardInfo2( HttpServletRequest request , BusinessCard model ){
+//
+//        //Long  customerId = this.getCustomerId( request );
+//        //Long userId = this.getUserId(request);
+//        //BusinessCardUpdateTypeEnum typeEnum = EnumHelper.getEnumType( BusinessCardUpdateTypeEnum.class , type );
+//        //BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , typeEnum , value);
+//
+//        return ApiResult.resultWith(ResultCodeEnum.SUCCESS , model );
+//    }
 
     /***
      *
@@ -153,5 +166,35 @@ public class BusinessCardController extends SiteBaseController {
         ApiResult<BusinessCard> result = new ApiResult<BusinessCard>(ResultCodeEnum.SUCCESS.getResultMsg(), ResultCodeEnum.SUCCESS.getResultCode() );
         result.setData(businessCard);
         return  result;
+    }
+
+    /***
+     * 显示名片页面
+     * @param customerId
+     * @param salesmanId
+     * @param model
+     * @return
+     */
+    @RequestMapping("/seeBusinessCard")
+    public String seeBusinessCard(long customerId , long salesmanId , long followerId , Model model) {
+        //检测是否关注了其他销售员
+        boolean isFollowedOther = businessCardRecordService.existsByCustomerIdAndFollowerIdNotInSalesmanId(customerId , followerId, salesmanId );
+        if( !isFollowedOther ){
+            //检测是否关注了指定的销售员
+            boolean isFollowed = businessCardRecordService.existsByCustomerIdAndUserIdAndFollowId(customerId , salesmanId, followerId);
+            if( !isFollowed ) {
+                BusinessCardRecord follow = new BusinessCardRecord();
+                follow.setFollowDate(new Date());
+                follow.setFollowId(followerId);
+                follow.setUserId(salesmanId);
+                follow.setCustomerId(customerId);
+                businessCardRecordService.insert(follow);
+            }
+        }
+
+        SalesmanBusinessCard salesmanBusinessCard = businessCardService.getSalesmanBusinessCard(customerId, salesmanId, followerId);
+
+        model.addAttribute("businessCard", salesmanBusinessCard);
+        return "businesscard/see_businesscard";
     }
 }

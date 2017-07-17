@@ -21,14 +21,14 @@ public class BusinessCardServiceTest extends CommonTestBase {
         Long userId=22222222L;
         Long customerId = 2323L;
         Long followerId = 0L;
-        SalesmanBusinessCard userBusinessCard = businessCardService.getSalesmanBusinessCard(userId, customerId , followerId );
+        SalesmanBusinessCard userBusinessCard = businessCardService.getSalesmanBusinessCard(customerId , userId , followerId );
         Assert.assertEquals(null , userBusinessCard.getBusinessCard());
         Assert.assertEquals(null , userBusinessCard.getSalesman());
         //测试存在用户基本信息和不存在名片信息
         userId=124L;
         customerId=742L;
         followerId=0L;
-        userBusinessCard = businessCardService.getSalesmanBusinessCard(userId,customerId , followerId);
+        userBusinessCard = businessCardService.getSalesmanBusinessCard( customerId , userId , followerId);
         Assert.assertTrue( userBusinessCard !=null );
         Assert.assertTrue( userBusinessCard.getSalesman() !=null);
         Assert.assertTrue( userBusinessCard.getBusinessCard() ==null );
@@ -40,7 +40,7 @@ public class BusinessCardServiceTest extends CommonTestBase {
         String text = "名片头像地址";
         BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , type , text );
         //再 测试 是否存在 名片信息
-        userBusinessCard = businessCardService.getSalesmanBusinessCard( userId , customerId , followerId);
+        userBusinessCard = businessCardService.getSalesmanBusinessCard( customerId , userId , followerId);
         Assert.assertTrue( userBusinessCard !=null );
         Assert.assertTrue( userBusinessCard.getSalesman() !=null);
         Assert.assertTrue( userBusinessCard.getBusinessCard() !=null );
