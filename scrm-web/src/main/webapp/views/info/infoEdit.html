@@ -77,7 +77,7 @@
                         <label class="col-sm-2 control-label">上传封面</label>
                         <div class="col-sm-6">
                             <input type="hidden" id="txtCover" value="" />
-                            <input type="file" id="uploadFile" name="uploadFile" readonly="readonly" class="form-control">
+                            <input type="file" id="uploadFile" name="uploadFile" readonly="readonly" class="form-control" onchange ="infoSaveEditHandler.uploadFile(this,1)">
                             <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：400*200</span>
 
                             <img class="imgpreview" src="../../images/bg.png" style="width:200px;height:200px;" />
@@ -120,25 +120,33 @@
 
         
         $(function () {
-            //点击打开文件选择器
-            $("#upload").on('click', function() {
 
-                alert(0);
-            });
         });
         var infoSaveEditHandler = {
-            saveEditInfo:function() {
-                $('#editSaveInfo').submit();
+
+            uploadFile:function(obj, type) {
+
+                alert(0);
+                $.jBox.tip("正在上传...", "loading");
+                $.ajaxFileUpload({
+                    url : "/common/upload",
+                    secureuri : false,// 一般设置为false
+                    fileElementId : "fileUpload"+type,// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                    dataType : 'json',// 返回值类型 一般设置为json
+                    data: {'type': type, "type2":2},
+
+                    success : function(data) // 服务器成功响应处理函数
+                    {
+                        console.log("服务器异常");
+                    },
+                    error : function(data)// 服务器响应失败处理函数
+                    {
+                        console.log("服务器异常");
+                    }
+                });
             }
+
         }
-
-        $('#infoSubmit').click(function () {
-            infoSaveEditHandler.saveEditInfo(0);
-        });
-
-        $('#uploadFile').click(function () {
-            infoSaveEditHandler.saveEditInfo(0);
-        });
 
 
 

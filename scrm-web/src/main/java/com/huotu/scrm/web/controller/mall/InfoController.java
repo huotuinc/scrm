@@ -27,7 +27,7 @@ public class InfoController extends MallBaseController {
 
     private Log logger = LogFactory.getLog(InfoController.class);
     @Autowired
-    InfoService infoServer;
+    InfoService infoService;
 
     /***
      * 展示资讯首页内容
@@ -40,9 +40,9 @@ public class InfoController extends MallBaseController {
         logger.info(informationSearch);
         informationSearch.setCustomerId(customerId);
         logger.info(informationSearch);
-        Page<Info> page = infoServer.infoSList(informationSearch);
+        Page<Info> page = infoService.infoSList(informationSearch);
         model.addAttribute("infoListsPage",page);
-        long account = infoServer.infoListsCount(false);
+        long account = infoService.infoListsCount(false);
         logger.info(account);
         model.addAttribute("totalAccount",account);
         return "info/info_list";
@@ -68,9 +68,9 @@ public class InfoController extends MallBaseController {
     @ResponseBody
     public ApiResult getInfoListsAccount(boolean disable,int page){
 
-        logger.info(infoServer.infoListsCount(disable)+"+++"+page);
+        logger.info(infoService.infoListsCount(disable)+"+++"+page);
         Map<String,Long> map = new HashMap<>();
-        map.put("amount",infoServer.infoListsCount(disable));
+        map.put("amount", infoService.infoListsCount(disable));
         ApiResult apiResult = ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",map);
         logger.info(apiResult);
         return  apiResult;
@@ -84,7 +84,7 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping("saveInfo")
     public String saveInfo(Info info){
-        infoServer.infoSave(info);
+        infoService.infoSave(info);
         return "index";
     }
 

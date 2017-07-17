@@ -19,12 +19,12 @@ public class InfoControllerTest extends CommonTestBase{
     private Log logger = LogFactory.getLog(InfoControllerTest.class);
 
     @Autowired
-    InfoService infoServer;
+    InfoService infoService;
 
 
     @Test
     public void searchInfoListTitleLike() throws Exception {
-        List<Info> info= infoServer.findListsByWord("李");
+        List<Info> info= infoService.findListsByWord("李");
         info.stream()
                 .forEach(System.out::println);
     }
@@ -32,14 +32,14 @@ public class InfoControllerTest extends CommonTestBase{
     @Test
     public void getInfoListsAccount() throws Exception {
 
-        long count = infoServer.infoListsCount(false);
+        long count = infoService.infoListsCount(false);
         logger.info(count);
     }
 
 //    @Test
 //    public void getInfoListPageable() throws Exception {
 //
-//        Page<Info> infoList = infoServer.infoSList(false,2,4);
+//        Page<Info> infoList = infoService.infoSList(false,2,4);
 //
 //        List<Info> infoList1 =  infoList.getContent();
 //        infoList1.stream()
@@ -60,7 +60,7 @@ public class InfoControllerTest extends CommonTestBase{
 //        info.setTitle("李");
 //        info.setContent("【李克强崎岖山路颠簸一小时考察脱贫攻坚】沿着崎岖山路，李克强10日乘车颠簸一小时，深入陕西宝鸡坪头镇大湾河村考察脱贫攻坚。总理走访两户人家询问收入、医保等情况，坐在院子里与村民交流。该村已被列入易地扶贫搬迁计划，村民们都盼着尽快搬迁。总理说，期待你们搬迁后生活有奔头，过上好日子。");
         info.setContent("【李");
-        Info saveInfo =  infoServer.infoSave(info);
+        Info saveInfo =  infoService.infoSave(info);
         logger.info(saveInfo);
     }
 
