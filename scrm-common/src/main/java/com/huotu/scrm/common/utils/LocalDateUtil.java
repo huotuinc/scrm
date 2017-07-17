@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.util;
+package com.huotu.scrm.common.utils;
 
 import org.springframework.util.StringUtils;
 

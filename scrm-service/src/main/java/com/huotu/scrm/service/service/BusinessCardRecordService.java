@@ -1,7 +1,9 @@
 package com.huotu.scrm.service.service;
 
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
+
 /**
- * Created by Administrator on 2017/7/12.
+ * Created by Jinxiangdong on 2017/7/12.
  */
 public interface BusinessCardRecordService {
 
@@ -28,4 +30,19 @@ public interface BusinessCardRecordService {
      * @return
      */
     boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId);
+
+    /***
+     * 判断用户是否关注过了除了指定的销售员id的其他销售员
+     * @param customerId
+     * @param followerId
+     * @return
+     */
+    boolean existsByCustomerIdAndFollowerIdNotInSalesmanId(Long customerId , Long followerId , Long salesmanId);
+
+    /***
+     *
+     * @param businessCardRecord
+     * @return
+     */
+    BusinessCardRecord insert( BusinessCardRecord businessCardRecord);
 }
