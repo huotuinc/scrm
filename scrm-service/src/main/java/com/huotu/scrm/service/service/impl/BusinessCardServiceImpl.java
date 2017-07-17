@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service.implement;
+package com.huotu.scrm.service.service.impl;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.mall.User;

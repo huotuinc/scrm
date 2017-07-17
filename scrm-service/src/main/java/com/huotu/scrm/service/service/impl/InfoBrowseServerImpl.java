@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service.implement;
+package com.huotu.scrm.service.service.impl;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.service.InfoBrowseServer;

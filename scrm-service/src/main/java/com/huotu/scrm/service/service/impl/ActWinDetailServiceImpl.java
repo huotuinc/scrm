@@ -7,7 +7,7 @@
  * 2013-2017. All rights reserved.
  */
 
-package com.huotu.scrm.service.service.implement;
+package com.huotu.scrm.service.service.impl;
 
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.repository.ActWinDetailRepository;
