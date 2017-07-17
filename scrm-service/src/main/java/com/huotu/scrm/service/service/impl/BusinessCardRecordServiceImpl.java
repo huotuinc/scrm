@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.impl;
 
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
 import com.huotu.scrm.service.service.BusinessCardRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,15 @@ public class BusinessCardRecordServiceImpl implements BusinessCardRecordService 
     @Override
     public boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId) {
         return businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId, userId,followId);
+    }
+
+    @Override
+    public boolean existsByCustomerIdAndFollowerIdNotInSalesmanId(Long customerId, Long followerId, Long salesmanId) {
+        return businessCardRecordReposity.existsByCustomerIdAndFollowIdAndUserIdNot(customerId , followerId , salesmanId);
+    }
+
+    @Override
+    public BusinessCardRecord insert(BusinessCardRecord businessCardRecord) {
+        return businessCardRecordReposity.save(businessCardRecord);
     }
 }

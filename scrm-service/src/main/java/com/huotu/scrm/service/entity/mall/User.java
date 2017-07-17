@@ -106,9 +106,5 @@ public class User {
      */
     @Column(name="UB_UserMobile",length = 50)
     private String userMobile;
-    /***
-     * 邮箱
-     */
-    @Column(name="UB_UserEmail",length = 50)
-    private String userEmail;
+
 }
