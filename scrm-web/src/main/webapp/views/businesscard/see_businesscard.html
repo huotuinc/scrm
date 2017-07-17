@@ -37,7 +37,7 @@
         <p class="right-dd"><a href="" style="color: #fff">取消关注</a> </p>
     </div>
     <div class="grsbg" style="padding: 20px 0px;">
-        <img style="border-radius: 50px; width: 100px;  height: 100px;" src="images/mrtx.jpg">
+        <img style="border-radius: 50px; width: 100px;  height: 100px;" th:src="${businessCard.getBusinessCard().getAvatar()}" >
         <div class="grsname">
             <p><b style="color: #fff;" th:text="${businessCard.getSalesman().getNickName()}"></b><i style="margin-left:5px; color: #fff">♀</i><!--♂切换性别--></p>
             <p><b style="color: #fff;" th:text="${businessCard.getBusinessCard().getJob()}"></b></p>

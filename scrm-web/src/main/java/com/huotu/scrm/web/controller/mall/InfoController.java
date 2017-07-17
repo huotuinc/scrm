@@ -75,8 +75,6 @@ public class InfoController extends MallBaseController {
         logger.info(apiResult);
         return  apiResult;
 
-        return null;
-
     }
 
     /**
