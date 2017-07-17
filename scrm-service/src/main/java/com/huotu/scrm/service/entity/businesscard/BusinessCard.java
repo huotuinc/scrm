@@ -58,5 +58,10 @@ public class BusinessCard implements Serializable {
      */
     @Column(name = "CompanyAddress",length = 512)
     private String companyAddress;
+    /***
+     * 邮箱
+     */
+    @Column(name="Email",length = 100)
+    private String email;
 
 }

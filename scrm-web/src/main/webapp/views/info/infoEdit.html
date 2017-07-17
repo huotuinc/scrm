@@ -15,22 +15,23 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/jsTree/style.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
     <base target="_blank">
 </head>
 <body class="gray-bg">
-
+    <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
     <div class="wrapper wrapper-content">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5>编辑资讯信息</h5>
             </div>
             <div class="ibox-content">
-                <form class="form-horizontal" id="signupForm">
+                <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/saveInfo}" action="#">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">资讯标题</label>
                         <div class="col-sm-6">
-                            <input type="text" id="title" name="title" maxlength="30" class="form-control">
+                            <input type="text" id="title" name="title" maxlength="30" class="form-control"
+                            th:value="${info.title}">
                             <span class="help-block"><i class="fa fa-info-circle"></i>最多30个字符</span>
                         </div>
                     </div>
@@ -38,16 +39,8 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">资讯简介</label>
                         <div class="col-sm-6">                            
-                            <textarea rows="3" id="articleIntro" name="articleIntro" maxlength="150"  class="form-control"></textarea>                            
+                            <textarea rows="3" id="introduce" name="introduce" maxlength="150"  class="form-control" th:value="${info.introduce}"></textarea>
                             <span class="help-block"><i class="fa fa-info-circle"></i>最多150个字符</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group" style="display:none;">
-                        <div class="hr-line-dashed"></div>
-                        <label class="col-sm-2 control-label">是否置顶</label>
-                        <div class="col-sm-6">
-                            <input type="checkbox" id="articleTop" name="articleTop" style="display:none;" class="js-switch" />
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
@@ -55,12 +48,12 @@
                         <label class="col-sm-2 control-label">是否发布</label>
                         <div class="col-sm-6">
                             <div class="radio radio-info radio-inline">
-                                <input type="radio" id="publishRadio1" value="0" name="radioInline" data-check="true" checked="checked">
-                                <label for="inlineRadio1">是</label>
+                                <input type="radio" id="publishRadioPublish" value="1" name="publishRadio" data-check="true"  th:checked="${info.status}" checked="checked">
+                                <label for="publishRadioPublish">是</label>
                             </div>
                             <div class="radio radio-inline">
-                                <input type="radio" id="publishRadio2" value="1" name="radioInline">
-                                <label for="inlineRadio2">否</label>
+                                <input type="radio" id="publishRadio" value="0" name="publishRadio" th:checked="${!info.status}">
+                                <label for="publishRadio">否</label>
                             </div>
                         </div>
                     </div>
@@ -69,42 +62,28 @@
                         <label class="col-sm-2 control-label">是否推广</label>
                         <div class="col-sm-6">
                             <div class="radio radio-info radio-inline">
-                                <input type="radio" id="inlineRadio1" value="0" name="radioInline" data-check="true" checked="checked">
-                                <label for="inlineRadio1">所有人</label>
+                                <input type="radio" id="inlineExtend" value="1" name="radioExtend" data-check="true" checked="checked" th:checked="${info.extend}">
+                                <label for="inlineExtend">推广</label>
                             </div>
                             <div class="radio radio-inline">
-                                <input type="radio" id="inlineRadio2" value="1" name="radioInline">
-                                <label for="inlineRadio2">盟主</label>
-                            </div>
-                            <div class="radio radio-inline">
-                                <input type="radio" id="inlineRadio3" value="2" name="radioInline">
-                                <label for="inlineRadio3">盟友</label>
+                                <input type="radio" id="inlineExtended" value="0" name="radioExtend" th:checked="${!info.extend}">
+                                <label for="inlineExtended">不推广</label>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="form-group" id="shopnameshow" style="display:none;">
-                        <div class="hr-line-dashed"></div>
-                        <label class="col-sm-2 control-label">申请门店</label>
-                        <div class="col-sm-6">
-                            <input type="text" id="articleShopName" name="articleShopName" class="form-control" style="border:none;background-color:#ffffff !important;" readonly="readonly" />
-                        </div>
-                    </div>
-
 
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">上传封面</label>
                         <div class="col-sm-6">
-                            <input type="hidden" id="txtcover" value="" />
-                            <input type="file" id="uploadfile" name="uploadfile" readonly="readonly" class="form-control">
+                            <input type="hidden" id="txtCover" value="" />
+                            <input type="file" id="uploadFile" name="uploadFile" readonly="readonly" class="form-control" onchange ="infoSaveEditHandler.uploadFile(this,1)">
                             <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：400*200</span>
 
-                            <img class="imgpreview" src="../static/img/bg.png" style="width:200px;height:200px;" />
+                            <img class="imgpreview" src="../../images/bg.png" style="width:200px;height:200px;" />
                         </div>
                     </div>
                     <div class="hr-line-dashed"></div>
-
                     <div class="form-group">
                         <label class="col-sm-2 control-label">资讯内容</label>
                         <div class="col-sm-8" id="eg">
@@ -113,13 +92,9 @@
                             </div>
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-5">
-                            <button class="btn btn-success btn-submit" type="submit">提交</button>
-                            <button class="btn btn-success btn-yes" onclick="articleHelper.updateStatus(1)" style="display:none;" type="button">同意</button>
-                            <button class="btn btn-success btn-no"  onclick="articleHelper.updateStatus(-1)" style="display:none;" type="button">拒绝</button>
+                            <button class="btn btn-success btn-submit" type="submit" id="infoSubmit">提交</button>
                         </div>
                     </div>
                 </form>
@@ -141,8 +116,45 @@
     <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
 
+    <script type="text/javascript">
+
+        
+        $(function () {
+
+        });
+        var infoSaveEditHandler = {
+
+            uploadFile:function(obj, type) {
+
+                alert(0);
+                $.jBox.tip("正在上传...", "loading");
+                $.ajaxFileUpload({
+                    url : "/common/upload",
+                    secureuri : false,// 一般设置为false
+                    fileElementId : "fileUpload"+type,// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                    dataType : 'json',// 返回值类型 一般设置为json
+                    data: {'type': type, "type2":2},
+
+                    success : function(data) // 服务器成功响应处理函数
+                    {
+                        console.log("服务器异常");
+                    },
+                    error : function(data)// 服务器响应失败处理函数
+                    {
+                        console.log("服务器异常");
+                    }
+                });
+            }
+
+        }
+
+
+
+    </script>
 
 </body>
+
+
 
 </html>
 <!--<script type="text/javascript">-->

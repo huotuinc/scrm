@@ -26,11 +26,8 @@ import java.util.Map;
 public class InfoController extends MallBaseController {
 
     private Log logger = LogFactory.getLog(InfoController.class);
-    private static final  int pageSize = 5;
-
     @Autowired
-     InfoService infoServer;
-
+    InfoService infoService;
 
     /***
      * 展示资讯首页内容
@@ -41,16 +38,15 @@ public class InfoController extends MallBaseController {
     public String infoHomeLists(InformationSearch informationSearch, @ModelAttribute("customerId") Long customerId , Model model){
 
         logger.info(informationSearch);
-        logger.info(customerId);
         informationSearch.setCustomerId(customerId);
-        Page<Info> page = infoServer.infoSList(informationSearch);
+        logger.info(informationSearch);
+        Page<Info> page = infoService.infoSList(informationSearch);
         model.addAttribute("infoListsPage",page);
-
-        long account = infoServer.infoListsCount(false);
+        long account = infoService.infoListsCount(false);
+        logger.info(account);
         model.addAttribute("totalAccount",account);
         return "info/info_list";
     }
-
 
     /**
      *
@@ -59,34 +55,9 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping(value = "/edit")
     public String infoEditPage(Model model){
-
-
-        return "infoEdit";
+        model.addAttribute("info",new Info());
+        return "info/infoEdit";
     }
-
-
-
-
-//    /**
-//     * 通过资讯标题模糊搜索相应的资讯列表
-//     * @param condition
-//     * @return
-//     */
-//    @RequestMapping("/search")
-//    public String searchInfoListTitleLike(int page ,String condition,Model model){
-//
-//        List<Info> infos;
-//        if (condition.length() >0 ){
-//            infos= infoServer.findListsByWord(condition);
-//        }
-//
-//        model.addAttribute("infoLists",infos);
-//
-//        model.addAttribute("searchAmount",infos.size());
-//        return "info_list";
-//
-//    }
-
 
     /**
      * 获取行数记录总数
@@ -97,29 +68,14 @@ public class InfoController extends MallBaseController {
     @ResponseBody
     public ApiResult getInfoListsAccount(boolean disable,int page){
 
-        logger.info(infoServer.infoListsCount(disable)+"+++"+page);
+        logger.info(infoService.infoListsCount(disable)+"+++"+page);
         Map<String,Long> map = new HashMap<>();
-        map.put("amount",infoServer.infoListsCount(disable));
+        map.put("amount", infoService.infoListsCount(disable));
         ApiResult apiResult = ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",map);
         logger.info(apiResult);
         return  apiResult;
 
     }
-
-//    /**
-//     * 获取当前页的记录数
-//     * @param page
-//     * @return
-//     */
-//    @RequestMapping("/page")
-//    @ResponseBody
-//    public ApiResult getInfoListPageable(int page){
-//
-//        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",infoServer.infoSList(false,
-//                page,pageSize)
-//        );
-//
-//    }
 
     /**
      * 保存修改资讯
@@ -128,7 +84,7 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping("saveInfo")
     public String saveInfo(Info info){
-        infoServer.infoSave(info);
+        infoService.infoSave(info);
         return "index";
     }
 

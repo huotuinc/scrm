@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.entity.support;
 
-import com.huotu.scrm.service.util.LocalDateUtil;
+
+import com.huotu.scrm.common.utils.LocalDateUtil;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

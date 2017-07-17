@@ -2,102 +2,69 @@
  * Created by Administrator on 2017/7/11.
  */
 
-
-
-
 $(function () {
-
     'use strict';
 
-    var updateurl = "/mall/updateBusinessCardInfo?customerId=2";
-    var uploadImageFileUrl;
-    var URL;
-    var $simage=$("#simage");
+    var updateurl = "/site/updateBusinessCardInfo";
+    //var uploadImageFileUrl;
+    //var URL;
+    var $customerId = $("#customerId");
+    var $userId = $("#userId");
 
-    //var $uploadavator= $("#uploadavator");
-    var $avform = $("#avform");
-    $avform.on('submit', uploadAvator());
-    //$uploadavator.click(uploadAvator);
-    //console.log("aaaa");
+    var $avatarForm = $("#avatarForm");
+    //$avatarForm.on('submit', uploadAvator);
 
-    URL = window.URL || window.webkitURL;
+    //var $weuishow_avatar = $("#weuishow_avatar");
+    var $weuishow_companyname=$("#weuishow_companyname");
+    var $weuishow_qq=$("#weuishow_qq");
+    var $weuishow_tel=$("#weuishow_tel");
+    var $weuishow_email=$("#weuishow_email");
+    var $weuishow_companyaddress=$("#weuishow_companyaddress");
+    var $weuishow_job=$("#weuishow_job");
 
-    // var options = {
-    //     aspectRatio: 16 / 9,
-    //     preview: '.img-preview',
-    //     crop: function (e) {
-    //         // $dataX.val(Math.round(e.x));
-    //         // $dataY.val(Math.round(e.y));
-    //         // $dataHeight.val(Math.round(e.height));
-    //         // $dataWidth.val(Math.round(e.width));
-    //         // $dataRotate.val(e.rotate);
-    //         // $dataScaleX.val(e.scaleX);
-    //         // $dataScaleY.val(e.scaleY);
-    //         // console.log(Math.round(e.x));
-    //         // console.log(Math.round(e.y));
-    //         // console.log(Math.round(e.height));
-    //         // console.log(Math.round(e.width));
-    //         // console.log(e.rotate);
-    //         // console.log(e.scaleX);
-    //         // console.log(e.scaleY);
-    //     }
-    // };
+    //$weuishow_avatar.click( showTip );
+    $weuishow_companyaddress.click(showTip);
+    $weuishow_companyname.click(showTip);
+    $weuishow_job.click(showTip);
+    $weuishow_email.click(showTip);
+    $weuishow_qq.click(showTip);
+    $weuishow_tel.click(showTip);
 
-    var $uploadimage = $("#btnFile");
+    //URL = window.URL || window.webkitURL;
 
-    $uploadimage.change(uploadimage);
+    var $btnFile = $("#btnInput");
+    $btnFile.change(uploadImage);
 
 
-
-    //initCropper();
-
-
-    function initCropper() {
-
-        //alert("init ");
-        // Cropper
-        $simage.on({
-            ready: function (e) {
-                console.log(e.type);
-            },
-            cropstart: function (e) {
-                console.log(e.type, e.action);
-            },
-            cropmove: function (e) {
-                console.log(e.type, e.action);
-            },
-            cropend: function (e) {
-                console.log(e.type, e.action);
-            },
-            crop: function (e) {
-                console.log(e.type, e.x, e.y, e.width, e.height, e.rotate, e.scaleX, e.scaleY);
-            },
-            zoom: function (e) {
-                console.log(e.type, e.ratio);
-            }
-        }).cropper(options);
-
-    }
-
-    function uploadimage() {
+    // var $uploadimage = $("#btnFile");
+    //
+    // $uploadimage.change(uploadimage);
 
 
-        // if (!$simage.data('cropper')) {
-        //     console.log("has data");
-        //     return;
-        // }
+    function uploadImage() {
 
         var files = this.files;
         var file;
         if (files && files.length) {
             file = files[0];
+        }else{
+            return false;
         }
 
-        if (uploadImageFileUrl) {
-            URL.revokeObjectURL(uploadImageFileUrl);
-        }
+        console.log("sssbbbbbs");
 
-        uploadImageFileUrl = URL.createObjectURL(file);
+        //$("#avatarForm").submit();
+
+        uploadAvator();
+
+        //return false;
+        //$avatarForm.submit();
+
+        // if (uploadImageFileUrl) {
+        //     URL.revokeObjectURL(uploadImageFileUrl);
+        // }
+
+        // uploadImageFileUrl = URL.createObjectURL(file);
 
         //alert(uploadImageFileUrl);
 
@@ -107,14 +74,13 @@ $(function () {
 
         //$simage.cropper('destroy').attr('src', uploadImageFileUrl).cropper(options);
 
-        $simage.attr("src", uploadImageFileUrl);
+        //$simage.attr("src", uploadImageFileUrl);
 
-        console.log("set image");
+        //console.log("set image");
 
         //$simage.cropper("replace", uploadImageFileUrl);
 
         //initCropper();
-
 
     }
 
@@ -123,25 +89,38 @@ $(function () {
 
         //var data = $simage.cropper("getCroppedCanvas").toDataURL();
 
-        //console.log( data);
-        var $uploadimage = $("#btnFile");
+        console.log( "1111");
+        var $uploadimage = $("#btnInput");
         if( !$uploadimage.val()  ) return false;
 
-        alert("upload222");
+        //alert("upload222");
+        console.log( $uploadimage.val() );
 
 
-        var $form = $("#avform");
-        var url = $form.attr("action");
+        //var $form = $("#avform");
+        var url = $avatarForm.attr("action");
 
-        var data = new FormData( $form[0] );
+        console.log("url="+ url);
+
+        var data = new FormData( $avatarForm[0] );
+
         console.log(data);
 
         $.ajax(url,{
-            type:"post",
+            method:"post",
             data:data,
             dataType:'json',
+            processData: false,
+            contentType: false,
             success:function (data) {
                 console.log(data);
+
+                var $img_avatar= $("#img_avatar");
+
+                console.log("src=" + data.data.avatar);
+
+                $img_avatar.attr("src" , data.data.avatar);
+
             },
             error:function (error) {
                 console.log(error);
@@ -150,13 +129,6 @@ $(function () {
 
     }
 
-
-    var $updatecompanyname = $("#updatecompanyname");
-    $updatecompanyname.click(updateBusinessCard);
-    var $updateqq=$("#updateqq");
-    $updateqq.click(updateBusinessCard);
-    var $updatetel = $("#updatetel");
-    $updatetel.click(updateBusinessCard);
 
     function updateBusinessCard() {
         var type= $(this).attr("js-datatype");
@@ -176,6 +148,58 @@ $(function () {
          }
         })
 
+    }
+
+    function showTip() {
+        var datatype= $(this).attr("js-data-type");
+        var title = $(this).attr("js-data-hint");
+        var $ele = $(this).find(".ui-data-ele");
+        var text = $ele.text();
+        console.log(text);
+
+        $.prompt({
+            text: "",
+            title: title,
+            onOK: function (text) {
+                //$.alert("姓名:" + text, "填写成功");
+                $ele.val(text);
+                ajaxRequest( datatype , text );
+                $ele.text(text);
+            },
+            onCancel: function () {
+                console.log("取消了");
+            },
+            input: text
+        });
+
+    }
+
+
+    function ajaxRequest(  updatetype , text ) {
+        var url = "/site/updateBusinessCardInfo";
+        var customerId = $customerId.val();
+        var userid = $userId.val();
+        var data ={ customerId : customerId , userId:userid , type: updatetype , value:text};
+
+        console.log("ssss");
+
+        $.ajax({
+           url: url,
+            type:"post",
+           dataType:"json",
+            data: data,
+            beforeSend:function () {
+
+            },
+            success:function (data) {
+
+            },
+            error:function (error) {
+               console.log(error);
+            },
+
+
+        });
     }
 
 });

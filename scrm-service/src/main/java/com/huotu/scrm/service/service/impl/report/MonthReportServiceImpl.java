@@ -30,7 +30,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     private DayReportRepository reportDayRepository;
 
     @Autowired
-    private MonthReportRepository reportMonthRepository;
+    private MonthReportRepository monthReportRepository;
 
     @Autowired
     private UserLevelRepository userLevelRepository;
@@ -40,7 +40,7 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Override
     @Transactional
-    public void saveReportMonth() {
+    public void saveMonthReport() {
         LocalDate today = LocalDate.now();
         //获取本月第一天
         LocalDate firstDay = today.with(TemporalAdjusters.firstDayOfMonth());
@@ -51,43 +51,47 @@ public class MonthReportServiceImpl implements MonthReportService {
         List<Long> userIdList = reportDayRepository.findByUserId();
         for (long userId : userIdList) {
             User user = userRepository.findOne(userId);
-            MonthReport reportMonth = new MonthReport();
+            MonthReport monthReport = new MonthReport();
             //设置用户ID
-            reportMonth.setUserId(userId);
+            monthReport.setUserId(userId);
             //设置商户号
-            reportMonth.setCustomerId(user.getCustomerId());
+            monthReport.setCustomerId(user.getCustomerId());
             //设置等级
-            reportMonth.setLevelId(user.getLevelId());
+            monthReport.setLevelId(user.getLevelId());
             //设置是否为销售员
             UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-            reportMonth.setSalesman(userLevel.isSalesman());
+            monthReport.setSalesman(userLevel.isSalesman());
             //设置每月咨询转发量
             int forwardNum = getForwardNum(userId, lastFirstDay, lastEndDay);
-            reportMonth.setForwardNum(forwardNum);
+            monthReport.setForwardNum(forwardNum);
             //设置每月访客量
             int visitorNum = getVisitorNum(userId, lastFirstDay, lastEndDay);
-            reportMonth.setVisitorNum(visitorNum);
+            monthReport.setVisitorNum(visitorNum);
             //设置每月推广积分
             int extensionScore = getExtensionScore(userId, lastFirstDay, lastEndDay);
-            reportMonth.setExtensionScore(extensionScore);
+            monthReport.setExtensionScore(extensionScore);
             //设置每月被关注量(销售员特有)
-            if (reportMonth.isSalesman()) {
+            if (monthReport.isSalesman()) {
                 int followNum = getFollowNum(userId, lastFirstDay, lastEndDay);
-                reportMonth.setFollowNum(followNum);
+                monthReport.setFollowNum(followNum);
             } else {
-                reportMonth.setFollowNum(-1);
+                monthReport.setFollowNum(-1);
             }
             //设置统计月份
-            reportMonth.setReportMonth(lastFirstDay);
+            monthReport.setReportMonth(lastFirstDay);
             //保存数据
-            reportMonthRepository.save(reportMonth);
+            monthReportRepository.save(monthReport);
+        }
+        //设置排名
+        for (long userId:userIdList) {
+            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay);
             //设置每月积分排名
             int scoreRanking = getScoreRanking(userId, lastFirstDay);
-            reportMonth.setScoreRanking(scoreRanking);
+            monthReport.setScoreRanking(scoreRanking);
             //设置每月关注量排名
             int followRanking = getFollowRanking(userId, lastFirstDay);
-            reportMonth.setFollowRanking(followRanking);
-            reportMonthRepository.save(reportMonth);
+            monthReport.setFollowRanking(followRanking);
+            monthReportRepository.save(monthReport);
         }
     }
 
@@ -178,7 +182,7 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @return
      */
     public int getScoreRanking(Long userId, LocalDate month) {
-        List<MonthReport> sortAll = reportMonthRepository.findOrderByExtensionScore(month);
+        List<MonthReport> sortAll = monthReportRepository.findOrderByExtensionScore(month);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {
@@ -197,7 +201,7 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @return
      */
     public int getFollowRanking(Long userId, LocalDate month) {
-        List<MonthReport> sortAll = reportMonthRepository.findOrderByFollowNum(month);
+        List<MonthReport> sortAll = monthReportRepository.findOrderByFollowNum(month);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {

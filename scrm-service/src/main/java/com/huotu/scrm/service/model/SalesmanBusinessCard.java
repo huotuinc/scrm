@@ -14,9 +14,13 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class SalesmanBusinessCard implements Serializable{
-
+    /***
+     * 销售员基本信息
+     */
     private User salesman;
-
+    /***
+     * 销售员名片信息
+     */
     private BusinessCard businessCard;
     /***
      * 关注人数
@@ -30,5 +34,4 @@ public class SalesmanBusinessCard implements Serializable{
      * 关注者Id
      */
     private Long followerId;
-
 }

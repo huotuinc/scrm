@@ -104,11 +104,4 @@ public class DayReport {
     @Converter(name = "",converterClass = LocalDateAttributeConverter.class)
     private LocalDate reportDay;
 
-
-    @Override
-    public String toString() {
-        return "DayReport{" +
-                "id=" + id +
-                '}';
-    }
 }

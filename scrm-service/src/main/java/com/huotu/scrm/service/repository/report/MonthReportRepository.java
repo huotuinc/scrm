@@ -17,5 +17,7 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long> 
     @Query("select t from MonthReport  t where t.reportMonth=?1 and t.isSalesman = true order by t.followNum desc ")
     List<MonthReport> findOrderByFollowNum(LocalDate date);
 
+    MonthReport findByUserIdAndReportMonth(long userId, LocalDate lastFirstDay);
+
 
 }

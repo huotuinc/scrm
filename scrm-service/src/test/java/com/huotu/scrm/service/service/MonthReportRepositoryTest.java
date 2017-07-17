@@ -1,7 +1,6 @@
-package com.huotu.scrm.service.repository;
+package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.service.CommonTestBase;
-import com.huotu.scrm.service.service.MonthReportService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -18,7 +17,7 @@ public class MonthReportRepositoryTest extends CommonTestBase {
     @Test
     @Rollback(false)
     public void testMonthReportService() {
-       monthReportService.saveReportMonth();
+       monthReportService.saveMonthReport();
 
     }
 }

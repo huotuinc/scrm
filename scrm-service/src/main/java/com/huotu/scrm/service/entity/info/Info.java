@@ -1,12 +1,17 @@
 package com.huotu.scrm.service.entity.info;
 
-import com.huotu.scrm.common.ienum.InfoStatusEnum;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
@@ -73,25 +78,24 @@ public class Info {
 
 
     /**
-     * 资讯状态     1、 已发布  0、未发布
+     * 资讯状态     1、 已发布  0、未发布 (判断普通会员)
      */
     @Column(name = "Status")
     private boolean status;
 
 
     /**
-     * 资讯推广状态  1、 已推广  0、未推广
+     * 资讯推广状态  1、 已推广  0、未推广（判断小伙伴）
      */
     @Column(name = "Extend")
-    private boolean  extend = false;
-
+    private boolean extend = false;
 
 
     /**
      * 资讯是否删除  1、已删除  0、正常
      */
     @Column(name = "Disable")
-    private boolean  disable = false;
+    private boolean disable = false;
 
 
     @Override

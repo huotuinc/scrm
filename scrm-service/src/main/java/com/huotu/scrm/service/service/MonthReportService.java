@@ -10,6 +10,6 @@ public interface MonthReportService {
      *
      * @return
      */
-    void saveReportMonth();
+    void saveMonthReport();
 
 }
