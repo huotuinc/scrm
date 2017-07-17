@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service.impl;
+package com.huotu.scrm.service.service.implement;
 
 import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
 import com.huotu.scrm.service.service.BusinessCardRecordService;

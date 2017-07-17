@@ -7,7 +7,7 @@
  * 2013-2017. All rights reserved.
  */
 
-package com.huotu.scrm.service.service.impl;
+package com.huotu.scrm.service.service.implement;
 
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.repository.ActPrizeRepository;
