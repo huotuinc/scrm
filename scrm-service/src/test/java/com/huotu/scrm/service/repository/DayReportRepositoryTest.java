@@ -38,29 +38,19 @@ public class DayReportRepositoryTest extends CommonTestBase {
     }
 
 
-
-//
+    //
     @Test
-   @Rollback(false)
+    @Rollback(false)
     public void testDayReportRepository() {
         LocalDate now = LocalDate.now();
-//        LocalDate date = now.minusDays(1);
-//        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(date, now);
-//        for (DayReport d : orderByExtensionScore
-//                ) {
-//            System.out.println(d.toString());
-//        }
         DayReport dayReport = new DayReport();
-       dayReport.setReportDay(now);
-////       dayReportRepository.save(dayReport);
-//        List<DayReport> byReportDay = dayReportRepository.findByReportDay(now);
-//        System.out.println(byReportDay.size());
+        dayReport.setReportDay(now);
         System.out.println(now.minusDays(1));
         System.out.println(now.plusDays(1));
-        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(now.minusDays(2), now);
+        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(now.minusDays(2));
         System.out.println(orderByExtensionScore.size());
-        for (DayReport d: orderByExtensionScore
-             ) {
+        for (DayReport d : orderByExtensionScore
+                ) {
             System.out.println(d.getId());
         }
     }
