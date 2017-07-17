@@ -50,6 +50,7 @@ public class ApiResult<T> {
         ApiResult apiResult = new ApiResult();
         apiResult.code = resultCodeEnum.getResultCode();
         apiResult.msg = msg;
+        apiResult.data = data;
         return apiResult;
     }
 

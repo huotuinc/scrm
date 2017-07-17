@@ -64,17 +64,14 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler("/resource/**/*", "/image/**/*", "/js/**/*", "/**/*.html" , "/css/**/*")
-                .addResourceLocations("/resource/", "/image/", "/js/", "/", "/css/");
+        registry.addResourceHandler("/resources/**/*", "/image/**/*", "/js/**/*", "/**/*.html")
+                .addResourceLocations("/resources/", "/image/", "/js/", "/");
     }
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.viewResolver(thymeleafViewResolver);
     }
-
-
-
 
     @Configuration
     public static class ThymeleafConfig {

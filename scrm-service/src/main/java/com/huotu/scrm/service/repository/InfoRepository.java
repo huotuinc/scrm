@@ -17,5 +17,6 @@ public interface InfoRepository extends JpaRepository<Info,Long>,JpaSpecificatio
 
     List<Info> findByTitleLike(String title);
 
+
 }
 
