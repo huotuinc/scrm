@@ -1,6 +1,6 @@
 package com.huotu.scrm.web.controller.site;
 
-import com.huotu.scrm.service.service.InfoExtensionService;
+import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;

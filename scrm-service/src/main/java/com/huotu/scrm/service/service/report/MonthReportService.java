@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service;
+package com.huotu.scrm.service.service.report;
 
 /**
  * Created by hxh on 2017-07-12.

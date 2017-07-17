@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.service.CommonTestBase;
+import com.huotu.scrm.service.service.report.DayReportService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

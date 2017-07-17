@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service.impl.report;
+package com.huotu.scrm.service.service.report.impl;
 
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
@@ -8,7 +8,7 @@ import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
-import com.huotu.scrm.service.service.MonthReportService;
+import com.huotu.scrm.service.service.report.MonthReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,10 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Autowired
     private DayReportRepository reportDayRepository;
-
     @Autowired
     private MonthReportRepository monthReportRepository;
-
     @Autowired
     private UserLevelRepository userLevelRepository;
-
     @Autowired
     private UserRepository userRepository;
 
@@ -83,7 +80,7 @@ public class MonthReportServiceImpl implements MonthReportService {
             monthReportRepository.save(monthReport);
         }
         //设置排名
-        for (long userId:userIdList) {
+        for (long userId : userIdList) {
             MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay);
             //设置每月积分排名
             int scoreRanking = getScoreRanking(userId, lastFirstDay);

@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service.impl.report;
+package com.huotu.scrm.service.service.report.impl;
 
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
@@ -10,7 +10,7 @@ import com.huotu.scrm.service.repository.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
-import com.huotu.scrm.service.service.DayReportService;
+import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,19 +30,14 @@ public class DayReportServiceImpl implements DayReportService {
 
     @Autowired
     private DayReportRepository dayReportRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private UserLevelRepository userLevelRepository;
-
     @Autowired
     private InfoBrowseRepository infoBrowseRepository;
-
     @Autowired
     private InfoConfigureRepository infoConfigureRepository;
-
     @Autowired
     private BusinessCardRecordReposity businessCardRecordReposity;
 
@@ -104,7 +99,8 @@ public class DayReportServiceImpl implements DayReportService {
             //设置每日访客排名
         }
         for (long userId : bySourceUserIdList) {
-            DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, lastDay);
+//            DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, lastDay);
+            DayReport dayReport = null;
             int visitorRanking = visitorRanking(userId, lastDay);
             dayReport.setVisitorRanking(visitorRanking);
             //设置每日积分排名
@@ -185,7 +181,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int visitorRanking(Long userId, LocalDate date) {
-        List<DayReport> sortAll = dayReportRepository.findOrderByVisitorNum(date);
+        List<DayReport> sortAll = dayReportRepository.findByReportDayOrderByVisitorNumDesc(date);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             System.out.println(userId);
@@ -206,7 +202,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int scoreRanking(Long userId, LocalDate date) {
-        List<DayReport> sortAll = dayReportRepository.findOrderByExtensionScore(date);
+        List<DayReport> sortAll = dayReportRepository.findByReportDayOrderByExtensionScoreDesc(date);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {
@@ -225,7 +221,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int followRanking(Long userId, LocalDate date) {
-        List<DayReport> sortAll = dayReportRepository.findOrderByFollowNum(date);
+        List<DayReport> sortAll = dayReportRepository.findByReportDayOrderByFollowNumDesc(date);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {

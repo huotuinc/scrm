@@ -5,7 +5,6 @@ import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
-import com.huotu.scrm.service.util.DateUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -20,10 +19,8 @@ public class DayReportRepositoryTest extends CommonTestBase {
 
     @Autowired
     private DayReportRepository dayReportRepository;
-
     @Autowired
     private InfoBrowseRepository infoBrowseRepository;
-
     @Autowired
     private UserLevelRepository userLevelRepository;
 
@@ -32,8 +29,6 @@ public class DayReportRepositoryTest extends CommonTestBase {
      */
     @Test
     public void testDateUtil() {
-        System.out.println("前天日期(时分秒默认为最大):" + DateUtil.getBeforeLastDay());
-        System.out.println("昨天日期(时分秒默认最大):" + DateUtil.getLastDayMax());
         System.out.println("");
     }
 
@@ -42,17 +37,22 @@ public class DayReportRepositoryTest extends CommonTestBase {
     @Test
     @Rollback(false)
     public void testDayReportRepository() {
-        LocalDate now = LocalDate.now();
-        DayReport dayReport = new DayReport();
-        dayReport.setReportDay(now);
-        System.out.println(now.minusDays(1));
-        System.out.println(now.plusDays(1));
-        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(now.minusDays(2));
-        System.out.println(orderByExtensionScore.size());
-        for (DayReport d : orderByExtensionScore
-                ) {
-            System.out.println(d.getId());
-        }
+       LocalDate now = LocalDate.now();
+//        DayReport dayReport = new DayReport();
+//        dayReport.setReportDay(now);
+//        System.out.println(now.minusDays(1));
+//        System.out.println(now.plusDays(1));
+//        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(now.minusDays(2));
+//        System.out.println(orderByExtensionScore.size());
+//        for (DayReport d : orderByExtensionScore
+//                ) {
+//            System.out.println(d.getId());
+//        }
+        List<DayReport> li = dayReportRepository.findByReportDayOrderByVisitorNumDesc(now.minusDays(1));
+        li.forEach(dayReport -> {
+            System.out.println(dayReport.getVisitorNum());
+        });
+
     }
 
     /**

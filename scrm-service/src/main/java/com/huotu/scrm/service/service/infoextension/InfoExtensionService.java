@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service;
+package com.huotu.scrm.service.service.infoextension;
 
 import com.huotu.scrm.service.model.InfoModel;
 

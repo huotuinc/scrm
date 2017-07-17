@@ -1,10 +1,11 @@
-package com.huotu.scrm.service.service;
+package com.huotu.scrm.service.service.infoextension.impl;
 
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.model.InfoModel;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
+import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

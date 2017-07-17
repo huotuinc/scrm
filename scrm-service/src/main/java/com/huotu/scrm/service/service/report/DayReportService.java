@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service;
+package com.huotu.scrm.service.service.report;
 
 import java.time.LocalDate;
 
