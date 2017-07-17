@@ -21,4 +21,7 @@ public interface BusinessCardRecordReposity extends JpaRepository<BusinessCardRe
      * @return
      */
     Boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId);
+
+    //根据用户ID查询关注人数
+    long countByUserId(Long userId);
 }

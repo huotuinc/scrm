@@ -23,7 +23,7 @@ public class InfoConfigure {
      */
     @Id
     @Column(name = "Customer_Id")
-    private int customerId;
+    private Long customerId;
 
     /**
      *  是否开启转发奖励

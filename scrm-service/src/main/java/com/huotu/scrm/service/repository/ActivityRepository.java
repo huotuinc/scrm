@@ -19,7 +19,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> ,JpaSp
 
     @Modifying
     @Query("update Activity a set a.isDelete = ?1 where a.actId =?2")
-    void deleteActivityByActId(int isDelete , long actId );
+    void deleteActivityByActId(boolean isDelete , long actId );
 
     /**
      * 分页查询所有活动
@@ -28,5 +28,5 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> ,JpaSp
      * @param pageable
      * @return
      */
-    Page<Activity> findByIsDelete(int isDelete, Pageable pageable);
+    Page<Activity> findByIsDelete(boolean isDelete, Pageable pageable);
 }
