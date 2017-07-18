@@ -1,9 +1,9 @@
-package com.huotu.scrm.service.service.impl;
+package com.huotu.scrm.service.service.info.impl;
 
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.repository.InfoRepository;
-import com.huotu.scrm.service.service.InfoService;
+import com.huotu.scrm.service.service.info.InfoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;

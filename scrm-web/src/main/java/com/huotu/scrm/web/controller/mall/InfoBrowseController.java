@@ -3,10 +3,9 @@ package com.huotu.scrm.web.controller.mall;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
-import com.huotu.scrm.service.service.InfoBrowseServer;
+import com.huotu.scrm.service.service.info.impl.InfoBrowseServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 

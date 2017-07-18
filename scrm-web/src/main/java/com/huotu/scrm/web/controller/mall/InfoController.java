@@ -5,7 +5,7 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
-import com.huotu.scrm.service.service.InfoService;
+import com.huotu.scrm.service.service.info.InfoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class InfoController extends MallBaseController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/infoLists")
+    @RequestMapping(value = "/infoList")
     public String infoHomeLists(InformationSearch informationSearch, @ModelAttribute("customerId") Long customerId , Model model){
 
         logger.info(informationSearch);
@@ -54,10 +54,11 @@ public class InfoController extends MallBaseController {
      * @return
      */
     @RequestMapping(value = "/edit")
-    public String infoEditPage(Long id,  Model model){
+    public String infoEditPage(Long id,  Model model,@ModelAttribute("customerId") Long customerId){
         Info info =  infoService.findOneById(id);
         model.addAttribute("info",info);
-        return "info/infoEdit";
+        model.addAttribute("customerId",customerId);
+        return "info/info_Edit";
     }
 
     /**
