@@ -73,11 +73,12 @@ public class UploadController {
             }
             if (id != null && uploadResourceEnum != null) {
                 //如果有某一类的主键
-                path = StaticResourceService.IMG + customerId + "/" + uploadResourceEnum.getValue() + "/" + id + "." + prefix;
+                path = StaticResourceService.IMG + customerId + "/" + uploadResourceEnum.getValue() + "/" + id + "/";
             } else {
-                path = StaticResourceService.IMG + customerId + "/" + DateUtils.formatDate(now, "yyyyMMdd") + "/"
-                        + DateUtils.formatDate(now, "yyyyMMddHHmmSS") + "." + prefix;
+                path = StaticResourceService.IMG + customerId + "/";
             }
+            path += (DateUtils.formatDate(now, "yyyyMMdd") + "/"
+                    + DateUtils.formatDate(now, "yyyyMMddHHmmSS") + "." + prefix);
             URI uri = resourceServer.uploadResource(null, path, files.getInputStream());
             responseData.put("fileUrl", uri);
             responseData.put("fileUri", path);
@@ -89,11 +90,11 @@ public class UploadController {
         return responseData;
     }
 
-    @RequestMapping(value = "/mall/upload",method = RequestMethod.POST)
+    @RequestMapping(value = "/mall/upload", method = RequestMethod.POST)
     @ResponseBody
     public Map<Object, Object> upLoadToMall(
             @RequestParam(value = "customerId") Long customerId,
-            @RequestParam(value = "btnFile", required = false) MultipartFile files){
+            @RequestParam(value = "btnFile", required = false) MultipartFile files) {
         int result = 0;
         Map<Object, Object> responseData = new HashMap<>();
         try {
@@ -107,17 +108,17 @@ public class UploadController {
                 int width = image.getWidth();
                 int height = image.getHeight();
                 Map<String, Object> map = new TreeMap<>();
-                map.put("customid",customerId);
-                map.put("base64Image",imgStr);
-                map.put("size",width + "x" + height);
-                map.put("extenName",prefix);
+                map.put("customid", customerId);
+                map.put("base64Image", imgStr);
+                map.put("size", width + "x" + height);
+                map.put("extenName", prefix);
 
                 HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/gallery/uploadPhoto", map);
                 if (httpResult.getHttpStatus() == HttpStatus.SC_OK) {
                     JSONObject obj = JSONObject.parseObject(httpResult.getHttpContent());
-                    if(obj.getIntValue("code") == 200){
+                    if (obj.getIntValue("code") == 200) {
                         String fileUri = obj.getString("data");
-                        URI uri = resourceServer.getResource(StaticResourceService.huobanmallMode,fileUri);
+                        URI uri = resourceServer.getResource(StaticResourceService.huobanmallMode, fileUri);
                         responseData.put("fileUrl", uri);
                         responseData.put("fileUri", fileUri);
                         responseData.put("msg", "上传成功！");
