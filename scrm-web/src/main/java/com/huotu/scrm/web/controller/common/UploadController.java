@@ -90,6 +90,13 @@ public class UploadController {
         return responseData;
     }
 
+    /**
+     * 上传文件到商城
+     *
+     * @param customerId 商户ID
+     * @param files      文件
+     * @return 文件uri
+     */
     @RequestMapping(value = "/mall/upload", method = RequestMethod.POST)
     @ResponseBody
     public Map<Object, Object> upLoadToMall(
