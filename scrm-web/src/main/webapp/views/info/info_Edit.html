@@ -26,10 +26,10 @@
     <div class="ibox float-e-margins">
         <div class="ibox-title">
             <h5>编辑资讯信息</h5>
-            "${}"
         </div>
         <div class="ibox-content">
             <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" action="#">
+                <input type="hidden" name="id" value="" th:value="${info.id}"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">资讯标题</label>
                     <div class="col-sm-6">
@@ -43,7 +43,7 @@
                     <label class="col-sm-2 control-label">资讯简介</label>
                     <div class="col-sm-6">
                         <textarea rows="3" id="introduce" name="introduce" maxlength="150" class="form-control"
-                                  th:value="${info.introduce}"></textarea>
+                                  th:text="${info.introduce}">资讯简介</textarea>
                         <span class="help-block"><i class="fa fa-info-circle"></i>最多150个字符</span>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">上传封面</label>
                     <div class="col-sm-6">
-                        <input type="hidden" id="txtCover" value="" th:value="${info.getImageUrl()}"/>
+                        <input type="hidden" name="imageUrl" value="" th:value="${info.imageUrl}"/>
                         <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
                         <button class="btn btn-success" id="uploadImage" type="button"
                                 onclick="infoSaveEditHandler.uploadFile()">上传图片
@@ -92,7 +92,7 @@
 
                         <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
 
-                        <img id="imageShow" src="../../images/bg.png" style="width:200px;height:200px;"/>
+                        <img id="imageShow" src="../../images/bg.png" th:src="${info.imageUrl}" style="width:200px;height:200px;"/>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
@@ -102,7 +102,9 @@
 
                     <div class="col-sm-8" id="eg">
                         <div class="ibox-content no-padding">
-                            <div style="display: none;" id="summerNote">请编辑填写内容</div>
+                            <input  type="hidden" name="infoContent"  th:text="${info.content}">
+                            <div style="display: none;" id="summerNote">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -131,8 +133,6 @@
 <!---->
 
 <script type="text/javascript">
-
-
     $(function () {
         $('#summerNote').summernote({
             height: 300,
@@ -154,11 +154,11 @@
                 type: "post",
                 success : function(data) // 服务器成功响应处理函数
                 {
-                    $('#imageShow').attr('src', data.fileUrl);
-                    $("input:text[id='txtCover']").val(data.fileUrl);
-                    console.log("xxxx"+data.fileUri);
-                    console.log("++++"+data.fileUrl);
                     console.log(data);
+                    if(data.code == 200){
+                        $('#imageShow').attr('src', data.fileUrl);
+                        $("input:hidden[name='imageUrl']").val(data.fileUri);
+                    }
                 },
                 error : function(data)// 服务器响应失败处理函数
                 {
@@ -168,6 +168,9 @@
         },
 
         uploadInfo:function () {
+
+            alert($('#summerNote').code());
+            $("input:hidden[name='infoContent']").val($('#summerNote').te);
             $('#infoSubmit').submit();
         }
 

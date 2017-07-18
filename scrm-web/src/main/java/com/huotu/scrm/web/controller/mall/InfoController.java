@@ -49,7 +49,6 @@ public class InfoController extends MallBaseController {
     @RequestMapping(value = "/info/edit")
     public String infoEditPage(Long id,  Model model,@ModelAttribute("customerId") Long customerId){
         Info info =  infoService.findOneById(id);
-        info.setCustomerId(customerId);
         model.addAttribute("info",info);
         return "info/info_Edit";
     }
@@ -64,9 +63,11 @@ public class InfoController extends MallBaseController {
     @RequestMapping("/info/saveInfo")
     public String saveInfo(@ModelAttribute("customerId") Long customerId, Info info){
         logger.info(info);
-        info.setCustomerId(customerId);
+        if (info.getCustomerId() == null || info.getCustomerId() == 0){
+            info.setCustomerId(customerId);
+        }
         infoService.infoSave(info);
-        return "info/info_list";
+        return "forward:info/infoList";
     }
 
 
