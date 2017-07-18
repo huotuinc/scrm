@@ -16,26 +16,27 @@ import java.util.List;
 
 /**
  * 奖品Service层接口
- *
+ * <p>
  * Created by montage on 2017/7/13.
  */
-
-
 public interface ActPrizeService {
     /**
      * 分页查询所有奖品
+     *
      * @return
      */
     Page<ActPrize> getPageActPrize(int pageNo, int pageSize);
 
     /**
      * 保存奖品
+     *
      * @param actPrize 奖品实体类
      */
     ActPrize saveActPrize(ActPrize actPrize);
 
     /**
      * 删除奖品
+     *
      * @param prizeId 奖品Id
      */
     void deleteActPrize(Long prizeId);
@@ -50,12 +51,14 @@ public interface ActPrizeService {
 
     /**
      * 查询所有奖品
+     *
      * @return
      */
     List<ActPrize> findAll();
 
     /**
      * 根据奖品类型查询奖品
+     *
      * @return
      */
     ActPrize findByPrizeType(boolean prizeType);

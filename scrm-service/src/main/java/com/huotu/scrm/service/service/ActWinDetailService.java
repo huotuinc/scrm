@@ -12,15 +12,19 @@ package com.huotu.scrm.service.service;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * 活动中奖记录Service层接口
- *
+ * <p>
  * Created by montage on 2017/7/13.
  */
 public interface ActWinDetailService {
 
     /**
      * 分页查询所有中奖记录
+     *
      * @return
      */
     Page<ActWinDetail> getPageActWinDetail(int pageNo, int pageSize);
@@ -33,5 +37,10 @@ public interface ActWinDetailService {
      */
     ActWinDetail saveActWinDetail(ActWinDetail actWinDetail);
 
-
+    /**
+     * 创建中奖记录的excel表格
+     *
+     * @return
+     */
+    List<Map<String, Object>> createExcelRecord();
 }

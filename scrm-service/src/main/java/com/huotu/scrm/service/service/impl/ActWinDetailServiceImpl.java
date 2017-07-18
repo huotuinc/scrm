@@ -18,6 +18,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by montage on 2017/7/13.
  */
@@ -31,11 +37,32 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
 
     @Override
     public Page<ActWinDetail> getPageActWinDetail(int pageNo, int pageSize) {
-        return actWinDetailRepository.findAll(new PageRequest(pageNo-1,pageSize));
+        return actWinDetailRepository.findAll(new PageRequest(pageNo - 1, pageSize));
     }
 
     @Override
     public ActWinDetail saveActWinDetail(ActWinDetail actWinDetail) {
         return actWinDetailRepository.save(actWinDetail);
+    }
+
+    @Override
+    public  List<Map<String, Object>> createExcelRecord() {
+        List<ActWinDetail> actWinDetailList = actWinDetailRepository.findAll();
+        List<Map<String, Object>> listMap = new ArrayList<>();
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put("sheetName", "sheet1");
+        listMap.add(map);
+        actWinDetailList.forEach( actWinDetail -> {
+            Map<String,Object> mapValue = new HashMap<>();
+            mapValue.put("winDetailId",actWinDetail.getWinDetailId());
+            mapValue.put("userId",actWinDetail.getUserId());
+            mapValue.put("actName",actWinDetail.getActName());
+            mapValue.put("prizeName",actWinDetail.getPrize().getPrizeName());
+            mapValue.put("winnerName",actWinDetail.getWinnerName());
+            mapValue.put("winnerTel",actWinDetail.getWinnerTel());
+            mapValue.put("winTime",actWinDetail.getWin_Time());
+            mapValue.put("ipAddress",actWinDetail.getIpAddress());
+        });
+        return listMap;
     }
 }
