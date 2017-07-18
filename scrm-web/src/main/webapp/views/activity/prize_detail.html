@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奖品编辑</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/jsTree/style.min.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form method="post" th:action="" class="form-horizontal" >
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">奖品名称:</label>
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="奖品名称" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">奖品类型:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control input" name="sortNum" id="sortNum">
+                            <option selected="selected" value="2">谢谢惠顾</option>
+                            <option selected="selected" value="2">奖品</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">上传图片</label>
+                    <div class="col-sm-3">
+                        <input type="hidden" id="txtcover" value="" />
+                        <input type="file" id="uploadfile" name="uploadfile" readonly="readonly" class="form-control">
+                        <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：400*200</span>
+
+                        <img class="imgpreview" src="../static/img/bg.png" style="width:200px;height:200px;" />
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">奖品数量:</label>
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="奖品数量" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">中奖概率:</label>
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="中奖概率" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">排序字段:</label>
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="排序字段" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-5">
+                        <button class="btn btn-primary" type="submit">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<!--validate-->
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
+<script src="../../resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-utils.js"
+        th:src="@{/resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
+<script src="../../resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-init.js"
+        th:src="@{/resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-init.js}"></script>
+
+</body>
+<script src="../../resources/js/manager.js" th:src="@{/resources/js/manager.js}"></script>
+</html>

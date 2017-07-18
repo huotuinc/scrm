@@ -1,0 +1,274 @@
+/****/
+body {
+    font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;
+}
+
+ 
+.ddbg {
+    background-color: #efeff4
+} 
+
+
+/*20160816个人中心*/
+ 
+.grs a{ display:block;position: absolute;    
+    font-size:14px;
+    width: 30px;
+    height: 30px;} 
+.grs a.z{left:10px;top: 10px;}
+.grs a.y{    right: 10px;
+    top: 10px;
+    width: 62px;
+    background-color: #ffffff;
+    height: 22px;
+    border: 1px solid #a3a3a3;
+    text-align: center;}
+.grsbg{text-align:center; padding:10px; clear:both; background-size:cover; background-position:center}
+.grsbq span{    margin: 0px 4px;
+    padding: 4px 6px;
+    font-size: 12px;
+    background-color: #747474;
+    border-radius: 4px;
+    color: #fff;}
+.grsname{ font-size:14px; margin-bottom:4px; }
+.grsjz{width: 70px;
+    height: 70px;
+    border-radius: 100%;    
+    margin:6px auto 4px auto; }
+.grstx{width: 64px;
+    height: 64px;
+    overflow: hidden;
+    border-radius: 100%;
+    border: 3px solid transparent;}
+.grstx img{ border: 0;
+    vertical-align: top;
+    max-width: 100%;}
+	.er{background-image:url(../images/ericon.png); width:30px; height:30px; overflow: hidden;background-position:top ; background-size:30px auto}
+	
+	
+	 
+	
+	.fonthui,.fonthui a,.fonthui a:link,.fonthui a:visited{color:#686868}
+	.fontbai,.fontbai a,.fontbai a:link,.fontbai a:visited{ color:#fff}	 
+	.fonthui .grsbg{background-color:#1a1a1a;}
+	.fontbai .grsbg{ background-color:#000;}
+	.fonthui .er{ background-position:top}
+	.fontbai .er{ background-position: bottom}
+	.fonthui .grsjz{background-color:rgba(255,255,255,0.8)}
+	.fontbai .grsjz{background-color:rgba(255,255,255,0.8)}
+	
+/*平均分*/
+.pjf_4ge  li {
+    width: 25%;
+}
+.pjf_5ge  li {
+    width: 20%;
+}
+.pjf_3ge  li {
+    width: 33.3%;
+}
+.pjf_2ge li {
+    width: 50%;
+}	
+/*我的钱包*/
+ .f-fleft { 
+    
+}.imgsize {
+    width:18px;
+    height:18px;
+    margin-top: -2px; vertical-align:middle
+}.f-fleft i {
+      font-size:14px; font-style:normal
+}.col {
+    color: #ff3d00;
+}
+.f-frighttwo {
+    right: 10px;
+    position: absolute;
+   
+}.f-frighttwo i {
+    margin-right: 6px; font-size:14px;font-style:normal
+}
+
+.dailiren-float-ul.ka li{ position: relative; font-size:12px} 
+	.sl-zdy.duu li {     
+    border-right: 1px solid #585858;
+}
+.sl-zdy.duu li:last-child{ border:none} 
+.sl-zdy.duu{ padding-top:20px; padding-bottom:20px}
+
+
+
+
+.dailiren-float-ul ul {
+    list-style: none;
+    margin: 0;
+}
+.dailiren-float-ul {
+    width: 100%;
+    overflow: hidden;
+    zoom: 1;
+    display: -webkit-flex;
+    display: flex;
+}
+.dailiren-float-ul li {
+    float: left;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: block;
+    flex: 1;
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    box-flex: 1;
+    -ms-box-flex: 1;
+    -webkit-box-flex: 1;
+}
+.dailiren-float-ul a {
+    color: #111;
+    display: block
+}
+.dailiren-float-ul li .con {
+    border-right: 1px solid #D2D2D2;
+}
+.dailiren-float-ul li:last-child .con {
+    border-right: none;
+}
+.dailiren-float-ul.ka li {
+    padding:20px 0px;
+}
+ 
+.dailiren-s-ka {
+    background-color: #fff;
+    color: #111;
+}
+.dailiren-s-ka li .sj {
+    font-size:20px;
+    color: #ff3d00;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    width: 95%;
+}
+.dailiren-s-ka.duu li{border-right: 1px solid #eee;}
+.dailiren-s-ka.duu li:last-child{ border:none} 
+.dailiren-s-ka.duu li{ padding:0px 0px}
+.dailiren-s-ka.duu{ padding:10px 0px;}
+
+ 
+.gerendiy .weui_cells{margin-top:0.8em; font-size:14px}	
+.ccgg{width: 25px;height: 20px; padding:2px 0px}
+.dailiren-float-ul .number{position: absolute;
+    top:0.6rem;
+    right:1.2rem; font-size:0.5rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    padding: 0 0.2rem;
+    border: 1px solid red;
+    border-radius: 0.2rem;
+    color: #FFFFFF;
+    font-weight: 700;
+    background: red;
+    overflow: hidden;
+    opacity: 1;
+    
+    float: left;
+    text-align: center; display:none
+     } .number.b{display: block}
+	 
+.dailiren-s-ka.line .dailiren-float-ul.ka li{ padding:10px 0px 15px 0px;}
+.dailiren-s-ka.line a img{ border:0px}
+.dailiren-s-ka.line .ccgg{width:30px; height:30px;padding:2px 0px 0px 0px}
+.dailiren-s-ka.line ul li{ border:1px solid #eee; border-top:0px;border-left:0px}
+.dailiren-s-ka.line ul li:last-child{border-right:0px}
+
+
+.dailiren-s-ka li .sjb {
+    font-size:20px;
+    color:#ff3d00;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    display: inline-block;
+    width: 95%;
+}
+.red{ color:red}
+.bd input[type="text"] {    line-height: 1.41176471;
+    font-size: 17px;
+    
+}
+
+
+ 
+.bd a:link.weui_cell .weui_cell_ft:after,.bd a:visited.weui_cell .weui_cell_ft:after{border-color: #c8c8cd; }
+
+.bd.szyo .weui_cell_ft{ font-size:16px}
+
+/*五星*/
+.rating{
+	width:80px;
+	height:16px;
+	margin:0 auto;
+	padding:0;
+	list-style:none;
+	clear:both;
+	position:relative;
+	background: url(../images/star-matrix.gif) no-repeat 0 0; background-size:80px  
+}
+/* add these classes to the ul to effect the change to the correct number of stars */
+.nostar {background-position:0 0}
+.onestar {background-position:0 -16px}
+.twostar {background-position:0 -32px}
+.threestar {background-position:0 -48px}
+.fourstar {background-position:0 -64px}
+.fivestar {background-position:0 -80px}
+ul.rating li {
+	cursor: pointer;
+ /*ie5 mac doesn't like it if the list is floated\*/
+	float:left;
+	/* end hide*/
+	text-indent:-999em;
+}
+ul.rating li a {
+	position:absolute;
+	left:0;
+	top:0;
+	width:16px;
+	height:16px;
+	text-decoration:none;
+	z-index: 200;
+}
+ul.rating li.one a {left:0}
+ul.rating li.two a {left:16px;}
+ul.rating li.three a {left:32px;}
+ul.rating li.four a {left:48px;}
+ul.rating li.five a {left:64px;}
+
+
+
+
+.weui_cells_access.fr .weui_cell_ft:before {
+    content: " ";
+    display: inline-block;
+    -webkit-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+    height: 6px;
+    width: 6px;
+    border-width: 2px 2px 0 0;
+    border-color: #c8c8cd;
+    border-style: solid;
+    position: relative;
+    top:-1px;     
+    margin-right:.3em;
+}
+
+
+.dailiren-float-ul .number.zs{top:1.5rem;}
+
+/*20160824个人中心修改*/
+
+  .bnh span{ margin:0px 6px;}
+  .bnh span.on{ background-color:#ff3d00; color:#fff; border-radius:4px; padding:2px 4px}  
+  .weui_cells_access .bnh.weui_cell_ft:after{ display:none}

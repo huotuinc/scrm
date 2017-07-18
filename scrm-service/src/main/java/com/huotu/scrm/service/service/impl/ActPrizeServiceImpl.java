@@ -35,15 +35,15 @@ public class ActPrizeServiceImpl implements ActPrizeService {
 
     @Override
     public Page<ActPrize> getPageActPrize(int pageNo, int pageSize) {
-        return actPrizeRepository.findAll(new PageRequest(pageNo-1,pageSize,new Sort(Sort.Direction.DESC,"sort")));
+        return actPrizeRepository.findAll(new PageRequest(pageNo - 1, pageSize, new Sort(Sort.Direction.DESC, "sort")));
     }
 
     @Override
     public ActPrize saveActPrize(ActPrize actPrize) {
         ActPrize newActPrize;
-        if (actPrize.getPrizeId() != null && actPrize.getPrizeId() != 0){
+        if (actPrize.getPrizeId() != null && actPrize.getPrizeId() != 0) {
             newActPrize = actPrizeRepository.findOne(actPrize.getPrizeId());
-        }else {
+        } else {
             newActPrize = new ActPrize();
         }
         newActPrize.setPrizeName(actPrize.getPrizeName());
@@ -59,7 +59,9 @@ public class ActPrizeServiceImpl implements ActPrizeService {
     }
 
     @Override
-    public ActPrize findByPrizeId(Long prizeId) {return actPrizeRepository.findOne(prizeId);}
+    public ActPrize findByPrizeId(Long prizeId) {
+        return actPrizeRepository.findOne(prizeId);
+    }
 
     @Override
     public List<ActPrize> findAll() {

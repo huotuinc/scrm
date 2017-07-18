@@ -5,7 +5,7 @@ import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
 
 /**
- * Created by Administrator on 2017/7/11.
+ * Created by Jinxiangdong on 2017/7/11.
  */
 public interface BusinessCardService {
 
@@ -18,13 +18,13 @@ public interface BusinessCardService {
     BusinessCard getBusinessCard(Long salesmanId , Long customerId);
 
     /***
-     * 通过salesmanId和customerId获得名片信息和用户信息
+     * 通过salesmanId和customerId和关注者d获得名片信息和用户信息
      * @param salesmanId 销售员Id
      * @param customerId 商户Id
      * @param followerId 关注者Id
      * @return
      */
-    SalesmanBusinessCard getSalesmanBusinessCard(Long salesmanId , Long customerId , Long followerId);
+    SalesmanBusinessCard getSalesmanBusinessCard( Long customerId , Long salesmanId , Long followerId);
 
     /***
      * 按照类型更新名片信息
