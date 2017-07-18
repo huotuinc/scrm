@@ -1,0 +1,193 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+
+    <title></title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <base target="_blank">
+</head>
+<body class="gray-bg">
+<!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
+<!--/*@thymesVar id="goodsName" type="java.lang.String"*/-->
+<div class="wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>编辑资讯信息</h5>
+        </div>
+        <div class="ibox-content">
+            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" action="#">
+                <input type="hidden" name="id" value="" th:value="${info.id}"/>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">资讯标题</label>
+                    <div class="col-sm-6">
+                        <input type="text" id="title" name="title" maxlength="30" class="form-control"
+                               th:value="${info.title}">
+                        <span class="help-block"><i class="fa fa-info-circle"></i>最多30个字符</span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">资讯简介</label>
+                    <div class="col-sm-6">
+                        <textarea rows="3" id="introduce" name="introduce" maxlength="150" class="form-control"
+                                  th:text="${info.introduce}">资讯简介</textarea>
+                        <span class="help-block"><i class="fa fa-info-circle"></i>最多150个字符</span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否发布</label>
+                    <div class="col-sm-6">
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="publishRadioPublish" value="1" name="publishRadio" data-check="true"
+                                   th:checked="${info.status}" checked="checked">
+                            <label for="publishRadioPublish">是</label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <input type="radio" id="publishRadio" value="0" name="publishRadio"
+                                   th:checked="${!info.status}">
+                            <label for="publishRadio">否</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">是否推广</label>
+                    <div class="col-sm-6">
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="inlineExtend" value="1" name="radioExtend" data-check="true"
+                                   checked="checked" th:checked="${info.extend}">
+                            <label for="inlineExtend">推广</label>
+                        </div>
+                        <div class="radio radio-inline">
+                            <input type="radio" id="inlineExtended" value="0" name="radioExtend"
+                                   th:checked="${!info.extend}">
+                            <label for="inlineExtended">不推广</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">上传封面</label>
+                    <div class="col-sm-6">
+                        <input type="hidden" name="imageUrl" value="" th:value="${info.imageUrl}"/>
+                        <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
+                        <button class="btn btn-success" id="uploadImage" type="button"
+                                onclick="infoSaveEditHandler.uploadFile()">上传图片
+                        </button>
+
+                        <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
+
+                        <img id="imageShow" src="../../images/bg.png" th:src="${info.imageUrl}" style="width:200px;height:200px;"/>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">资讯内容</label>
+
+
+                    <div class="col-sm-8" id="eg">
+                        <div class="ibox-content no-padding">
+                            <input  type="hidden" name="infoContent"  th:text="${info.content}">
+                            <div style="display: none;" id="summerNote">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-sm-offset-5">
+                        <button class="btn btn-success btn-submit" type="submit" id="infoSubmit" onclick="infoSaveEditHandler.uploadInfo()">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="../../js/plugins/hot/jquery.utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
+<!---->
+
+<script type="text/javascript">
+    $(function () {
+        $('#summerNote').summernote({
+            height: 300,
+            minHeight: 200,
+            maxHeight: 400,
+            focus: true,
+            lang: 'zh-CN',
+        });
+
+    });
+
+    var infoSaveEditHandler = {
+        uploadFile:function() {
+            $.ajaxFileUpload({
+                url : "/mall/common/upload",
+                secureuri : false,// 一般设置为false
+                fileElementId : "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                dataType : 'json',// 返回值类型 一般设置为json
+                type: "post",
+                success : function(data) // 服务器成功响应处理函数
+                {
+                    console.log(data);
+                    if(data.code == 200){
+                        $('#imageShow').attr('src', data.fileUrl);
+                        $("input:hidden[name='imageUrl']").val(data.fileUri);
+                    }
+                },
+                error : function(data)// 服务器响应失败处理函数
+                {
+                    console.log(data+"服务器异常");
+                }
+            })
+        },
+
+        uploadInfo:function () {
+
+            alert($('#summerNote').code());
+            $("input:hidden[name='infoContent']").val($('#summerNote').te);
+            $('#infoSubmit').submit();
+        }
+
+    }
+
+
+</script>
+
+</body>
+
+
+</html>
+<!--<script type="text/javascript">-->
+<!--$('input[type="file"]').prettyFile();-->
+<!--$(function () {-->
+<!--var smnote = $(".summernote").summernote({-->
+<!--lang: "zh-CN"-->
+<!--});-->
+<!--});-->
+<!--</script>-->

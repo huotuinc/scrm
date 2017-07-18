@@ -1,12 +1,15 @@
 package com.huotu.scrm.common.utils;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 
 /**
  * Created by luohaibo on 2017/7/13.
  */
-@Data
+@Getter
+@Setter
 public class InformationSearch {
 
     private int extend = 0;

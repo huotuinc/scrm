@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service;
+package com.huotu.scrm.service.service.info;
 
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
@@ -11,6 +11,14 @@ import java.util.List;
  * Created by luohaibo on 2017/7/5.
  */
 public interface InfoService {
+
+
+    /**
+     * 通过ID 查找对应的资讯
+     * @param id
+     * @return
+     */
+    Info findOneById(Long id);
 
     /**
      * 根据Disable字段查询行数
