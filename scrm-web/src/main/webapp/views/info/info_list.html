@@ -58,9 +58,13 @@
                         <label class="">资讯管理</label>
                     </div>
                     <!--添加资讯按钮-->
-                    <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">添加资讯</button>
-                    </div>
+                    <form class="search-panel" method="get" action="#" th:action="@{/mall/info/edit}"
+                          id="addInfoForm">
+                        <div style="text-align:right;">
+                            <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button" >添加资讯
+                            </button>
+                        </div>
+                    </form>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
@@ -149,7 +153,7 @@
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
                                     </span>
                                     &nbsp;
-                                    <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
+                                    <span onclick="" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
@@ -188,7 +192,6 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
-<script src="../js/infoJs/infoLists.js"></script>
 
 <script type="text/javascript">
     var pageIndex = [[${informationSearch.pageNo}]];
@@ -214,6 +217,10 @@
             $("input[name=pageNo]").val(pageNo);
             $('#searchForm').submit();
         },
+
+        editInfo:function(){
+            $('addInfoForm').submit();
+        }
     }
 
     $('.js-search').click(function () {
@@ -223,6 +230,12 @@
     $('.js-searchAll').click(function(){
         infoListHandler.searchAll();
     });
+
+    $('.js-edit').click(function(){
+        infoListHandler.editInfo();
+    });
+
+
 </script>
 </body>
 

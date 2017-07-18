@@ -58,6 +58,7 @@ public class InfoController extends MallBaseController {
         Info info =  infoService.findOneById(id);
         try {
             URI imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
+            logger.info(imgUri.toString());
             info.setImageUrl(imgUri.toString());
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -80,7 +81,8 @@ public class InfoController extends MallBaseController {
             info.setCustomerId(customerId);
         }
         infoService.infoSave(info);
-        return "info/info_list";
+        return "redirect:/mall/info/infoList";
+
     }
 
 
