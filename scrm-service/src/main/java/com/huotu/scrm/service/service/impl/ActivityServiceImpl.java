@@ -28,7 +28,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Page<Activity> findAllActivity(int pageNo, int pageSize) {
         Pageable pageable = new PageRequest(pageNo - 1, pageSize);
-        return activityRepository.findByIsDelete(false,pageable);
+        return activityRepository.findByIsDelete(false, pageable);
     }
 
     @Override
@@ -39,14 +39,14 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Activity saveActivity(Activity activity) {
         Activity newActivity;
-        if (activity.getActId() !=null && activity.getActId()!= 0){
+        if (activity.getActId() != null && activity.getActId() != 0) {
             newActivity = activityRepository.findOne(activity.getActId());
-        }else {
-            newActivity =new Activity();
+        } else {
+            newActivity = new Activity();
         }
         newActivity.setCustomerId(activity.getCustomerId());
         newActivity.setActTitle(activity.getActTitle());
-        newActivity.setActType(EnumHelper.getEnumType(ActEnum.Activity.class,activity.getActType()));
+        newActivity.setActType(EnumHelper.getEnumType(ActEnum.Activity.class, activity.getActType()));
         newActivity.setStartDate(activity.getStartDate());
         newActivity.setEndDate(activity.getEndDate());
         newActivity.setOpenStatus(activity.isOpenStatus());
@@ -58,11 +58,9 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public void updateActivity(Long actId,boolean isDelete) {
-          activityRepository.updateActivityByActId(isDelete,actId);
+    public void updateActivity(Long actId, boolean isDelete) {
+        activityRepository.updateActivityByActId(isDelete, actId);
     }
-
-
 
 
 }

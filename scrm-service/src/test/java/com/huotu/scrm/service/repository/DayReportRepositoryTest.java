@@ -5,7 +5,6 @@ import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
-import com.huotu.scrm.service.util.DateUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -30,12 +29,12 @@ public class DayReportRepositoryTest extends CommonTestBase {
     /**
      * 测试日期工具类
      */
-    @Test
+ /*   @Test
     public void testDateUtil() {
         System.out.println("前天日期(时分秒默认为最大):" + DateUtil.getBeforeLastDay());
         System.out.println("昨天日期(时分秒默认最大):" + DateUtil.getLastDayMax());
         System.out.println("");
-    }
+    }*/
 
 
     //

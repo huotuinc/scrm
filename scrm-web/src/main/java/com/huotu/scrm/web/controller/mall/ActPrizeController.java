@@ -19,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * 奖品控制层
@@ -40,13 +42,13 @@ public class ActPrizeController extends MallBaseController {
      * @return
      */
     @RequestMapping("/list")
-    public String prizeList(int pageIndex, Model model){
+    public String prizeList(@RequestParam(required = false,defaultValue = "1") int pageIndex, Model model){
         Page<ActPrize> pageActPrize = actPrizeService.getPageActPrize(pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("prizeList",pageActPrize.getContent());
         model.addAttribute("totalPages",pageActPrize.getTotalPages());
         model.addAttribute("totalRecords",pageActPrize.getTotalElements());
         model.addAttribute("pageIndex", pageIndex);
-        model.addAttribute("pageSize", 20);
+        model.addAttribute("pageSize", Constant.PAGE_SIZE);
         return "activity/prize_list";
     }
 
@@ -57,6 +59,7 @@ public class ActPrizeController extends MallBaseController {
      * @return
      */
     @RequestMapping("/list/save")
+    @ResponseBody
     public ApiResult savePrize(ActPrize actPrize){
         if (actPrize.getPrizeId() != null && actPrize.getPrizeId()>0){
             actPrize = actPrizeService.findByPrizeId(actPrize.getPrizeId());
@@ -75,6 +78,7 @@ public class ActPrizeController extends MallBaseController {
      * @return
      */
     @RequestMapping("/list/delete")
+    @ResponseBody
     public ApiResult deletePrize(Long prizeId){
         if (prizeId != null && prizeId > 0){
             actPrizeService.deleteActPrize(prizeId);

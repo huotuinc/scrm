@@ -10,8 +10,8 @@
 package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.common.utils.ApiResult;
+import com.huotu.scrm.common.utils.IpUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
-import com.huotu.scrm.common.utils.DateUtil;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.service.ActPrizeService;
@@ -21,8 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,9 +39,9 @@ public class ActWinController extends SiteBaseController {
 
     @Autowired
     private ActPrizeService actPrizeService;
-
     @Autowired
     private ActWinDetailService actWinDetailService;
+
     /**
      * 参加抽奖活动
      *
@@ -50,24 +50,23 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/join/act")
     @ResponseBody
     public ApiResult joinAct(
-            HttpServletRequest request , String userId, int userScore,
-            @RequestParam(required = false,defaultValue = "null" ) String userName,
-            @RequestParam(required = false,defaultValue = "null") String userTel)
-    {
+            HttpServletRequest request, String userId, int userScore,
+            @RequestParam(required = false, defaultValue = "null") String userName,
+            @RequestParam(required = false, defaultValue = "null") String userTel) {
         //回归算法得到奖品
         int proCount = 100;
         String minRate = "min";
         String maxRate = "max";
         Integer tempInt = 0;
         //待中奖奖品数组
-        Map<Long,Map<String,Integer>> prizesMap = new HashMap<>();
+        Map<Long, Map<String, Integer>> prizesMap = new HashMap<>();
         List<ActPrize> actPrizeList = actPrizeService.findAll();
-        for (ActPrize actPrize: actPrizeList) {
-            Map<String,Integer> oddMap = new HashMap<>();
-            oddMap.put(minRate,tempInt);
+        for (ActPrize actPrize : actPrizeList) {
+            Map<String, Integer> oddMap = new HashMap<>();
+            oddMap.put(minRate, tempInt);
             tempInt += actPrize.getWinRate();
-            oddMap.put(maxRate,tempInt);
-            prizesMap.put(actPrize.getPrizeId(),oddMap);
+            oddMap.put(maxRate, tempInt);
+            prizesMap.put(actPrize.getPrizeId(), oddMap);
         }
         //得到随机数
         int random = (int) Math.random() * proCount;
@@ -79,41 +78,24 @@ public class ActWinController extends SiteBaseController {
             Integer minNum = oddsMap.get(minRate);
             Integer maxNum = oddsMap.get(maxRate);
             //验证random 在哪件奖品中间
-            if (minNum <= random && maxNum > random ) {
-                Date now = new Date();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                format = dateFormat.format(now);
+            if (minNum <= random && maxNum > random) {
                 prize = actPrizeService.findByPrizeId(prizeId);
-                if (prize.getRemainCount() == 0){
-                    prize =actPrizeService.findByPrizeType(false);
+                if (prize.getRemainCount() == 0) {
+                    prize = actPrizeService.findByPrizeType(false);
                 }
                 break;
             }
         }
         //TODO 用户积分没有得到 无法计算游戏消耗积分
-        //得到用户的Ip地址
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }else if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }else if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        } else if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        } else if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
         ActWinDetail actWinDetail = new ActWinDetail();
         actWinDetail.setPrize(prize);
-        actWinDetail.setIpAddress(ip);
+        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
         actWinDetail.setUserId(Long.valueOf(userId));
-        actWinDetail.setWin_Time(DateUtil.stringToDate(format));
+        actWinDetail.setWin_Time(new Date());
         actWinDetail.setWinnerName(userName);
         actWinDetail.setWinnerTel(userTel);
         actWinDetail = actWinDetailService.saveActWinDetail(actWinDetail);
-
-        if (actWinDetail != null ){
+        if (actWinDetail != null) {
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
         }
         return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
