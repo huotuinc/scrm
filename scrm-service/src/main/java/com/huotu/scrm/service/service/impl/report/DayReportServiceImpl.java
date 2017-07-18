@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 
@@ -26,7 +29,7 @@ import java.util.List;
 public class DayReportServiceImpl implements DayReportService {
 
     @Autowired
-    private DayReportRepository reportDayRepository;
+    private DayReportRepository dayReportRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -45,36 +48,34 @@ public class DayReportServiceImpl implements DayReportService {
 
     @Override
     @Transactional
-    public void saveReportDay() {
+    public void saveDayReport() {
         //获取今日日期
         LocalDate today = LocalDate.now();
         //获取昨日日期
         LocalDate lastDay = today.minusDays(1);
-        //获取前天日期
-        LocalDate beforeLastDay = today.minusDays(2);
         List<Long> bySourceUserIdList = infoBrowseRepository.findBySourceUserId();
         for (long sourceUserId : bySourceUserIdList) {
-            DayReport reportDay = new DayReport();
+            DayReport dayReport = new DayReport();
             User user = userRepository.findOne(sourceUserId);
             //设置用户ID
-            reportDay.setUserId(sourceUserId);
+            dayReport.setUserId(sourceUserId);
             //设置商户号
-            reportDay.setCustomerId(user.getCustomerId());
+            dayReport.setCustomerId(user.getCustomerId());
             //设置等级
-            reportDay.setLevelId(user.getLevelId());
+            dayReport.setLevelId(user.getLevelId());
             //设置是否为销售员
             UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-            reportDay.setSalesman(userLevel.isSalesman());
+            dayReport.setSalesman(userLevel.isSalesman());
             //设置每日咨询转发量
-            int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(sourceUserId);
-            reportDay.setForwardNum(forwardNumBySourceUserId);
+            int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(sourceUserId, lastDay);
+            dayReport.setForwardNum(forwardNumBySourceUserId);
             //设置每日访客量
-            long countBySourceUserId = infoBrowseRepository.countBySourceUserId(sourceUserId);
-            reportDay.setVisitorNum((int) countBySourceUserId);
+            long countBySourceUserId = infoBrowseRepository.countBySourceUserIdAndBrowseTime(sourceUserId, lastDay);
+            dayReport.setVisitorNum((int) countBySourceUserId);
             //设置每日推广积分（咨询转发奖励和转发咨询浏览奖励）
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
             //获取转发资讯奖励积分
-            int forwardScore = getEstimateScore(sourceUserId);
+            int forwardScore = getEstimateScore(sourceUserId, lastDay);
             //获取每日访客量奖励积分
             int visitorScore = 0;
             //获取访客量转换比例
@@ -88,31 +89,35 @@ public class DayReportServiceImpl implements DayReportService {
                     visitorScore = (int) (countBySourceUserId / exchangeRate);
                 }
             }
-            reportDay.setExtensionScore(visitorScore + forwardScore);
+            dayReport.setExtensionScore(visitorScore + forwardScore);
             //设置每日被关注量(销售员特有)
-            if (reportDay.isSalesman()) {
+            if (dayReport.isSalesman()) {
                 long countByUserId = businessCardRecordReposity.countByUserId(sourceUserId);
-                reportDay.setFollowNum((int) countByUserId);
+                dayReport.setFollowNum((int) countByUserId);
             } else {
-                reportDay.setFollowNum(0);
+                dayReport.setFollowNum(0);
             }
             //设置统计日期
-            reportDay.setReportDay(lastDay);
+            dayReport.setReportDay(lastDay);
             //保存数据
-            reportDayRepository.save(reportDay);
+            dayReportRepository.save(dayReport);
             //设置每日访客排名
-            int visitorRanking = visitorRanking(sourceUserId, beforeLastDay, today);
-            reportDay.setVisitorRanking(visitorRanking);
+        }
+        for (long userId : bySourceUserIdList) {
+            DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, lastDay);
+            int visitorRanking = visitorRanking(userId, lastDay);
+            dayReport.setVisitorRanking(visitorRanking);
             //设置每日积分排名
-            int scoreRanking = scoreRanking(sourceUserId, beforeLastDay, today);
-            reportDay.setScoreRanking(scoreRanking);
+            int scoreRanking = scoreRanking(userId, lastDay);
+            dayReport.setScoreRanking(scoreRanking);
             //设置每日关注排名（销售员特有）
-            if (reportDay.isSalesman()) {
-                int followRanking = followRanking(sourceUserId, beforeLastDay, today);
-                reportDay.setFollowRanking(followRanking);
+            if (dayReport.isSalesman()) {
+                int followRanking = followRanking(userId, lastDay);
+                dayReport.setFollowRanking(followRanking);
             } else {
-                reportDay.setFollowRanking(-1);
+                dayReport.setFollowRanking(-1);
             }
+            dayReportRepository.save(dayReport);
         }
     }
 
@@ -120,12 +125,13 @@ public class DayReportServiceImpl implements DayReportService {
      * 统计预计积分
      *
      * @param userId 用户ID
+     * @param date   统计日期
      * @return
      */
     @Override
-    public int getEstimateScore(Long userId) {
+    public int getEstimateScore(Long userId, LocalDate date) {
         User user = userRepository.findOne(userId);
-        int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(userId);
+        int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(userId, date);
         InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
         //获取转发咨询浏览量奖励积分
         int forwardScore = 0;
@@ -153,16 +159,33 @@ public class DayReportServiceImpl implements DayReportService {
         return forwardScore;
     }
 
+    @Override
+    public int getCumulativeScore(Long userId) {
+        User user = userRepository.findOne(userId);
+        //获取注册时间
+        Date regTime = user.getRegTime();
+        Instant instant = regTime.toInstant();
+        ZoneId zoneId = ZoneId.systemDefault();
+        // atZone()方法返回在指定时区从此Instant生成的ZonedDateTime。
+        LocalDate regTimeDate = instant.atZone(zoneId).toLocalDate();
+        List<DayReport> dayReports = dayReportRepository.findByReportDay(userId, regTimeDate);
+        int cumulativeScore = 0;
+        for (DayReport dayReport :
+                dayReports) {
+            cumulativeScore += dayReport.getExtensionScore();
+        }
+        return cumulativeScore;
+    }
+
     /**
      * 统计访客排名
      *
-     * @param userId  用户ID
-     * @param dateMin 统计最小时间
-     * @param dateMax 统计最大时间
+     * @param userId 用户ID
+     * @param date   统计日期
      * @return
      */
-    public int visitorRanking(Long userId, LocalDate dateMin, LocalDate dateMax) {
-        List<DayReport> sortAll = reportDayRepository.findOrderByVisitorNum(dateMin, dateMax);
+    public int visitorRanking(Long userId, LocalDate date) {
+        List<DayReport> sortAll = dayReportRepository.findOrderByVisitorNum(date);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             System.out.println(userId);
@@ -178,13 +201,12 @@ public class DayReportServiceImpl implements DayReportService {
     /**
      * 统计推广积分排名
      *
-     * @param userId  用户ID
-     * @param dateMin 统计最小时间
-     * @param dateMax 统计最大时间
+     * @param userId 用户ID
+     * @param date   统计日期
      * @return
      */
-    public int scoreRanking(Long userId, LocalDate dateMin, LocalDate dateMax) {
-        List<DayReport> sortAll = reportDayRepository.findOrderByExtensionScore(dateMin, dateMax);
+    public int scoreRanking(Long userId, LocalDate date) {
+        List<DayReport> sortAll = dayReportRepository.findOrderByExtensionScore(date);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {
@@ -198,13 +220,12 @@ public class DayReportServiceImpl implements DayReportService {
     /**
      * 统计关注排名
      *
-     * @param userId  用户ID
-     * @param dateMin 统计最小时间
-     * @param dateMax 统计最大时间
+     * @param userId 用户ID
+     * @param date   统计日期
      * @return
      */
-    public int followRanking(Long userId, LocalDate dateMin, LocalDate dateMax) {
-        List<DayReport> sortAll = reportDayRepository.findOrderByFollowNum(dateMin, dateMax);
+    public int followRanking(Long userId, LocalDate date) {
+        List<DayReport> sortAll = dayReportRepository.findOrderByFollowNum(date);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动列表</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.7.css" rel="stylesheet"/>
+    <!--checkbox-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <!--list-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div style="text-align:right;">
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">新增</button>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>活动名称</th>
+                                <th>活动类型</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody th:remove="all-but-first">
+                            <tr th:each="activity:${activities}">
+                                <td id="act" th:hidden="${activity.customerId}"></td>
+                                <td class="js-actId" th:text="${activity.actId}">1</td>
+                                <td th:text="${activity.actTitle}">
+                                    <div class="checkbox checkbox-primary m-b-none m-t-none">
+                                    </div>
+                                </td>
+                                <td th:text="${activity.actType}" style="width: 5%;">
+                                    <p style="width: 100%; height: 50px;">
+                                    </p>
+                                </td>
+                                <td th:text="${activity.startDate}"></td>
+                                <td th:text="${activity.endDate}"></td>
+                                <td th:text="${activity.openStatus}"></td>
+                                <td>
+                                    <span class="cursor-point" ><i class="fa fa-link tooltips" data-placement="top" data-toggle="tooltip" data-original-title="活动链接"></i></span>
+                                    &nbsp;&nbsp;
+                                    <span class="cursor-point"><i class="fa fa-paste tooltips" data-placement="top" data-toggle="tooltip" data-original-title="参与记录"></i></span>
+                                    &nbsp;&nbsp;
+                                    <span class="cursor-point"><i class="fa fa-cog tooltips" data-placement="top" data-toggle="tooltip" data-original-title="奖品设置"></i></span>
+                                    &nbsp;&nbsp;
+                                    <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i></span>
+                                    &nbsp;&nbsp;
+                                    <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top" data-toggle="tooltip" data-original-title="删除"></i></span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <p style="float: left; margin: 20px 0;">共
+                            <th:block th:text="${totalRecords}">100</th:block>
+                            条记录，当前第
+                            <th:block th:text="${pageIndex}">1</th:block>
+                            /
+                            <th:block th:text="${totalPages}">15</th:block>
+                            ，每页
+                            <th:block th:text="${pageSize}">10</th:block>
+                            条记录
+                        </p>
+                        <ul style="float: right;" class="pagination pagination-split">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="../js/infoJs/infoLists.js"></script>
+
+<script type="text/javascript"  th:inline="javascript">
+var pageIndex = /*[[${informationSearch.pageNo}]]*/ 1;
+var totalPage = /*[[${infoListsPage.totalPages}]]*/ 20;
+//初始化分页
+var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
+
+pageinate.init(function (p) {
+    infoListHandler.search(p);
+});
+
+var infoListHandler = {
+    search:function(pageNo) {
+        var search = $("input:text[name='infoName']").val(pageIndex);
+        $('#searchForm').submit();
+    },
+
+    searchAll:function(){
+        window.location.href = "/mall/infoLists";
+    },
+
+    search: function(pageNo){
+        $("input[name=pageNo]").val(pageNo);
+        $('#searchForm').submit();
+    },
+}
+
+$('.js-search').click(function () {
+    infoListHandler.search(1);
+});
+
+$('.js-searchAll').click(function(){
+    infoListHandler.searchAll();
+});
+</script>
+
+<script type="text/javascript">
+    var ajaxUrl = "[[@{/act}]]";
+</script>
+</body>
+
+</html>

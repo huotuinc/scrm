@@ -5,7 +5,6 @@ import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
-import com.huotu.scrm.service.util.DateUtil;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -30,37 +29,27 @@ public class DayReportRepositoryTest extends CommonTestBase {
     /**
      * 测试日期工具类
      */
-    @Test
+ /*   @Test
     public void testDateUtil() {
         System.out.println("前天日期(时分秒默认为最大):" + DateUtil.getBeforeLastDay());
         System.out.println("昨天日期(时分秒默认最大):" + DateUtil.getLastDayMax());
         System.out.println("");
-    }
+    }*/
 
 
-
-//
+    //
     @Test
-   @Rollback(false)
+    @Rollback(false)
     public void testDayReportRepository() {
         LocalDate now = LocalDate.now();
-//        LocalDate date = now.minusDays(1);
-//        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(date, now);
-//        for (DayReport d : orderByExtensionScore
-//                ) {
-//            System.out.println(d.toString());
-//        }
         DayReport dayReport = new DayReport();
-       dayReport.setReportDay(now);
-////       dayReportRepository.save(dayReport);
-//        List<DayReport> byReportDay = dayReportRepository.findByReportDay(now);
-//        System.out.println(byReportDay.size());
+        dayReport.setReportDay(now);
         System.out.println(now.minusDays(1));
         System.out.println(now.plusDays(1));
-        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(now.minusDays(2), now);
+        List<DayReport> orderByExtensionScore = dayReportRepository.findOrderByExtensionScore(now.minusDays(2));
         System.out.println(orderByExtensionScore.size());
-        for (DayReport d: orderByExtensionScore
-             ) {
+        for (DayReport d : orderByExtensionScore
+                ) {
             System.out.println(d.getId());
         }
     }

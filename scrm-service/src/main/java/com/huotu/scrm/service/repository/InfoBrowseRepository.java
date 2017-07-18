@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -18,13 +19,13 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
 
     List<InfoBrowse> findByInfoId(Long infoId);
 
-    //根据转发用户ID查询转发咨询的访问量
-    long countBySourceUserId(Long sourceUserId);
+    //根据转发用户ID和转发日期查询转发咨询的访问量
+    long countBySourceUserIdAndBrowseTime(Long sourceUserId, LocalDate date);
 
-        @Query("select distinct t.sourceUserId from  InfoBrowse t")
-        List<Long> findBySourceUserId();
+    @Query("select distinct t.sourceUserId from  InfoBrowse t")
+    List<Long> findBySourceUserId();
 
-    //根据转发用户ID查询咨询转发量(去掉重复浏览)
-    @Query("select count(distinct t.infoId) from InfoBrowse t where t.sourceUserId=?1")
-    int findForwardNumBySourceUserId(Long userId);
+    //根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
+    @Query("select count(distinct t.infoId) from InfoBrowse t where t.sourceUserId=?1 and t.browseTime=?2")
+    int findForwardNumBySourceUserId(Long userId, LocalDate date);
 }

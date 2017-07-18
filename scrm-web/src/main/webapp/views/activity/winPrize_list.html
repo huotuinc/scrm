@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中奖记录</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <!--checkbox-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg" data-unitTest="false" data-prototype="true">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div>
+                        <label class="">中奖记录</label>
+                    </div>
+                    <!--添加资讯按钮-->
+                    <div style="text-align:right;">
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">导出</button>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th class="col-sm-2">用户编号</th>
+                                <th class="col-sm-1">活动名称</th>
+                                <th>奖品名称</th>
+                                <th>姓名</th>
+                                <th>电话</th>
+                                <th>日期</th>
+                                <th>IP</th>
+                            </tr>
+                            </thead>
+                            <tbody th:remove="all-but-first">
+                            <tr th:each="prDeList: ${prizeDetailList}">
+                                <td th:text="${prDeList.winDetailId}">1</td>
+                                <td th:text="${prDeList.userId}">
+                                    <div class="checkbox checkbox-primary m-b-none m-t-none">
+                                    </div>
+                                </td>
+                                <td th:text="${}" style="width: 5%;">
+                                    <p style="width: 100%; height: 50px;">
+                                    </p>
+                                </td>
+                                <td th:text="${jdGood.skuId}"></td>
+                                <td th:text="${prDeList.winnerName}"></td>
+                                <td th:text="${prDeList.winnerTel}"></td>
+                                <td th:text="${prDeList.win_Time}"></td>
+                                <td th:text="${prDeList.ipAddress}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        共
+                        <th:block th:text="${totalRecords}">100</th:block>
+                        条记录，当前第
+                        <th:block th:text="${pageIndex}">1</th:block>
+                        /
+                        <th:block th:text="${totalPages}">15</th:block>
+                        ，每页
+                        <th:block th:text="${pageSize}">10</th:block>
+                        条记录
+                        <ul style="float: right;" class="pagination pagination-split">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="../js/infoJs/infoLists.js"></script>
+
+<script type="text/javascript"  th:inline="javascript">
+    var pageIndex = /*[[${informationSearch.pageNo}]]*/ 1;
+    var totalPage = /*[[${infoListsPage.totalPages}]]*/ 20;
+    //初始化分页
+    var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
+
+    pageinate.init(function (p) {
+        infoListHandler.search(p);
+    });
+
+    var infoListHandler = {
+        search:function(pageNo) {
+            var search = $("input:text[name='infoName']").val(pageIndex);
+            $('#searchForm').submit();
+        },
+
+        searchAll:function(){
+            window.location.href = "/mall/infoLists";
+        },
+
+        search: function(pageNo){
+            $("input[name=pageNo]").val(pageNo);
+            $('#searchForm').submit();
+        },
+    }
+
+    $('.js-search').click(function () {
+        infoListHandler.search(1);
+    });
+
+    $('.js-searchAll').click(function(){
+        infoListHandler.searchAll();
+    });
+</script>
+</body>
+
+</html>

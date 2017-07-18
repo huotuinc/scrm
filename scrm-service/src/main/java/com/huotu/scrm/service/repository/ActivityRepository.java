@@ -19,7 +19,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> ,JpaSp
 
     @Modifying
     @Query("update Activity a set a.isDelete = ?1 where a.actId =?2")
-    void deleteActivityByActId(boolean isDelete , long actId );
+    void updateActivityByActId(boolean isDelete , long actId );
 
     /**
      * 分页查询所有活动
