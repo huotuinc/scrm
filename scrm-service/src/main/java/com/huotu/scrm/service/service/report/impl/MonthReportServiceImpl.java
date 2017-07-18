@@ -41,9 +41,9 @@ public class MonthReportServiceImpl implements MonthReportService {
         LocalDate today = LocalDate.now();
         //获取本月第一天
         LocalDate firstDay = today.with(TemporalAdjusters.firstDayOfMonth());
-        /*得到上月第一天*/
+        //得到上月第一天
         LocalDate lastFirstDay = firstDay.minusMonths(1);
-        /*得到上月最后一天*/
+        //得到上月最后一天
         LocalDate lastEndDay = today.with(TemporalAdjusters.lastDayOfMonth()).minusMonths(1);
         List<Long> userIdList = reportDayRepository.findByUserId();
         for (long userId : userIdList) {
@@ -179,7 +179,7 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @return
      */
     public int getScoreRanking(Long userId, LocalDate month) {
-        List<MonthReport> sortAll = monthReportRepository.findOrderByExtensionScore(month);
+        List<MonthReport> sortAll = monthReportRepository.findByReportMonthOrderByExtensionScoreDesc(month);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {
