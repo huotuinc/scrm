@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.Date;
@@ -39,7 +40,6 @@ import java.util.TreeMap;
  * Created by Administrator on 2015/5/19.
  */
 @Controller
-@RequestMapping("/common")
 public class UploadController {
     @Autowired
     private StaticResourceService resourceServer;
@@ -53,7 +53,7 @@ public class UploadController {
      * @param files      文件信息
      * @return 文件信息
      */
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/common/upload", method = RequestMethod.POST)
     @ResponseBody
     public Map<Object, Object> upLoad(
             @RequestParam(value = "customerId") Long customerId,
@@ -93,16 +93,17 @@ public class UploadController {
     /**
      * 上传文件到商城
      *
-     * @param customerId 商户ID
+     * @param request 请求
      * @param files      文件
      * @return 文件uri
      */
-    @RequestMapping(value = "/mall/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/mall/common/upload", method = RequestMethod.POST)
     @ResponseBody
     public Map<Object, Object> upLoadToMall(
-            @RequestParam(value = "customerId") Long customerId,
+            HttpServletRequest request,
             @RequestParam(value = "btnFile", required = false) MultipartFile files) {
         int result = 0;
+        Long customerId = Long.parseLong(request.getAttribute("customerId").toString());
         Map<Object, Object> responseData = new HashMap<>();
         try {
             String fileName = files.getOriginalFilename();
