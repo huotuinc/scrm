@@ -29,7 +29,7 @@
             "${}"
         </div>
         <div class="ibox-content">
-            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/saveInfo}" action="#">
+            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" action="#">
                 <div class="form-group">
                     <label class="col-sm-2 control-label">资讯标题</label>
                     <div class="col-sm-6">
@@ -84,15 +84,15 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">上传封面</label>
                     <div class="col-sm-6">
-                        <input type="hidden" id="txtCover" value=""/>
-                        <input type="file" id="uploadFile" name="uploadFile" readonly="readonly" class="form-control">
+                        <input type="hidden" id="txtCover" value="" th:value="${info.getImageUrl()}"/>
+                        <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
                         <button class="btn btn-success" id="uploadImage" type="button"
                                 onclick="infoSaveEditHandler.uploadFile()">上传图片
                         </button>
 
-                        <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：400*200</span>
+                        <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
 
-                        <img class="imgpreview" src="../../images/bg.png" style="width:200px;height:200px;"/>
+                        <img id="imageShow" src="../../images/bg.png" style="width:200px;height:200px;"/>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
@@ -108,7 +108,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-5">
-                        <button class="btn btn-success btn-submit" type="submit" id="infoSubmit">提交</button>
+                        <button class="btn btn-success btn-submit" type="submit" id="infoSubmit" onclick="infoSaveEditHandler.uploadInfo()">提交</button>
                     </div>
                 </div>
             </form>
@@ -119,7 +119,7 @@
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="../../js/plugins/hot/jquery.utils.js"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/bootstrap.min.js"></script>
-<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
 <script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/sweetalert/sweetalert.min.js"></script>
@@ -128,7 +128,7 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
-
+<!---->
 
 <script type="text/javascript">
 
@@ -140,35 +140,36 @@
             maxHeight: 400,
             focus: true,
             lang: 'zh-CN',
-            // 重写图片上传
-            onImageUpload: function (files, editor, $editable) {
-                sendFile(files[0], editor, $editable);
-            }
         });
 
-    })
+    });
 
     var infoSaveEditHandler = {
+        uploadFile:function() {
+            $.ajaxFileUpload({
+                url : "/mall/common/upload",
+                secureuri : false,// 一般设置为false
+                fileElementId : "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                dataType : 'json',// 返回值类型 一般设置为json
+                type: "post",
+                success : function(data) // 服务器成功响应处理函数
+                {
+                    $('#imageShow').attr('src', data.fileUrl);
+                    $("input:text[id='txtCover']").val(data.fileUrl);
+                    console.log("xxxx"+data.fileUri);
+                    console.log("++++"+data.fileUrl);
+                    console.log(data);
+                },
+                error : function(data)// 服务器响应失败处理函数
+                {
+                    console.log(data+"服务器异常");
+                }
+            })
+        },
 
-            uploadFile:function() {
-                console.log("服务器异常");
-                $.ajaxFileUpload({
-                    url : "/common/mall/upload",
-                    secureuri : false,// 一般设置为false
-                    fileElementId : "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
-                    dataType : 'json',// 返回值类型 一般设置为json
-                    data:{customerId:1},
-                    type: "post",
-                    success : function(data) // 服务器成功响应处理函数
-                    {
-                        console.log("服务器异常");
-                    },
-                    error : function(data)// 服务器响应失败处理函数
-                    {
-                        console.log("服务器异常");
-                    }
-                });
-            }
+        uploadInfo:function () {
+            $('#infoSubmit').submit();
+        }
 
     }
 
