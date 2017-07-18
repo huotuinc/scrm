@@ -1,13 +1,23 @@
 package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.service.CommonTestBase;
+import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
-import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
+import com.huotu.scrm.service.entity.mall.Customer;
+import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
+import com.huotu.scrm.service.repository.CustomerRepository;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.mall.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.DigestUtils;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by Administrator on 2017/7/13.
@@ -15,9 +25,13 @@ import java.util.Date;
 public class BusinessCardRecordServiceTest extends CommonTestBase {
 
     @Autowired
-    BusinessCardRecordReposity businessCardRecordReposity;
+    BusinessCardRecordRepository businessCardRecordReposity;
     @Autowired
     BusinessCardService businessCardService;
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     public void existsByCustomerIdAndUserIdAndFollowId(){
@@ -69,6 +83,53 @@ public class BusinessCardRecordServiceTest extends CommonTestBase {
         Assert.assertFalse(isFollowed_1);
         boolean  isFollowed_2 = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId,userId2 , followerId);
         Assert.assertTrue(isFollowed_2);
+
+    }
+
+    @Test
+    public void deleteByCustomerIdAndUserIdAndFollowId()throws UnsupportedEncodingException{
+
+//        Customer customer = new Customer();
+//        customer.setLoginName(UUID.randomUUID().toString());
+//        customer.setEnabled(true);
+//        customer.setLoginPassword(DigestUtils.md5DigestAsHex( "123456".getBytes("utf-8")));
+//        customer.setNickName(UUID.randomUUID().toString());
+//        customer.set
+//        customer = customerRepository.save( customer );
+        Long customerId=4421L;
+
+        Long salesmanId = 128335L;
+        Long followerId = 128560L;
+        Long followerId2 = 3242L;
+
+//        User salesman =new User();
+//        salesman.setCustomerId(customerId);
+//        salesman.setLoginName(UUID.randomUUID().toString());
+//        salesman.setUserGender("男");
+//        salesman.setNickName(UUID.randomUUID().toString());
+//        salesman = userRepository.save(salesman);
+
+        businessCardService.updateBusinessCard( customerId , salesmanId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB , UUID.randomUUID().toString());
+
+//        User follower =new User();
+//        follower.setCustomerId(customerId);
+//        follower.setLoginName(UUID.randomUUID().toString());
+//        follower.setUserGender("女");
+//        follower.setNickName(UUID.randomUUID().toString());
+//        follower = userRepository.save(follower);
+
+        BusinessCardRecord businessCardRecord = new BusinessCardRecord();
+        businessCardRecord.setFollowDate(new Date());
+        businessCardRecord.setFollowId( followerId );
+        businessCardRecord.setUserId( salesmanId );
+        businessCardRecord.setCustomerId(customerId);
+        businessCardRecord = businessCardRecordReposity.save( businessCardRecord );
+
+        int count = businessCardRecordReposity.deleteByCustomerIdAndUserIdAndFollowId( customerId , salesmanId , followerId );
+        Assert.assertEquals( 1 ,count  );
+
+        count = businessCardRecordReposity.deleteByCustomerIdAndUserIdAndFollowId( customerId , salesmanId , followerId2 );
+        Assert.assertEquals( 0 , count );
 
     }
 }

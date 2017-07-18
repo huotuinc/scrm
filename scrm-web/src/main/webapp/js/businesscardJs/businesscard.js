@@ -116,10 +116,10 @@ $(function () {
                 console.log(data);
 
                 var $img_avatar= $("#img_avatar");
+                var imgUrl = data.data.avatar + "?r="+Math.random()*10;
+                console.log("src=" + imgUrl );
 
-                console.log("src=" + data.data.avatar);
-
-                $img_avatar.attr("src" , data.data.avatar);
+                $img_avatar.attr("src" , imgUrl);
 
             },
             error:function (error) {

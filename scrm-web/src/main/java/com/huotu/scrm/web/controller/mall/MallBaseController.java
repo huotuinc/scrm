@@ -17,11 +17,6 @@ public class MallBaseController {
         return Long.parseLong(request.getAttribute("customerId").toString());
     }
 
-    @ModelAttribute("userId")
-    public long getUserId(HttpServletRequest request){
-        return Long.parseLong( request.getAttribute("userId").toString() );
-    }
-
     @ModelAttribute("loginType")
     public int getLoginType(HttpServletRequest request) {
         return Integer.parseInt(request.getAttribute("loginType").toString());

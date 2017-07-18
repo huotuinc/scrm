@@ -4,22 +4,24 @@ import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
-import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
-import com.huotu.scrm.service.repository.BusinessCardReposity;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
 import com.huotu.scrm.service.repository.UserReposity;
 import com.huotu.scrm.service.service.BusinessCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Jinxiangdong on 2017/7/11.
  */
 @Service
+@Transactional
 public class BusinessCardServiceImpl implements BusinessCardService{
     @Autowired
-    BusinessCardReposity businessCardReposity;
+    BusinessCardRepository businessCardReposity;
     @Autowired
-    BusinessCardRecordReposity businessCardRecordReposity;
+    BusinessCardRecordRepository businessCardRecordReposity;
     @Autowired
     UserReposity userReposity;
 

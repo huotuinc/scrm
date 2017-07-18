@@ -1,15 +1,14 @@
-package com.huotu.scrm.service.repository;
+package com.huotu.scrm.service.repository.businesscard;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 /**
  * 名片关注记录表
- * Created by Administrator on 2017/7/12.
+ * Created by Jinxiangdong on 2017/7/12.
  */
-public interface BusinessCardRecordReposity extends JpaRepository<BusinessCardRecord , Long > {
+public interface BusinessCardRecordRepository extends JpaRepository<BusinessCardRecord , Long > {
 
     /***
      * 根据商户Id和销售员Id和关注人id删除关注记录
@@ -17,7 +16,7 @@ public interface BusinessCardRecordReposity extends JpaRepository<BusinessCardRe
      * @param salesmanId
      * @param followId
      */
-    void deleteByCustomerIdAndUserIdAndFollowId(Long customerId , Long salesmanId , Long followId);
+    int deleteByCustomerIdAndUserIdAndFollowId(Long customerId , Long salesmanId , Long followId);
 
     /***
      * 获得指定商户id下的指定销售员Id的关注人数

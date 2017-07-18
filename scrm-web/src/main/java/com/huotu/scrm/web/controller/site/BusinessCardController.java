@@ -11,6 +11,7 @@ import com.huotu.scrm.service.model.SalesmanBusinessCard;
 import com.huotu.scrm.service.service.BusinessCardRecordService;
 import com.huotu.scrm.service.service.BusinessCardService;
 import com.huotu.scrm.web.service.StaticResourceService;
+import javafx.beans.property.adapter.ReadOnlyJavaBeanBooleanProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -52,6 +56,7 @@ public class BusinessCardController extends SiteBaseController {
             businessCard=new BusinessCard();
             businessCard.setCustomerId(customerId);
             businessCard.setUserId(salesmanId);
+            businessCard.setAvatar("");
         }
         model.addAttribute("businessCard", businessCard);
 
@@ -78,8 +83,9 @@ public class BusinessCardController extends SiteBaseController {
             staticResourceService.deleteResource(path);
             //再上传最新的图片
             URI uri = staticResourceService.uploadResource(mode , path , btnFile.getInputStream());
+            String uriString = uri.toString();
             //然后保存图片的uri地址到数据库
-            BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR , uri.toString() );
+            BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR , uriString );
 
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS , businessCard);
         }catch (IOException ioEx){
@@ -196,5 +202,30 @@ public class BusinessCardController extends SiteBaseController {
 
         model.addAttribute("businessCard", salesmanBusinessCard);
         return "businesscard/see_businesscard";
+    }
+
+
+    /***
+     * 取消关注
+     * @param customerId
+     * @param salesmanId
+     * @param followerId
+     * @return
+     */
+    @RequestMapping(value = "/cancelFollow", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiResult cancelFollow(Long customerId , Long salesmanId , Long followerId ){
+        try {
+            businessCardRecordService.deleteByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
+
+            int numberOfFollower = businessCardRecordService.getFollowCountByCustomerIdAndUserId(customerId, salesmanId);
+            Map<Object, Object> resultMap = new HashMap<>();
+            resultMap.put("numberOfFollower", numberOfFollower);
+            resultMap.put("isFollowed", false);
+
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS, resultMap);
+        }catch (Exception ex){
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
+        }
     }
 }

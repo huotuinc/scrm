@@ -4,7 +4,7 @@ import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
-import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
@@ -41,7 +41,7 @@ public class DayReportServiceImpl implements DayReportService {
     private InfoConfigureRepository infoConfigureRepository;
 
     @Autowired
-    private BusinessCardRecordReposity businessCardRecordReposity;
+    private BusinessCardRecordRepository businessCardRecordReposity;
 
     @Override
     @Transactional
