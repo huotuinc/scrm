@@ -29,12 +29,26 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     private InfoRepository infoRepository;
 
+
+
     public long infoListsCount(boolean disable) {
         return infoRepository.countByDisable(disable);
     }
 
     public List<Info> findListsByWord(String title) {
         return infoRepository.findByTitleLike(title);
+    }
+
+
+    @Override
+    public Info findOneById(Long id) {
+        Info info;
+        if (id != null && id != 0){
+            info = infoRepository.findOne(id);
+        }else {
+            info = new Info();
+        }
+        return info;
     }
 
     public Info infoSave(Info info) {

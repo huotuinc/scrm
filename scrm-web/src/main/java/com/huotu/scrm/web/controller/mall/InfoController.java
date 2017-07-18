@@ -54,8 +54,9 @@ public class InfoController extends MallBaseController {
      * @return
      */
     @RequestMapping(value = "/edit")
-    public String infoEditPage(Model model){
-        model.addAttribute("info",new Info());
+    public String infoEditPage(Long id,  Model model){
+        Info info =  infoService.findOneById(id);
+        model.addAttribute("info",info);
         return "info/infoEdit";
     }
 

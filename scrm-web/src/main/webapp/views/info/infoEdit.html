@@ -142,13 +142,9 @@
 
         })
 
-
-
         var infoSaveEditHandler = {
-
             uploadFile:function(obj, type) {
-
-                alert(obj);
+                console.log("服务器异常");
                 $.jBox.tip("正在上传...", "loading");
                 $.ajaxFileUpload({
                     url : "/common/upload",

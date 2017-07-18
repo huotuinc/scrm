@@ -12,6 +12,14 @@ import java.util.List;
  */
 public interface InfoService {
 
+
+    /**
+     * 通过ID 查找对应的资讯
+     * @param id
+     * @return
+     */
+    Info findOneById(Long id);
+
     /**
      * 根据Disable字段查询行数
      *
