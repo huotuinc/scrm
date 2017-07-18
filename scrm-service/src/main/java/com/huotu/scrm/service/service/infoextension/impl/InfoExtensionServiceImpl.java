@@ -2,13 +2,16 @@ package com.huotu.scrm.service.service.infoextension.impl;
 
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.model.StatisticalInformation;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
+import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,12 +24,13 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private InfoRepository infoRepository;
-
     @Autowired
     private InfoBrowseRepository infoBrowseRepository;
+    @Autowired
+    private DayReportService dayReportService;
+
 
     @Override
     public int getUserType(Long userId) {
@@ -54,7 +58,25 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             infoModel.setForwardNum(getInfoForwardNum(info.getId()));
             infoModel.setVisitorNum(getVisitorNum(info.getId()));
             infoModel.setReleaseTime(getReleaseTime(info.getId()));
+            infoModels.add(infoModel);
         });
+        return infoModels;
+    }
+
+    @Override
+    public StatisticalInformation getInformation(Long userId) {
+        StatisticalInformation statisticalInformation = new StatisticalInformation();
+        //获取今日日期
+        LocalDate today = LocalDate.now();
+        //设置今日访客量
+//        int visitorNum = (int) infoBrowseRepository.countBySourceUserIdAndBrowseTime(userId, today);
+//        statisticalInformation.setDayVisitorNum(visitorNum);
+//        //设置今日预计积分
+//        int dayScore = dayReportService.getEstimateScore(userId, today);
+//        statisticalInformation.setDayScore(dayScore);
+        //获取累积积分
+        int accumulateScore = dayReportService.getCumulativeScore(userId);
+        statisticalInformation.setAccumulateScore(accumulateScore);
         return null;
     }
 

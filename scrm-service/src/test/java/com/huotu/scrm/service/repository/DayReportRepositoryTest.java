@@ -9,7 +9,6 @@ import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -29,20 +28,9 @@ public class DayReportRepositoryTest extends CommonTestBase {
     @Autowired
     private MonthReportRepository monthReportRepository;
 
-    /**
-     * 测试日期工具类
-     */
     @Test
-    public void testDateUtil() {
-        System.out.println("");
-    }
-
-
-    //
-    @Test
-    @Rollback(false)
     public void testDayReportRepository() {
-       LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now();
         DayReport dayReport = new DayReport();
         dayReport.setReportDay(now);
         System.out.println(now.minusDays(1));
@@ -51,7 +39,7 @@ public class DayReportRepositoryTest extends CommonTestBase {
         System.out.println(date);
         List<MonthReport> list = monthReportRepository.findByReportMonthOrderByExtensionScoreDesc(date);
         System.out.println(list.size());
-        list.forEach(p->{
+        list.forEach(p -> {
             System.out.println(p.getExtensionScore());
         });
     }

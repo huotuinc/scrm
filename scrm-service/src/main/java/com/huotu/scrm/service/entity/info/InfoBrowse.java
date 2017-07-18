@@ -1,9 +1,7 @@
 package com.huotu.scrm.service.entity.info;
 
-import com.huotu.scrm.service.entity.support.LocalDateAttributeConverter;
 import lombok.Getter;
 import lombok.Setter;
-import org.eclipse.persistence.annotations.Converter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * Created by luohaibo on 2017/7/11.
@@ -58,8 +56,7 @@ public class InfoBrowse {
     /**
      * 资讯查看时间
      */
-    @Column(name = "Brose_Time",columnDefinition = "date")
-    @Converter(name = "",converterClass = LocalDateAttributeConverter.class)
-    private LocalDate browseTime;
+    @Column(name = "Brose_Time", columnDefinition = "datetime")
+    private LocalDateTime browseTime;
 
 }

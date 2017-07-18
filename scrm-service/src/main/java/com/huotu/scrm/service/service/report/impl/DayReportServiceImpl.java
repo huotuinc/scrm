@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +49,10 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDate today = LocalDate.now();
         //获取昨日日期
         LocalDate lastDay = today.minusDays(1);
+        //获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        //获取昨天时间（时分秒默认为零）
+        LocalDateTime lastTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.minusDays(1).getDayOfMonth(), 0, 0, 0);
         List<Long> bySourceUserIdList = infoBrowseRepository.findBySourceUserId();
         for (long sourceUserId : bySourceUserIdList) {
             DayReport dayReport = new DayReport();
@@ -62,15 +67,15 @@ public class DayReportServiceImpl implements DayReportService {
             UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
             dayReport.setSalesman(userLevel.isSalesman());
             //设置每日咨询转发量
-            int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(sourceUserId, lastDay);
+            int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(lastTime, now, sourceUserId);
             dayReport.setForwardNum(forwardNumBySourceUserId);
             //设置每日访客量
-            long countBySourceUserId = infoBrowseRepository.countBySourceUserIdAndBrowseTime(sourceUserId, lastDay);
-            dayReport.setVisitorNum((int) countBySourceUserId);
+            int countBySourceUserId = infoBrowseRepository.countBySourceUserIdAndBrowseTime(sourceUserId, lastTime, now);
+            dayReport.setVisitorNum(countBySourceUserId);
             //设置每日推广积分（咨询转发奖励和转发咨询浏览奖励）
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
             //获取转发资讯奖励积分
-            int forwardScore = getEstimateScore(sourceUserId, lastDay);
+            int forwardScore = getEstimateScore(sourceUserId, lastTime, now);
             //获取每日访客量奖励积分
             int visitorScore = 0;
             //获取访客量转换比例
@@ -87,7 +92,7 @@ public class DayReportServiceImpl implements DayReportService {
             dayReport.setExtensionScore(visitorScore + forwardScore);
             //设置每日被关注量(销售员特有)
             if (dayReport.isSalesman()) {
-                long countByUserId = businessCardRecordReposity.countByUserId(sourceUserId);
+                long countByUserId = businessCardRecordReposity.countByUserId(sourceUserId, lastTime, now);
                 dayReport.setFollowNum((int) countByUserId);
             } else {
                 dayReport.setFollowNum(0);
@@ -99,8 +104,7 @@ public class DayReportServiceImpl implements DayReportService {
             //设置每日访客排名
         }
         for (long userId : bySourceUserIdList) {
-//            DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, lastDay);
-            DayReport dayReport = null;
+            DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, lastDay);
             int visitorRanking = visitorRanking(userId, lastDay);
             dayReport.setVisitorRanking(visitorRanking);
             //设置每日积分排名
@@ -120,14 +124,15 @@ public class DayReportServiceImpl implements DayReportService {
     /**
      * 统计预计积分
      *
-     * @param userId 用户ID
-     * @param date   统计日期
+     * @param userId  用户ID
+     * @param minDate 统计起始日期
+     * @param maxDate 统计最后日期
      * @return
      */
     @Override
-    public int getEstimateScore(Long userId, LocalDate date) {
+    public int getEstimateScore(Long userId, LocalDateTime minDate, LocalDateTime maxDate) {
         User user = userRepository.findOne(userId);
-        int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(userId, date);
+        int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(minDate, maxDate,userId);
         InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
         //获取转发咨询浏览量奖励积分
         int forwardScore = 0;

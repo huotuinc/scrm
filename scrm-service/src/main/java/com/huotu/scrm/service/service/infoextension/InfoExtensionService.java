@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.service.infoextension;
 
 import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.model.StatisticalInformation;
 
 import java.util.List;
 
@@ -24,4 +25,12 @@ public interface InfoExtensionService {
      * @return
      */
     List<InfoModel> findInfo(Long userId, int userType);
+
+    /**
+     * 统计用户信息 （积分排名等）
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    StatisticalInformation getInformation(Long userId);
 }

@@ -45,7 +45,7 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
     @Query("select distinct t.userId from DayReport t ")
     List<Long> findByUserId();
 
-//   DayReport findByUserIdAndReportDay(Long userId, LocalDate date);
+    DayReport findByUserIdAndReportDay(Long userId, LocalDate date);
 
     @Query("select t from DayReport t where t.userId=?1 and t.reportDay>=?2")
     List<DayReport> findByReportDay(Long userId, LocalDate date);
