@@ -43,5 +43,4 @@ public class BusinessCardRecord implements Serializable {
     @Column(name = "Follow_Date", columnDefinition = "datetime")
     private LocalDateTime followDate;
 
-
 }

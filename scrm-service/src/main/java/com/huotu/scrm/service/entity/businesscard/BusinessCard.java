@@ -10,17 +10,16 @@ import java.io.Serializable;
  * 销售员名片信息表
  * Created by jinxiangdong on 2017/7/11.
  */
-@Table(name = "SCRM_BusinessCard" )
+@Table(name = "SCRM_BusinessCard")
 @Getter
 @Setter
 @Entity
 public class BusinessCard implements Serializable {
-
     /***
      * UserId
      */
     @Id
-    @Column(name = "User_Id" )
+    @Column(name = "User_Id")
     private Long userId;
     /***
      * 商户Id
@@ -31,17 +30,17 @@ public class BusinessCard implements Serializable {
     /***
      * 名片头像地址
      */
-    @Column(name = "Avatar" , length = 512)
+    @Column(name = "Avatar", length = 512)
     private String avatar;
     /***
      * 职位
      */
-    @Column(name = "Job" , length = 100)
+    @Column(name = "Job", length = 100)
     private String job;
     /***
      * 企业名
      */
-    @Column(name="CompanyName")
+    @Column(name = "CompanyName")
     private String companyName;
     /***
      * 固定电话
@@ -51,17 +50,17 @@ public class BusinessCard implements Serializable {
     /***
      * QQ
      */
-    @Column(name = "QQ",length = 20)
+    @Column(name = "QQ", length = 20)
     private String qq;
     /***
      * 企业地址
      */
-    @Column(name = "CompanyAddress",length = 512)
+    @Column(name = "CompanyAddress", length = 512)
     private String companyAddress;
     /***
      * 邮箱
      */
-    @Column(name="Email",length = 100)
+    @Column(name = "Email", length = 100)
     private String email;
 
 }
