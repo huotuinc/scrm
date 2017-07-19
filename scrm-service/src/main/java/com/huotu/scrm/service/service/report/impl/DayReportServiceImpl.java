@@ -81,7 +81,7 @@ public class DayReportServiceImpl implements DayReportService {
             //获取访客量转换比例
             int exchangeRate = infoConfigure.getExchangeRate();
             //判断是否开启访客量积分奖励
-            if (infoConfigure.isExchange()) {
+            if (infoConfigure.isExchangeSwitch()) {
                 //判断小伙伴是否开启访客量奖励
                 int exchangeUserType = infoConfigure.getExchangeUserType();
                 //exchangeUserType 1：小伙伴 2：小伙伴 + 会员
@@ -139,13 +139,13 @@ public class DayReportServiceImpl implements DayReportService {
         //获取咨询转发转换比例
         int rewardScore = infoConfigure.getRewardScore();
         //判断是否开启咨询转发积分奖励
-        if (infoConfigure.getIsReward()) {
+        if (infoConfigure.isRewardSwitch()) {
             //判断小伙伴是否开启咨询转发奖励
             int rewardUserType = infoConfigure.getRewardUserType();
             //rewardUserType 1：小伙伴 2：小伙伴 + 会员
             if (rewardUserType == 1 || rewardUserType == 2) {
                 //判断是否开启奖励次数限制
-                if (infoConfigure.isReward_Limit()) {
+                if (infoConfigure.isRewardLimitSwitch()) {
                     int rewardLimitNum = infoConfigure.getRewardLimitNum();
                     if (rewardLimitNum < forwardNumBySourceUserId) {
                         forwardScore = rewardLimitNum * rewardScore;
