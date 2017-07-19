@@ -37,4 +37,9 @@ public class InfoRewardConfigureServiceImpl implements InfoRewardConfigureServic
         newInfoConfigure.setInfoIntroduceUrl(infoConfigure.getInfoIntroduceUrl());
         return null;
     }
+
+    @Override
+    public InfoConfigure readRewardConfigure(Long customerId) {
+        return infoConfigureRepository.findOne(customerId);
+    }
 }
