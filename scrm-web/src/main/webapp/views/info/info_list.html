@@ -58,13 +58,10 @@
                         <label class="">资讯管理</label>
                     </div>
                     <!--添加资讯按钮-->
-                    <form class="search-panel" method="get" action="#" th:action="@{/mall/info/edit}"
-                          id="addInfoForm">
-                        <div style="text-align:right;">
-                            <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button" >添加资讯
-                            </button>
-                        </div>
-                    </form>
+                    <div style="text-align:right;">
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button">添加资讯
+                        </button>
+                    </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
@@ -219,7 +216,7 @@
         },
 
         editInfo:function(){
-            $('addInfoForm').submit();
+            window.location.href = "/mall/info/edit";
         }
     }
 
