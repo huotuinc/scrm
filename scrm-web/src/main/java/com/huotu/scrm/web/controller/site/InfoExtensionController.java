@@ -1,6 +1,7 @@
 package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.model.StatisticalInformation;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,10 @@ public class InfoExtensionController extends SiteBaseController {
     /**
      * 进入资讯状态（普通会员：进入资讯推广 小伙伴：进入推广中心）
      *
+     * @param userId 用户ID
+     * @param model
      * @return
+     * @throws URISyntaxException
      */
     @RequestMapping("/getInfoExtension")
     public String getInfoExtension(@ModelAttribute("userId") Long userId, Model model) throws URISyntaxException {
@@ -39,10 +43,23 @@ public class InfoExtensionController extends SiteBaseController {
         }
         model.addAttribute("infoModes", infoModels);
         if (userType == 0) {//普通会员
-            return "infoextension/info_center";
-        } else {//小伙伴
-
             return "infoextension/info_extension";
+        } else {//小伙伴
+            StatisticalInformation statisticalInformation = infoExtensionService.getInformation(userId);
+            model.addAttribute("statisticalInformation", statisticalInformation);
+            return "infoextension/info_center";
         }
+    }
+
+    /**
+     * 转到今日积分排名页面
+     *
+     * @param userId 用户ID
+     * @param model
+     * @return
+     */
+    @RequestMapping("/getScoreRanking")
+    public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) {
+        return "extensiondetail/personal-ranking";
     }
 }

@@ -86,14 +86,14 @@ public class DayReportServiceImpl implements DayReportService {
                 int exchangeUserType = infoConfigure.getExchangeUserType();
                 //exchangeUserType 1：小伙伴 2：小伙伴 + 会员
                 if (exchangeUserType == 1 || exchangeUserType == 2) {
-                    visitorScore = (int) (countBySourceUserId / exchangeRate);
+                    visitorScore = (countBySourceUserId / exchangeRate);
                 }
             }
             dayReport.setExtensionScore(visitorScore + forwardScore);
             //设置每日被关注量(销售员特有)
             if (dayReport.isSalesman()) {
-                long countByUserId = businessCardRecordReposity.countByUserId(sourceUserId, lastTime, now);
-                dayReport.setFollowNum((int) countByUserId);
+                int countByUserId = businessCardRecordReposity.countByUserId(sourceUserId, lastTime, now);
+                dayReport.setFollowNum(countByUserId);
             } else {
                 dayReport.setFollowNum(0);
             }

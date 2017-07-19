@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -50,5 +51,7 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
     @Query("select t from DayReport t where t.userId=?1 and t.reportDay>=?2")
     List<DayReport> findByReportDay(Long userId, LocalDate date);
 
+    @Query("select t from DayReport t where t.userId = ?1 and t.reportDay<=?2")
+    List<DayReport> findAllFollowNum(Long userId, LocalDateTime date);
 
 }

@@ -30,7 +30,7 @@ public class DayReportServiceTest extends CommonTestBase {
     public void testDayReportService() {
 //        dayReportService.saveDayReport();
         int cumulativeScore = dayReportService.getCumulativeScore(687500L);
-      dayReportService.saveDayReport();
+        dayReportService.saveDayReport();
         System.out.println(cumulativeScore);
         LocalDateTime now = LocalDateTime.now();
 //        now.minusDays(1);
@@ -38,8 +38,10 @@ public class DayReportServiceTest extends CommonTestBase {
         LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
         infoBrowseRepository.findForwardNumBySourceUserId(now.minusDays(2), now, 687500L);
         List<DayReport> all = dayReportRepository.findAll();
-        all.forEach(p->{
+        all.forEach(p -> {
+            System.out.println(p.getId());
             System.out.println(p.getExtensionScore());
+            System.out.println(p.getFollowNum());
         });
     }
 

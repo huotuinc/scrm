@@ -23,11 +23,6 @@
                     推广中心
                 </a>
             </li>
-            <li>
-                <a href="#">
-                    我的推广
-                </a>
-            </li>
         </ul>
     </div>
 </div>
@@ -44,31 +39,31 @@
     <ul class="dailiren-float-ul ka  pjf_4ge ">
         <li>
             <a href="javascript:void(0);">
-                <p class="sj">3531</p>
+                <p class="sj" th:text="${statisticalInformation.dayScoreRanking}"></p>
                 <p>今日排名</p>
             </a>
         </li>
         <li>
             <a href="javascript:void(0);">
-                <p class="sj">65.30</p>
+                <p class="sj" th:text="${statisticalInformation.dayVisitorNum}"></p>
                 <p>创造UV</p>
             </a>
         </li>
         <li>
             <a href="javascript:void(0);">
-                <p class="sj">875</p>
-                <p>今日积分</p>
+                <p class="sj" th:text="${statisticalInformation.dayScore}"></p>
+                <p>今日预计积分</p>
             </a>
         </li>
         <li>
             <a href="javascript:void(0);">
-                <p class="sj">3411</p>
+                <p class="sj" th:text="${statisticalInformation.accumulateScore}"></p>
                 <p>累计积分</p>
             </a>
         </li>
         <li>
             <a href="javascript:void(0);">
-                <p class="sj">3411</p>
+                <p class="sj" th:text="${statisticalInformation.followNum}"></p>
                 <p>关注人数</p>
             </a>
         </li>

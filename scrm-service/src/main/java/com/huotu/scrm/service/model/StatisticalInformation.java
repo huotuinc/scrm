@@ -31,7 +31,7 @@ public class StatisticalInformation implements Serializable {
      */
     private int accumulateScore;
     /**
-     * 今日关注人数（销售员特有）
+     * 关注人数（销售员特有 -1: 不是销售员）
      */
-    private int dayFollowNum;
+    private int followNum = -1;
 }

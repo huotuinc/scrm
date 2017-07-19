@@ -1,17 +1,22 @@
 package com.huotu.scrm.service.service.infoextension.impl;
 
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
+import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.model.InfoModel;
 import com.huotu.scrm.service.model.StatisticalInformation;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.InfoRepository;
+import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
+import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +35,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     private InfoBrowseRepository infoBrowseRepository;
     @Autowired
     private DayReportService dayReportService;
+    @Autowired
+    private UserLevelRepository userLevelRepository;
+    @Autowired
+    private DayReportRepository dayReportRepository;
 
 
     @Override
@@ -66,18 +75,33 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     @Override
     public StatisticalInformation getInformation(Long userId) {
         StatisticalInformation statisticalInformation = new StatisticalInformation();
-        //获取今日日期
-        LocalDate today = LocalDate.now();
+        //获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        //获取昨天时间（时分秒默认为零）
+        LocalDateTime beginTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
         //设置今日访客量
-//        int visitorNum = (int) infoBrowseRepository.countBySourceUserIdAndBrowseTime(userId, today);
-//        statisticalInformation.setDayVisitorNum(visitorNum);
-//        //设置今日预计积分
-//        int dayScore = dayReportService.getEstimateScore(userId, today);
-//        statisticalInformation.setDayScore(dayScore);
+        int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTime(userId, beginTime, now);
+        statisticalInformation.setDayVisitorNum(visitorNum);
+        //设置今日预计积分
+        int dayScore = dayReportService.getEstimateScore(userId, beginTime, now);
+        statisticalInformation.setDayScore(dayScore);
         //获取累积积分
         int accumulateScore = dayReportService.getCumulativeScore(userId);
         statisticalInformation.setAccumulateScore(accumulateScore);
-        return null;
+        //获取关注人数（销售员特有）
+        User user = userRepository.findOne(userId);
+        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        int followNum = 0;
+        if (userLevel.isSalesman()) {
+            List<DayReport> followNumList = dayReportRepository.findAllFollowNum(userId, now);
+            for (DayReport dayReport : followNumList
+                    ) {
+                followNum += dayReport.getFollowNum();
+            }
+            statisticalInformation.setFollowNum(followNum);
+        }
+        //获取积分排名
+        return statisticalInformation;
     }
 
     /**
