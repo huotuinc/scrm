@@ -1,11 +1,10 @@
 package com.huotu.scrm.web.controller.mall;
 
 
-import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
-import com.huotu.scrm.service.service.InfoService;
+import com.huotu.scrm.service.service.info.InfoService;
+import com.huotu.scrm.web.service.StaticResourceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 
 /**
  * 资讯管理控制器
@@ -28,15 +28,16 @@ public class InfoController extends MallBaseController {
     private Log logger = LogFactory.getLog(InfoController.class);
     @Autowired
     InfoService infoService;
+    @Autowired
+    StaticResourceService staticResourceService;
 
     /***
      * 展示资讯首页内容
      * @param model
      * @return
      */
-    @RequestMapping(value = "/infoLists")
+    @RequestMapping(value = "/info/infoList")
     public String infoHomeLists(InformationSearch informationSearch, @ModelAttribute("customerId") Long customerId , Model model){
-
         logger.info(informationSearch);
         informationSearch.setCustomerId(customerId);
         logger.info(informationSearch);
@@ -53,28 +54,20 @@ public class InfoController extends MallBaseController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/edit")
-    public String infoEditPage(Model model){
-        model.addAttribute("info",new Info());
-        return "info/infoEdit";
-    }
-
-    /**
-     * 获取行数记录总数
-     * @param disable
-     * @return
-     */
-    @RequestMapping("/count")
-    @ResponseBody
-    public ApiResult getInfoListsAccount(boolean disable,int page){
-
-        logger.info(infoService.infoListsCount(disable)+"+++"+page);
-        Map<String,Long> map = new HashMap<>();
-        map.put("amount", infoService.infoListsCount(disable));
-        ApiResult apiResult = ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",map);
-        logger.info(apiResult);
-        return  apiResult;
-
+    @RequestMapping(value = "/info/edit")
+    public String infoEditPage(@RequestParam(required = false,defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId){
+        Info info =  infoService.findOneById(id);
+        if(info.getId() != null && info.getId() != 0){
+            try {
+                URI imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
+                logger.info(imgUri.toString());
+                info.setImageUrl(imgUri.toString());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+        model.addAttribute("info",info);
+        return "info/info_edit";
     }
 
     /**
@@ -82,10 +75,14 @@ public class InfoController extends MallBaseController {
      * @param info
      * @return
      */
-    @RequestMapping("saveInfo")
-    public String saveInfo(Info info){
+    @RequestMapping("/info/saveInfo")
+    public String saveInfo(@ModelAttribute("customerId") Long customerId, Info info){
+        logger.info(info);
+        if (info.getCustomerId() == null || info.getCustomerId() == 0){
+            info.setCustomerId(customerId);
+        }
         infoService.infoSave(info);
-        return "index";
+        return "redirect:/mall/info/infoList";
     }
 
 

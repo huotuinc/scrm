@@ -10,8 +10,8 @@ import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
 import com.huotu.scrm.service.repository.mall.UserRepository;
-import com.huotu.scrm.service.service.BusinessCardRecordService;
-import com.huotu.scrm.service.service.BusinessCardService;
+import com.huotu.scrm.service.service.businessCard.BusinessCardRecordService;
+import com.huotu.scrm.service.service.businessCard.BusinessCardService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,20 +22,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
-
+import java.time.LocalDateTime;
 
 /**
  * 名片控制器
  * Created by jinxiangdong on 2017/7/11.
  */
-//@RequestMapping("/businessCard")
+
 @Controller
+@RequestMapping("/site/businessCard")
 public class BusinessCardController extends SiteBaseController {
     @Autowired
     private BusinessCardService businessCardService;
@@ -53,9 +51,10 @@ public class BusinessCardController extends SiteBaseController {
      * @param model
      * @return
      */
-    @RequestMapping("/editBusinessCard")
+    @RequestMapping(value = "/editBusinessCard" , method = RequestMethod.GET)
     public String editBusinessCard(HttpServletRequest request,
-                                   @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId, Model model) {
+                                   @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+                                   Model model) {
         long userId = this.getUserId(request);
         BusinessCard businessCard = businessCardService.getBusinessCard(userId, customerId);
         if (businessCard == null) {
@@ -79,7 +78,6 @@ public class BusinessCardController extends SiteBaseController {
     public ApiResult uploadAvatar(HttpServletRequest request,
                                   @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
                                   MultipartFile btnFile) throws Exception {
-
         if (btnFile == null || btnFile.isEmpty() || btnFile.getSize() < 1) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
         }
@@ -150,7 +148,7 @@ public class BusinessCardController extends SiteBaseController {
             boolean isFollowed = businessCardRecordService.existsByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
             if (!isFollowed) {
                 BusinessCardRecord follow = new BusinessCardRecord();
-                follow.setFollowDate(new Date());
+                follow.setFollowDate(LocalDateTime.now());
                 follow.setFollowId(followerId);
                 follow.setUserId(salesmanId);
                 follow.setCustomerId(customerId);

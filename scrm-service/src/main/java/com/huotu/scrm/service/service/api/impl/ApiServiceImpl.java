@@ -4,7 +4,7 @@ import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.httputil.HttpClientUtil;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.mall.Customer;
-import com.huotu.scrm.service.repository.CustomerRepository;
+import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.service.api.ApiService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

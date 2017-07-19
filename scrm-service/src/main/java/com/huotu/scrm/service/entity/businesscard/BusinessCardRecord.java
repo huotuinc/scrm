@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 销售员名片关注表
@@ -18,12 +18,12 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(name = "SCRM_BusinessCardRecord")
-public class BusinessCardRecord implements Serializable{
+public class BusinessCardRecord implements Serializable {
     /***
      * 被关注者ID
      */
     @Id
-    @Column(name = "User_Id" )
+    @Column(name = "User_Id")
     private Long userId;
     /***
      * 商户Id
@@ -40,8 +40,7 @@ public class BusinessCardRecord implements Serializable{
     /***
      * 关注时间
      */
-    @Column(name = "Follow_Date")
-    private Date followDate;
-
+    @Column(name = "Follow_Date", columnDefinition = "datetime")
+    private LocalDateTime followDate;
 
 }

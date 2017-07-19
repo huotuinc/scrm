@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -37,21 +38,21 @@ public class Info {
     /**
      * 资讯标题
      */
-    @Column(name = "Title", length = 30)
+    @Column(name = "Title", length = 60)
     private String title;
 
 
     /**
      * 资讯简介
      */
-    @Column(name = "Introduce", length = 50)
+    @Column(name = "Introduce", length = 100)
     private String introduce;
 
 
     /**
      * 资讯详情
      */
-    @Column(name = "Content", length = 200)
+    @Column(name = "Content", length = 400)
     private String content;
 
 
@@ -72,9 +73,8 @@ public class Info {
      * 资讯创建时间
      */
     @Column(name = "Create_Time")
-    @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private LocalDateTime createTime;
 
 
     /**

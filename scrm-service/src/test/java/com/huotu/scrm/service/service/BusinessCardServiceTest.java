@@ -2,11 +2,18 @@ package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
+import com.huotu.scrm.service.entity.mall.Customer;
+import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
+import com.huotu.scrm.service.repository.mall.CustomerRepository;
+import com.huotu.scrm.service.repository.mall.UserRepository;
+import com.huotu.scrm.service.service.businessCard.BusinessCardService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Random;
 
 /**
  * Created by Administrator on 2017/7/11.
@@ -14,20 +21,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BusinessCardServiceTest extends CommonTestBase {
     @Autowired
     private BusinessCardService businessCardService;
+    @Autowired
+    CustomerRepository customerRepository;
+    @Autowired
+    UserRepository userRepository;
 
     @Test
     public void getSalesmanBusinessCard(){
         //测试不存在的信息
-        Long userId=22222222L;
-        Long customerId = 2323L;
-        Long followerId = 0L;
+        Customer customer = mockCustomer();
+        customer = customerRepository.save(customer);
+        Random random =new Random();
+        Long customerId = customer.getId();
+        Long userId= random.nextLong();
+        Long followerId = random.nextLong();
         SalesmanBusinessCard userBusinessCard = businessCardService.getSalesmanBusinessCard(customerId , userId , followerId );
         Assert.assertEquals(null , userBusinessCard.getBusinessCard());
         Assert.assertEquals(null , userBusinessCard.getSalesman());
         //测试存在用户基本信息和不存在名片信息
-        userId=124L;
-        customerId=742L;
-        followerId=0L;
+
+        User user = mockUser(customerId);
+        user = userRepository.save(user);
+        User user1 = userRepository.findOne(user.getId());
+        User user2 = userRepository.getByIdAndCustomerId(user.getId(),customerId);
+        Assert.assertEquals(user.getId(),user2.getId());
+        userId=user.getId();
+        //User follower = mockUser(customerId);
+        //followerId = random.nextLong();
+
+
         userBusinessCard = businessCardService.getSalesmanBusinessCard( customerId , userId , followerId);
         Assert.assertTrue( userBusinessCard !=null );
         Assert.assertTrue( userBusinessCard.getSalesman() !=null);
