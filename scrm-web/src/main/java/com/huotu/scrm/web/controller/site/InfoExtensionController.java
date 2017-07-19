@@ -1,5 +1,9 @@
 package com.huotu.scrm.web.controller.site;
 
+import com.huotu.scrm.service.model.DayFollowNumInfo;
+import com.huotu.scrm.service.model.DayScoreInfo;
+import com.huotu.scrm.service.model.DayScoreRankingInfo;
+import com.huotu.scrm.service.model.DayVisitorNumInfo;
 import com.huotu.scrm.service.model.InfoModel;
 import com.huotu.scrm.service.model.StatisticalInformation;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
@@ -18,6 +22,7 @@ import java.util.List;
  * Created by hxh on 2017-07-17.
  */
 @Controller
+@RequestMapping("/extension")
 public class InfoExtensionController extends SiteBaseController {
 
     @Autowired
@@ -60,7 +65,49 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/getScoreRanking")
     public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) {
+        DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(userId);
+        model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
+        return "extensiondetail/personal_ranking";
+    }
 
-        return "extensiondetail/personal-ranking";
+    /**
+     * 转到今日积分统计页面
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    @RequestMapping("/getScoreInfo")
+    public String getScoreInfo(@ModelAttribute("userId") Long userId, Model model) {
+        DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(userId);
+        model.addAttribute("dayScoreInfo", dayScoreInfo);
+        return "extensiondetail/personal_score";
+    }
+
+    /**
+     * 转到今日关注统计页面
+     *
+     * @param userId 用户ID
+     * @param model
+     * @return
+     */
+    @RequestMapping("/getFollowInfo")
+    public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) {
+        DayFollowNumInfo dayFollowNumInfo = infoExtensionService.getFollowNumInfo(userId);
+        model.addAttribute("dayFollowNumInfo", dayFollowNumInfo);
+        return "extensiondetail/personal_follow";
+    }
+
+    /**
+     * 转到今日访问量页面
+     *
+     * @param useruId
+     * @param model
+     * @return
+     */
+    @RequestMapping("/getVisitorInfo")
+    public String getVisitorInfo(@ModelAttribute("userId") Long useruId, Model model) {
+        DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(useruId);
+        model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
+        return "extensiondetail/personal_uv";
     }
 }

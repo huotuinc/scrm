@@ -12,14 +12,14 @@
           href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
     <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
     <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"/>
-    <title>关注人数</title>
+    <title>推广明细</title>
 </head>
 <body class="grbg">
 <div class="bd">
     <div style="position: fixed;top:0px;left:0px;right:0px; z-index:99999">
         <div class="sl-ka superli" style="font-size:12px">
             <ul class="sl-float-ul ka  pjf_5ge custom-paixu">
-                <li>
+                <li class="on">
                     <a href="personal-ranking.html">
                         排名
                     </a>
@@ -34,7 +34,7 @@
                         积分
                     </a>
                 </li>
-                <li class="on">
+                <li>
                     <a href="personal-follow.html">
                         关注
                     </a>
@@ -46,8 +46,8 @@
     <div class="f-bigbox">
         <div class="fa-bigbox">
             <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                <p class="phone">今日关注人数（位）</p>
-                <p style="color: #fff; font-size: 30px;" th:text="${dayFollowNumInfo.dayFollowNum}"></p>
+                <p class="phone">今日积分排名（位）</p>
+                <p style="color: #fff; font-size: 30px;" th:text="${dayScoreRankingInfo.dayScoreRanking}"></p>
             </div>
             <p class="f-rgo" style="display:none">
                 <a href="">
@@ -63,25 +63,25 @@
                 <ul class="dailiren-float-ul ka  pjf_3ge ">
                     <li>
                         <a>
-                            <p class="sj" th:text="${dayFollowNumInfo.followRanking}"></p>
-                            <p>当前排名</p>
+                            <p class="sj" th:text="${dayScoreRankingInfo.monthScoreRanking}"></p>
+                            <p>本月积分排名（位）</p>
                         </a>
                     </li>
                     <li>
                         <a style="border-left: 1px solid #57acf0;">
-                            <p class="sj" th:text="${dayFollowNumInfo.highestFollowRanking}"></p>
-                            <p>最高月排名</p>
+                            <p class="sj" th:text="${dayScoreRankingInfo.highestMonthScoreRanking}"></p>
+                            <p>最高月积分排名（位）</p>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" th:each="monthFollowInfo:${dayFollowNumInfo.monthFollowRankingList}">
+            <a class="weui_cell" th:each="monthRanking:${dayScoreRankingInfo.monthScoreRankingList}">
                 <div class="weui_cell_bd weui_cell_primary">
-                    <p th:text="${monthFollowInfo.month}"></p>
+                    <p th:text="${monthRanking.month}"></p>
                 </div>
-                <div class="weui_cell_ft" th:text="${monthFollowInfo.date}"></div>
+                <div class="weui_cell_ft" th:text="${monthRanking.date}"></div>
             </a>
         </div>
     </div>

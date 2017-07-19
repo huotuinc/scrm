@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport"
           content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
@@ -19,12 +19,12 @@
     <div style="position: fixed;top:0px;left:0px;right:0px; z-index:99999">
         <div class="sl-ka superli" style="font-size:12px">
             <ul class="sl-float-ul ka  pjf_5ge custom-paixu">
-                <li class="on">
+                <li>
                     <a href="personal-ranking.html">
                         排名
                     </a>
                 </li>
-                <li>
+                <li class="on">
                     <a href="personal-uv.html">
                         UV
                     </a>
@@ -46,12 +46,12 @@
     <div class="f-bigbox">
         <div class="fa-bigbox">
             <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                <p class="phone">今日积分排名（位）</p>
-                <p style="color: #fff; font-size: 30px;">10</p>
+                <p class="phone">今日UV（位）</p>
+                <p style="color: #fff; font-size: 30px;" th:text="${dayVisitorNumInfo.dayVisitorBum}">10</p>
             </div>
             <p class="f-rgo" style="display:none">
                 <a href="">
-                    <img style="width:30px;" src="images/szsz.png">
+                    <img style="width:30px;" src="../../resources/images/szsz.png">
                 </a>
             </p>
             <p style="clear:both"></p>
@@ -62,51 +62,27 @@
             <div class="dailiren-s-ka">
                 <ul class="dailiren-float-ul ka  pjf_3ge ">
                     <li>
-                        <a href="ye.html">
-                            <p class="sj">12</p>
-                            <p>本月积分排名（位）</p>
+                        <a>
+                            <p class="sj" th:text="${dayVisitorNumInfo.monthVisitorNum}"></p>
+                            <p>本月UV（人）</p>
                         </a>
                     </li>
                     <li>
-                        <a href="hb.html" style="border-left: 1px solid #57acf0;">
-                            <p class="sj">5</p>
-                            <p>最高月积分排名（位）</p>
+                        <a style="border-left: 1px solid #57acf0;">
+                            <p class="sj" th:text="${dayVisitorNumInfo.highestMonthVisitorNum}"></p>
+                            <p>历史最最高月UV（人）</p>
                         </a>
                     </li>
 
                 </ul>
             </div>
         </div>
-        <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" href="wddd.html">
+        <div class="weui_cells weui_cells_access" th:each="monthVisitorInfo:${dayVisitorNumInfo.monthVisitorNumList}">
+            <a class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
-                    <p>本月排名</p>
+                    <p th:text="${monthVisitorInfo.month}"></p>
                 </div>
-                <div class="weui_cell_ft">7</div>
-            </a>
-            <a class="weui_cell" href="hdxq.html">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>上月排名</p>
-                </div>
-                <div class="weui_cell_ft">2</div>
-            </a>
-            <a class="weui_cell" href="wdsc.html">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>4月排名</p>
-                </div>
-                <div class="weui_cell_ft">15</div>
-            </a>
-            <a class="weui_cell" href="javascript:;">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>3月排名</p>
-                </div>
-                <div class="weui_cell_ft">10</div>
-            </a>
-            <a class="weui_cell" href="javascript:;">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>2月排名</p>
-                </div>
-                <div class="weui_cell_ft">60</div>
+                <div class="weui_cell_ft" th:text="${monthVisitorInfo.date}"></div>
             </a>
         </div>
     </div>

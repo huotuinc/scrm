@@ -70,8 +70,8 @@
     </ul>
 </div>
 <p style="height: 10px"></p>
-<div class="xzdd-list" th:each="infoMode:${infoModes}">
-    <div class="weui_panel">
+<div class="xzdd-list">
+    <div class="weui_panel" th:each="infoMode:${infoModes}">
         <div class="weui_panel_bd">
             <div class="weui_media_box weui_media_text">
                 <div class="weui_media_hd">
@@ -90,6 +90,7 @@
                                 src="../../resources/images/three.png" width="100%" th:text="${infoMode.releaseTime}">
                         </li>
                     </ul>
+                    <button type="button" class="tuiguang">推广</button>
                 </div>
             </div>
         </div>

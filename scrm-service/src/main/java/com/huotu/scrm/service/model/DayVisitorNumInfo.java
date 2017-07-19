@@ -28,5 +28,5 @@ public class DayVisitorNumInfo implements Serializable {
     /**
      * 近几个月访客量（默认统计5个月包含本月）
      */
-    private List<Integer> monthVisitorNumList;
+    private List<MonthStatisticInfo> monthVisitorNumList;
 }

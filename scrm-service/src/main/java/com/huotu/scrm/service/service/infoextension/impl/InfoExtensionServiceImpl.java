@@ -5,11 +5,13 @@ import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
+import com.huotu.scrm.service.entity.report.MonthReport;
 import com.huotu.scrm.service.model.DayFollowNumInfo;
 import com.huotu.scrm.service.model.DayScoreInfo;
 import com.huotu.scrm.service.model.DayScoreRankingInfo;
 import com.huotu.scrm.service.model.DayVisitorNumInfo;
 import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.model.MonthStatisticInfo;
 import com.huotu.scrm.service.model.StatisticalInformation;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.InfoConfigureRepository;
@@ -17,12 +19,15 @@ import com.huotu.scrm.service.repository.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
+import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
 import com.huotu.scrm.service.service.report.DayReportService;
+import com.huotu.scrm.service.service.report.MonthReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -53,6 +58,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     private DayReportRepository dayReportRepository;
     @Autowired
     private InfoConfigureRepository infoConfigureRepository;
+    @Autowired
+    private MonthReportRepository monthReportRepository;
+    @Autowired
+    private MonthReportService monthReportService;
 
 
     @Override
@@ -161,22 +170,87 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Override
     public DayScoreRankingInfo getScoreRankingInfo(Long userId) {
-
+        //获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        //获取昨天时间（时分秒默认为零）
+        LocalDateTime beginTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
         return null;
     }
 
     @Override
     public DayScoreInfo getScoreInfo(Long userId) {
-        return null;
+        //获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        //获取昨天时间（时分秒默认为零）
+        LocalDateTime beginTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
+        LocalDate localDate = LocalDate.now();
+        DayScoreInfo dayScoreInfo = new DayScoreInfo();
+        int extensionScore = dayReportService.getEstimateScore(userId, beginTime, now);
+        dayScoreInfo.setDayScore(extensionScore);
+        //设置昨日积分
+        DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, localDate.minusDays(1));
+        dayScoreInfo.setLastDayScore(dayReport.getExtensionScore());
+        //设置历史累积积分
+        int cumulativeScore = dayReportService.getCumulativeScore(userId);
+        dayScoreInfo.setAccumulateScore(cumulativeScore);
+        //设置近几个月积分信息
+        List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            MonthStatisticInfo monthStatisticInfo = new MonthStatisticInfo();
+            if (i == 0) {
+                int monthScore = monthReportService.getExtensionScore(userId, localDate.withDayOfMonth(1), localDate);
+                monthStatisticInfo.setData(monthScore);
+            } else {
+                MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i));
+                monthStatisticInfo.setData(monthReport.getExtensionScore());
+            }
+            monthStatisticInfo.setMonth(now.minusMonths(i).getMonthValue());
+            monthStatisticInfoList.add(monthStatisticInfo);
+        }
+        dayScoreInfo.setMonthScoreList(monthStatisticInfoList);
+        return dayScoreInfo;
     }
 
     @Override
     public DayVisitorNumInfo getVisitorNumInfo(Long userId) {
+        DayVisitorNumInfo dayVisitorNumInfo = new DayVisitorNumInfo();
+        LocalDateTime now = LocalDateTime.now();
+        //获取昨天时间（时分秒默认为零）
+        LocalDateTime beginTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
+        LocalDate localDate = LocalDate.now();
+        //设置今日访客量
+        int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTime(userId, beginTime, now);
+        dayVisitorNumInfo.setDayVisitorBum(dayVisitorNum);
+        //设置本月访问量
+        int monthVisitorNum = monthReportService.getVisitorNum(userId, localDate.withDayOfMonth(1), localDate);
+        dayVisitorNumInfo.setMonthVisitorNum(monthVisitorNum + dayVisitorNum);
+        //设置历史最高月访问量
+        int highestMonthVisitorNum = monthReportRepository.findMaxMonthVisitorNumRanking(userId);
+        dayVisitorNumInfo.setHighestMonthVisitorNum(highestMonthVisitorNum);
+        //设置近几个月访问量
+        List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
+        MonthStatisticInfo monthInfo = new MonthStatisticInfo();
+        monthInfo.setMonth(now.getMonthValue());
+        monthInfo.setData(dayVisitorNumInfo.getMonthVisitorNum());
+        monthStatisticInfoList.add(monthInfo);
+        for (int i = 1; i < 5; i++) {
+            MonthStatisticInfo monthStatisticInfo = new MonthStatisticInfo();
+            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i));
+            monthStatisticInfo.setData(monthReport.getVisitorNum());
+            monthStatisticInfo.setMonth(now.minusMonths(i).getMonthValue());
+            monthStatisticInfoList.add(monthStatisticInfo);
+        }
+        dayVisitorNumInfo.setMonthVisitorNumList(monthStatisticInfoList);
         return null;
     }
 
     @Override
     public DayFollowNumInfo getFollowNumInfo(Long userId) {
+        DayFollowNumInfo dayFollowNumInfo = new DayFollowNumInfo();
+        //获取当前时间
+        LocalDateTime now = LocalDateTime.now();
+        //获取昨天时间（时分秒默认为零）
+        LocalDateTime beginTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
         return null;
     }
 
@@ -214,7 +288,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     }
 
 
-    public Date localDateTimeToDate(LocalDateTime time){
+    public Date localDateTimeToDate(LocalDateTime time) {
         ZoneId zone = ZoneId.systemDefault();
         Instant instant = time.atZone(zone).toInstant();
         Date date = Date.from(instant);
