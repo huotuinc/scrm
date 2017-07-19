@@ -59,7 +59,8 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">添加资讯</button>
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button">添加资讯
+                        </button>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -94,12 +95,12 @@
                                         总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
                                     </span>
                                 </td>
-                                <td th:text="${#dates.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
+                                <td th:text="${#temporals.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
                                 <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
                                 <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
                                     <span class="cursor-point">
-                                        <a href="info_Edit.html" th:href="@{/mall/info/edit(id=${info.id})}"><i class="fa fa-pencil tooltips" data-toggle="tooltip" data-original-title="编辑"></i></a>
+                                        <a href="info_edit.html" th:href="@{/mall/info/edit(id=${info.id})}"><i class="fa fa-pencil tooltips" data-toggle="tooltip" data-original-title="编辑"></i></a>
                                     </span>
                                     &nbsp;
                                     <span class="cursor-point">
@@ -149,7 +150,7 @@
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
                                     </span>
                                     &nbsp;
-                                    <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
+                                    <span onclick="" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
@@ -188,7 +189,6 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
-<script src="../js/infoJs/infoLists.js"></script>
 
 <script type="text/javascript">
     var pageIndex = [[${informationSearch.pageNo}]];
@@ -214,6 +214,10 @@
             $("input[name=pageNo]").val(pageNo);
             $('#searchForm').submit();
         },
+
+        editInfo:function(){
+            window.location.href = "/mall/info/edit";
+        }
     }
 
     $('.js-search').click(function () {
@@ -223,6 +227,12 @@
     $('.js-searchAll').click(function(){
         infoListHandler.searchAll();
     });
+
+    $('.js-edit').click(function(){
+        infoListHandler.editInfo();
+    });
+
+
 </script>
 </body>
 

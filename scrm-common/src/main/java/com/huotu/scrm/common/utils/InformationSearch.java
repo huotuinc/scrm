@@ -16,7 +16,7 @@ public class InformationSearch {
     private int status = 1;
     private int disable = 0;
     private int pageNo = 1;
-    private int pageSize = 5;
+    private int pageSize = Constant.PAGE_SIZE;
     private String searchCondition;
     private Long customerId;
     @Override

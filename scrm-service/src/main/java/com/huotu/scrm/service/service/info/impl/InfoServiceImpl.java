@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,13 +60,15 @@ public class InfoServiceImpl implements InfoService {
         } else {
             newInfo = new Info();
             newInfo.setCustomerId(info.getCustomerId());
+            newInfo.setCreateTime(LocalDateTime.now());
         }
         newInfo.setTitle(info.getTitle());
         newInfo.setIntroduce(info.getIntroduce());
         newInfo.setContent(info.getContent());
-        newInfo.setImageUrl(info.getImageUrl());
+        if(!StringUtils.isEmpty(info.getImageUrl()) && StringUtils.containsWhitespace("http")){
+            newInfo.setImageUrl(info.getImageUrl());
+        }
         newInfo.setThumbnailImageUrl(info.getThumbnailImageUrl());
-        newInfo.setCreateTime(info.getCreateTime());
         newInfo.setStatus(info.isStatus());
         newInfo.setDisable(info.isDisable());
         newInfo.setExtend(info.isExtend());

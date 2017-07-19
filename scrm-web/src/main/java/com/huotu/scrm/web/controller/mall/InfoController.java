@@ -1,7 +1,10 @@
 package com.huotu.scrm.web.controller.mall;
+
+
 import com.huotu.scrm.common.utils.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.info.InfoService;
+import com.huotu.scrm.web.service.StaticResourceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 
 /**
@@ -22,6 +28,8 @@ public class InfoController extends MallBaseController {
     private Log logger = LogFactory.getLog(InfoController.class);
     @Autowired
     InfoService infoService;
+    @Autowired
+    StaticResourceService staticResourceService;
 
     /***
      * 展示资讯首页内容
@@ -47,13 +55,20 @@ public class InfoController extends MallBaseController {
      * @return
      */
     @RequestMapping(value = "/info/edit")
-    public String infoEditPage(Long id,  Model model,@ModelAttribute("customerId") Long customerId){
+    public String infoEditPage(@RequestParam(required = false,defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId){
         Info info =  infoService.findOneById(id);
+        if(info.getId() != null && info.getId() != 0){
+            try {
+                URI imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
+                logger.info(imgUri.toString());
+                info.setImageUrl(imgUri.toString());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
         model.addAttribute("info",info);
-        return "info/info_Edit";
+        return "info/info_edit";
     }
-
-
 
     /**
      * 保存修改资讯
@@ -67,7 +82,7 @@ public class InfoController extends MallBaseController {
             info.setCustomerId(customerId);
         }
         infoService.infoSave(info);
-        return "forward:info/infoList";
+        return "redirect:/mall/info/infoList";
     }
 
 
