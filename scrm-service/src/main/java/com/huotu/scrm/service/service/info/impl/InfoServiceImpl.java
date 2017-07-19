@@ -1,8 +1,8 @@
 package com.huotu.scrm.service.service.info.impl;
 
-import com.huotu.scrm.common.utils.InformationSearch;
+import com.huotu.scrm.service.model.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
-import com.huotu.scrm.service.repository.InfoRepository;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.service.info.InfoService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,7 +16,6 @@ import org.springframework.util.StringUtils;
 import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

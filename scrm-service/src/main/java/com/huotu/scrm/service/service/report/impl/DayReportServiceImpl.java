@@ -6,7 +6,7 @@ import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
-import com.huotu.scrm.service.repository.InfoConfigureRepository;
+import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;

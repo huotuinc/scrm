@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.repository;
+package com.huotu.scrm.service.repository.info;
 
 import com.huotu.scrm.service.entity.info.Info;
 import org.springframework.data.jpa.repository.JpaRepository;
