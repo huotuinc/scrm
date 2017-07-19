@@ -1,9 +1,7 @@
 package com.huotu.scrm.service.entity.report;
 
-import com.huotu.scrm.service.entity.support.LocalDateAttributeConverter;
 import lombok.Getter;
 import lombok.Setter;
-import org.eclipse.persistence.annotations.Converter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -100,8 +98,7 @@ public class DayReport {
     /**
      * 统计日期
      */
-    @Column(name = "Report_Day", columnDefinition = "date")
-    @Converter(name = "",converterClass = LocalDateAttributeConverter.class)
+    @Column(name = "Report_Day")
     private LocalDate reportDay;
 
 }

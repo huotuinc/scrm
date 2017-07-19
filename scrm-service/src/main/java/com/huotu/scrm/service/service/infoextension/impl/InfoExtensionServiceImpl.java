@@ -88,6 +88,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Override
     public StatisticalInformation getInformation(Long userId) {
+        Long customerId = userRepository.findOne(userId).getCustomerId();
         StatisticalInformation statisticalInformation = new StatisticalInformation();
         //获取当前时间
         LocalDateTime now = LocalDateTime.now();
