@@ -4,6 +4,8 @@ import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+
 /**
  * 名片关注记录表
  * Created by Jinxiangdong on 2017/7/12.
@@ -37,13 +39,21 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
     Boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId , Long salesmanId , Long followId);
 
     /***
-     *
+     * 检测是否存在关注了除了指定的销售员名片的其他名片
      * @param customerId
      * @param followId
      * @param userId
      * @return
      */
     Boolean existsByCustomerIdAndFollowIdAndUserIdNot(Long customerId , Long followId , Long userId );
+
+    /***
+     * 查询我关注的名片列表
+     * @param customerId
+     * @param followId
+     * @return
+     */
+    List<BusinessCardRecord> findByCustomerIdAndFollowId(Long customerId , Long followId);
 
     //根据用户ID查询关注人数
     long countByUserId(Long userId);

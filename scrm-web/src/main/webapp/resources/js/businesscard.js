@@ -1,20 +1,12 @@
 /**
- * Created by Administrator on 2017/7/11.
+ * Created by Jinxiangdong on 2017/7/11.
  */
-
 $(function () {
     'use strict';
 
-    var updateurl = "/site/updateBusinessCardInfo";
-    //var uploadImageFileUrl;
-    //var URL;
     var $customerId = $("#customerId");
     var $userId = $("#userId");
-
     var $avatarForm = $("#avatarForm");
-    //$avatarForm.on('submit', uploadAvator);
-
-    //var $weuishow_avatar = $("#weuishow_avatar");
     var $weuishow_companyname=$("#weuishow_companyname");
     var $weuishow_qq=$("#weuishow_qq");
     var $weuishow_tel=$("#weuishow_tel");
@@ -22,7 +14,6 @@ $(function () {
     var $weuishow_companyaddress=$("#weuishow_companyaddress");
     var $weuishow_job=$("#weuishow_job");
 
-    //$weuishow_avatar.click( showTip );
     $weuishow_companyaddress.click(showTip);
     $weuishow_companyname.click(showTip);
     $weuishow_job.click(showTip);
@@ -30,75 +21,34 @@ $(function () {
     $weuishow_qq.click(showTip);
     $weuishow_tel.click(showTip);
 
-    //URL = window.URL || window.webkitURL;
-
     var $btnFile = $("#btnInput");
     $btnFile.change(uploadImage);
-
-
-    // var $uploadimage = $("#btnFile");
-    //
-    // $uploadimage.change(uploadimage);
-
+    var layerIndex = 0;
 
     function uploadImage() {
-
         var files = this.files;
-        var file;
+        //var file;
         if (files && files.length) {
-            file = files[0];
+            //file = files[0];
         }else{
             return false;
         }
 
-        console.log("sssbbbbbs");
-
-        //$("#avatarForm").submit();
-
-        uploadAvator();
-
-        //return false;
-        //$avatarForm.submit();
-
-        // if (uploadImageFileUrl) {
-        //     URL.revokeObjectURL(uploadImageFileUrl);
-        // }
-
-        // uploadImageFileUrl = URL.createObjectURL(file);
-
-        //alert(uploadImageFileUrl);
-
-        //var $image = $("#simage");
-
-        //$image.attr("src", uploadImageFileUrl);
-
-        //$simage.cropper('destroy').attr('src', uploadImageFileUrl).cropper(options);
-
-        //$simage.attr("src", uploadImageFileUrl);
-
-        //console.log("set image");
-
-        //$simage.cropper("replace", uploadImageFileUrl);
-
-        //initCropper();
-
+        uploadAvatar();
     }
 
-    function uploadAvator() {
-        //alert("upload");
-
-        //var data = $simage.cropper("getCroppedCanvas").toDataURL();
-
-        console.log( "1111");
-        var $uploadimage = $("#btnInput");
-        if( !$uploadimage.val()  ) return false;
+    function uploadAvatar() {
+        //var $uploadimage = $("#btnInput");
+        if( !$btnFile.val()  ) return false;
 
         //alert("upload222");
-        console.log( $uploadimage.val() );
-
+        console.log( $btnFile.val() );
 
         //var $form = $("#avform");
         var url = $avatarForm.attr("action");
+
+        //test--------------
+        //url = "/common/upload";
 
         console.log("url="+ url);
 
@@ -112,41 +62,28 @@ $(function () {
             dataType:'json',
             processData: false,
             contentType: false,
+            beforeSend:function () {
+                layerIndex = layer.load();
+            },
+            complete:function () {
+                layer.close(layerIndex);
+            },
             success:function (data) {
                 console.log(data);
-
-                var $img_avatar= $("#img_avatar");
-                var imgUrl = data.data.avatar + "?r="+Math.random()*10;
-                console.log("src=" + imgUrl );
-
-                $img_avatar.attr("src" , imgUrl);
-
+                if( data.code == 200 ) {
+                    var $img_avatar = $("#img_avatar");
+                    var imgUrl = data.data.avatar + "?r=" + Math.random() * 10;
+                    console.log("src=" + imgUrl);
+                    $img_avatar.attr("src", imgUrl);
+                }else{
+                    layer.msg( data.msg );
+                }
             },
             error:function (error) {
                 console.log(error);
+                layer.msg(error);
             }
         });
-
-    }
-
-
-    function updateBusinessCard() {
-        var type= $(this).attr("js-datatype");
-        var value = $("#companyname").val();
-
-        alert(type);
-        var data = {type:type,value:value};
-        $.ajax(updateurl,{
-         type:'Post',
-         dataType:"json",
-         data: data,
-         success:function (data) {
-             console.log(data);
-         },
-         error:function (error) {
-            console.log(error);
-         }
-        })
 
     }
 
@@ -161,27 +98,22 @@ $(function () {
             text: "",
             title: title,
             onOK: function (text) {
-                //$.alert("姓名:" + text, "填写成功");
-                $ele.val(text);
-                ajaxRequest( datatype , text );
-                $ele.text(text);
+                ajaxRequest( $ele , datatype , text );
             },
             onCancel: function () {
                 console.log("取消了");
             },
             input: text
         });
-
     }
 
-
-    function ajaxRequest(  updatetype , text ) {
-        var url = "/site/updateBusinessCardInfo";
+    function ajaxRequest( ele , updatetype , text ) {
+        var url = $('body').attr("js-data-update-url"); //"/site/updateBusinessCardInfo";
         var customerId = $customerId.val();
         var userid = $userId.val();
         var data ={ customerId : customerId , userId:userid , type: updatetype , value:text};
 
-        console.log("ssss");
+        console.log("url="+url);
 
         $.ajax({
            url: url,
@@ -189,16 +121,21 @@ $(function () {
            dataType:"json",
             data: data,
             beforeSend:function () {
-
+                layerIndex = layer.load();
+            },
+            complete:function () {
+                layer.close(layerIndex);
             },
             success:function (data) {
-
+                if(data.code==200){
+                    ele.text( text );
+                }else{
+                    layer.msg(data.msg);
+                }
             },
             error:function (error) {
                console.log(error);
             },
-
-
         });
     }
 

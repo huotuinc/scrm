@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.service.impl;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
@@ -9,8 +10,12 @@ import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
 import com.huotu.scrm.service.repository.UserReposity;
 import com.huotu.scrm.service.service.BusinessCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Jinxiangdong on 2017/7/11.
@@ -73,5 +78,17 @@ public class BusinessCardServiceImpl implements BusinessCardService{
         model = businessCardReposity.saveAndFlush(model);
 
         return model;
+    }
+
+    public List<SalesmanBusinessCard> getMyBusinessCardList(Long customerId, Long userId) {
+        List<BusinessCardRecord> list = businessCardRecordReposity.findByCustomerIdAndFollowId(customerId, userId);
+        List<SalesmanBusinessCard> myBusinessCards=new ArrayList<>();
+        if(list.size()>0){
+            for(BusinessCardRecord item : list){
+                SalesmanBusinessCard salesman = this.getSalesmanBusinessCard(customerId,item.getUserId() , item.getFollowId());
+                myBusinessCards.add(salesman);
+            }
+        }
+        return myBusinessCards;
     }
 }

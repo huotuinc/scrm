@@ -34,20 +34,23 @@
 
 <input id="customerId" type="hidden" th:value="${businessCard.getSalesman().getCustomerId()}">
 <input id="salesmanId" type="hidden" th:value="${businessCard.getSalesman().getId()}">
-<input id="followerId" type="hidden" th:value="${businessCard.getFollowerId()}">
+<!--<input id="followerId" type="hidden" th:value="${businessCard.getFollowerId()}">-->
 
 <div class="fonthui" style="position:relative">
     <div class="right-xx">
         <p class="right-dd js-data-numberOfFollower" th:text="${'已关注'+businessCard.getNumberOfFollowers()+'人'}"></p>
-        <p class="right-dd"><a href="javascript:void(0);" style="color: #fff" id="cancelFollow" th:if="${businessCard.getIsFollowed()}">取消关注</a> </p>
+        <p class="right-dd js-data-cancelFollow-div"><a href="javascript:void(0);" style="color: #fff" id="cancelFollow" th:if="${businessCard.getIsFollowed()}">取消关注</a> </p>
     </div>
     <div class="grsbg" style="padding: 20px 0px;">
         <img style="border-radius: 50px; width: 100px;  height: 100px;" th:src="${businessCard.getBusinessCard().getAvatar()}" >
         <div class="grsname">
             <p><b style="color: #fff;" th:text="${businessCard.getSalesman().getNickName()}"></b>
-                <i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}">♀</i><!--♂切换性别-->
-                <i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('女')}">♂</i>
-                <i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('未知')}" th:text="${businessCard.getSalesman().getUserGender()}"></i>
+                <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}">♂</i>&lt;!&ndash;♂切换性别&ndash;&gt;-->
+                <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('女')}">♀</i>-->
+                <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}" th:text="${businessCard.getSalesman().getUserGender()}"></i>-->
+                <i style="margin-left: 5px;color: #fff" th:text="${businessCard.getSalesman().getUserGender().equals('男')}? '♂' : (${businessCard.getSalesman().getUserGender().equals('女')} ? '♀' : ${businessCard.getSalesman().getUserGender()}) "></i>
+
+                <!--<i style="margin-left: 5px;color: #fff" th:text="${businessCard.getSalesman().getUserGender().equals('男')}?'♂':  ${businessCard.getSalesman().getUserGender().equals('女')} ? '♀': ${businessCard.getSalesman().getUserGender()}"></i>-->
             </p>
             <p><b style="color: #fff;" th:text="${businessCard.getBusinessCard().getJob()}"></b></p>
         </div>
@@ -55,32 +58,32 @@
 </div>
 <!--end-->
 <div class="weui_cells weui_cells_access">
-    <a class="weui_cell" href="wddd.html">
+    <a class="weui_cell" th:href="${'tel:'+businessCard.getSalesman().getUserMobile()}">
         <div class="weui_cell_bd weui_cell_primary">
-            <p>手机：<span class="detial-xx">1522323636</span><i class="title-num">一键保存至通讯录</i></p>
+            <p>手机：<span class="detial-xx" th:text="${businessCard.getSalesman().getUserMobile()}"></span><i class="title-num">一键保存或拨号</i></p>
         </div>
     </a>
-    <a class="weui_cell" href="hdxq.html">
+    <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
             <p>电话：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getTel()}"></span></p>
         </div>
     </a>
-    <a class="weui_cell" href="wdsc.html">
+    <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
             <p>QQ：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getQq()}"></span></p>
         </div>
     </a>
-    <a class="weui_cell" href="personal.html">
+    <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
             <p>邮箱：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getEmail()}"></span></p>
         </div>
     </a>
-    <a class="weui_cell" href="personal.html">
+    <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
             <p>企业：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyName()}"></span></p>
         </div>
     </a>
-    <a class="weui_cell" href="personal.html">
+    <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
             <p>地址：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyAddress()}"></span></p>
         </div>
@@ -96,15 +99,15 @@
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js" ></script>
 <script>
     $(function(){
-        $cancelFollow= $("#cancelFollow");
-        $cancelFollow.click(cancelFollow);
+        $("#cancelFollow").click(cancelFollow);
+        //$cancelFollow.click(cancelFollow);
 
         function cancelFollow() {
             var url = $('body').attr("js-cancelfollow-url");
             var customerId = $("#customerId").val();
             var salesmanId = $("#salesmanId").val();
-            var followerId = $("#followerId").val();
-            var data ={customerId:customerId,salesmanId: salesmanId, followerId:followerId };
+            //var followerId = $("#followerId").val();
+            var data ={customerId:customerId,salesmanId: salesmanId};
             $.ajax({
                 url:url,
                 type:"post",
@@ -112,8 +115,12 @@
                 data: data,
                 success:function (data) {
                     console.log(data);
-                    $("#js-data-numberOfFollower").val( data.numberOfFollower );
-
+                    if( data.code == 200 ) {
+                        $(".js-data-numberOfFollower").text("已关注"+data.data.numberOfFollower+"人");
+                        data.data.isFollowed ? $(".js-data-cancelFollow-div").show() : $(".js-data-cancelFollow-div").hide();
+                    }else{
+                        alert( data.msg );
+                    }
                 },
                 error:function (error) {
                     console.log(error);

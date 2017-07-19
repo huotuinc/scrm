@@ -6,27 +6,28 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
+import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
+import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.BusinessCardRecordService;
 import com.huotu.scrm.service.service.BusinessCardService;
 import com.huotu.scrm.web.service.StaticResourceService;
-import javafx.beans.property.adapter.ReadOnlyJavaBeanBooleanProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 
 /**
@@ -42,136 +43,91 @@ public class BusinessCardController extends SiteBaseController {
     private BusinessCardRecordService businessCardRecordService;
     @Autowired
     private StaticResourceService staticResourceService;
+    @Autowired
+    private UserRepository userRepository;
 
     /***
      * 编辑销售员名片信息
-     * @param salesmanId
+     * @param request
+     * @param customerId
      * @param model
      * @return
      */
     @RequestMapping("/editBusinessCard")
-    public String editBusinessCard( long customerId ,  long salesmanId , Model model ){
-        BusinessCard businessCard = businessCardService.getBusinessCard(salesmanId , customerId );
-        if(businessCard==null){
-            businessCard=new BusinessCard();
+    public String editBusinessCard(HttpServletRequest request,
+                                   @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId, Model model) {
+        long userId = this.getUserId(request);
+        BusinessCard businessCard = businessCardService.getBusinessCard(userId, customerId);
+        if (businessCard == null) {
+            businessCard = new BusinessCard();
             businessCard.setCustomerId(customerId);
-            businessCard.setUserId(salesmanId);
+            businessCard.setUserId(userId);
             businessCard.setAvatar("");
         }
         model.addAttribute("businessCard", businessCard);
-
         return "businesscard/edit_businesscard";
     }
 
     /***
      * 上传名片头像接口
-     * @param customerId
-     * @param userId
-     * @param btnFile
+     * @param customerId 商户Id
+     * @param btnFile 图片
      * @return
      */
-    @RequestMapping(value = "/uploadAvatar" , method = RequestMethod.POST )
+    @RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult uploadAvatar( Long customerId , Long userId , MultipartFile btnFile ){
-        try {
-            UploadResourceEnum uploadResourceType = UploadResourceEnum.USER;
-            String fileName = btnFile.getOriginalFilename();
-            String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
-            String path = StaticResourceService.IMG + customerId + "/" + uploadResourceType.getValue() + "/" + userId + "." + prefix;
-            String mode = null;
-            //先删除原来的图片
-            staticResourceService.deleteResource(path);
-            //再上传最新的图片
-            URI uri = staticResourceService.uploadResource(mode , path , btnFile.getInputStream());
-            String uriString = uri.toString();
-            //然后保存图片的uri地址到数据库
-            BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR , uriString );
+    public ApiResult uploadAvatar(HttpServletRequest request,
+                                  @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+                                  MultipartFile btnFile) throws Exception {
 
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS , businessCard);
-        }catch (IOException ioEx){
-            return new ApiResult( ioEx.getMessage() , ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultCode());
-        }catch (URISyntaxException uriEx){
-            return new ApiResult( uriEx.getMessage() , ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultCode());
+        if (btnFile == null || btnFile.isEmpty() || btnFile.getSize() < 1) {
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
         }
-//
-//        try {
-//            if( uploadImage == null || uploadImage.getSize() ==0 || uploadImage.isEmpty()){
-//                return new ApiResult("请上传图片", ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultCode());
-//            }
-//            InputStream inputStream = uploadImage.getInputStream();
-//            String dir = "avatar";
-//            String path = request.getSession().getServletContext().getRealPath(dir);
-//            String originalFileName = uploadImage.getOriginalFilename();
-//            String type = uploadImage.getContentType();
-//            if(type==null || !type.toLowerCase().startsWith("image/")) {
-//                //return JSON.toJSONString(new Result(false, "不支持的文件类型，仅支持图片！"));
-//                return new ApiResult("不支持的文件类型，仅支持图片！", ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultCode() );
-//            }
-//
-//            System.out.println("file type:"+type);
-//            String fileName = new Date().getTime()+""+new Random().nextInt(10000)+"_"+originalFileName.substring(originalFileName.lastIndexOf('.'));
-//            System.out.println("文件路径："+path+":"+fileName);
-//            String fullPath = path+  File.separator + "\\"+fileName;
-//
-//            File newFile=new File(path);
-//            if(!newFile.exists()) newFile.mkdirs();
-//
-//            FileOutputStream fileOutputStream = new FileOutputStream(fullPath);
-//            int byteCount=0;
-//            int byteWritten=0;
-//            byte[] buffer=new byte[1024];
-//            while ( (byteCount = inputStream.read( buffer )) != -1 ){
-//                //fileOutputStream.write( buffer , byteWritten , byteCount );
-//                fileOutputStream.write(buffer);
-//                byteWritten +=byteCount;
-//            }
-//            inputStream.close();
-//            fileOutputStream.close();
-//
-//            return  new ApiResult( ResultCodeEnum.SUCCESS.getResultMsg() , ResultCodeEnum.SUCCESS.getResultCode() );
-//        }catch (IOException ioEx){
-//            return new ApiResult(ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultMsg() , ResultCodeEnum.SYSTEM_BAD_REQUEST.getResultCode());
-//        }
+        String type = btnFile.getContentType();
+        if (type == null || !type.toLowerCase().startsWith("image/")) {
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不支持的文件类型，仅支持图片！");
+        }
+
+        Long userId = this.getUserId(request);
+        UploadResourceEnum uploadResourceType = UploadResourceEnum.USER;
+        String fileName = btnFile.getOriginalFilename();
+        String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
+        String path = StaticResourceService.IMG + customerId + "/" + uploadResourceType.getValue() + "/" + userId + "." + prefix;
+        String mode = null;
+        //先删除原来的图片
+        staticResourceService.deleteResource(path);
+        //再上传最新的图片
+        URI uri = staticResourceService.uploadResource(mode, path, btnFile.getInputStream());
+        String uriString = uri.toString();
+        //然后保存图片的uri地址到数据库
+        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, uriString);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, businessCard);
     }
 
-//    /***
-//     *
-//     * @param request
-//     * @param type
-//     * @param value
-//     * @return
-//     */
-//    @RequestMapping(value = "/updateBusinessCardInfo" , method = RequestMethod.POST)
-//    @ResponseBody
-//    public ApiResult updateBusinessCardInfo2( HttpServletRequest request , BusinessCard model ){
-//
-//        //Long  customerId = this.getCustomerId( request );
-//        //Long userId = this.getUserId(request);
-//        //BusinessCardUpdateTypeEnum typeEnum = EnumHelper.getEnumType( BusinessCardUpdateTypeEnum.class , type );
-//        //BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , typeEnum , value);
-//
-//        return ApiResult.resultWith(ResultCodeEnum.SUCCESS , model );
-//    }
-
     /***
-     *
+     * 更新名片信息
      * @param request
      * @param type
      * @param value
      * @return
      */
-    @RequestMapping(value = "/updateBusinessCardInfo" , method = RequestMethod.POST)
+    @RequestMapping(value = "/updateBusinessCardInfo", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult updateBusinessCardInfo( HttpServletRequest request , Long customerId , Long userId, Integer type , String value ){
+    public ApiResult updateBusinessCardInfo(HttpServletRequest request,
+                                            @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+                                            @RequestParam(name = "type", required = false, defaultValue = "1") Integer type,
+                                            @RequestParam(name = "value", required = false, defaultValue = "") String value) {
+        long userId = this.getUserId(request);
+        User user = userRepository.getOne(userId);
+        if (user == null) {
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
+        }
+        BusinessCardUpdateTypeEnum typeEnum = EnumHelper.getEnumType(BusinessCardUpdateTypeEnum.class, type);
+        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, typeEnum, value);
 
-        //Long  customerId = this.getCustomerId( request );
-        //Long userId = this.getUserId(request);
-        BusinessCardUpdateTypeEnum typeEnum = EnumHelper.getEnumType( BusinessCardUpdateTypeEnum.class , type );
-        BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , typeEnum , value);
-
-        ApiResult<BusinessCard> result = new ApiResult<BusinessCard>(ResultCodeEnum.SUCCESS.getResultMsg(), ResultCodeEnum.SUCCESS.getResultCode() );
+        ApiResult<BusinessCard> result = new ApiResult<BusinessCard>(ResultCodeEnum.SUCCESS.getResultMsg(), ResultCodeEnum.SUCCESS.getResultCode());
         result.setData(businessCard);
-        return  result;
+        return result;
     }
 
     /***
@@ -181,14 +137,18 @@ public class BusinessCardController extends SiteBaseController {
      * @param model
      * @return
      */
-    @RequestMapping("/seeBusinessCard")
-    public String seeBusinessCard(long customerId , long salesmanId , long followerId , Model model) {
+    @RequestMapping("/showBusinessCard")
+    public String showBusinessCard(HttpServletRequest request,
+                                   @RequestParam(name = "customerId", required = false, defaultValue = "0") long customerId,
+                                   @RequestParam(name = "salesmanId", required = false, defaultValue = "0") long salesmanId,
+                                   Model model) {
+        Long followerId = this.getUserId(request);
         //检测是否关注了其他销售员
-        boolean isFollowedOther = businessCardRecordService.existsByCustomerIdAndFollowerIdNotInSalesmanId(customerId , followerId, salesmanId );
-        if( !isFollowedOther ){
+        boolean isFollowedOther = businessCardRecordService.existsByCustomerIdAndFollowerIdNotInSalesmanId(customerId, followerId, salesmanId);
+        if (!isFollowedOther) {
             //检测是否关注了指定的销售员
-            boolean isFollowed = businessCardRecordService.existsByCustomerIdAndUserIdAndFollowId(customerId , salesmanId, followerId);
-            if( !isFollowed ) {
+            boolean isFollowed = businessCardRecordService.existsByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
+            if (!isFollowed) {
                 BusinessCardRecord follow = new BusinessCardRecord();
                 follow.setFollowDate(new Date());
                 follow.setFollowId(followerId);
@@ -197,11 +157,9 @@ public class BusinessCardController extends SiteBaseController {
                 businessCardRecordService.insert(follow);
             }
         }
-
         SalesmanBusinessCard salesmanBusinessCard = businessCardService.getSalesmanBusinessCard(customerId, salesmanId, followerId);
-
         model.addAttribute("businessCard", salesmanBusinessCard);
-        return "businesscard/see_businesscard";
+        return "businesscard/show_businesscard";
     }
 
 
@@ -209,23 +167,37 @@ public class BusinessCardController extends SiteBaseController {
      * 取消关注
      * @param customerId
      * @param salesmanId
-     * @param followerId
      * @return
      */
     @RequestMapping(value = "/cancelFollow", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult cancelFollow(Long customerId , Long salesmanId , Long followerId ){
+    public ApiResult cancelFollow(HttpServletRequest request,
+                                  @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+                                  @RequestParam(name = "salesmanId", required = false, defaultValue = "0") Long salesmanId) {
         try {
+            Long followerId = this.getUserId(request);
             businessCardRecordService.deleteByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
-
             int numberOfFollower = businessCardRecordService.getFollowCountByCustomerIdAndUserId(customerId, salesmanId);
             Map<Object, Object> resultMap = new HashMap<>();
             resultMap.put("numberOfFollower", numberOfFollower);
             resultMap.put("isFollowed", false);
-
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS, resultMap);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
         }
+    }
+
+    /***
+     * 我的名片夹
+     * @param customerId
+     * @return
+     */
+    @RequestMapping("/myBusinessCard")
+    public ModelAndView myBusinessCard(HttpServletRequest request, @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId) {
+        Long userId = this.getUserId(request);
+        List<SalesmanBusinessCard> myBusinessCards = businessCardService.getMyBusinessCardList(customerId, userId);
+        ModelAndView modelAndView = new ModelAndView("businesscard/my_businesscard");
+        modelAndView.addObject("myBusinessCards", myBusinessCards);
+        return modelAndView;
     }
 }

@@ -33,7 +33,8 @@ import java.util.List;
 @ComponentScan({
         "com.huotu.scrm.web.controller",
         "com.huotu.scrm.web.interceptor",
-        "com.huotu.scrm.web.service"
+        "com.huotu.scrm.web.service",
+        "com.huotu.scrm.web.resolver"
 })
 @Import({MVCConfig.ThymeleafConfig.class, ServiceConfig.class})
 public class MVCConfig extends WebMvcConfigurerAdapter {
@@ -122,7 +123,6 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
             return viewResolver;
         }
     }
-
 
     @Bean
     public CommonsMultipartResolver multipartResolver(){

@@ -33,7 +33,7 @@
     </style>
 </head>
 
-<body class="ddbg" >
+<body class="ddbg" js-data-update-url="updateBusinessCardInfo">
 <form name="avatarForm" id="avatarForm" action="/site/uploadAvatar" method="post" enctype="multipart/form-data">
     <input type="hidden" id="customerId" name="customerId" th:value="${businessCard.getCustomerId()}">
     <input type="hidden" id="userId" name="userId" th:value="${businessCard.getUserId()}">
@@ -48,7 +48,7 @@
                 </label>
                 </div>
                 <div class="weui_cell_ft">
-                    <img id="img_avatar" class="ui-data-ele" style=" width: 31px;vertical-align: middle;" th:src="${businessCard.getAvatar().isEmpty()}? '../../resources/image/mrtx.jpg': ${businessCard.getAvatar()}" >
+                    <img id="img_avatar" class="ui-data-ele" style=" width: 31px;vertical-align: middle;" th:src="${businessCard.getAvatar()}? (${businessCard.getAvatar().isEmpty()} ? '../../resources/image/mrtx.jpg' : ${businessCard.getAvatar()} ): '../../resources/image/mrtx.jpg'" >
                 </div>
 
         </a>
@@ -84,7 +84,7 @@
         </a>
         <a class="weui_cell" id="weuishow_companyaddress" js-data-type="6" js-data-hint="请输入企业地址" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
-                <p>公司地址</p>
+                <p style="min-width:40px; ">公司地址</p>
             </div>
             <div id="div_companyaddress" class="weui_cell_ft ui-data-ele" th:text="${businessCard.getCompanyAddress()}"></div>
         </a>
@@ -93,9 +93,18 @@
 
 </form>
 
+<div id="toast" style="display: none">
+    <div class="weui_mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-toast"></i>
+        <p class="weui-toast-content"></p>
+    </div>
+</div>
+
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js" ></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.js"></script>
-<script src="../../js/businesscardJs/businesscard.js" ></script>
+<script src="../../resources/js/businesscard.js" ></script>
 
 </body>
 </html>

@@ -4,6 +4,8 @@ import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
 
+import java.util.List;
+
 /**
  * Created by Jinxiangdong on 2017/7/11.
  */
@@ -36,4 +38,11 @@ public interface BusinessCardService {
      */
     BusinessCard updateBusinessCard(Long customerId , Long userId , BusinessCardUpdateTypeEnum type , String text);
 
+    /**
+     * 获得我的名片夹
+     * @param customerId
+     * @param userId
+     * @return
+     */
+    List<SalesmanBusinessCard> getMyBusinessCardList(Long customerId , Long userId);
 }
