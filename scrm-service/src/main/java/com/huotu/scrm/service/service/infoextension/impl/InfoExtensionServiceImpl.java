@@ -16,7 +16,9 @@ import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -131,10 +133,18 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @return
      */
     public int getReleaseTime(Long infoId) {
-        Date createTime = infoRepository.findOne(infoId).getCreateTime();
+        LocalDateTime createTime = infoRepository.findOne(infoId).getCreateTime();
         Date now = new Date();
-        long releaseTime = (now.getTime() - createTime.getTime()) / (60 * 60 * 1000);
+        long releaseTime = (now.getTime() - localDateTimeToDate(createTime).getTime()) / (60 * 60 * 1000);
         return (int) releaseTime;
+    }
+
+
+    public Date localDateTimeToDate(LocalDateTime time){
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = time.atZone(zone).toInstant();
+        Date date = Date.from(instant);
+        return date;
     }
 
 }
