@@ -1,31 +1,26 @@
 package com.huotu.scrm.service.entity.support;
 
-import com.huotu.scrm.common.utils.LocalDateTimeUtil;
+import org.springframework.data.convert.Jsr310Converters;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * Created by hxh on 2017-07-18.
  */
 @Converter(autoApply = true)
-public class LocalDateTimeAttributeConverter implements AttributeConverter<LocalDateTime, String> {
+public class LocalDateTimeAttributeConverter implements AttributeConverter<LocalDateTime, Date> {
 
 
     @Override
-    public String convertToDatabaseColumn(LocalDateTime attribute) {
-        return LocalDateTimeUtil.toStr(attribute);
+    public Date convertToDatabaseColumn(LocalDateTime attribute) {
+        return Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(attribute);
     }
 
     @Override
-    public LocalDateTime convertToEntityAttribute(String dbData) {
-        try {
-            return LocalDateTimeUtil.toLocalDateTime(dbData);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public LocalDateTime convertToEntityAttribute(Date dbData) {
+        return Jsr310Converters.DateToLocalDateTimeConverter.INSTANCE.convert(dbData);
     }
 }

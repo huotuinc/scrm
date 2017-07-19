@@ -15,15 +15,15 @@ import java.io.Serializable;
 public class StatisticalInformation implements Serializable {
 
     /**
-     * 今日积分排名 （只计算咨询转发量的奖励积分）
+     * 今日访问量排名
      */
-    private int dayScoreRanking;
+    private int dayVisitorRanking;
     /**
      * 今日访客量
      */
     private int dayVisitorNum;
     /**
-     * 今日预计积分 （只计算咨询转发量的奖励积分）
+     * 今日预计积分
      */
     private int dayScore;
     /**
