@@ -52,14 +52,14 @@
                     <label class="col-sm-2 control-label">是否发布</label>
                     <div class="col-sm-6">
                         <div class="radio radio-info radio-inline">
-                            <input type="radio" id="publishRadioPublish" value="1" name="publishRadio" data-check="true"
+                            <input type="radio" id="status1" value="1" name="status" data-check="true"
                                    th:checked="${info.status}" checked="checked">
-                            <label for="publishRadioPublish">是</label>
+                            <label for="status1">是</label>
                         </div>
                         <div class="radio radio-inline">
-                            <input type="radio" id="publishRadio" value="0" name="publishRadio"
+                            <input type="radio" id="status0" value="0" name="status"
                                    th:checked="${!info.status}">
-                            <label for="publishRadio">否</label>
+                            <label for="status0">否</label>
                         </div>
                     </div>
                 </div>
@@ -68,12 +68,12 @@
                     <label class="col-sm-2 control-label">是否推广</label>
                     <div class="col-sm-6">
                         <div class="radio radio-info radio-inline">
-                            <input type="radio" id="inlineExtend" value="1" name="radioExtend" data-check="true"
+                            <input type="radio" id="inlineExtend" value="1" name="extend" data-check="true"
                                    checked="checked" th:checked="${info.extend}">
                             <label for="inlineExtend">推广</label>
                         </div>
                         <div class="radio radio-inline">
-                            <input type="radio" id="inlineExtended" value="0" name="radioExtend"
+                            <input type="radio" id="inlineExtended" value="0" name="extend"
                                    th:checked="${!info.extend}">
                             <label for="inlineExtended">不推广</label>
                         </div>

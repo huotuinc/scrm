@@ -95,7 +95,7 @@
                                         总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
                                     </span>
                                 </td>
-                                <td th:text="${#dates.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
+                                <td th:text="${#temporals.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
                                 <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
                                 <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
