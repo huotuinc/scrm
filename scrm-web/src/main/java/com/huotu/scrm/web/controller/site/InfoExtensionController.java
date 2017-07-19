@@ -60,6 +60,7 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/getScoreRanking")
     public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) {
+
         return "extensiondetail/personal-ranking";
     }
 }
