@@ -7,8 +7,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Date;
-
 /**
  * Created by Administrator on 2017/7/13.
  */
@@ -33,7 +31,7 @@ public class BusinessCardRecordServiceTest extends CommonTestBase {
         businessCardRecord.setCustomerId(customerId);
         businessCardRecord.setUserId(userId);
         businessCardRecord.setFollowId(followerId);
-        businessCardRecord.setFollowDate( new Date());
+//        businessCardRecord.setFollowDate( new Date());
 
         businessCardRecordReposity.saveAndFlush(businessCardRecord);
 
@@ -56,7 +54,7 @@ public class BusinessCardRecordServiceTest extends CommonTestBase {
         record.setCustomerId(customerId);
         record.setUserId( userId2 );
         record.setFollowId(followerId);
-        record.setFollowDate(new Date());
+//        record.setFollowDate(new Date());
         businessCardRecordReposity.save( record );
         //检测是否关注了userId=128579L
         boolean isFollowed_128579 = businessCardRecordReposity.existsByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId ,userId);
