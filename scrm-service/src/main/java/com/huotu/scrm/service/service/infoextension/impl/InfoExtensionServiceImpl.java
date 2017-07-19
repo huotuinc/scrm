@@ -72,7 +72,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         } else {//小伙伴
             extendStatus = true;
         }
-        List<Info> infoList = infoRepository.findByCustomerIdAndStatusAndExtendAndDisable(customerId, status, extendStatus, false);
+        List<Info> infoList = infoRepository.findByCustomerIdAndIsStatusAndIsExtendAndIsDisable(customerId, status, extendStatus, false);
         infoList.forEach(info -> {
             InfoModel infoModel = new InfoModel();
             infoModel.setTitle(info.getTitle());

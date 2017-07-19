@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.info;
 
+import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import static org.junit.Assert.*;
 /**
  * Created by luohaibo on 2017/7/19.
  */
-public class InfoRewardConfigureServiceTest {
+public class InfoRewardConfigureServiceTest extends CommonTestBase {
 
     @Autowired
     InfoRewardConfigureService infoRewardConfigureService;
