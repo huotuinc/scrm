@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport"
           content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
@@ -24,12 +24,12 @@
                         排名
                     </a>
                 </li>
-                <li class="on">
+                <li>
                     <a href="personal-uv.html">
                         UV
                     </a>
                 </li>
-                <li>
+                <li class="on">
                     <a href="personal-score.html">
                         积分
                     </a>
@@ -46,31 +46,32 @@
     <div class="f-bigbox">
         <div class="fa-bigbox">
             <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                <p class="phone">今日UV（位）</p>
-                <p style="color: #fff; font-size: 30px;">10</p>
+                <p class="phone">今日预计积分（分）</p>
+                <p style="color: #fff; font-size: 30px;" th:text="${dayScoreInfo.dayScore}">10</p>
             </div>
             <p class="f-rgo" style="display:none">
                 <a href="">
-                    <img style="width:30px;" src="images/szsz.png">
+                    <img style="width:30px;" src="../../resources/images/szsz.png">
                 </a>
             </p>
             <p style="clear:both"></p>
         </div>
     </div>
+
     <div class="dlrzx">
         <div class=" blue">
             <div class="dailiren-s-ka">
                 <ul class="dailiren-float-ul ka  pjf_3ge ">
                     <li>
-                        <a href="ye.html">
+                        <a>
                             <p class="sj">12</p>
-                            <p>今日UV（人）</p>
+                            <p>昨日积分（分）</p>
                         </a>
                     </li>
                     <li>
-                        <a href="hb.html" style="border-left: 1px solid #57acf0;">
-                            <p class="sj">5</p>
-                            <p>本月最高UV（人）</p>
+                        <a style="border-left: 1px solid #57acf0;">
+                            <p class="sj" th:text="${dayScoreInfo.accumulateScore}">5</p>
+                            <p>历史累计（分）</p>
                         </a>
                     </li>
 
@@ -78,35 +79,11 @@
             </div>
         </div>
         <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" href="wddd.html">
+            <a class="weui_cell" th:each="monthScoreInfo:${dayScoreInfo.monthScoreList}">
                 <div class="weui_cell_bd weui_cell_primary">
-                    <p>本月</p>
+                    <p th:text="${monthScoreInfo.month}"></p>
                 </div>
-                <div class="weui_cell_ft">7</div>
-            </a>
-            <a class="weui_cell" href="hdxq.html">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>上月</p>
-                </div>
-                <div class="weui_cell_ft">2</div>
-            </a>
-            <a class="weui_cell" href="wdsc.html">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>4月</p>
-                </div>
-                <div class="weui_cell_ft">15</div>
-            </a>
-            <a class="weui_cell" href="javascript:;">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>3月</p>
-                </div>
-                <div class="weui_cell_ft">10</div>
-            </a>
-            <a class="weui_cell" href="javascript:;">
-                <div class="weui_cell_bd weui_cell_primary">
-                    <p>2月</p>
-                </div>
-                <div class="weui_cell_ft">60</div>
+                <div class="weui_cell_ft" th:text="${monthScoreInfo.date}">7</div>
             </a>
         </div>
     </div>

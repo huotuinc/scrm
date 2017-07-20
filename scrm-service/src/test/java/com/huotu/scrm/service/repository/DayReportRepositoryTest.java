@@ -44,17 +44,6 @@ public class DayReportRepositoryTest extends CommonTestBase {
         });
     }
 
-    /**
-     * 测试查询咨询转发来源用户ID（去掉重复）
-     */
-    @Test
-    public void testInfoBrowseRepository() {
-        List<Long> bySourceUserId = infoBrowseRepository.findBySourceUserId();
-        for (long infoBrowse : bySourceUserId) {
-            System.out.println(infoBrowse);
-        }
-    }
-
     @Test
     public void testUserLevelRepository() {
         UserLevel byLevelAndCustomerId = userLevelRepository.findByLevelAndCustomerId(1, 842L);

@@ -24,9 +24,9 @@ public class DayScoreRankingInfo implements Serializable {
     /**
      * 最高月积分排名
      */
-    private int HighestMonthScoreRanking;
+    private int highestMonthScoreRanking;
     /**
      * 近几个月积分排名（默认统计5个月包含本月）
      */
-    private List<Integer> monthScoreRankingList;
+    private List<MonthStatisticInfo> monthScoreRankingList;
 }

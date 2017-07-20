@@ -23,15 +23,15 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     @Query("select count (t) from InfoBrowse t where  t.browseTime>=?2 and t.browseTime<?3 and t.sourceUserId=?1 ")
     int countBySourceUserIdAndBrowseTime(Long sourceUserId, LocalDateTime minDate, LocalDateTime maxDate);
 
-    @Query("select distinct t.sourceUserId from  InfoBrowse t")
-    List<Long> findBySourceUserId();
+    @Query("select distinct t.sourceUserId from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<=?2")
+    List<Long> findBySourceUserId(LocalDateTime minDate, LocalDateTime maxDate);
 
     //根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
     @Query("select count(distinct t.infoId) from InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2 and t.sourceUserId=?3")
     int findForwardNumBySourceUserId(LocalDateTime minDate, LocalDateTime maxDate, Long userId);
 
     //查询咨询的转发量
-    @Query("select count(distinct t.infoId) from InfoBrowse t")
+    @Query("select  count(distinct t.sourceUserId) from InfoBrowse t where t.infoId=?1")
     int findInfoForwardNum(Long infoId);
 
 }

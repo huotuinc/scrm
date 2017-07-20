@@ -27,5 +27,5 @@ public class DayScoreInfo implements Serializable {
     /**
      * 近几个月积分（默认统计5个月包含本月）
      */
-    private List<Integer> monthScore;
+    private List<MonthStatisticInfo> monthScoreList;
 }

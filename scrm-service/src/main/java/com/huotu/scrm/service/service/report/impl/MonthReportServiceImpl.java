@@ -45,7 +45,7 @@ public class MonthReportServiceImpl implements MonthReportService {
         LocalDate lastFirstDay = firstDay.minusMonths(1);
         //得到上月最后一天
         LocalDate lastEndDay = today.with(TemporalAdjusters.lastDayOfMonth()).minusMonths(1);
-        List<Long> userIdList = reportDayRepository.findByUserId();
+        List<Long> userIdList = reportDayRepository.findByUserId(lastFirstDay, lastEndDay);
         for (long userId : userIdList) {
             User user = userRepository.findOne(userId);
             MonthReport monthReport = new MonthReport();
@@ -95,13 +95,13 @@ public class MonthReportServiceImpl implements MonthReportService {
     /**
      * 统计每月资讯转发量
      *
-     * @param userId       用户ID
-     * @param lastFirstDay 上月第一天
-     * @param lastEndDay   上月最后一天
+     * @param userId  用户ID
+     * @param minDate 统计起始时间
+     * @param maxDate 统计结束时间
      * @return
      */
-    int getForwardNum(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
-        Specification<DayReport> specification = getSpecification(userId, lastFirstDay, lastEndDay);
+    public int getForwardNum(Long userId, LocalDate minDate, LocalDate maxDate) {
+        Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
         List<DayReport> sortAll = reportDayRepository.findAll(specification);
         int num = 0;
         for (DayReport reportDay : sortAll) {
@@ -113,13 +113,13 @@ public class MonthReportServiceImpl implements MonthReportService {
     /**
      * 统计每月访客量
      *
-     * @param userId       用户ID
-     * @param lastFirstDay 上月第一天
-     * @param lastEndDay   上月最后一天
+     * @param userId  用户ID
+     * @param minDate 统计起始时间
+     * @param maxDate 统计结束时间
      * @return
      */
-    int getVisitorNum(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
-        Specification<DayReport> specification = getSpecification(userId, lastFirstDay, lastEndDay);
+    public int getVisitorNum(Long userId, LocalDate minDate, LocalDate maxDate) {
+        Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
         List<DayReport> sortAll = reportDayRepository.findAll(specification);
         int num = 0;
         for (DayReport reportDay : sortAll) {
@@ -131,13 +131,13 @@ public class MonthReportServiceImpl implements MonthReportService {
     /**
      * 统计每月推广积分
      *
-     * @param userId       用户ID
-     * @param lastFirstDay 上月第一天
-     * @param lastEndDay   上月最后一天
+     * @param userId  用户ID
+     * @param minDate 统计起始时间
+     * @param maxDate 统计结束时间
      * @return
      */
-    int getExtensionScore(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
-        Specification<DayReport> specification = getSpecification(userId, lastFirstDay, lastEndDay);
+    public int getExtensionScore(Long userId, LocalDate minDate, LocalDate maxDate) {
+        Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
         List<DayReport> sortAll = reportDayRepository.findAll(specification);
         int num = 0;
         for (DayReport reportDay : sortAll) {
@@ -149,17 +149,17 @@ public class MonthReportServiceImpl implements MonthReportService {
     /**
      * 统计每月关注量（销售员特有）
      *
-     * @param userId       用户ID
-     * @param lastFirstDay 上月第一天
-     * @param lastEndDay   上月最后一天
+     * @param userId  用户ID
+     * @param minDate 统计起始时间
+     * @param maxDate 统计起始时间
      * @return
      */
-    int getFollowNum(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
+    public int getFollowNum(Long userId, LocalDate minDate, LocalDate maxDate) {
         Specification<DayReport> specification = ((root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(cb.equal(root.get("userId").as(Long.class), userId));
-            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastFirstDay));
-            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastEndDay));
+            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(LocalDate.class), minDate));
+            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(LocalDate.class), maxDate));
             predicates.add(cb.equal(root.get("isSalesman").as(boolean.class), true));
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         });

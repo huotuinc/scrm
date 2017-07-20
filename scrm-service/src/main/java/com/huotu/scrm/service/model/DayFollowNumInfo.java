@@ -28,5 +28,5 @@ public class DayFollowNumInfo implements Serializable {
     /**
      * 近几个月关注排名 （默认统计5个月包含本月）
      */
-    private List<Integer> monthFollowRankingList;
+    private List<MonthStatisticInfo> monthFollowRankingList;
 }
