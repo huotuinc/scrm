@@ -4,9 +4,9 @@ import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
-import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
-import com.huotu.scrm.service.repository.InfoConfigureRepository;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
@@ -40,7 +40,7 @@ public class DayReportServiceImpl implements DayReportService {
     @Autowired
     private InfoConfigureRepository infoConfigureRepository;
     @Autowired
-    private BusinessCardRecordReposity businessCardRecordReposity;
+    private BusinessCardRecordRepository businessCardRecordRepository;
 
     @Override
     @Transactional
@@ -53,7 +53,7 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDateTime now = LocalDateTime.now();
         //获取昨天时间（时分秒默认为零）
         LocalDateTime lastTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.minusDays(1).getDayOfMonth(), 0, 0, 0);
-        List<Long> bySourceUserIdList = infoBrowseRepository.findBySourceUserId();
+        List<Long> bySourceUserIdList = infoBrowseRepository.findBySourceUserId(lastTime, now.minusDays(1));
         for (long sourceUserId : bySourceUserIdList) {
             DayReport dayReport = new DayReport();
             User user = userRepository.findOne(sourceUserId);
@@ -77,7 +77,7 @@ public class DayReportServiceImpl implements DayReportService {
             dayReport.setExtensionScore(extensionScore);
             //设置每日被关注量(销售员特有)
             if (dayReport.isSalesman()) {
-                int countByUserId = businessCardRecordReposity.countByUserId(sourceUserId, lastTime, now);
+                int countByUserId = businessCardRecordRepository.countByUserId(sourceUserId, lastTime, now);
                 dayReport.setFollowNum(countByUserId);
             } else {
                 dayReport.setFollowNum(0);
@@ -124,13 +124,13 @@ public class DayReportServiceImpl implements DayReportService {
         //获取咨询转发转换比例
         int rewardScore = infoConfigure.getRewardScore();
         //判断是否开启咨询转发积分奖励
-        if (infoConfigure.getIsReward()) {
+        if (infoConfigure.isRewardSwitch()) {
             //判断小伙伴是否开启咨询转发奖励
             int rewardUserType = infoConfigure.getRewardUserType();
             //rewardUserType 1：小伙伴 2：小伙伴 + 会员
             if (rewardUserType == 1 || rewardUserType == 2) {
                 //判断是否开启奖励次数限制
-                if (infoConfigure.isReward_Limit()) {
+                if (infoConfigure.isRewardLimitSwitch()) {
                     int rewardLimitNum = infoConfigure.getRewardLimitNum();
                     if (rewardLimitNum < forwardNumBySourceUserId) {
                         forwardScore = rewardLimitNum * rewardScore;
@@ -149,7 +149,7 @@ public class DayReportServiceImpl implements DayReportService {
         //获取访客量转换比例
         int exchangeRate = infoConfigure.getExchangeRate();
         //判断是否开启访客量积分奖励
-        if (infoConfigure.isExchange()) {
+        if (infoConfigure.isExchangeSwitch()) {
             //判断小伙伴是否开启访客量奖励
             int exchangeUserType = infoConfigure.getExchangeUserType();
             //exchangeUserType 1：小伙伴 2：小伙伴 + 会员

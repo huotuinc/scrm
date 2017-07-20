@@ -43,8 +43,8 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
     List<DayReport> findByReportDayOrderByVisitorNumDesc(LocalDate date);
 
     //查询所有数据（取出重复用户ID）
-    @Query("select distinct t.userId from DayReport t ")
-    List<Long> findByUserId();
+    @Query("select distinct t.userId from DayReport t where t.reportDay>=?1 and t.reportDay<=?2")
+    List<Long> findByUserId(LocalDate minDate, LocalDate maxDate);
 
     DayReport findByUserIdAndReportDay(Long userId, LocalDate date);
 

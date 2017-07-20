@@ -96,4 +96,22 @@ public class MonthReport {
     @Column(name = "Report_Month", columnDefinition = "date")
     @Converter(name = "", converterClass = LocalDateAttributeConverter.class)
     private LocalDate reportMonth;
+
+    @Override
+    public String toString() {
+        return "MonthReport{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", customerId=" + customerId +
+                ", levelId=" + levelId +
+                ", isSalesman=" + isSalesman +
+                ", forwardNum=" + forwardNum +
+                ", visitorNum=" + visitorNum +
+                ", extensionScore=" + extensionScore +
+                ", scoreRanking=" + scoreRanking +
+                ", followNum=" + followNum +
+                ", followRanking=" + followRanking +
+                ", reportMonth=" + reportMonth +
+                '}';
+    }
 }

@@ -7,6 +7,7 @@ import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 
@@ -26,8 +27,9 @@ public class DayReportServiceTest extends CommonTestBase {
      * 测试保存每日统计信息
      */
     @Test
+    @Rollback(false)
     public void testDayReportService() {
-      dayReportService.saveDayReport();
+        dayReportService.saveDayReport();
 //        int cumulativeScore = dayReportService.getCumulativeScore(687500L);
 //        dayReportService.saveDayReport();
 //        System.out.println(cumulativeScore);
@@ -38,9 +40,7 @@ public class DayReportServiceTest extends CommonTestBase {
 //        infoBrowseRepository.findForwardNumBySourceUserId(now.minusDays(2), now, 687500L);
         List<DayReport> all = dayReportRepository.findAll();
         all.forEach(p -> {
-            System.out.println(p.getId());
-            System.out.println(p.getExtensionScore());
-            System.out.println(p.getFollowNum());
+            System.out.println(p.toString());
         });
     }
 

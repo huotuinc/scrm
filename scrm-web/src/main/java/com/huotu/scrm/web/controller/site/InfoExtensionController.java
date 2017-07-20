@@ -39,8 +39,12 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/getInfoExtension")
     public String getInfoExtension(@ModelAttribute("userId") Long userId, Model model) throws URISyntaxException {
+
+        userId = 727010L;
         int userType = infoExtensionService.getUserType(userId);
+        userType = 1;
         List<InfoModel> infoModels = infoExtensionService.findInfo(userId, userType);
+
         for (InfoModel infoModel : infoModels) {
             URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, infoModel.getThumbnailImageUrl());
             infoModel.setThumbnailImageUrl(uri.getPath());

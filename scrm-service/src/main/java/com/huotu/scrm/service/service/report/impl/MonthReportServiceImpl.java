@@ -45,7 +45,7 @@ public class MonthReportServiceImpl implements MonthReportService {
         LocalDate lastFirstDay = firstDay.minusMonths(1);
         //得到上月最后一天
         LocalDate lastEndDay = today.with(TemporalAdjusters.lastDayOfMonth()).minusMonths(1);
-        List<Long> userIdList = reportDayRepository.findByUserId();
+        List<Long> userIdList = reportDayRepository.findByUserId(lastFirstDay, lastEndDay);
         for (long userId : userIdList) {
             User user = userRepository.findOne(userId);
             MonthReport monthReport = new MonthReport();

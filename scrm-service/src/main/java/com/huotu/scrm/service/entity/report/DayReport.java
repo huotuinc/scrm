@@ -101,4 +101,22 @@ public class DayReport {
     @Column(name = "Report_Day")
     private LocalDate reportDay;
 
+    @Override
+    public String toString() {
+        return "DayReport{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", customerId=" + customerId +
+                ", levelId=" + levelId +
+                ", isSalesman=" + isSalesman +
+                ", forwardNum=" + forwardNum +
+                ", visitorNum=" + visitorNum +
+                ", visitorRanking=" + visitorRanking +
+                ", extensionScore=" + extensionScore +
+                ", scoreRanking=" + scoreRanking +
+                ", followNum=" + followNum +
+                ", followRanking=" + followRanking +
+                ", reportDay=" + reportDay +
+                '}';
+    }
 }
