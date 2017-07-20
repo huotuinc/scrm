@@ -1,5 +1,6 @@
-package com.huotu.scrm.common.utils;
+package com.huotu.scrm.service.model;
 
+import com.huotu.scrm.common.utils.Constant;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,7 +1,7 @@
 package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.service.entity.info.InfoBrowse;
-import com.huotu.scrm.service.service.info.impl.InfoBrowseServer;
+import com.huotu.scrm.service.service.info.InfoBrowseServer;
 import com.huotu.scrm.web.CommonTestBase;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
