@@ -69,12 +69,13 @@ public class InfoConfigure {
 
     /**
      * UV转换积分获取对象
+     * 0 会员  1 小伙伴
      */
     @Column(name = "Exchange_UserType")
     private int exchangeUserType;
 
     /**
-     * UV转换积分获取对象
+     * UV转换积分每日上限
      */
     @Column(name = "Day_Exchange_Limit")
     private int dayExchangeLimit;
