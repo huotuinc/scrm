@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+
+    <title></title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <!--<base target="_blank">-->
+</head>
+<body class="gray-bg">
+<!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
+<!--/*@thymesVar id="goodsName" type="java.lang.String"*/-->
+<div class="wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>转发奖励设置</h5>
+        </div>
+        <div class="ibox-content">
+            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" action="#">
+                <!--<input type="hidden" name="id" value="" th:value="${info.id}"/>-->
+                <div class="form-group">
+                    <div>
+                        <label class="col-sm-2 control-label">状态</label>
+                        <span class="switchery" id="articlePublish" style="background-color: rgb(100, 189, 99);
+                    border-color: rgb(100, 189, 99); box-shadow: rgb(100, 189, 99) 0px 0px 0px 16px inset;
+                    transition: border 0.4s, box-shadow 0.4s, background-color 1.2s;">
+                         <small style="left: 20px; transition: left 0.2s;"></small>
+                        </span>
+                    </div>
+                    </br>
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">转发资讯积分</label>
+                        <span style="padding-top: 6px;display: block;">转发一条资讯 可获得
+                        <input type="number" style="width: 80px" min="0" value="1">
+                        积分
+                </span>    </div>
+                    </br>
+                    <div>
+                        <label class="col-sm-2 control-label">转发奖励限制</label>
+                        <span class="switchery" id="articlePublishx" style="background-color: rgb(100, 189, 99);
+                    border-color: rgb(100, 189, 99); box-shadow: rgb(100, 189, 99) 0px 0px 0px 16px inset;
+                    transition: border 0.4s, box-shadow 0.4s, background-color 1.2s;">
+                         <small style="left: 20px; transition: left 0.2s;"></small>
+                        </span>
+                    </div>
+                    </br>
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">奖励次数限制</label>
+                        <span style="padding-top: 6px;display: block;">每日可获取奖励
+                        <input type="number" style="width: 80px" min="0" value="1">
+                        次</span>
+                    </div>
+                    </br>
+                    <div>
+                        <label class="col-sm-2 control-label">转发奖励获取对象</label>
+                        <div class="col-sm-6">
+                            <div class="radio radio-info radio-inline">
+                                <input type="radio" id="rewardObject0" value="1" name="status" data-check="true"
+                                       th:checked="${info.status}" checked="checked">
+                                <label for="rewardObject0">会员</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="rewardObject1" value="0" name="status"
+                                       th:checked="${!info.status}">
+                                <label for="rewardObject1">小伙伴</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="ibox-title">
+                    <h5>UV转换为积分</h5>
+                </div>
+
+                <div class="ibox-content">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <span class="switchery" id="articlePublish1" style="background-color: rgb(100, 189, 99);
+                    border-color: rgb(100, 189, 99); box-shadow: rgb(100, 189, 99) 0px 0px 0px 16px inset;
+                    transition: border 0.4s, box-shadow 0.4s, background-color 1.2s;">
+                            <small style="left: 20px; transition: left 0.2s;"></small>
+                        </span>
+
+                    </br>
+
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">小伙伴每日转发的产生UV转换成积分的比例:</label>
+                        <span style="padding-top: 6px;display: block;"> <input type="number" style="width: 80px" min="0" value="100">
+                            的UV量转1积分</span>
+                    </div>
+
+                    </br>
+
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">UV每日兑换上限:</label>
+                        <span style="padding-top: 6px;display: block;"> <input type="number" style="width: 80px" min="0" value="100">
+                            积分</span>
+                    </div>
+
+                    </br>
+
+                    <div style="padding-top: 5px;clear: both;">
+                        <label class="col-sm-2 control-label">转发奖励获取对象</label>
+                        <div class="col-sm-6">
+                            <div class="radio radio-info radio-inline">
+                                <input type="radio" id="turnObject0" value="1" name="status" data-check="true"
+                                       th:checked="${info.status}" checked="checked">
+                                <label for="turnObject0">会员</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="turnObject1" value="0" name="status"
+                                       th:checked="${!info.status}">
+                                <label for="turnObject1">小伙伴</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-5">
+                            <button class="btn btn-success btn-submit" type="submit" id="infoSubmit"
+                                    onclick="infoSaveEditHandler.uploadInfo()">提交
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="../../js/plugins/hot/jquery.utils.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
+<!---->
+
+<script type="text/javascript">
+    $(function () {
+        $('#summerNote').summernote({
+            height: 300,
+            minHeight: 200,
+            maxHeight: 400,
+            focus: true,
+            lang: 'zh-CN',
+        });
+
+    });
+
+    var infoSaveEditHandler = {
+        uploadFile: function () {
+            $.ajaxFileUpload({
+                url: "/mall/common/upload",
+                secureuri: false,// 一般设置为false
+                fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                dataType: 'json',// 返回值类型 一般设置为json
+                type: "post",
+                success: function (data) // 服务器成功响应处理函数
+                {
+                    if (data.code == 200) {
+                        $('#imageShow').attr('src', data.fileUrl);
+                        $("input:hidden[name='imageUrl']").val(data.fileUri);
+                    }
+                },
+                error: function (data)// 服务器响应失败处理函数
+                {
+                    console.log(data + "服务器异常");
+                }
+            })
+        },
+        uploadInfo: function () {
+            $("input:hidden[name='content']").val($('#summerNote').code());
+            $('#infoSubmit').submit();
+        }
+
+    }
+</script>
+
+</body>
+
+
+</html>
+<!--<script type="text/javascript">-->
+<!--$('input[type="file"]').prettyFile();-->
+<!--$(function () {-->
+<!--var smnote = $(".summernote").summernote({-->
+<!--lang: "zh-CN"-->
+<!--});-->
+<!--});-->
+<!--</script>-->
