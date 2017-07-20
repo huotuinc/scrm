@@ -133,7 +133,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             statisticalInformation.setFollowNum(followNum);
         }
         //获取访客量排名
-        List<Long> sourceUserIdList = infoBrowseRepository.findBySourceUserId();
+        List<Long> sourceUserIdList = infoBrowseRepository.findBySourceUserId(beginTime, now);
         Map<Long, Integer> map = new TreeMap<>();
         for (long sourceUserId : sourceUserIdList
                 ) {
@@ -214,7 +214,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     }
 
 
-    public Date localDateTimeToDate(LocalDateTime time){
+    public Date localDateTimeToDate(LocalDateTime time) {
         ZoneId zone = ZoneId.systemDefault();
         Instant instant = time.atZone(zone).toInstant();
         Date date = Date.from(instant);
