@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,13 +58,15 @@ public class InfoController extends MallBaseController {
     @RequestMapping(value = "/info/edit")
     public String infoEditPage(@RequestParam(required = false,defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId){
         Info info =  infoService.findOneById(id);
-        if(info.getId() != null && info.getId() != 0){
-            try {
-                URI imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
-                logger.info(imgUri.toString());
+        if (info.getId() != null && info.getId() != 0) {
+            if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
+                URI imgUri = null;
+                try {
+                    imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
                 info.setImageUrl(imgUri.toString());
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
             }
         }
         model.addAttribute("info",info);

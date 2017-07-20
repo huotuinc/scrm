@@ -33,7 +33,7 @@ public class InfoServiceImpl implements InfoService {
 
 
     public long infoListsCount(boolean disable) {
-        return infoRepository.countByDisable(disable);
+        return infoRepository.countByIsDisable(disable);
     }
 
     public List<Info> findListsByWord(String title) {
@@ -64,7 +64,7 @@ public class InfoServiceImpl implements InfoService {
         newInfo.setTitle(info.getTitle());
         newInfo.setIntroduce(info.getIntroduce());
         newInfo.setContent(info.getContent());
-        if(!StringUtils.isEmpty(info.getImageUrl()) && StringUtils.containsWhitespace("http")){
+        if(!StringUtils.isEmpty(info.getImageUrl()) && !StringUtils.containsWhitespace("http")){
             newInfo.setImageUrl(info.getImageUrl());
         }
         newInfo.setThumbnailImageUrl(info.getThumbnailImageUrl());
@@ -83,7 +83,7 @@ public class InfoServiceImpl implements InfoService {
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + informationSearch.getSearchCondition() + "%"));
             }
             list.add(criteriaBuilder.equal(root.get("customerId").as(Long.class), informationSearch.getCustomerId()));
-            list.add(criteriaBuilder.equal(root.get("disable").as(boolean.class), informationSearch.getDisable()));
+            list.add(criteriaBuilder.equal(root.get("isDisable").as(boolean.class), informationSearch.getDisable()));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }, pageable);

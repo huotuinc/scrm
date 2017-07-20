@@ -72,7 +72,7 @@ public class Info {
     /**
      * 资讯创建时间
      */
-    @Column(name = "Create_Time")
+    @Column(name = "Create_Time" , columnDefinition = "datetime")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
@@ -81,38 +81,23 @@ public class Info {
      * 资讯状态     1、 已发布  0、未发布 (判断普通会员)
      */
     @Column(name = "Status")
-    private boolean status;
+    private boolean isStatus;
 
 
     /**
      * 资讯推广状态  1、 已推广  0、未推广（判断小伙伴）
      */
     @Column(name = "Extend")
-    private boolean extend = false;
+    private boolean isExtend = false;
 
 
     /**
      * 资讯是否删除  1、已删除  0、正常
      */
     @Column(name = "Disable")
-    private boolean disable = false;
+    private boolean isDisable = false;
 
 
-    @Override
-    public String toString() {
-        return "Info{" +
-                "id=" + id +
-                ", customerId=" + customerId +
-                ", title='" + title + '\'' +
-                ", introduce='" + introduce + '\'' +
-                ", content='" + content + '\'' +
-                ", imageUrl='" + imageUrl + '\'' +
-                ", thumbnailImageUrl='" + thumbnailImageUrl + '\'' +
-                ", createTime=" + createTime +
-                ", status=" + status +
-                ", extend=" + extend +
-                ", disable=" + disable +
-                '}';
-    }
+
 
 }
