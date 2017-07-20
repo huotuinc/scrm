@@ -55,7 +55,9 @@ public class UserLevel {
      */
     @Column(name = "UL_CustomerID")
     private Long customerId;
-
+    /**
+     * 是否是销售员
+     */
     @Column(name = "Is_Salesman")
     private boolean isSalesman;
 }

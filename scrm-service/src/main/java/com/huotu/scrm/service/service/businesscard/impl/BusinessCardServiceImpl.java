@@ -12,6 +12,7 @@ import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
  */
 @Service
 @Transactional
-public class BusinessCardServiceImpl implements BusinessCardService{
+public class BusinessCardServiceImpl implements BusinessCardService {
     @Autowired
     BusinessCardRepository businessCardReposity;
     @Autowired
@@ -29,19 +30,19 @@ public class BusinessCardServiceImpl implements BusinessCardService{
     UserRepository userRepository;
 
     public BusinessCard getBusinessCard(Long salesmanId, Long customerId) {
-        BusinessCard businessCard = businessCardReposity.getByUserIdAndCustomerId(salesmanId , customerId);
+        BusinessCard businessCard = businessCardReposity.getByUserIdAndCustomerId(salesmanId, customerId);
         return businessCard;
     }
 
-    public SalesmanBusinessCard getSalesmanBusinessCard( Long customerId ,Long salesmanId , Long followerId ) {
-        BusinessCard businessCard = businessCardReposity.getByUserIdAndCustomerId(salesmanId , customerId);
-        User user = userRepository.getByIdAndCustomerId(salesmanId , customerId);
+    public SalesmanBusinessCard getSalesmanBusinessCard(Long customerId, Long salesmanId, Long followerId) {
+        BusinessCard businessCard = businessCardReposity.getByUserIdAndCustomerId(salesmanId, customerId);
+        User user = userRepository.getByIdAndCustomerId(salesmanId, customerId);
         Integer numberOfFollowers = businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);
-        Boolean isFollowed = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId,salesmanId,followerId);
+        Boolean isFollowed = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
         SalesmanBusinessCard userBusinessCard = new SalesmanBusinessCard();
         userBusinessCard.setBusinessCard(businessCard);
         userBusinessCard.setSalesman(user);
-        userBusinessCard.setNumberOfFollowers( numberOfFollowers);
+        userBusinessCard.setNumberOfFollowers(numberOfFollowers);
         userBusinessCard.setFollowerId(followerId);
         userBusinessCard.setIsFollowed(isFollowed);
 
@@ -49,27 +50,27 @@ public class BusinessCardServiceImpl implements BusinessCardService{
     }
 
 
-    public BusinessCard updateBusinessCard(Long customerId , Long userId , BusinessCardUpdateTypeEnum type , String text) {
+    public BusinessCard updateBusinessCard(Long customerId, Long userId, BusinessCardUpdateTypeEnum type, String text) {
 
-        BusinessCard model = businessCardReposity.getByUserIdAndCustomerId( userId , customerId );
-        if(model==null){
+        BusinessCard model = businessCardReposity.getByUserIdAndCustomerId(userId, customerId);
+        if (model == null) {
             model = new BusinessCard();
-            model.setCustomerId( customerId);
+            model.setCustomerId(customerId);
             model.setUserId(userId);
         }
-        if(type== BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR){
+        if (type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR) {
             model.setAvatar(text);
-        }else if(type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYNAME){
+        } else if (type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYNAME) {
             model.setCompanyName(text);
-        }else if(type== BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB){
+        } else if (type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB) {
             model.setJob(text);
-        }else if(type== BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_TEL){
+        } else if (type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_TEL) {
             model.setTel(text);
-        }else if(type== BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_QQ){
+        } else if (type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_QQ) {
             model.setQq(text);
-        }else if(type== BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYADDRESS){
+        } else if (type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYADDRESS) {
             model.setCompanyAddress(text);
-        }else if(type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_EMAIL){
+        } else if (type == BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_EMAIL) {
             model.setEmail(text);
         }
 
@@ -80,10 +81,10 @@ public class BusinessCardServiceImpl implements BusinessCardService{
 
     public List<SalesmanBusinessCard> getMyBusinessCardList(Long customerId, Long userId) {
         List<BusinessCardRecord> list = businessCardRecordReposity.findByCustomerIdAndFollowId(customerId, userId);
-        List<SalesmanBusinessCard> myBusinessCards=new ArrayList<>();
-        if(list.size()>0){
-            for(BusinessCardRecord item : list){
-                SalesmanBusinessCard salesman = this.getSalesmanBusinessCard(customerId,item.getUserId() , item.getFollowId());
+        List<SalesmanBusinessCard> myBusinessCards = new ArrayList<>();
+        if (list.size() > 0) {
+            for (BusinessCardRecord item : list) {
+                SalesmanBusinessCard salesman = this.getSalesmanBusinessCard(customerId, item.getUserId(), item.getFollowId());
                 myBusinessCards.add(salesman);
             }
         }

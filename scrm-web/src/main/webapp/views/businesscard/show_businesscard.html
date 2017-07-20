@@ -42,7 +42,7 @@
         <p class="right-dd js-data-cancelFollow-div"><a href="javascript:void(0);" style="color: #fff" id="cancelFollow" th:if="${businessCard.getIsFollowed()}">取消关注</a> </p>
     </div>
     <div class="grsbg" style="padding: 20px 0px;">
-        <img style="border-radius: 50px; width: 100px;  height: 100px;" th:src="${businessCard.getBusinessCard().getAvatar()}" >
+        <img style="border-radius: 50px; width: 100px;  height: 100px;" th:src="${businessCard.getBusinessCard().getAvatar()}? (${businessCard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg' : ${businessCard.getBusinessCard().getAvatar()} ): '../../resources/images/mrtx.jpg'" >
         <div class="grsname">
             <p><b style="color: #fff;" th:text="${businessCard.getSalesman().getNickName()}"></b>
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}">♂</i>&lt;!&ndash;♂切换性别&ndash;&gt;-->

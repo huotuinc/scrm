@@ -13,6 +13,7 @@ $(function () {
     var $weuishow_email=$("#weuishow_email");
     var $weuishow_companyaddress=$("#weuishow_companyaddress");
     var $weuishow_job=$("#weuishow_job");
+    var $js_avatar_div=$(".js-avatar-div");
 
     $weuishow_companyaddress.click(showTip);
     $weuishow_companyname.click(showTip);
@@ -20,6 +21,7 @@ $(function () {
     $weuishow_email.click(showTip);
     $weuishow_qq.click(showTip);
     $weuishow_tel.click(showTip);
+    $js_avatar_div.click(callInputFile);
 
     var $btnFile = $("#btnInput");
     $btnFile.change(uploadImage);
@@ -35,6 +37,13 @@ $(function () {
         }
 
         uploadAvatar();
+    }
+
+    /**
+     * 点击头像触发选择图片事件
+     */
+    function callInputFile() {
+        $btnFile.click();
     }
 
     function uploadAvatar() {
@@ -88,7 +97,7 @@ $(function () {
     }
 
     function showTip() {
-        var datatype= $(this).attr("js-data-type");
+        var dataType= $(this).attr("js-data-type");
         var title = $(this).attr("js-data-hint");
         var $ele = $(this).find(".ui-data-ele");
         var text = $ele.text();
@@ -98,7 +107,7 @@ $(function () {
             text: "",
             title: title,
             onOK: function (text) {
-                ajaxRequest( $ele , datatype , text );
+                ajaxRequest( $ele , dataType , text );
             },
             onCancel: function () {
                 console.log("取消了");
@@ -107,11 +116,11 @@ $(function () {
         });
     }
 
-    function ajaxRequest( ele , updatetype , text ) {
-        var url = $('body').attr("js-data-update-url"); //"/site/updateBusinessCardInfo";
+    function ajaxRequest( ele , updateType , text ) {
+        var url = $('body').attr("js-data-update-url");
         var customerId = $customerId.val();
-        var userid = $userId.val();
-        var data ={ customerId : customerId , userId:userid , type: updatetype , value:text};
+        var userId = $userId.val();
+        var data ={ customerId : customerId , userId:userId , type: updateType , value:text};
 
         console.log("url="+url);
 

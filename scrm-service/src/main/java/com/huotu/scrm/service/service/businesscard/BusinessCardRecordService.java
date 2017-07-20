@@ -13,14 +13,14 @@ public interface BusinessCardRecordService {
      * @param userId
      * @return
      */
-    int getFollowCountByCustomerIdAndUserId(Long customerId , Long userId);
+    int getFollowCountByCustomerIdAndUserId(Long customerId, Long userId);
 
     /***
      * 删除关注信息
      * @param customerId
      * @param userId
      */
-    void deleteByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId );
+    void deleteByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId);
 
     /***
      * 是否关注了指定的销售员名片
@@ -29,7 +29,7 @@ public interface BusinessCardRecordService {
      * @param followId
      * @return
      */
-    boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId , Long userId , Long followId);
+    boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId);
 
     /***
      * 判断用户是否关注过了除了指定的销售员id的其他销售员
@@ -37,12 +37,12 @@ public interface BusinessCardRecordService {
      * @param followerId
      * @return
      */
-    boolean existsByCustomerIdAndFollowerIdNotInSalesmanId(Long customerId , Long followerId , Long salesmanId);
+    boolean existsByCustomerIdAndFollowerIdNotInSalesmanId(Long customerId, Long followerId, Long salesmanId);
 
     /***
-     *
+     * 新增关注记录
      * @param businessCardRecord
      * @return
      */
-    BusinessCardRecord insert( BusinessCardRecord businessCardRecord);
+    BusinessCardRecord insert(BusinessCardRecord businessCardRecord);
 }

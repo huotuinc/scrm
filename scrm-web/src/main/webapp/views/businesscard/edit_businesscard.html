@@ -35,7 +35,7 @@
 </head>
 
 <body class="ddbg" js-data-update-url="updateBusinessCardInfo">
-<form name="avatarForm" id="avatarForm" action="/site/uploadAvatar" method="post" enctype="multipart/form-data">
+<form name="avatarForm" id="avatarForm" action="uploadAvatar" method="post" enctype="multipart/form-data">
     <input type="hidden" id="customerId" name="customerId" th:value="${businessCard.getCustomerId()}">
     <input type="hidden" id="userId" name="userId" th:value="${businessCard.getUserId()}">
     <div class="bd szyo">
@@ -48,7 +48,7 @@
                 <input type="file" id="btnInput" name="btnFile" accept="image/*"  style="cursor:hand;display: none!important;">
                 </label>
                 </div>
-                <div class="weui_cell_ft">
+                <div class="weui_cell_ft js-avatar-div">
                     <img id="img_avatar" class="ui-data-ele" style=" width: 31px;vertical-align: middle;" th:src="${businessCard.getAvatar()}? (${businessCard.getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg' : ${businessCard.getAvatar()} ): '../../resources/images/mrtx.jpg'" >
                 </div>
 
