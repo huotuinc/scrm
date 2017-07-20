@@ -20,7 +20,10 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long> 
     MonthReport findByUserIdAndReportMonth(long userId, LocalDate lastFirstDay);
 
     @Query("select max(t.visitorNum) from MonthReport t where t.userId = ?1")
-    int findMaxMonthVisitorNumRanking(Long userId);
+    int findMaxMonthVisitorNum(Long userId);
+
+    @Query("select min(t.followRanking) from MonthReport t where t.userId = ?1")
+    int findByMinMonthFollowNumRanking(Long userId);
 
 
 }

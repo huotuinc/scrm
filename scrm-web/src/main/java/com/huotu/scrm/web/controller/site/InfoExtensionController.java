@@ -22,7 +22,6 @@ import java.util.List;
  * Created by hxh on 2017-07-17.
  */
 @Controller
-@RequestMapping("/extension")
 public class InfoExtensionController extends SiteBaseController {
 
     @Autowired
@@ -100,13 +99,13 @@ public class InfoExtensionController extends SiteBaseController {
     /**
      * 转到今日访问量页面
      *
-     * @param useruId
+     * @param userId
      * @param model
      * @return
      */
     @RequestMapping("/getVisitorInfo")
-    public String getVisitorInfo(@ModelAttribute("userId") Long useruId, Model model) {
-        DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(useruId);
+    public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) {
+        DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(userId);
         model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
         return "extensiondetail/personal_uv";
     }

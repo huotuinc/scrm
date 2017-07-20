@@ -17,20 +17,30 @@ public interface MonthReportService {
     /**
      * 统计推广积分
      *
-     * @param userId       用户ID
-     * @param lastFirstDay 统计起始时间
-     * @param lastEndDay   统计结束时间
+     * @param userId   用户ID
+     * @param minDate  统计起始时间
+     * @param ,maxDate 统计结束时间
      * @return
      */
-    int getExtensionScore(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay);
+    int getExtensionScore(Long userId, LocalDate minDate, LocalDate maxDate);
 
     /**
      * 统计访客量
      *
-     * @param userId       用户ID
-     * @param lastFirstDay 统计起始时间
-     * @param lastEndDay   统计结束时间
+     * @param userId  用户ID
+     * @param minDate 统计起始时间
+     * @param maxDate 统计结束时间
      * @return
      */
-    int getVisitorNum(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay);
+    int getVisitorNum(Long userId, LocalDate minDate, LocalDate maxDate);
+
+    /**
+     * 统计关注量
+     *
+     * @param userId  用户ID
+     * @param minDate 统计起始时间
+     * @param maxDate 统计结束时间
+     * @return
+     */
+    int getFollowNum(Long userId, LocalDate minDate, LocalDate maxDate);
 }
