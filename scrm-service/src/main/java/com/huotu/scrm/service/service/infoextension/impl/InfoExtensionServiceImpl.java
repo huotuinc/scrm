@@ -14,8 +14,8 @@ import com.huotu.scrm.service.model.InfoModel;
 import com.huotu.scrm.service.model.MonthStatisticInfo;
 import com.huotu.scrm.service.model.StatisticalInformation;
 import com.huotu.scrm.service.repository.InfoBrowseRepository;
-import com.huotu.scrm.service.repository.InfoConfigureRepository;
-import com.huotu.scrm.service.repository.InfoRepository;
+import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
@@ -116,7 +116,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         InfoConfigure infoConfigure = infoConfigureRepository.findOne(customerId);
         int exchangeRate = infoConfigure.getExchangeRate();
         //判断是否开启访客量积分奖励
-        if (infoConfigure.isExchange()) {
+        if (infoConfigure.isExchangeSwitch()) {
             //判断小伙伴是否开启访客量奖励
             int exchangeUserType = infoConfigure.getExchangeUserType();
             //exchangeUserType 1：小伙伴 2：小伙伴 + 会员

@@ -1,7 +1,7 @@
 package com.huotu.scrm.web.controller.mall;
 
 
-import com.huotu.scrm.common.utils.InformationSearch;
+import com.huotu.scrm.service.model.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.web.service.StaticResourceService;

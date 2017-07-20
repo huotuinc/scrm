@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>异常错误</title>
+</head>
+<body>
+    <h2>啊哦，程序出错了！</h2>
+    <h3 th:text="${exception.message}"></h3>
+    <H4>堆栈信息:</H4>
+    <p th:each="stack :${exception.stackTrace}" th:text="${stack}"></p>
+</body>
+</html>

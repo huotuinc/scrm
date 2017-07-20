@@ -1,19 +1,21 @@
-package com.huotu.scrm.service.service.impl;
+package com.huotu.scrm.service.service.businesscard.impl;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
-import com.huotu.scrm.service.repository.BusinessCardRecordReposity;
-import com.huotu.scrm.service.service.BusinessCardRecordService;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.service.businesscard.BusinessCardRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by Administrator on 2017/7/12.
  */
 @Service
+@Transactional
 public class BusinessCardRecordServiceImpl implements BusinessCardRecordService {
 
     @Autowired
-    BusinessCardRecordReposity businessCardRecordReposity;
+    BusinessCardRecordRepository businessCardRecordReposity;
 
     @Override
     public int getFollowCountByCustomerIdAndUserId(Long customerId, Long userId) {

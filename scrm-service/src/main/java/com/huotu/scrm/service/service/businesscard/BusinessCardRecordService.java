@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.service;
+package com.huotu.scrm.service.service.businesscard;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 

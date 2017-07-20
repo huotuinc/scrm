@@ -63,10 +63,10 @@ li {
     opacity: 1;
 }
 
-.sl .swiper-pagination span {
-    -webkit-transition: 0;
-    transition: 0;
-}
+/*.sl .swiper-pagination span {*/
+    /*-webkit-transition: 0;*/
+    /*transition: 0;*/
+/*}*/
 
 /*个人中心*/
 .f-bigbox {
@@ -1582,12 +1582,12 @@ a.l-coupon_item {
     background-position: 0 0;
 }
 
-[class*=" weui_icon_"]:before, [class^=weui_icon_]:before {
-    background-image: url(../images/aaa.png);
-    background-size: 23px 47px;
-    background-repeat: no-repeat;
-    background-position: 0 0;
-}
+/*[class*=" weui_icon_"]:before, [class^=weui_icon_]:before {*/
+    /*background-image: url(../images/aaa.png);*/
+    /*background-size: 23px 47px;*/
+    /*background-repeat: no-repeat;*/
+    /*background-position: 0 0;*/
+/*}*/
 
 a.zuijia {
     background-color: #FF3F00;
@@ -1930,10 +1930,10 @@ a.zuijia {
     background: #fff;
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 2) .toolbar:before {
-    -webkit-transform: scaleY(0.5);
-    transform: scaleY(0.5);
-}
+/*@media only screen and (-webkit-min-device-pixel-ratio: 2).toolbar:before {*/
+    /*-webkit-transform: scaleY(0.5);*/
+    /*transform: scaleY(0.5);*/
+/*}*/
 
     .toolbar:before {
         content: '';
@@ -2306,65 +2306,65 @@ a.zuijia {
         margin-top: -6px;
     }
 
-    .useno-ygq {
-        position: absolute;
-        right: -5px;
-        width: 69px;
-        height: 37px;
-        background: url(../images/icon_hongbao1.png) no-repeat;
-        -webkit-background-size: 69px 146px;
-        background-size: 69px 146px;
-        -webkit-transform: rotate(-25deg);
-        -ms-transform: rotate(-25deg);
-        transform: rotate(25deg);
-        top: 10px;
-        background-position: 0px 0px;
-    }
+    /*.useno-ygq {*/
+        /*position: absolute;*/
+        /*right: -5px;*/
+        /*width: 69px;*/
+        /*height: 37px;*/
+        /*background: url(../images/icon_hongbao1.png) no-repeat;*/
+        /*-webkit-background-size: 69px 146px;*/
+        /*background-size: 69px 146px;*/
+        /*-webkit-transform: rotate(-25deg);*/
+        /*-ms-transform: rotate(-25deg);*/
+        /*transform: rotate(25deg);*/
+        /*top: 10px;*/
+        /*background-position: 0px 0px;*/
+    /*}*/
 
-    .useno-wsy {
-        position: absolute;
-        right: -5px;
-        width: 69px;
-        height: 37px;
-        background: url(../images/icon_hongbao1.png) no-repeat;
-        -webkit-background-size: 69px 146px;
-        background-size: 69px 146px;
-        -webkit-transform: rotate(-25deg);
-        -ms-transform: rotate(-25deg);
-        transform: rotate(25deg);
-        top: 10px;
-        background-position: 0px -36px;
-    }
+    /*.useno-wsy {*/
+        /*position: absolute;*/
+        /*right: -5px;*/
+        /*width: 69px;*/
+        /*height: 37px;*/
+        /*background: url(../images/icon_hongbao1.png) no-repeat;*/
+        /*-webkit-background-size: 69px 146px;*/
+        /*background-size: 69px 146px;*/
+        /*-webkit-transform: rotate(-25deg);*/
+        /*-ms-transform: rotate(-25deg);*/
+        /*transform: rotate(25deg);*/
+        /*top: 10px;*/
+        /*background-position: 0px -36px;*/
+    /*}*/
 
-    .useno-wks {
-        position: absolute;
-        right: -5px;
-        width: 69px;
-        height: 37px;
-        background: url(../images/icon_hongbao1.png) no-repeat;
-        -webkit-background-size: 69px 146px;
-        background-size: 69px 146px;
-        -webkit-transform: rotate(-25deg);
-        -ms-transform: rotate(-25deg);
-        transform: rotate(25deg);
-        top: 10px;
-        background-position: 0px -72px;
-    }
+    /*.useno-wks {*/
+        /*position: absolute;*/
+        /*right: -5px;*/
+        /*width: 69px;*/
+        /*height: 37px;*/
+        /*background: url(../images/icon_hongbao1.png) no-repeat;*/
+        /*-webkit-background-size: 69px 146px;*/
+        /*background-size: 69px 146px;*/
+        /*-webkit-transform: rotate(-25deg);*/
+        /*-ms-transform: rotate(-25deg);*/
+        /*transform: rotate(25deg);*/
+        /*top: 10px;*/
+        /*background-position: 0px -72px;*/
+    /*}*/
 
-    .useno {
-        position: absolute;
-        right: -5px;
-        width: 69px;
-        height: 37px;
-        background: url(../images/icon_hongbao1.png) no-repeat;
-        -webkit-background-size: 69px 146px;
-        background-size: 69px 146px;
-        -webkit-transform: rotate(-25deg);
-        -ms-transform: rotate(-25deg);
-        transform: rotate(25deg);
-        top: 10px;
-        background-position: 0px -109px;
-    }
+    /*.useno {*/
+        /*position: absolute;*/
+        /*right: -5px;*/
+        /*width: 69px;*/
+        /*height: 37px;*/
+        /*background: url(../images/icon_hongbao1.png) no-repeat;*/
+        /*-webkit-background-size: 69px 146px;*/
+        /*background-size: 69px 146px;*/
+        /*-webkit-transform: rotate(-25deg);*/
+        /*-ms-transform: rotate(-25deg);*/
+        /*transform: rotate(25deg);*/
+        /*top: 10px;*/
+        /*background-position: 0px -109px;*/
+    /*}*/
 
     .weui_media_box .wito {
         font-size: 14px;
@@ -2670,6 +2670,7 @@ a.zuijia {
         color: #1a1a1a;
         font-size: 16px;
         font-weight: bold;
+    }
 
     .grsjz.wechat {
         width: 100px;

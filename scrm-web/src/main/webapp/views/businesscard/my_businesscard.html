@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="description" content="" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.css">
+<link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/weui.min.css">
+<link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"/>
+<title>我的名片夹</title>
+</head>
+<body class="grbg">
+<div class="xzdd-list">
+<div class="weui_panel" th:each="businesscard :${myBusinessCards}" >
+  <div class="weui_panel_bd">
+    <div class="weui_media_box weui_media_text">
+      <div class="weui_media_hd">
+        <img class="weui_media_appmsg_thumb borderfive"
+             th:src="${businesscard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg': ${businesscard.getBusinessCard().getAvatar()}" alt="">
+      </div>
+      <div class="left-font">
+        <h4 class="weui_media_title">
+          <span th:text="${businesscard.getSalesman().getNickName()}? ${businesscard.getSalesman().getNickName()}:''"></span>
+          <i class="title-name" th:if="${businesscard.getBusinessCard().getJob()}" th:text="${businesscard.getBusinessCard().getJob()}"></i>
+        </h4>
+      <p class="weui_media_desc" th:text="${businesscard.getBusinessCard().getCompanyName()}? ${'企业名称：'+ businesscard.getBusinessCard().getCompanyName()} :'企业名称：'"></p>
+        <p class="weui_media_desc" th:text="${ businesscard.getSalesman().getUserMobile()} ? ${'联系方式：'+businesscard.getSalesman().getUserMobile()} : '联系方式：' "></p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js" ></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.js"></script>
+
+</body>
+</html>

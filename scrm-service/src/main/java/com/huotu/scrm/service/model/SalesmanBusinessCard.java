@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class SalesmanBusinessCard implements Serializable{
+public class SalesmanBusinessCard implements Serializable {
     /***
      * 销售员基本信息
      */

@@ -64,8 +64,8 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         super.addResourceHandlers(registry);
-        registry.addResourceHandler("/resources/**/*", "/image/**/*", "/js/**/*", "/**/*.html","/css/*")
-                .addResourceLocations("/resources/", "/image/", "/js/", "/","/css/");
+        registry.addResourceHandler("/resources/**/*", "/image/**/*", "/js/**/*", "/**/*.html")
+                .addResourceLocations("/resources/", "/image/", "/js/", "/");
     }
 
     @Override
@@ -123,11 +123,9 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
         }
     }
 
-
     @Bean
-    public CommonsMultipartResolver multipartResolver(){
+    public CommonsMultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
     }
-
 
 }
