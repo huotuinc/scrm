@@ -2,7 +2,7 @@ package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
-import com.huotu.scrm.service.service.businessCard.BusinessCardService;
+import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import com.huotu.scrm.web.CommonTestBase;
 import com.huotu.scrm.web.controller.page.site.TestEditBusinessCardPage;
 import org.junit.Test;
