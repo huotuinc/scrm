@@ -8,7 +8,7 @@ import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
-import com.huotu.scrm.service.service.businessCard.BusinessCardService;
+import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
