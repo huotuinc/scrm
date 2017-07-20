@@ -15,7 +15,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 @ControllerAdvice
 public class ExceptionHandlerController {
     /***
-     *
+     * 处理404 异常
      * @param exception
      * @return
      */
@@ -28,7 +28,7 @@ public class ExceptionHandlerController {
     }
 
     /***
-     *
+     * 处理 500 异常
      * @param exception
      * @param request
      * @return
@@ -36,6 +36,7 @@ public class ExceptionHandlerController {
     @ExceptionHandler(value = {Exception.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView error500(Exception exception, WebRequest request) {
+        exception.printStackTrace();
         ModelAndView mv = new ModelAndView("error");
         mv.addObject("exception", exception);
         return mv;

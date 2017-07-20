@@ -17,7 +17,7 @@ public interface BusinessCardService {
      * @param customerId
      * @return
      */
-    BusinessCard getBusinessCard(Long salesmanId , Long customerId);
+    BusinessCard getBusinessCard(Long salesmanId, Long customerId);
 
     /***
      * 通过salesmanId和customerId和关注者d获得名片信息和用户信息
@@ -26,7 +26,7 @@ public interface BusinessCardService {
      * @param followerId 关注者Id
      * @return
      */
-    SalesmanBusinessCard getSalesmanBusinessCard( Long customerId , Long salesmanId , Long followerId);
+    SalesmanBusinessCard getSalesmanBusinessCard(Long customerId, Long salesmanId, Long followerId);
 
     /***
      * 按照类型更新名片信息
@@ -36,13 +36,14 @@ public interface BusinessCardService {
      * @param text
      * @return
      */
-    BusinessCard updateBusinessCard(Long customerId , Long userId , BusinessCardUpdateTypeEnum type , String text);
+    BusinessCard updateBusinessCard(Long customerId, Long userId, BusinessCardUpdateTypeEnum type, String text);
 
     /**
      * 获得我的名片夹
+     *
      * @param customerId
      * @param userId
      * @return
      */
-    List<SalesmanBusinessCard> getMyBusinessCardList(Long customerId , Long userId);
+    List<SalesmanBusinessCard> getMyBusinessCardList(Long customerId, Long userId);
 }

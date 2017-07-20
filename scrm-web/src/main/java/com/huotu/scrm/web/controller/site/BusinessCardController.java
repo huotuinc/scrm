@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.*;
@@ -31,7 +32,6 @@ import java.time.LocalDateTime;
  * 名片控制器
  * Created by jinxiangdong on 2017/7/11.
  */
-
 @Controller
 @RequestMapping("/site/businessCard")
 public class BusinessCardController extends SiteBaseController {
@@ -51,11 +51,13 @@ public class BusinessCardController extends SiteBaseController {
      * @param model
      * @return
      */
-    @RequestMapping(value = "/editBusinessCard" , method = RequestMethod.GET)
+    @RequestMapping(value = "/editBusinessCard", method = RequestMethod.GET)
     public String editBusinessCard(HttpServletRequest request,
                                    @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
                                    Model model) {
         long userId = this.getUserId(request);
+
+
         BusinessCard businessCard = businessCardService.getBusinessCard(userId, customerId);
         if (businessCard == null) {
             businessCard = new BusinessCard();
@@ -123,7 +125,7 @@ public class BusinessCardController extends SiteBaseController {
         BusinessCardUpdateTypeEnum typeEnum = EnumHelper.getEnumType(BusinessCardUpdateTypeEnum.class, type);
         BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, typeEnum, value);
 
-        ApiResult<BusinessCard> result = new ApiResult<BusinessCard>(ResultCodeEnum.SUCCESS.getResultMsg(), ResultCodeEnum.SUCCESS.getResultCode());
+        ApiResult<BusinessCard> result = new ApiResult<>(ResultCodeEnum.SUCCESS.getResultMsg(), ResultCodeEnum.SUCCESS.getResultCode());
         result.setData(businessCard);
         return result;
     }
@@ -159,7 +161,6 @@ public class BusinessCardController extends SiteBaseController {
         model.addAttribute("businessCard", salesmanBusinessCard);
         return "businesscard/show_businesscard";
     }
-
 
     /***
      * 取消关注

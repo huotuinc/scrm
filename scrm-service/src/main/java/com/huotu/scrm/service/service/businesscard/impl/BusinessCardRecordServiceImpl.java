@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Created by Administrator on 2017/7/12.
+ * Created by Jinxiangdong on 2017/7/12.
  */
 @Service
 @Transactional
@@ -19,22 +19,22 @@ public class BusinessCardRecordServiceImpl implements BusinessCardRecordService 
 
     @Override
     public int getFollowCountByCustomerIdAndUserId(Long customerId, Long userId) {
-        return businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId , userId);
+        return businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, userId);
     }
 
     @Override
-    public void deleteByCustomerIdAndUserIdAndFollowId(Long customerId,Long userId, Long followId) {
-        businessCardRecordReposity.deleteByCustomerIdAndUserIdAndFollowId(customerId,userId, followId);
+    public void deleteByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId) {
+        businessCardRecordReposity.deleteByCustomerIdAndUserIdAndFollowId(customerId, userId, followId);
     }
 
     @Override
     public boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId) {
-        return businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId, userId,followId);
+        return businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId, userId, followId);
     }
 
     @Override
     public boolean existsByCustomerIdAndFollowerIdNotInSalesmanId(Long customerId, Long followerId, Long salesmanId) {
-        return businessCardRecordReposity.existsByCustomerIdAndFollowIdAndUserIdNot(customerId , followerId , salesmanId);
+        return businessCardRecordReposity.existsByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId, salesmanId);
     }
 
     @Override
