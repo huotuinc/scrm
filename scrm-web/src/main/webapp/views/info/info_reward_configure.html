@@ -34,25 +34,29 @@
                 <div class="form-group">
                     <div>
                         <label class="col-sm-2 control-label">状态</label>
-                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardSwitch" th:checked="${infoConfigure.rewardSwitch}"></label>
+                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardSwitch"
+                                      th:checked="${infoConfigure.rewardSwitch}"></label>
                     </div>
                     </br>
                     <div style="padding-top: 5px">
                         <label class="col-sm-2 control-label">转发资讯积分</label>
                         <span style="padding-top: 6px;display: block;">转发一条资讯 可获得
-                        <input type="number" name="rewardScore" style="width: 80px" min="0" value="1" th:value="${infoConfigure.rewardScore}">
+                        <input type="number" name="rewardScore" style="width: 80px" min="0" value="1"
+                               th:value="${infoConfigure.rewardScore}">
                         积分
-                </span>    </div>
+                </span></div>
                     </br>
                     <div>
                         <label class="col-sm-2 control-label">转发奖励限制</label>
-                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardLimitSwitch"  th:checked="${infoConfigure.rewardLimitSwitch}"></label>
+                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardLimitSwitch"
+                                      th:checked="${infoConfigure.rewardLimitSwitch}"></label>
                     </div>
                     </br>
                     <div style="padding-top: 5px">
                         <label class="col-sm-2 control-label">奖励次数限制</label>
                         <span style="padding-top: 6px;display: block;">每日可获取奖励
-                        <input type="number" name="rewardLimitNum" style="width: 80px" min="0" value="1" th:value="${infoConfigure.rewardLimitNum}">
+                        <input type="number" name="rewardLimitNum" style="width: 80px" min="0" value="1"
+                               th:value="${infoConfigure.rewardLimitNum}">
                         次</span>
                     </div>
                     </br>
@@ -61,7 +65,7 @@
                         <div class="col-sm-6">
                             <div class="radio radio-info radio-inline">
                                 <input type="radio" id="rewardObject0" value="0" name="rewardUserType" data-check="true"
-                                       th:checked="${infoConfigure.rewardUserType == 0}" >
+                                       th:checked="${infoConfigure.rewardUserType == 0}">
                                 <label for="rewardObject0">会员</label>
                             </div>
                             <div class="radio radio-inline">
@@ -72,39 +76,34 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="ibox-title">
                     <h5>UV转换为积分</h5>
                 </div>
-
                 <div class="ibox-content">
                     <label class="col-sm-2 control-label">状态</label>
-                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="exchangeSwitch" th:checked="${infoConfigure.exchangeSwitch}"> </label>
-
+                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="exchangeSwitch"
+                                  th:checked="${infoConfigure.exchangeSwitch}"> </label>
                     </br>
-
                     <div style="padding-top: 5px">
                         <label class="col-sm-2 control-label">小伙伴每日转发的产生UV转换成积分的比例:</label>
                         <span style="padding-top: 6px;display: block;">
-                            <input type="number" style="width: 80px" min="0" value="100" name="exchangeRate" th:value="${infoConfigure.exchangeRate}">
+                            <input type="number" style="width: 80px" min="0" value="100" name="exchangeRate"
+                                   th:value="${infoConfigure.exchangeRate}">
                             的UV量转1积分
                         </span>
                     </div>
-
                     </br>
                     <label class="col-sm-2 control-label">状态</label>
-                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="dayExchangeLimitSwitch" th:checked="${infoConfigure.dayExchangeLimitSwitch}"></label>
-
-
+                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="dayExchangeLimitSwitch"
+                                  th:checked="${infoConfigure.dayExchangeLimitSwitch}"></label>
                     <div style="padding-top: 5px">
                         <label class="col-sm-2 control-label">UV每日兑换上限:</label>
-                        <span style="padding-top: 6px;display: block;"> <input type="number" name="dayExchangeLimit" style="width: 80px" min="0" value="100" th:value="${infoConfigure.dayExchangeLimit}">
+                        <span style="padding-top: 6px;display: block;"> <input type="number" name="dayExchangeLimit"
+                                                                               style="width: 80px" min="0" value="100"
+                                                                               th:value="${infoConfigure.dayExchangeLimit}">
                             积分</span>
                     </div>
-
                     </br>
-
                     <div style="padding-top: 5px;clear: both;">
                         <label class="col-sm-2 control-label">转发奖励获取对象</label>
                         <div class="col-sm-6">
@@ -120,7 +119,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-5">
                             <button class="btn btn-success btn-submit" type="button" id="infoSubmit"
@@ -129,8 +127,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </form>
         </div>
     </div>
@@ -169,27 +165,24 @@
     }
 
     var RewardConfigureHandle = {
-        saveScoreConfigure:function () {
-            hot.ajax( "/mall/reward/Save",getFormJson("#editSaveInfo"),function(result){
-                if(result.code == 200){
+        saveScoreConfigure: function () {
+            hot.ajax("/mall/reward/Save", getFormJson("#editSaveInfo"), function (result) {
+                if (result.code == 200) {
                     hot.tip.success('修改成功');
-                    setTimeout(function(){
+                    setTimeout(function () {
                         RewardConfigureHandle.refresh();
-                    },500);
-                }else{
+                    }, 500);
+                } else {
                     hot.tip.error(result.msg);
                 }
-            },function(){},'post');
+            }, function () {
+            }, 'post');
         },
 
-        refresh:function(){
+        refresh: function () {
             $('#editSaveInfo').submit;
         }
-
     }
 </script>
-
 </body>
-
-
 </html>
