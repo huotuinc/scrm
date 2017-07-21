@@ -30,7 +30,7 @@ public class InfoRewardController extends MallBaseController{
      * @param customerId
      * @return
      */
-    @RequestMapping("/reward/read")
+    @RequestMapping("/info/configure")
     public String readRewardConfigureFromDb(@ModelAttribute("customerId") Long customerId, Model model){
         InfoConfigure infoConfigure = infoRewardConfigureService.readRewardConfigure(customerId);
         model.addAttribute("infoConfigure",infoConfigure);
@@ -42,7 +42,7 @@ public class InfoRewardController extends MallBaseController{
      * @param customerId
      * @return
      */
-    @RequestMapping("/reward/Save")
+    @RequestMapping("/info/saveConfigure")
     @ResponseBody
     public ApiResult saveRewardConfigureFromDb(@ModelAttribute("customerId") Long customerId, InfoConfigure infoConfigure){
         infoConfigure.setCustomerId(customerId);
