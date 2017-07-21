@@ -36,6 +36,7 @@ public class InfoRewardConfigureServiceImpl implements InfoRewardConfigureServic
         newInfoConfigure.setExchangeUserType(infoConfigure.getExchangeUserType());
         newInfoConfigure.setDayExchangeLimit(infoConfigure.getDayExchangeLimit());
         newInfoConfigure.setInfoIntroduceUrl(infoConfigure.getInfoIntroduceUrl());
+        newInfoConfigure.setDayExchangeLimitSwitch(infoConfigure.isDayExchangeLimitSwitch());
         return infoConfigureRepository.save(newInfoConfigure);
     }
 
