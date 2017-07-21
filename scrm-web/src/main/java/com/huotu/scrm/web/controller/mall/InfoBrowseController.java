@@ -1,11 +1,10 @@
 package com.huotu.scrm.web.controller.mall;
 
-import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.service.info.InfoBrowseServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -14,34 +13,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Created by luohaibo on 2017/7/12.
  */
 @Controller
-public class InfoBrowseController {
+public class InfoBrowseController extends MallBaseController{
 
     @Autowired
     InfoBrowseServer infoBrowseServer;
 
 
-
     /**
-     * 通过资讯id查找对应的资讯浏览记录
      *
+     * @param infoBrowse
+     * @param customerId
      * @return
      */
-    @RequestMapping("/browses")
+    @RequestMapping("/info/turnIn")
     @ResponseBody
-    public ApiResult infoBrowses(Long infoId){
-
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",
-                infoBrowseServer.InfoBrowseByInfoId(infoId));
+    public void infoTurnInRecord(InfoBrowse infoBrowse, @ModelAttribute("customerId") Long customerId){
+        infoBrowseServer.infoTurnInSave(infoBrowse,customerId);
     }
 
 
-    @RequestMapping("/addBrowse")
-    @ResponseBody
-    public String insertBrowse(Long infoId){
-        InfoBrowse infoBrowse = new InfoBrowse();
-        infoBrowseServer.infoBroseSave(infoBrowse);
-        return "";
-    }
+//    @RequestMapping("/addBrowse")
+//    @ResponseBody
+//    public String insertBrowse(Long infoId){
+//        InfoBrowse infoBrowse = new InfoBrowse();
+//        infoBrowseServer.infoBroseSave(infoBrowse);
+//        return "";
+//    }
 
 
 }

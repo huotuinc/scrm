@@ -20,21 +20,17 @@ import java.time.LocalDateTime;
 @Table(name = "SCRM_InfoBrowseLog")
 public class InfoBrowse {
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id")
-    private Long id;
-
     /**
      * 资讯主键
      */
+    @Id
     @Column(name = "Info_Id")
     private Long infoId;
 
     /**
      * 资讯转发来源用户
      */
+    @Id
     @Column(name = "Info_Source_UserId")
     private Long sourceUserId;
 
@@ -42,6 +38,7 @@ public class InfoBrowse {
     /**
      * 资讯查看用户
      */
+    @Id
     @Column(name = "Info_Read_UserId")
     private Long readUserId;
 
@@ -58,5 +55,11 @@ public class InfoBrowse {
      */
     @Column(name = "Brose_Time", columnDefinition = "datetime")
     private LocalDateTime browseTime;
+
+    /**
+     * 资讯转发
+     */
+    @Column(name = "Turn_Time", columnDefinition = "datetime")
+    private LocalDateTime turnTime;
 
 }

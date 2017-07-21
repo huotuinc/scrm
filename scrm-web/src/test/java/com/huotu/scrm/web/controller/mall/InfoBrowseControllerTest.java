@@ -16,14 +16,14 @@ public class InfoBrowseControllerTest extends CommonTestBase{
     @Autowired
     InfoBrowseServer infoBrowseServer;
 
-    @Test
-    @Rollback(false)
-    public void insertBrowse(){
-        InfoBrowse infoBrowse = new InfoBrowse();
-        infoBrowse.setInfoId(new Long(123));
-        infoBrowse.setReadUserId(new Long(1234));
-        infoBrowse.setSourceUserId(new Long(123456));
-        infoBrowseServer.infoBroseSave(infoBrowse);
-    }
+//    @Test
+//    @Rollback(false)
+//    public void insertBrowse(){
+//        InfoBrowse infoBrowse = new InfoBrowse();
+//        infoBrowse.setInfoId(new Long(123));
+//        infoBrowse.setReadUserId(new Long(1234));
+//        infoBrowse.setSourceUserId(new Long(123456));
+//        infoBrowseServer.infoBroseSave(infoBrowse);
+//    }
 
 }

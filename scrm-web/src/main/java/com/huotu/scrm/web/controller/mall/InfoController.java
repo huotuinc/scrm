@@ -3,7 +3,7 @@ package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
-import com.huotu.scrm.service.model.InformationSearch;
+import com.huotu.scrm.service.model.info.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.web.service.StaticResourceService;
@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import static java.awt.SystemColor.info;
 
 
 /**

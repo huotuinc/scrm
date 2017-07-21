@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.service.info.impl;
 
-import com.huotu.scrm.service.model.InformationSearch;
+import com.huotu.scrm.service.model.info.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.service.info.InfoService;

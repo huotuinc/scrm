@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.service.info;
 
-import com.huotu.scrm.service.model.InformationSearch;
+import com.huotu.scrm.service.model.info.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;

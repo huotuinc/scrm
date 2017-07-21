@@ -2,7 +2,7 @@ package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.entity.report.DayReport;
-import com.huotu.scrm.service.repository.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.junit.Test;

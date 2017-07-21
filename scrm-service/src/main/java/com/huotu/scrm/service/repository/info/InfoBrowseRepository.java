@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.repository;
+package com.huotu.scrm.service.repository.info;
 
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +13,9 @@ import java.util.List;
  */
 public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, JpaSpecificationExecutor<InfoBrowse> {
 
+
+
+    InfoBrowse findOneByInfoIdAndSourceUserIdAndReadUserId(Long infoId, Long sourceId, Long readId);
 
     long countByInfoId(Long infoId);
 

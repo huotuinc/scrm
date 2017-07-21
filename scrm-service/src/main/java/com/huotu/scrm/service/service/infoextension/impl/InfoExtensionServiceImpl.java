@@ -11,7 +11,7 @@ import com.huotu.scrm.service.model.DayScoreRankingInfo;
 import com.huotu.scrm.service.model.DayVisitorNumInfo;
 import com.huotu.scrm.service.model.InfoModel;
 import com.huotu.scrm.service.model.StatisticalInformation;
-import com.huotu.scrm.service.repository.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
