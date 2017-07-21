@@ -42,10 +42,10 @@ public class InfoServiceImpl implements InfoService {
 
 
     @Override
-    public Info findOneById(Long id) {
+    public Info findOneByIdAndCustomerId(Long id,Long customerId){
         Info info;
         if (id != null && id != 0){
-            info = infoRepository.findOne(id);
+            info = infoRepository.findOneByIdAndCustomerId(id,customerId);
         }else {
             info = new Info();
         }
@@ -73,6 +73,17 @@ public class InfoServiceImpl implements InfoService {
         newInfo.setExtend(info.isExtend());
         return infoRepository.save(newInfo);
 
+    }
+
+    @Override
+    public boolean deleteInfo(Long customerId, Long id) {
+        Info info = infoRepository.findOneByIdAndCustomerId(id,customerId);
+        if(info != null){
+            info.setDisable(true);
+            infoRepository.save(info);
+            return true;
+        }
+        return false;
     }
 
     public Page<Info> infoSList(InformationSearch informationSearch) {

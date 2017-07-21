@@ -18,7 +18,7 @@ public interface InfoService {
      * @param id
      * @return
      */
-    Info findOneById(Long id);
+    Info findOneByIdAndCustomerId(Long id,Long CustomerId);
 
     /**
      * 根据Disable字段查询行数
@@ -48,7 +48,14 @@ public interface InfoService {
     Info infoSave(Info info);
 
 
-
+    /**
+     * 删除资讯
+     * @param customerId
+     * @param id
+     * @return
+     */
+    @Transactional
+    boolean deleteInfo(Long customerId,Long id);
 
 
 }

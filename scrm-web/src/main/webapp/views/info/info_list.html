@@ -59,7 +59,7 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button">添加资讯
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button" th:attr="infid=0">添加资讯
                         </button>
                     </div>
                     <div class="panel-body">
@@ -99,8 +99,8 @@
                                 <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
                                 <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
-                                    <span class="cursor-point">
-                                        <a href="info_edit.html" th:href="@{/mall/info/edit(id=${info.id})}"><i class="fa fa-pencil tooltips" data-toggle="tooltip" data-original-title="编辑"></i></a>
+                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)" th:attr="infid=''+${info.id}">
+                                       <i class="fa fa-pencil tooltips" data-toggle="tooltip" data-original-title="编辑"></i>
                                     </span>
                                     &nbsp;
                                     <span class="cursor-point">
@@ -111,7 +111,7 @@
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
                                     </span>
                                     &nbsp;
-                                    <span onclick="goodListHandler.deleteGood(1)" class="cursor-point">
+                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infid=''+${info.id}" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
@@ -188,8 +188,8 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>-->
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>-->
 
 <script type="text/javascript">
     var pageIndex = [[${informationSearch.pageNo}]];
@@ -216,8 +216,26 @@
             $('#searchForm').submit();
         },
 
-        editInfo:function(){
-            window.location.href = "/mall/info/edit";
+        editInfo:function(obj){
+            var infoid = $(obj).attr("infid");
+            window.location.href = "/mall/info/edit?id="+infoid;
+        },
+
+        deleteInfo:function(obj){
+            var infoid = $(obj).attr("infid");
+            hot.ajax("/mall/info/deleteInfo", {
+                id:infoid
+            }, function (result) {
+                if (result.code == 200) {
+                    hot.tip.success("删除成功");
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    hot.tip.error(result.msg);
+                }
+            }, function () {
+            }, 'post');
         }
     }
 
@@ -230,10 +248,8 @@
     });
 
     $('.js-edit').click(function(){
-        infoListHandler.editInfo();
+        infoListHandler.editInfo(this);
     });
-
-
 </script>
 </body>
 
