@@ -12,6 +12,6 @@ package com.huotu.scrm.service.service.info;
 /**
  * Created by helloztt on 2017-07-21.
  */
-public class InfoServiceTest {
+public class InfoServiceTestByCosy {
 
 }
