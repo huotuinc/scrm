@@ -30,7 +30,7 @@
             <h5>转发奖励设置</h5>
         </div>
         <div class="ibox-content">
-            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/reward/Save}" action="#">
+            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/reward/read}">
                 <div class="form-group">
                     <div>
                         <label class="col-sm-2 control-label">状态</label>
@@ -123,8 +123,8 @@
 
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-5">
-                            <button class="btn btn-success btn-submit" type="submit" id="infoSubmit"
-                                    onclick="infoSaveEditHandler.uploadInfo()">修改提交
+                            <button class="btn btn-success btn-submit" type="button" id="infoSubmit"
+                                    onclick="RewardConfigureHandle.saveScoreConfigure()">修改提交
                             </button>
                         </div>
                     </div>
@@ -148,44 +148,42 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <!---->
 
 <script type="text/javascript">
-    $(function () {
-        $('#summerNote').summernote({
-            height: 300,
-            minHeight: 200,
-            maxHeight: 400,
-            focus: true,
-            lang: 'zh-CN',
-        });
-
-    });
-
-    var infoSaveEditHandler = {
-        uploadFile: function () {
-            $.ajaxFileUpload({
-                url: "/mall/common/upload",
-                secureuri: false,// 一般设置为false
-                fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
-                dataType: 'json',// 返回值类型 一般设置为json
-                type: "post",
-                success: function (data) // 服务器成功响应处理函数
-                {
-                    if (data.code == 200) {
-                        $('#imageShow').attr('src', data.fileUrl);
-                        $("input:hidden[name='imageUrl']").val(data.fileUri);
-                    }
-                },
-                error: function (data)// 服务器响应失败处理函数
-                {
-                    console.log(data + "服务器异常");
+    function getFormJson(frm) {
+        var o = {};
+        var a = $(frm).serializeArray();
+        $.each(a, function () {
+            if (o[this.name] != undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
                 }
-            })
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+
+    var RewardConfigureHandle = {
+        saveScoreConfigure:function () {
+            hot.ajax( "/mall/reward/Save",getFormJson("#editSaveInfo"),function(result){
+                if(result.code == 200){
+                    hot.tip.success('修改成功');
+                    setTimeout(function(){
+                        RewardConfigureHandle.refresh();
+                    },500);
+                }else{
+                    hot.tip.error(result.msg);
+                }
+            },function(){},'post');
         },
-        uploadInfo: function () {
-            $("input:hidden[name='content']").val($('#summerNote').code());
-            $('#infoSubmit').submit();
+
+        refresh:function(){
+            $('#editSaveInfo').submit;
         }
 
     }
