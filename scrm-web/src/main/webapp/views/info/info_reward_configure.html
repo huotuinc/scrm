@@ -18,7 +18,7 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
     <!--<base target="_blank">-->
-    <link href="../../css/infoRewardConfigure.css" rel="stylesheet">
+    <link href="../../resources/css/infoRewardConfigure.css" th:src="@{/resources/css/infoRewardConfigure.css}" rel="stylesheet">
 
 </head>
 <body class="gray-bg">
@@ -133,7 +133,7 @@
 </div>
 
 <script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
-<script src="../../js/plugins/hot/jquery.utils.js"></script>
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js" th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
@@ -166,7 +166,7 @@
 
     var RewardConfigureHandle = {
         saveScoreConfigure: function () {
-            hot.ajax("/mall/reward/Save", getFormJson("#editSaveInfo"), function (result) {
+            hot.ajax("/mall/info/saveConfigure", getFormJson("#editSaveInfo"), function (result) {
                 if (result.code == 200) {
                     hot.tip.success('修改成功');
                     setTimeout(function () {
