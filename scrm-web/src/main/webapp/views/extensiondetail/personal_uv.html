@@ -20,22 +20,22 @@
         <div class="sl-ka superli" style="font-size:12px">
             <ul class="sl-float-ul ka  pjf_5ge custom-paixu">
                 <li>
-                    <a href="personal-ranking.html">
+                    <a href="/site/extension/getScoreRanking">
                         排名
                     </a>
                 </li>
                 <li class="on">
-                    <a href="personal-uv.html">
+                    <a href="/site/extension/getVisitorInfo">
                         UV
                     </a>
                 </li>
                 <li>
-                    <a href="personal-score.html">
+                    <a href="/site/extension/getScoreInfo">
                         积分
                     </a>
                 </li>
                 <li>
-                    <a href="personal-follow.html">
+                    <a href="/site/extension/getFollowInfo">
                         关注
                     </a>
                 </li>
@@ -80,9 +80,9 @@
         <div class="weui_cells weui_cells_access" th:each="monthVisitorInfo:${dayVisitorNumInfo.monthVisitorNumList}">
             <a class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
-                    <p th:text="${monthVisitorInfo.month}"></p>
+                    <p th:text="${monthVisitorInfo.month}+'月'"></p>
                 </div>
-                <div class="weui_cell_ft" th:text="${monthVisitorInfo.date}"></div>
+                <div class="weui_cell_ft" th:text="${monthVisitorInfo.data}"></div>
             </a>
         </div>
     </div>

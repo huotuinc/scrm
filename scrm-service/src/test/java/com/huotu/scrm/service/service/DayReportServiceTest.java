@@ -7,7 +7,6 @@ import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 
@@ -27,7 +26,6 @@ public class DayReportServiceTest extends CommonTestBase {
      * 测试保存每日统计信息
      */
     @Test
-    @Rollback(false)
     public void testDayReportService() {
         dayReportService.saveDayReport();
 //        int cumulativeScore = dayReportService.getCumulativeScore(687500L);

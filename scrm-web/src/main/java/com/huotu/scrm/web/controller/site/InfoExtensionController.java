@@ -37,12 +37,10 @@ public class InfoExtensionController extends SiteBaseController {
      * @return
      * @throws URISyntaxException
      */
-    @RequestMapping("/getInfoExtension")
+    @RequestMapping("/extension/getInfoExtension")
     public String getInfoExtension(@ModelAttribute("userId") Long userId, Model model) throws URISyntaxException {
-
         userId = 727010L;
         int userType = infoExtensionService.getUserType(userId);
-        userType = 1;
         List<InfoModel> infoModels = infoExtensionService.findInfo(userId, userType);
 
         for (InfoModel infoModel : infoModels) {
@@ -66,7 +64,7 @@ public class InfoExtensionController extends SiteBaseController {
      * @param model
      * @return
      */
-    @RequestMapping("/getScoreRanking")
+    @RequestMapping("/extension/getScoreRanking")
     public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) {
         DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(userId);
         model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
@@ -79,7 +77,7 @@ public class InfoExtensionController extends SiteBaseController {
      * @param userId 用户ID
      * @return
      */
-    @RequestMapping("/getScoreInfo")
+    @RequestMapping("/extension/getScoreInfo")
     public String getScoreInfo(@ModelAttribute("userId") Long userId, Model model) {
         DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(userId);
         model.addAttribute("dayScoreInfo", dayScoreInfo);
@@ -93,7 +91,7 @@ public class InfoExtensionController extends SiteBaseController {
      * @param model
      * @return
      */
-    @RequestMapping("/getFollowInfo")
+    @RequestMapping("/extension/getFollowInfo")
     public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) {
         DayFollowNumInfo dayFollowNumInfo = infoExtensionService.getFollowNumInfo(userId);
         model.addAttribute("dayFollowNumInfo", dayFollowNumInfo);
@@ -107,7 +105,7 @@ public class InfoExtensionController extends SiteBaseController {
      * @param model
      * @return
      */
-    @RequestMapping("/getVisitorInfo")
+    @RequestMapping("/extension/getVisitorInfo")
     public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) {
         DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(userId);
         model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);

@@ -53,7 +53,7 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDateTime now = LocalDateTime.now();
         //获取昨天时间（时分秒默认为零）
         LocalDateTime lastTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.minusDays(1).getDayOfMonth(), 0, 0, 0);
-        List<Long> bySourceUserIdList = infoBrowseRepository.findBySourceUserId(lastTime, now.minusDays(1));
+        List<Long> bySourceUserIdList = infoBrowseRepository.findSourceUserIdList(lastTime, now.minusDays(1));
         for (long sourceUserId : bySourceUserIdList) {
             DayReport dayReport = new DayReport();
             User user = userRepository.findOne(sourceUserId);
