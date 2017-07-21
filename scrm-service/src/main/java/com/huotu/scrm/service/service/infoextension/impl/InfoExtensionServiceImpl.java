@@ -12,9 +12,8 @@ import com.huotu.scrm.service.model.DayVisitorNumInfo;
 import com.huotu.scrm.service.model.InfoModel;
 import com.huotu.scrm.service.model.MonthStatisticInfo;
 import com.huotu.scrm.service.model.StatisticalInformation;
-import com.huotu.scrm.service.repository.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
-import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
@@ -55,8 +54,6 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     private UserLevelRepository userLevelRepository;
     @Autowired
     private DayReportRepository dayReportRepository;
-    @Autowired
-    private InfoConfigureRepository infoConfigureRepository;
     @Autowired
     private MonthReportRepository monthReportRepository;
     @Autowired
@@ -186,12 +183,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthStatisticInfoList.add(monthInfo);
         for (int i = 1; i < 5; i++) {
             MonthStatisticInfo monthStatisticInfo = new MonthStatisticInfo();
-            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i));
-            if (monthReport != null) {
-
-                monthStatisticInfo.setData(monthReport.getScoreRanking());
-            } else {
+            List<MonthReport> reportList = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i).withDayOfMonth(1));
+            if (reportList.isEmpty() || reportList == null) {
                 monthStatisticInfo.setData(0);
+            } else {
+                monthStatisticInfo.setData(reportList.get(0).getScoreRanking());
             }
             monthStatisticInfo.setMonth(now.minusMonths(i).getMonthValue());
             monthStatisticInfoList.add(monthStatisticInfo);
@@ -211,11 +207,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int extensionScore = dayReportService.getEstimateScore(userId, beginTime, now);
         dayScoreInfo.setDayScore(extensionScore);
         //设置昨日积分
-        DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, localDate.minusDays(1));
-        if (dayReport != null) {
-            dayScoreInfo.setLastDayScore(dayReport.getExtensionScore());
-        } else {
+        List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDay(userId, localDate.minusDays(1));
+        if (dayReportList.isEmpty() || dayReportList == null) {
             dayScoreInfo.setLastDayScore(0);
+        } else {
+            dayScoreInfo.setLastDayScore(dayReportList.get(0).getExtensionScore());
         }
         //设置历史累积积分
         int cumulativeScore = dayReportService.getCumulativeScore(userId);
@@ -228,11 +224,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
                 int monthScore = monthReportService.getExtensionScore(userId, localDate.withDayOfMonth(1), localDate);
                 monthStatisticInfo.setData(monthScore);
             } else {
-                MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i));
-                if (monthReport != null) {
-                    monthStatisticInfo.setData(monthReport.getExtensionScore());
-                } else {
+                List<MonthReport> reportList = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i).withDayOfMonth(1));
+                if (reportList.isEmpty() || reportList == null) {
                     monthStatisticInfo.setData(0);
+                } else {
+                    monthStatisticInfo.setData(reportList.get(0).getExtensionScore());
                 }
             }
             monthStatisticInfo.setMonth(now.minusMonths(i).getMonthValue());
@@ -266,11 +262,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthStatisticInfoList.add(monthInfo);
         for (int i = 1; i < 5; i++) {
             MonthStatisticInfo monthStatisticInfo = new MonthStatisticInfo();
-            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i));
-            if (monthReport != null) {
-                monthStatisticInfo.setData(monthReport.getVisitorNum());
-            } else {
+            List<MonthReport> reportList = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i).withDayOfMonth(1));
+            if (reportList.isEmpty() || reportList == null) {
                 monthStatisticInfo.setData(0);
+            } else {
+                monthStatisticInfo.setData(reportList.get(0).getVisitorNum());
             }
             monthStatisticInfo.setMonth(now.minusMonths(i).getMonthValue());
             monthStatisticInfoList.add(monthStatisticInfo);
@@ -312,17 +308,30 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthStatisticInfoList.add(monthInfo);
         for (int i = 1; i < 5; i++) {
             MonthStatisticInfo monthStatisticInfo = new MonthStatisticInfo();
-            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i));
-            if (monthReport != null) {
-                monthStatisticInfo.setData(monthReport.getFollowRanking());
-            } else {
+            List<MonthReport> reportList = monthReportRepository.findByUserIdAndReportMonth(userId, localDate.minusMonths(i).withDayOfMonth(1));
+            if (reportList.isEmpty() || reportList == null) {
                 monthStatisticInfo.setData(0);
+            } else {
+                monthStatisticInfo.setData(reportList.get(0).getFollowRanking());
             }
             monthStatisticInfo.setMonth(now.minusMonths(i).getMonthValue());
             monthStatisticInfoList.add(monthStatisticInfo);
         }
         dayFollowNumInfo.setMonthFollowRankingList(monthStatisticInfoList);
         return dayFollowNumInfo;
+    }
+
+    @Override
+    public boolean checkIsSalesman(Long userId) {
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            return false;
+        }
+        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        if (userLevel == null) {
+            return false;
+        }
+        return userLevel.isSalesman();
     }
 
     /**

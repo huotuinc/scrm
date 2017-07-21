@@ -29,8 +29,8 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(environment.acceptsProfiles("development")){
-            String requestUserId=null;
+        if (environment.acceptsProfiles("development", "test")) {
+            String requestUserId = null;
             Enumeration<String> paramKeys = request.getParameterNames();
             while (paramKeys.hasMoreElements()) {
                 String paramKey = paramKeys.nextElement();
@@ -40,7 +40,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
                     break;
                 }
             }
-            if( requestUserId ==null ) {
+            if (requestUserId == null) {
                 //小伙伴
                 request.setAttribute("userId", 1058510);
                 //普通会员

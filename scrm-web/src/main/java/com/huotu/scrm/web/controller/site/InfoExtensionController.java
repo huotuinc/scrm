@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -37,12 +38,10 @@ public class InfoExtensionController extends SiteBaseController {
      * @return
      * @throws URISyntaxException
      */
-    @RequestMapping("/extension/getInfoExtension")
+    @RequestMapping(value = "/extension/getInfoExtension",method = RequestMethod.GET)
     public String getInfoExtension(@ModelAttribute("userId") Long userId, Model model) throws URISyntaxException {
-        userId = 727010L;
         int userType = infoExtensionService.getUserType(userId);
         List<InfoModel> infoModels = infoExtensionService.findInfo(userId, userType);
-
         for (InfoModel infoModel : infoModels) {
             URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, infoModel.getThumbnailImageUrl());
             infoModel.setThumbnailImageUrl(uri.getPath());
@@ -52,7 +51,9 @@ public class InfoExtensionController extends SiteBaseController {
             return "infoextension/info_extension";
         } else {//小伙伴
             StatisticalInformation statisticalInformation = infoExtensionService.getInformation(userId);
+            boolean status = infoExtensionService.checkIsSalesman(userId);
             model.addAttribute("statisticalInformation", statisticalInformation);
+            model.addAttribute("status", status);
             return "infoextension/info_center";
         }
     }
@@ -67,7 +68,9 @@ public class InfoExtensionController extends SiteBaseController {
     @RequestMapping("/extension/getScoreRanking")
     public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) {
         DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(userId);
+        boolean status = infoExtensionService.checkIsSalesman(userId);
         model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
+        model.addAttribute("status", status);
         return "extensiondetail/personal_ranking";
     }
 
@@ -80,7 +83,9 @@ public class InfoExtensionController extends SiteBaseController {
     @RequestMapping("/extension/getScoreInfo")
     public String getScoreInfo(@ModelAttribute("userId") Long userId, Model model) {
         DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(userId);
+        boolean status = infoExtensionService.checkIsSalesman(userId);
         model.addAttribute("dayScoreInfo", dayScoreInfo);
+        model.addAttribute("status", status);
         return "extensiondetail/personal_score";
     }
 
@@ -108,7 +113,9 @@ public class InfoExtensionController extends SiteBaseController {
     @RequestMapping("/extension/getVisitorInfo")
     public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) {
         DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(userId);
+        boolean status = infoExtensionService.checkIsSalesman(userId);
         model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
+        model.addAttribute("status", status);
         return "extensiondetail/personal_uv";
     }
 }

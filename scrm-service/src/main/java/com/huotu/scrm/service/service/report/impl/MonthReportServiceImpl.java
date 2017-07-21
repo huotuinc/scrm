@@ -77,11 +77,16 @@ public class MonthReportServiceImpl implements MonthReportService {
             //设置统计月份
             monthReport.setReportMonth(lastFirstDay);
             //保存数据
+            //先删除数据
+            List<MonthReport> monthReportList = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay);
+            monthReportList.forEach(p -> {
+                monthReportRepository.delete(p.getId());
+            });
             monthReportRepository.save(monthReport);
         }
         //设置排名
         for (long userId : userIdList) {
-            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay);
+            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay).get(0);
             //设置每月积分排名
             int scoreRanking = getScoreRanking(userId, lastFirstDay);
             monthReport.setScoreRanking(scoreRanking);

@@ -6,7 +6,6 @@ import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.report.MonthReportService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class MonthReportRepositoryTest extends CommonTestBase {
 
 
     @Test
-    @Rollback(false)
     public void testMonthReportService() {
         monthReportService.saveMonthReport();
         List<MonthReport> all = monthReportRepository.findAll();

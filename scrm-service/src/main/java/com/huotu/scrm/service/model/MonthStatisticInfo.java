@@ -2,6 +2,7 @@ package com.huotu.scrm.service.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
+@ToString
 public class MonthStatisticInfo implements Serializable {
     /**
      * 统计月份
