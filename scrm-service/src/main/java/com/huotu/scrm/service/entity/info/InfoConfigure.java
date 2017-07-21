@@ -74,6 +74,13 @@ public class InfoConfigure {
     @Column(name = "Exchange_UserType")
     private int exchangeUserType;
 
+
+    /**
+     * UV转换开关s
+     */
+    @Column(name = "Day_Exchange_Limit_Switch")
+    private boolean isDayExchangeLimitSwitch;
+
     /**
      * UV转换积分每日上限
      */

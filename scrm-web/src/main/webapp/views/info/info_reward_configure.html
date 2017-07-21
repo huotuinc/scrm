@@ -20,10 +20,8 @@
     <!--<base target="_blank">-->
     <link href="../../css/infoRewardConfigure.css" rel="stylesheet">
 
-
 </head>
 <body class="gray-bg">
-
 <!--/*@thymesVar id="infoConfigure" type="com.huotu.scrm.service.entity.info.InfoConfigure"*/-->
 <!--/*@thymesVar id="goodsName" type="java.lang.String"*/-->
 <div class="wrapper wrapper-content">
@@ -36,8 +34,7 @@
                 <div class="form-group">
                     <div>
                         <label class="col-sm-2 control-label">状态</label>
-                        <label><input class="mui-switch mui-switch-anim" type="checkbox"> 默认未选中，过渡效果，加 mui-switch-anim
-                            类即可</label>
+                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardSwitch" th:checked="${infoConfigure.rewardSwitch}"></label>
                     </div>
                     </br>
                     <div style="padding-top: 5px">
@@ -49,8 +46,7 @@
                     </br>
                     <div>
                         <label class="col-sm-2 control-label">转发奖励限制</label>
-                        <label><input class="mui-switch mui-switch-anim" type="checkbox"> 默认未选中，过渡效果，加 mui-switch-anim
-                            类即可</label>
+                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardLimitSwitch"  th:checked="${infoConfigure.rewardLimitSwitch}"></label>
                     </div>
                     </br>
                     <div style="padding-top: 5px">
@@ -84,8 +80,7 @@
 
                 <div class="ibox-content">
                     <label class="col-sm-2 control-label">状态</label>
-                    <label><input class="mui-switch mui-switch-anim" type="checkbox"> 默认未选中，过渡效果，加 mui-switch-anim
-                        类即可</label>
+                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="exchangeSwitch" th:checked="${infoConfigure.exchangeSwitch}"> </label>
 
                     </br>
 
@@ -99,8 +94,7 @@
 
                     </br>
                     <label class="col-sm-2 control-label">状态</label>
-                    <label><input class="mui-switch mui-switch-anim" type="checkbox"> 默认未选中，过渡效果，加 mui-switch-anim
-                        类即可</label>
+                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="dayExchangeLimitSwitch" th:checked="${infoConfigure.dayExchangeLimitSwitch}"></label>
 
 
                     <div style="padding-top: 5px">
