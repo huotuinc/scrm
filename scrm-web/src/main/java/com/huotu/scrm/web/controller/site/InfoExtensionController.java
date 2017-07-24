@@ -11,6 +11,7 @@ import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,19 +39,26 @@ public class InfoExtensionController extends SiteBaseController {
      * @return
      * @throws URISyntaxException
      */
-    @RequestMapping(value = "/extension/getInfoExtension",method = RequestMethod.GET)
+    @RequestMapping(value = "/extension/getInfoExtension", method = RequestMethod.GET)
     public String getInfoExtension(@ModelAttribute("userId") Long userId, Model model) throws URISyntaxException {
+        //获取用户类型
         int userType = infoExtensionService.getUserType(userId);
+        //获取统计信息（积分，排名等）
         List<InfoModel> infoModels = infoExtensionService.findInfo(userId, userType);
+        //获取图片资源
         for (InfoModel infoModel : infoModels) {
-            URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, infoModel.getThumbnailImageUrl());
-            infoModel.setThumbnailImageUrl(uri.getPath());
+            String thumbnailImageUrl = infoModel.getThumbnailImageUrl();
+            if (!StringUtils.isEmpty(thumbnailImageUrl)) {
+                URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, thumbnailImageUrl);
+                infoModel.setThumbnailImageUrl(uri.getPath());
+            }
         }
         model.addAttribute("infoModes", infoModels);
         if (userType == 0) {//普通会员
             return "infoextension/info_extension";
         } else {//小伙伴
             StatisticalInformation statisticalInformation = infoExtensionService.getInformation(userId);
+            //判断是否为销售员
             boolean status = infoExtensionService.checkIsSalesman(userId);
             model.addAttribute("statisticalInformation", statisticalInformation);
             model.addAttribute("status", status);
@@ -67,7 +75,9 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/extension/getScoreRanking")
     public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) {
+        //获取统计性能（积分，排名等）
         DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(userId);
+        //判断是否为销售员
         boolean status = infoExtensionService.checkIsSalesman(userId);
         model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
         model.addAttribute("status", status);
@@ -82,7 +92,9 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/extension/getScoreInfo")
     public String getScoreInfo(@ModelAttribute("userId") Long userId, Model model) {
+        //获取统计性能（积分，排名等）
         DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(userId);
+        //判断是否为销售员
         boolean status = infoExtensionService.checkIsSalesman(userId);
         model.addAttribute("dayScoreInfo", dayScoreInfo);
         model.addAttribute("status", status);
@@ -98,6 +110,7 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/extension/getFollowInfo")
     public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) {
+        //获取统计性能（积分，排名等）
         DayFollowNumInfo dayFollowNumInfo = infoExtensionService.getFollowNumInfo(userId);
         model.addAttribute("dayFollowNumInfo", dayFollowNumInfo);
         return "extensiondetail/personal_follow";
@@ -112,7 +125,9 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/extension/getVisitorInfo")
     public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) {
+        //获取统计性能（积分，排名等）
         DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(userId);
+        //判断是否为销售员
         boolean status = infoExtensionService.checkIsSalesman(userId);
         model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
         model.addAttribute("status", status);

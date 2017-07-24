@@ -79,9 +79,9 @@
         <div class="weui_cells weui_cells_access">
             <a class="weui_cell" th:each="monthFollowInfo:${dayFollowNumInfo.monthFollowRankingList}">
                 <div class="weui_cell_bd weui_cell_primary">
-                    <p th:text="${monthFollowInfo.month}+'月'"></p>
+                    <p th:text="${monthFollowInfo.month}+'排名'"></p>
                 </div>
-                <div class="weui_cell_ft" th:text="${monthFollowInfo.data}"></div>
+                <div class="weui_cell_ft" th:text="${monthFollowInfo.data}+'位'"></div>
             </a>
         </div>
     </div>

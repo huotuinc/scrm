@@ -80,9 +80,9 @@
         <div class="weui_cells weui_cells_access" th:each="monthVisitorInfo:${dayVisitorNumInfo.monthVisitorNumList}">
             <a class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
-                    <p th:text="${monthVisitorInfo.month}+'月'"></p>
+                    <p th:text="${monthVisitorInfo.month}"></p>
                 </div>
-                <div class="weui_cell_ft" th:text="${monthVisitorInfo.data}"></div>
+                <div class="weui_cell_ft" th:text="${monthVisitorInfo.data}+'人'"></div>
             </a>
         </div>
     </div>

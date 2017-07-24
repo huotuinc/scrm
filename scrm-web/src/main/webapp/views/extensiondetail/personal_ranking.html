@@ -79,9 +79,9 @@
         <div class="weui_cells weui_cells_access">
             <a class="weui_cell" th:each="monthRanking:${dayScoreRankingInfo.monthScoreRankingList}">
                 <div class="weui_cell_bd weui_cell_primary">
-                    <p th:text="${monthRanking.month}+'月排名'"></p>
+                    <p th:text="${monthRanking.month}+'排名'"></p>
                 </div>
-                <div class="weui_cell_ft" th:text="${monthRanking.data}"></div>
+                <div class="weui_cell_ft" th:text="${monthRanking.data}+'位'"></div>
             </a>
         </div>
     </div>

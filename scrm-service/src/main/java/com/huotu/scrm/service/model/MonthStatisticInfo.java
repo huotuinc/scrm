@@ -17,7 +17,7 @@ public class MonthStatisticInfo implements Serializable {
     /**
      * 统计月份
      */
-    private int month;
+    private String month;
     /**
      * 统计数据（积分排名等）
      */

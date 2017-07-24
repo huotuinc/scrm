@@ -12,6 +12,7 @@ import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,11 +58,11 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDateTime todayBegin = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
         List<Long> bySourceUserIdList = infoBrowseRepository.findSourceUserIdList(lastTime, now.minusDays(1));
         for (long sourceUserId : bySourceUserIdList) {
-            DayReport dayReport = new DayReport();
             User user = userRepository.findOne(sourceUserId);
             if (user == null) {
                 continue;
             }
+            DayReport dayReport = new DayReport();
             //设置用户ID
             dayReport.setUserId(sourceUserId);
             //设置商户号
@@ -199,6 +200,15 @@ public class DayReportServiceImpl implements DayReportService {
             cumulativeScore += dayReport.getExtensionScore();
         }
         return cumulativeScore;
+    }
+
+    /**
+     * 定时统计每日信息
+     */
+    @Override
+    @Scheduled(cron = "0 15 0 * * *")
+    public void saveDayReportScheduled() {
+        saveDayReport();
     }
 
     /**
