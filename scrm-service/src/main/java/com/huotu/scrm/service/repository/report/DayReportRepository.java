@@ -31,6 +31,7 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
      * @param date 查询日期
      * @return
      */
+    @Query("select t from DayReport t where t.reportDay=?1 and t.isSalesman=true order by t.followNum desc ")
     List<DayReport> findByReportDayOrderByFollowNumDesc(LocalDate date);
 
     /**

@@ -61,9 +61,10 @@
                 <p>累计积分</p>
             </a>
         </li>
-        <li>
+        <li th:if="${status}">
             <a href="javascript:void(0);">
-                <p class="sj" th:text="${statisticalInformation.followNum}"></p>
+                <p class="sj" th:text="${statisticalInformation.followNum}"
+                ></p>
                 <p>关注人数</p>
             </a>
         </li>

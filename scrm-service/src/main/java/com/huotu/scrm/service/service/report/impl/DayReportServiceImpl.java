@@ -118,7 +118,7 @@ public class DayReportServiceImpl implements DayReportService {
                 int followRanking = followRanking(userId, lastDay);
                 dayReport.setFollowRanking(followRanking);
             } else {
-                dayReport.setFollowRanking(-1);
+                dayReport.setFollowRanking(0);
             }
             dayReportRepository.save(dayReport);
         }
@@ -222,8 +222,6 @@ public class DayReportServiceImpl implements DayReportService {
         List<DayReport> sortAll = dayReportRepository.findByReportDayOrderByVisitorNumDesc(date);
         int ranking = 0;
         for (int i = 0; i < sortAll.size(); i++) {
-            System.out.println(userId);
-            System.out.println(sortAll.get(i).getUserId());
             if (userId.equals(sortAll.get(i).getUserId())) {
                 ranking = i + 1;
                 break;

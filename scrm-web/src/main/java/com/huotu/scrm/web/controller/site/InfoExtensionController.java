@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,7 +38,7 @@ public class InfoExtensionController extends SiteBaseController {
      * @return
      * @throws URISyntaxException
      */
-    @RequestMapping(value = "/extension/getInfoExtension", method = RequestMethod.GET)
+    @RequestMapping(value = "/extension/getInfoExtension")
     public String getInfoExtension(@ModelAttribute("userId") Long userId, Model model) throws URISyntaxException {
         //获取用户类型
         int userType = infoExtensionService.getUserType(userId);
