@@ -1,7 +1,6 @@
 package com.huotu.scrm.service.service.infoextension.impl;
 
 import com.huotu.scrm.service.entity.info.Info;
-import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
@@ -141,6 +140,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         Map<Long, Integer> map = new TreeMap<>();
         for (long sourceUserId : sourceUserIdList
                 ) {
+            if (getUserType(sourceUserId) != 1) {
+                continue;
+            }
             int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTime(sourceUserId, beginTime, now);
             map.put(sourceUserId, dayVisitorNum);
         }
@@ -169,6 +171,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         Map<Long, Integer> map = new TreeMap<>();
         for (long sourceUserId : sourceUserIdList
                 ) {
+            if (getUserType(sourceUserId) != 1) {
+                continue;
+            }
             int dayScore = dayReportService.getEstimateScore(sourceUserId, beginTime, now);
             map.put(sourceUserId, dayScore);
         }
@@ -178,6 +183,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         Map<Long, Integer> mapMonth = new TreeMap<>();
         for (long sourceUserId : sourceUserIdList
                 ) {
+            if (getUserType(sourceUserId) != 1) {
+                continue;
+            }
             int dayMonthScore = dayReportService.getEstimateScore(sourceUserId, firstDay, now);
             mapMonth.put(sourceUserId, dayMonthScore);
         }
@@ -299,6 +307,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         Map<Long, Integer> map = new TreeMap<>();
         for (long sourceUserId : sourceUserIdList
                 ) {
+            if (getUserType(sourceUserId) != 1) {
+                continue;
+            }
             int followNum = businessCardRecordRepository.countByUserId(sourceUserId, beginTime, now);
             map.put(sourceUserId, followNum);
         }
@@ -353,11 +364,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @return
      */
     public int getVisitorNum(Long infoId) {
-        List<InfoBrowse> byInfoId = infoBrowseRepository.findByInfoId(infoId);
-        if (byInfoId == null || byInfoId.isEmpty()) {
-            return 0;
-        }
-        return infoBrowseRepository.findCountInfoId(infoId);
+
+        return (int) infoBrowseRepository.countByInfoId(infoId);
     }
 
     /**
@@ -382,7 +390,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     }
 
     /**
-     * 获取本月排名
+     * 获取排名
      *
      * @param map
      * @param userId
@@ -403,7 +411,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     }
 
     /**
-     * @param userId
+     * 获取月统计信息
+     *
+     * @param userId 用户ID
      * @param type   0：积分排名 1：今日积分 2：今日访客量 3：今日关注
      * @param i
      * @return
