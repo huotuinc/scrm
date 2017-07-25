@@ -50,7 +50,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
         webDriver.get(editUrl);
         TestEditBusinessCardPage editBusinessCardPage = this.initPage(TestEditBusinessCardPage.class);
         editBusinessCardPage.setBusinessCard(businessCard);
-        WebElement ele = webDriver.findElement(By.id("div_job"));
+        //WebElement ele = webDriver.findElement(By.id("div_job"));
         editBusinessCardPage.validate();
 
     }

@@ -90,7 +90,7 @@ public class TestEditBusinessCardPage extends AbstractPage {
         weuishow_qq.click();
         WebElement ele = webDriver.findElement( By.id("weui-prompt-input"));
         ele.sendKeys("51818549");
-
+        
         ele = webDriver.findElement(By.className("weui_btn_dialog"));
         ele.click();
 
