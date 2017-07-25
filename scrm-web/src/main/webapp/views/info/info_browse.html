@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>资讯列表</title>
+    <title>资讯浏览列表</title>
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Morris -->
@@ -99,7 +99,7 @@
                                 <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
                                 <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
-                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)" th:attr="infid=${info.id}">
+                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)" th:attr="infid=''+${info.id}">
                                        <i class="fa fa-pencil tooltips" data-toggle="tooltip" data-original-title="编辑"></i>
                                     </span>
                                     &nbsp;
@@ -188,8 +188,8 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>-->
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>-->
 
 <script type="text/javascript">
     var pageIndex = [[${informationSearch.pageNo}]];

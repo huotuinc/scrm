@@ -15,6 +15,7 @@ public interface InfoRepository extends JpaRepository<Info, Long>, JpaSpecificat
 
     long countByIsDisable(boolean state);
 
+    Info findOneByIdAndCustomerId(Long id,Long customerId);
 
     List<Info> findByTitleLike(String title);
 

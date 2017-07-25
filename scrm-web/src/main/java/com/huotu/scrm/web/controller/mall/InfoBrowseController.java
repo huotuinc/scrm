@@ -3,44 +3,64 @@ package com.huotu.scrm.web.controller.mall;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
-import com.huotu.scrm.service.service.info.InfoBrowseServer;
+import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
+import com.huotu.scrm.service.service.info.InfoBrowseService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 /**
  * 浏览量转发控制器
  * Created by luohaibo on 2017/7/12.
  */
 @Controller
-public class InfoBrowseController {
+public class InfoBrowseController extends MallBaseController{
 
+
+    private Log logger = LogFactory.getLog(InfoBrowseController.class);
     @Autowired
-    InfoBrowseServer infoBrowseServer;
-
-
+    InfoBrowseService infoBrowseServer;
 
     /**
-     * 通过资讯id查找对应的资讯浏览记录
      *
+     * @param infoBrowse
+     * @param customerId
      * @return
      */
-    @RequestMapping("/browses")
+    @RequestMapping("/info/turnIn")
     @ResponseBody
-    public ApiResult infoBrowses(Long infoId){
-
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"成功",
-                infoBrowseServer.InfoBrowseByInfoId(infoId));
+    public void infoTurnInRecord(InfoBrowse infoBrowse, @ModelAttribute("customerId") Long customerId){
+        infoBrowseServer.infoTurnInSave(infoBrowse,customerId);
     }
 
+    /**
+     * 查询转发记录
+     * @param infoBrowseAndTurnSearch
+     * @param customerId
+     * @param model
+     * @return
+     */
+    @RequestMapping("/info/turnRecord")
+    public String infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch, @ModelAttribute("customerId") Long customerId, Model model){
+      infoBrowseAndTurnSearch.setCustomerId(customerId);
+      Page<InfoBrowse> page =  infoBrowseServer.infoTurnRecord(infoBrowseAndTurnSearch);
+      model.addAttribute("infoTurnListPage",page);
+      return "info/info_turn";
+    }
 
-    @RequestMapping("/addBrowse")
+    @RequestMapping("/info/deleteTurn")
     @ResponseBody
-    public String insertBrowse(Long infoId){
-        InfoBrowse infoBrowse = new InfoBrowse();
-        infoBrowseServer.infoBroseSave(infoBrowse);
-        return "";
+    public ApiResult deleteTurn(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
+        int count = infoBrowseServer.updateInfoTurnRecord(infoBrowseAndTurnSearch);
+        logger.info(count);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
 
 

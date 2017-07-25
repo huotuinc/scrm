@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>资讯列表</title>
+    <title>资讯转发列表</title>
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Morris -->
@@ -17,101 +17,43 @@
 </head>
 
 <body class="gray-bg" data-unitTest="false" data-prototype="true">
-<!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
-<!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
-<!--/*@thymesVar id="informationSearch" type="com.huotu.scrm.service.model.info.InformationSearch"*/-->
+<!--/*@thymesVar id="infoTurnListPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.InfoBrowse>"*/-->
+<!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
+<!--/*@thymesVar id="infoBrowseAndTurnSearch" type="com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch"*/-->
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
-    <!--search-->
-    <!--<form role="form" class="search-panel">-->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox float-e-margins">
-                    <div>
-                        <label class="">资讯筛选</label>
-                    </div>
-                    <form class="search-panel" method="get" action="#" th:action="@{/mall/info/infoList}" id="searchForm">
-                        <!--用来传递页码-->
-                        <input type="hidden" name="pageNo" value="1" th:value="${informationSearch.pageNo}" />
-                        <div class="ibox-content p-m no-borders">
-                            <div class="form-inline ">
-                                <div class="form-group m-r-sm">
-                                    <label class="control-label" for="searchCondition">标题关键字：</label>
-                                    <input type="text" class="form-control input-sm mb10" id="searchCondition" name="searchCondition"
-                                       th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>
-                                    <button type="button"  class="btn btn-success js-search">筛选</button>
-                                    <button type="button"  class="btn btn-success js-searchAll">显示全部</button>
-                                </div>
-                            </div>
-                        </div>
-                     </form>
-                </div>
-            </div>
-        </div>
-    <!--</form>-->
-    <!--search-->
-    <!--list-->
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
                 <div class="ibox-content p-xxs no-top-border">
                     <div>
-                        <label class="">资讯管理</label>
-                    </div>
-                    <!--添加资讯按钮-->
-                    <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button" th:attr="infid=0">添加资讯
-                        </button>
+                        <label class="">资讯转发列表</label>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
                             <tr>
                                 <th>序号</th>
-                                <th>资讯标题</th>
-                                <th>资讯简介</th>
-                                <th>创建时间</th>
-                                <th>发布状态</th>
-                                <th>推广状态</th>
+                                <th>头像</th>
+                                <th>昵称</th>
+                                <th>转发时间</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
-                            <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
-                            <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
-                            <tr th:each="info ,infoState: ${infoListsPage.content}">
-                                <td th:text="${info.id}">1</td>
+                            <!--/*@thymesVar id="infoTurnListPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.InfoBrowse>"*/-->
+                            <!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
+                            <tr th:each="infoBrowse ,infoState: ${infoTurnListPage.content}">
+                                <td th:text="${infoState.index} + 1 + (${infoBrowseAndTurnSearch.pageNo} - 1) * ${infoBrowseAndTurnSearch.pageSize}">1</td>
                                 <td style="width: 20%;">
-                                    <a>
-                                        <p  style="width: 100%; height: 50px;">
-                                        <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
-                                                习近平对司法体制改革作出重要指示引起热烈反响
-                                        </span>
-                                        </p>
-                                    </a>
+                                    <img th:src="${infoBrowse.imgUrl}"  src="../../resources/images/infoBg.png" width="60" height="60">
                                 </td>
-                                <td style="width: 20%;">
-                                    <span class="font-hidden" style="width: 95%;float: left;" th:text="${info.introduce}">
-                                                连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
-                                        总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
-                                    </span>
+                                <td th:text="${infoBrowse.nickName}">
+
                                 </td>
-                                <td th:text="${#temporals.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
-                                <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
-                                <td th:text="${info.isExtend()?'是':'否'}">是</td>
+                                <td th:text="${#temporals.format(infoBrowse.turnTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
                                 <td>
-                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)" th:attr="infid=${info.id}">
-                                       <i class="fa fa-pencil tooltips" data-toggle="tooltip" data-original-title="编辑"></i>
-                                    </span>
-                                    &nbsp;
-                                    <span class="cursor-point">
-                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="转发记录"></i>
-                                    </span>
-                                    &nbsp;
-                                    <span class="cursor-point">
-                                        <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
-                                    </span>
-                                    &nbsp;
-                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infid=''+${info.id}" class="cursor-point">
+                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infoId=${infoBrowse.infoId},sourceUserId=${infoBrowse.sourceUserId}"
+                                     class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
@@ -160,13 +102,13 @@
                             </tbody>
                         </table>
                         共
-                        <th:block th:text="${infoListsPage.totalElements}">0</th:block>
+                        <th:block th:text="${infoTurnListPage.totalElements}">0</th:block>
                         条记录，当前第
-                        <th:block th:text="${informationSearch.pageNo}">0</th:block>
+                        <th:block th:text="${infoBrowseAndTurnSearch.pageNo}">0</th:block>
                         /
-                        <th:block th:text="${infoListsPage.totalPages}">0</th:block>
+                        <th:block th:text="${infoTurnListPage.totalPages}">0</th:block>
                         ，每页
-                        <th:block th:text="${informationSearch.pageSize}">0</th:block>
+                        <th:block th:text="${infoBrowseAndTurnSearch.pageSize}">0</th:block>
                         条记录
                         <ul style="float: right;" class="pagination pagination-split">
                         </ul>
@@ -188,12 +130,12 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>-->
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>-->
 
 <script type="text/javascript">
-    var pageIndex = [[${informationSearch.pageNo}]];
-    var totalPage = [[${infoListsPage.totalPages}]];
+    var pageIndex = [[${infoBrowseAndTurnSearch.pageNo}]];
+    var totalPage = [[${infoTurnListPage.totalPages}]];
     //初始化分页
     var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
@@ -202,29 +144,14 @@
     });
 
     var infoListHandler = {
-        search:function(pageNo) {
-            var search = $("input:text[name='infoName']").val(pageIndex);
-            $('#searchForm').submit();
-        },
-
-        searchAll:function(){
-            window.location.href = "/mall/info/infoList";
-        },
-
-        search: function(pageNo){
-            $("input[name=pageNo]").val(pageNo);
-            $('#searchForm').submit();
-        },
-
-        editInfo:function(obj){
-            var infoid = $(obj).attr("infid");
-            window.location.href = "/mall/info/edit?id="+infoid;
-        },
-
         deleteInfo:function(obj){
-            var infoid = $(obj).attr("infid");
-            hot.ajax("/mall/info/deleteInfo", {
-                id:infoid
+            var infoId = $(obj).attr("infoId");
+            alert(infoId);
+            var sourceUserId = $(obj).attr("sourceUserId");
+            alert(sourceUserId);
+            hot.ajax("/mall/info/deleteTurn", {
+                infoId:infoId,
+                sourceUserId:sourceUserId
             }, function (result) {
                 if (result.code == 200) {
                     hot.tip.success("删除成功");
@@ -238,18 +165,18 @@
             }, 'post');
         }
     }
-
-    $('.js-search').click(function () {
-        infoListHandler.search(1);
-    });
-
-    $('.js-searchAll').click(function(){
-        infoListHandler.searchAll();
-    });
-
-    $('.js-edit').click(function(){
-        infoListHandler.editInfo(this);
-    });
+//
+//    $('.js-search').click(function () {
+//        infoListHandler.search(1);
+//    });
+//
+//    $('.js-searchAll').click(function(){
+//        infoListHandler.searchAll();
+//    });
+//
+//    $('.js-edit').click(function(){
+//        infoListHandler.editInfo(this);
+//    });
 </script>
 </body>
 

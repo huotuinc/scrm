@@ -170,7 +170,7 @@
                 if (result.code == 200) {
                     hot.tip.success('修改成功');
                     setTimeout(function () {
-                        RewardConfigureHandle.refresh();
+                        window.location.reload();
                     }, 500);
                 } else {
                     hot.tip.error(result.msg);
@@ -179,9 +179,6 @@
             }, 'post');
         },
 
-        refresh: function () {
-            $('#editSaveInfo').submit;
-        }
     }
 </script>
 </body>
