@@ -50,7 +50,7 @@
                                 <td th:text="${infoBrowse.nickName}">
 
                                 </td>
-                                <td th:text="${#temporals.format(infoBrowse.turnTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
+                                <td th:text="${#temporals.format(infoBrowse.browseTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
                                 <td>
                                     <span onclick="infoListHandler.deleteInfo(this)" th:attr="infoId=${infoBrowse.infoId},sourceUserId=${infoBrowse.sourceUserId}"
                                      class="cursor-point">
