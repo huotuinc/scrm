@@ -1,6 +1,6 @@
 package com.huotu.scrm.service.service.info.impl;
 
-import com.huotu.scrm.service.model.InformationSearch;
+import com.huotu.scrm.service.model.info.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.service.info.InfoService;
@@ -33,7 +33,7 @@ public class InfoServiceImpl implements InfoService {
 
 
     public long infoListsCount(boolean disable) {
-        return infoRepository.countByDisable(disable);
+        return infoRepository.countByIsDisable(disable);
     }
 
     public List<Info> findListsByWord(String title) {
@@ -42,10 +42,10 @@ public class InfoServiceImpl implements InfoService {
 
 
     @Override
-    public Info findOneById(Long id) {
+    public Info findOneByIdAndCustomerId(Long id,Long customerId){
         Info info;
         if (id != null && id != 0){
-            info = infoRepository.findOne(id);
+            info = infoRepository.findOneByIdAndCustomerId(id,customerId);
         }else {
             info = new Info();
         }
@@ -64,7 +64,7 @@ public class InfoServiceImpl implements InfoService {
         newInfo.setTitle(info.getTitle());
         newInfo.setIntroduce(info.getIntroduce());
         newInfo.setContent(info.getContent());
-        if(!StringUtils.isEmpty(info.getImageUrl()) && StringUtils.containsWhitespace("http")){
+        if(!StringUtils.isEmpty(info.getImageUrl()) && !StringUtils.containsWhitespace("http")){
             newInfo.setImageUrl(info.getImageUrl());
         }
         newInfo.setThumbnailImageUrl(info.getThumbnailImageUrl());
@@ -75,7 +75,18 @@ public class InfoServiceImpl implements InfoService {
 
     }
 
-    public Page<Info> infoSList(InformationSearch informationSearch) {
+    @Override
+    public boolean deleteInfo(Long customerId, Long id) {
+        Info info = infoRepository.findOneByIdAndCustomerId(id,customerId);
+        if(info != null){
+            info.setDisable(true);
+            infoRepository.save(info);
+            return true;
+        }
+        return false;
+    }
+
+    public Page<Info> infoList(InformationSearch informationSearch) {
         Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize());
         return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
@@ -83,7 +94,7 @@ public class InfoServiceImpl implements InfoService {
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + informationSearch.getSearchCondition() + "%"));
             }
             list.add(criteriaBuilder.equal(root.get("customerId").as(Long.class), informationSearch.getCustomerId()));
-            list.add(criteriaBuilder.equal(root.get("disable").as(boolean.class), informationSearch.getDisable()));
+            list.add(criteriaBuilder.equal(root.get("isDisable").as(boolean.class), informationSearch.getDisable()));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }, pageable);

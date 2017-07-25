@@ -13,12 +13,13 @@ import java.util.List;
 public interface InfoRepository extends JpaRepository<Info, Long>, JpaSpecificationExecutor<Info> {
 
 
-    long countByDisable(Boolean state);
+    long countByIsDisable(boolean state);
 
+    Info findOneByIdAndCustomerId(Long id,Long customerId);
 
     List<Info> findByTitleLike(String title);
 
-    List<Info> findByCustomerIdAndStatusAndExtendAndDisable(Long customerId, boolean status, boolean extend, boolean disable);
+    List<Info> findByCustomerIdAndIsStatusAndIsExtendAndIsDisable(Long customerId, boolean status, boolean extend, boolean disable);
 
 
 }

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -32,6 +31,7 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
      * @param date 查询日期
      * @return
      */
+    @Query("select t from DayReport t where t.reportDay=?1 and t.isSalesman=true order by t.followNum desc ")
     List<DayReport> findByReportDayOrderByFollowNumDesc(LocalDate date);
 
     /**
@@ -46,12 +46,12 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
     @Query("select distinct t.userId from DayReport t where t.reportDay>=?1 and t.reportDay<=?2")
     List<Long> findByUserId(LocalDate minDate, LocalDate maxDate);
 
-    DayReport findByUserIdAndReportDay(Long userId, LocalDate date);
+    List<DayReport> findByUserIdAndReportDay(Long userId, LocalDate date);
 
     @Query("select t from DayReport t where t.userId=?1 and t.reportDay>=?2")
     List<DayReport> findByReportDay(Long userId, LocalDate date);
 
     @Query("select t from DayReport t where t.userId = ?1 and t.reportDay<=?2")
-    List<DayReport> findAllFollowNum(Long userId, LocalDateTime date);
+    List<DayReport> findAllFollowNum(Long userId, LocalDate date);
 
 }

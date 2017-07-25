@@ -5,6 +5,7 @@ import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.service.info.InfoRewardConfigureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Rollback;
 
 /**
  * Created by luohaibo on 2017/7/19.
@@ -35,7 +36,8 @@ public class InfoRewardConfigureServiceImpl implements InfoRewardConfigureServic
         newInfoConfigure.setExchangeUserType(infoConfigure.getExchangeUserType());
         newInfoConfigure.setDayExchangeLimit(infoConfigure.getDayExchangeLimit());
         newInfoConfigure.setInfoIntroduceUrl(infoConfigure.getInfoIntroduceUrl());
-        return null;
+        newInfoConfigure.setDayExchangeLimitSwitch(infoConfigure.isDayExchangeLimitSwitch());
+        return infoConfigureRepository.save(newInfoConfigure);
     }
 
     @Override

@@ -29,7 +29,7 @@ public class InfoConfigure {
      *  是否开启转发奖励
      */
     @Column(name = "Reward_Switch")
-    private boolean rewardSwitch;
+    private boolean isRewardSwitch;
 
     /**
      * 转发咨询奖励积分
@@ -41,7 +41,7 @@ public class InfoConfigure {
      * 是否开启转发奖励限制
      */
     @Column(name = "Reward_Limit_Switch")
-    private boolean RewardLimitSwitch;
+    private boolean isRewardLimitSwitch;
 
     /**
      * 每日奖励限制次数
@@ -59,7 +59,7 @@ public class InfoConfigure {
      * 是否开启UV转换积分
      */
     @Column(name = "Exchange_Switch")
-    private boolean exchangeSwitch;
+    private boolean isExchangeSwitch;
 
     /**
      * UV转换积分的比例
@@ -69,12 +69,20 @@ public class InfoConfigure {
 
     /**
      * UV转换积分获取对象
+     * 0 会员  1 小伙伴
      */
     @Column(name = "Exchange_UserType")
     private int exchangeUserType;
 
+
     /**
-     * UV转换积分获取对象
+     * UV转换开关s
+     */
+    @Column(name = "Day_Exchange_Limit_Switch")
+    private boolean isDayExchangeLimitSwitch;
+
+    /**
+     * UV转换积分每日上限
      */
     @Column(name = "Day_Exchange_Limit")
     private int dayExchangeLimit;

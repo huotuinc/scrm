@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--360浏览器优先以webkit内核解析-->
+
+    <title></title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <!--<base target="_blank">-->
+    <link href="../../resources/css/infoRewardConfigure.css" th:src="@{/resources/css/infoRewardConfigure.css}" rel="stylesheet">
+
+</head>
+<body class="gray-bg">
+<!--/*@thymesVar id="infoConfigure" type="com.huotu.scrm.service.entity.info.InfoConfigure"*/-->
+<!--/*@thymesVar id="goodsName" type="java.lang.String"*/-->
+<div class="wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>转发奖励设置</h5>
+        </div>
+        <div class="ibox-content">
+            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/reward/read}">
+                <div class="form-group">
+                    <div>
+                        <label class="col-sm-2 control-label">状态</label>
+                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardSwitch"
+                                      th:checked="${infoConfigure.rewardSwitch}"></label>
+                    </div>
+                    </br>
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">转发资讯积分</label>
+                        <span style="padding-top: 6px;display: block;">转发一条资讯 可获得
+                        <input type="number" name="rewardScore" style="width: 80px" min="0" value="1"
+                               th:value="${infoConfigure.rewardScore}">
+                        积分
+                </span></div>
+                    </br>
+                    <div>
+                        <label class="col-sm-2 control-label">转发奖励限制</label>
+                        <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardLimitSwitch"
+                                      th:checked="${infoConfigure.rewardLimitSwitch}"></label>
+                    </div>
+                    </br>
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">奖励次数限制</label>
+                        <span style="padding-top: 6px;display: block;">每日可获取奖励
+                        <input type="number" name="rewardLimitNum" style="width: 80px" min="0" value="1"
+                               th:value="${infoConfigure.rewardLimitNum}">
+                        次</span>
+                    </div>
+                    </br>
+                    <div>
+                        <label class="col-sm-2 control-label">转发奖励获取对象</label>
+                        <div class="col-sm-6">
+                            <div class="radio radio-info radio-inline">
+                                <input type="radio" id="rewardObject0" value="0" name="rewardUserType" data-check="true"
+                                       th:checked="${infoConfigure.rewardUserType == 0}">
+                                <label for="rewardObject0">会员</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="rewardObject1" value="1" name="rewardUserType"
+                                       th:checked="${infoConfigure.rewardUserType == 1}" checked="checked">
+                                <label for="rewardObject1">小伙伴</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ibox-title">
+                    <h5>UV转换为积分</h5>
+                </div>
+                <div class="ibox-content">
+                    <label class="col-sm-2 control-label">状态</label>
+                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="exchangeSwitch"
+                                  th:checked="${infoConfigure.exchangeSwitch}"> </label>
+                    </br>
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">小伙伴每日转发的产生UV转换成积分的比例:</label>
+                        <span style="padding-top: 6px;display: block;">
+                            <input type="number" style="width: 80px" min="0" value="100" name="exchangeRate"
+                                   th:value="${infoConfigure.exchangeRate}">
+                            的UV量转1积分
+                        </span>
+                    </div>
+                    </br>
+                    <label class="col-sm-2 control-label">状态</label>
+                    <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="dayExchangeLimitSwitch"
+                                  th:checked="${infoConfigure.dayExchangeLimitSwitch}"></label>
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">UV每日兑换上限:</label>
+                        <span style="padding-top: 6px;display: block;"> <input type="number" name="dayExchangeLimit"
+                                                                               style="width: 80px" min="0" value="100"
+                                                                               th:value="${infoConfigure.dayExchangeLimit}">
+                            积分</span>
+                    </div>
+                    </br>
+                    <div style="padding-top: 5px;clear: both;">
+                        <label class="col-sm-2 control-label">转发奖励获取对象</label>
+                        <div class="col-sm-6">
+                            <div class="radio radio-info radio-inline">
+                                <input type="radio" id="turnObject0" value="0" name="exchangeUserType" data-check="true"
+                                       th:checked="${infoConfigure.exchangeUserType==0}" checked="checked">
+                                <label for="turnObject0">会员</label>
+                            </div>
+                            <div class="radio radio-inline">
+                                <input type="radio" id="turnObject1" value="1" name="exchangeUserType"
+                                       th:checked="${infoConfigure.exchangeUserType==1}">
+                                <label for="turnObject1">小伙伴</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-5">
+                            <button class="btn btn-success btn-submit" type="button" id="infoSubmit"
+                                    onclick="RewardConfigureHandle.saveScoreConfigure()">修改提交
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js" th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
+<!---->
+
+<script type="text/javascript">
+    function getFormJson(frm) {
+        var o = {};
+        var a = $(frm).serializeArray();
+        $.each(a, function () {
+            if (o[this.name] != undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    }
+
+    var RewardConfigureHandle = {
+        saveScoreConfigure: function () {
+            hot.ajax("/mall/info/saveConfigure", getFormJson("#editSaveInfo"), function (result) {
+                if (result.code == 200) {
+                    hot.tip.success('修改成功');
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 500);
+                } else {
+                    hot.tip.error(result.msg);
+                }
+            }, function () {
+            }, 'post');
+        },
+
+    }
+</script>
+</body>
+</html>

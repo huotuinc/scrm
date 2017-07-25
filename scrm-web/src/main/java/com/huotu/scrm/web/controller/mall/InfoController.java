@@ -1,7 +1,9 @@
 package com.huotu.scrm.web.controller.mall;
 
 
-import com.huotu.scrm.service.model.InformationSearch;
+import com.huotu.scrm.common.utils.ApiResult;
+import com.huotu.scrm.common.utils.ResultCodeEnum;
+import com.huotu.scrm.service.model.info.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.web.service.StaticResourceService;
@@ -11,9 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -41,7 +46,7 @@ public class InfoController extends MallBaseController {
         logger.info(informationSearch);
         informationSearch.setCustomerId(customerId);
         logger.info(informationSearch);
-        Page<Info> page = infoService.infoSList(informationSearch);
+        Page<Info> page = infoService.infoList(informationSearch);
         model.addAttribute("infoListsPage",page);
         long account = infoService.infoListsCount(false);
         logger.info(account);
@@ -56,14 +61,16 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping(value = "/info/edit")
     public String infoEditPage(@RequestParam(required = false,defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId){
-        Info info =  infoService.findOneById(id);
-        if(info.getId() != null && info.getId() != 0){
-            try {
-                URI imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
-                logger.info(imgUri.toString());
+        Info info =  infoService.findOneByIdAndCustomerId(id,customerId);
+        if (info.getId() != null && info.getId() != 0) {
+            if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
+                URI imgUri = null;
+                try {
+                    imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
                 info.setImageUrl(imgUri.toString());
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
             }
         }
         model.addAttribute("info",info);
@@ -85,5 +92,19 @@ public class InfoController extends MallBaseController {
         return "redirect:/mall/info/infoList";
     }
 
+    /**
+     * 删除资讯
+     * @param customerId
+     * @param id
+     * @return
+     */
+    @RequestMapping("/info/deleteInfo")
+    @ResponseBody
+    public ApiResult deleteInfo(@ModelAttribute("customerId") Long customerId, Long id){
+        if (infoService.deleteInfo(customerId,id)){
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"删除成功");
+        }
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"删除失败");
+    }
 
 }

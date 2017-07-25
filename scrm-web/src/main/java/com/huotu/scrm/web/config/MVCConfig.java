@@ -1,5 +1,6 @@
 package com.huotu.scrm.web.config;
 
+import com.huotu.scrm.service.config.SchedulingConfig;
 import com.huotu.scrm.service.config.ServiceConfig;
 import com.huotu.scrm.web.interceptor.HeaderInterceptor;
 import com.huotu.scrm.web.interceptor.CustomerInterceptor;
@@ -35,7 +36,7 @@ import java.util.List;
         "com.huotu.scrm.web.interceptor",
         "com.huotu.scrm.web.service"
 })
-@Import({MVCConfig.ThymeleafConfig.class, ServiceConfig.class})
+@Import({MVCConfig.ThymeleafConfig.class, ServiceConfig.class, SchedulingConfig.class})
 public class MVCConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private HeaderInterceptor headerInterceptor;
