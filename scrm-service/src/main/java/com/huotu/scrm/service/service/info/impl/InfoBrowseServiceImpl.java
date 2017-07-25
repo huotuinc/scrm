@@ -2,29 +2,22 @@ package com.huotu.scrm.service.service.info.impl;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
-import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
-import com.huotu.scrm.service.service.info.InfoBrowseServer;
+import com.huotu.scrm.service.service.info.InfoBrowseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Spliterator;
-import java.util.function.Consumer;
 
 
 /**
  * Created by luohaibo on 2017/7/12.
  */
 @Service
-public class InfoBrowseServerImpl implements InfoBrowseServer {
+public class InfoBrowseServiceImpl implements InfoBrowseService {
 
 
     @Autowired
@@ -52,8 +45,8 @@ public class InfoBrowseServerImpl implements InfoBrowseServer {
     }
 
     @Override
-    public int deleteInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
-        int a = infoBrowseRepository.updateInfoTurn(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getSourceUserId(),true);
+    public int updateInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        infoBrowseRepository.updateInfoTurn(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getSourceUserId(),true);
         return 0;
     }
 

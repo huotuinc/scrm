@@ -25,17 +25,13 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     Page<InfoBrowse> findAllBrowseRecordAndCustomerId(Long infoId, Long customerId ,boolean disable,Pageable pageable);
 
 
-
-
     @Query("update InfoBrowse t set t.isDisable=?3 where t.infoId=?1 and t.sourceUserId=?2")
     @Modifying
-    int updateInfoTurn(Long infoId, Long sourceUserId,boolean disable);
+    void updateInfoTurn(Long infoId, Long sourceUserId,boolean disable);
 
 
     long countByInfoId(Long infoId);
 
-
-    List<InfoBrowse> findByInfoId(Long infoId);
 
     //根据转发用户ID和转发日期查询转发咨询的访问量
     @Query("select count (t) from InfoBrowse t where  t.browseTime>=?2 and t.browseTime<?3 and t.sourceUserId=?1 ")

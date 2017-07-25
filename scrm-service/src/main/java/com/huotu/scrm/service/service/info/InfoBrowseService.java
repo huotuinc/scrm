@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by luohaibo on 2017/7/12.
  */
-public interface InfoBrowseServer {
+public interface InfoBrowseService {
 
 
     @Transactional
@@ -31,7 +31,8 @@ public interface InfoBrowseServer {
      * @param infoBrowseAndTurnSearch
      * @return
      */
-    int deleteInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
+    @Transactional
+    int updateInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
 
 

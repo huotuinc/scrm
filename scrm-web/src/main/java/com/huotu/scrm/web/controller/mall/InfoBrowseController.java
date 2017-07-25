@@ -4,7 +4,7 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
-import com.huotu.scrm.service.service.info.InfoBrowseServer;
+import com.huotu.scrm.service.service.info.InfoBrowseService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
-import static sun.misc.Version.println;
 
 /**
  * 浏览量转发控制器
@@ -29,7 +26,7 @@ public class InfoBrowseController extends MallBaseController{
 
     private Log logger = LogFactory.getLog(InfoBrowseController.class);
     @Autowired
-    InfoBrowseServer infoBrowseServer;
+    InfoBrowseService infoBrowseServer;
 
     /**
      *
@@ -54,9 +51,6 @@ public class InfoBrowseController extends MallBaseController{
     public String infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch, @ModelAttribute("customerId") Long customerId, Model model){
       infoBrowseAndTurnSearch.setCustomerId(customerId);
       Page<InfoBrowse> page =  infoBrowseServer.infoTurnRecord(infoBrowseAndTurnSearch);
-
-      page.getContent().stream()
-              .forEach(System.out::println);
       model.addAttribute("infoTurnListPage",page);
       return "info/info_turn";
     }
@@ -64,7 +58,7 @@ public class InfoBrowseController extends MallBaseController{
     @RequestMapping("/info/deleteTurn")
     @ResponseBody
     public ApiResult deleteTurn(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
-        int count = infoBrowseServer.deleteInfoTurnRecord(infoBrowseAndTurnSearch);
+        int count = infoBrowseServer.updateInfoTurnRecord(infoBrowseAndTurnSearch);
         logger.info(count);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }

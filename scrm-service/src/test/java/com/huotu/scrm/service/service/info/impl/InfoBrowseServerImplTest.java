@@ -14,12 +14,12 @@ import static org.junit.Assert.*;
 public class InfoBrowseServerImplTest extends CommonTestBase{
     @Autowired
     private InfoBrowseRepository infoBrowseRepository;
-    @Test
-    public void deleteInfoTurnRecord() throws Exception {
 
+    @Test
+    @Rollback(value = false)
+    public void deleteInfoTurnRecord() throws Exception {
         Long infoId=1232L,sourceUserId=1L;
         infoBrowseRepository.updateInfoTurn(infoId,sourceUserId,true);
-
     }
 
 }
