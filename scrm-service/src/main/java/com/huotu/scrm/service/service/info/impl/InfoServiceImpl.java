@@ -86,7 +86,7 @@ public class InfoServiceImpl implements InfoService {
         return false;
     }
 
-    public Page<Info> infoSList(InformationSearch informationSearch) {
+    public Page<Info> infoList(InformationSearch informationSearch) {
         Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize());
         return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();

@@ -16,4 +16,6 @@ public class InfoBrowseAndTurnSearch {
     private Long customerId;
     private Long sourceUserId;
     private Long readUserId;
+    private Long infoId;
+
 }

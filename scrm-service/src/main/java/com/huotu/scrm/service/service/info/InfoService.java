@@ -37,7 +37,7 @@ public interface InfoService {
     /**
      * 根据分页条件查找到某一页的资讯列表
      */
-    Page<Info> infoSList(InformationSearch informationSearch);
+    Page<Info> infoList(InformationSearch informationSearch);
 
 
     /**

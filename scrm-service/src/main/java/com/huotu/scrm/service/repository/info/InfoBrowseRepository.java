@@ -1,8 +1,11 @@
 package com.huotu.scrm.service.repository.info;
 
 import com.huotu.scrm.service.entity.info.InfoBrowse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,18 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
 
 
     InfoBrowse findOneByInfoIdAndSourceUserIdAndReadUserId(Long infoId, Long sourceId, Long readId);
+
+
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.sourceUserId where t.infoId=?1 and t.customerId=?2 and t.isDisable=?3 group by t.infoId,t.sourceUserId,u.weixinImageUrl,u.wxNickName")
+    Page<InfoBrowse> findAllBrowseRecordAndCustomerId(Long infoId, Long customerId ,boolean disable,Pageable pageable);
+
+
+
+
+    @Query("update InfoBrowse t set t.isDisable=?3 where t.infoId=?1 and t.sourceUserId=?2")
+    @Modifying
+    int updateInfoTurn(Long infoId, Long sourceUserId,boolean disable);
+
 
     long countByInfoId(Long infoId);
 

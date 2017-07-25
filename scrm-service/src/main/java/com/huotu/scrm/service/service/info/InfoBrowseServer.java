@@ -4,6 +4,7 @@ import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -18,11 +19,30 @@ public interface InfoBrowseServer {
     void infoTurnInSave(InfoBrowse infoBrowse,Long customerId);
 
     /**
-     * 根据分页条件查找到某一资讯的资讯列表转发记入
+     * 查询资讯的转发记入
+     * @param
+     * @return
      */
-    Page<InfoBrowse> infoTurnAndBrowseList(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
+    Page<InfoBrowse> infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
 
+    /**
+     * 删除转发记录
+     * @param infoBrowseAndTurnSearch
+     * @return
+     */
+    int deleteInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
+
+
+
+
+    Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
+//    /**
+//     * 查询资讯的浏览记入
+//     * @param infoBrowseAndTurnSearch
+//     * @return
+//     */
+//    Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
 //
 //

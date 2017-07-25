@@ -46,7 +46,7 @@ public class InfoController extends MallBaseController {
         logger.info(informationSearch);
         informationSearch.setCustomerId(customerId);
         logger.info(informationSearch);
-        Page<Info> page = infoService.infoSList(informationSearch);
+        Page<Info> page = infoService.infoList(informationSearch);
         model.addAttribute("infoListsPage",page);
         long account = infoService.infoListsCount(false);
         logger.info(account);

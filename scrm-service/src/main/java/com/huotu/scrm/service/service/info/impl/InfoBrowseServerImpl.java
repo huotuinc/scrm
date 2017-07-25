@@ -5,9 +5,18 @@ import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.service.info.InfoBrowseServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.criteria.Predicate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
 
 /**
@@ -36,8 +45,21 @@ public class InfoBrowseServerImpl implements InfoBrowseServer {
     }
 
     @Override
-    public Page<InfoBrowse> infoTurnAndBrowseList(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
-        return null;
+    public Page<InfoBrowse> infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
+       return infoBrowseRepository.findAllBrowseRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+    }
+
+    @Override
+    public int deleteInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        int a = infoBrowseRepository.updateInfoTurn(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getSourceUserId(),true);
+        return 0;
+    }
+
+    @Override
+    public Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
+        return infoBrowseRepository.findAllBrowseRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
     }
 
 
