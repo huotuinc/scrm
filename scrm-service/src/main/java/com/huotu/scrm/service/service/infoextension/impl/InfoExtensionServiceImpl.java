@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.service.infoextension.impl;
 
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
@@ -114,7 +115,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         statisticalInformation.setDayScore(dayScore);
         //获取累积积分
         int accumulateScore = dayReportService.getCumulativeScore(userId);
-        statisticalInformation.setAccumulateScore(accumulateScore);
+        //获取本月预计积分
+        int monthScore = monthReportService.getExtensionScore(userId, localDate.withDayOfMonth(1), localDate);
+        statisticalInformation.setAccumulateScore(monthScore + accumulateScore);
         //获取关注人数（销售员特有）
         User user = userRepository.findOne(userId);
         UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
@@ -222,11 +225,12 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         }
         //设置历史累积积分
         int cumulativeScore = dayReportService.getCumulativeScore(userId);
-        dayScoreInfo.setAccumulateScore(cumulativeScore);
+        //获取本月预计积分
+        int monthScore = monthReportService.getExtensionScore(userId, localDate.withDayOfMonth(1), localDate);
+        dayScoreInfo.setAccumulateScore(cumulativeScore + monthScore);
         //设置近几个月积分信息
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
         MonthStatisticInfo monInfo = new MonthStatisticInfo();
-        int monthScore = monthReportService.getExtensionScore(userId, localDate.withDayOfMonth(1), localDate);
         monInfo.setData(monthScore);
         monInfo.setMonth("本月");
         monthStatisticInfoList.add(monInfo);
@@ -349,7 +353,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @return
      */
     public int getVisitorNum(Long infoId) {
-        return (int) infoBrowseRepository.countByInfoId(infoId);
+        List<InfoBrowse> byInfoId = infoBrowseRepository.findByInfoId(infoId);
+        if (byInfoId == null || byInfoId.isEmpty()) {
+            return 0;
+        }
+        return infoBrowseRepository.findCountInfoId(infoId);
     }
 
     /**

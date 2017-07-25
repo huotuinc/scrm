@@ -4,22 +4,23 @@ import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
-import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.entity.report.MonthReport;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
+import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +43,8 @@ public class DayReportServiceImpl implements DayReportService {
     private InfoConfigureRepository infoConfigureRepository;
     @Autowired
     private BusinessCardRecordRepository businessCardRecordRepository;
+    @Autowired
+    private MonthReportRepository monthReportRepository;
 
     @Override
     @Transactional
@@ -189,15 +192,14 @@ public class DayReportServiceImpl implements DayReportService {
         }
         //获取注册时间
         Date regTime = user.getRegTime();
-        Instant instant = regTime.toInstant();
-        ZoneId zoneId = ZoneId.systemDefault();
-        // atZone()方法返回在指定时区从此Instant生成的ZonedDateTime。
-        LocalDate regTimeDate = instant.atZone(zoneId).toLocalDate();
-        List<DayReport> dayReports = dayReportRepository.findByReportDay(userId, regTimeDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(regTime);
+        LocalDate date = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1);
+        List<MonthReport> monthReports = monthReportRepository.findCumulativeScore(userId,date);
         int cumulativeScore = 0;
-        for (DayReport dayReport :
-                dayReports) {
-            cumulativeScore += dayReport.getExtensionScore();
+        for (MonthReport monthReport :
+                monthReports) {
+            cumulativeScore += monthReport.getExtensionScore();
         }
         return cumulativeScore;
     }

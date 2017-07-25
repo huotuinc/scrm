@@ -16,6 +16,9 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
 
     long countByInfoId(Long infoId);
 
+    @Query("select count (t) from InfoBrowse t where t.infoId = ?1")
+    int findCountInfoId(Long infoId);
+
 
     List<InfoBrowse> findByInfoId(Long infoId);
 

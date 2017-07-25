@@ -28,4 +28,7 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long> 
     @Query("select min(t.scoreRanking) from MonthReport t where t.userId=?1")
     int findMaxScoreRanking(Long userId);
 
+    @Query("select t from MonthReport t where t.userId=?1 and t.reportMonth>?2")
+    List<MonthReport> findCumulativeScore(Long userId, LocalDate monthReport);
+
 }
