@@ -21,11 +21,15 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     InfoBrowse findOneByInfoIdAndSourceUserIdAndReadUserId(Long infoId, Long sourceId, Long readId);
 
 
-    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.sourceUserId where t.infoId=?1 and t.customerId=?2 and t.isDisable=?3 group by t.infoId,t.sourceUserId,u.weixinImageUrl,u.wxNickName")
-    Page<InfoBrowse> findAllBrowseRecordAndCustomerId(Long infoId, Long customerId ,boolean disable,Pageable pageable);
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.sourceUserId where t.infoId=?1 and t.customerId=?2 and t.turnDisable=?3 group by t.infoId,t.sourceUserId,u.weixinImageUrl,u.wxNickName")
+    Page<InfoBrowse> findAllTurnRecordAndCustomerId(Long infoId, Long customerId ,boolean disable,Pageable pageable);
 
 
-    @Query("update InfoBrowse t set t.isDisable=?3 where t.infoId=?1 and t.sourceUserId=?2")
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.readUserId,t.browseTime,u.weixinImageUrl," +
+            "u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 and t.browseDisable=?3 ")
+    Page<InfoBrowse> findAllBrowseRecord(Long infoId,Long customerId,boolean disable,Pageable pageable);
+
+    @Query("update InfoBrowse t set t.turnDisable=?3 where t.infoId=?1 and t.sourceUserId=?2")
     @Modifying
     void updateInfoTurn(Long infoId, Long sourceUserId,boolean disable);
 

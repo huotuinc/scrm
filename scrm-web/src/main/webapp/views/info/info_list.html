@@ -59,7 +59,7 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button" th:attr="infid=0">添加资讯
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button" th:attr="infoId=0">添加资讯
                         </button>
                     </div>
                     <div class="panel-body">
@@ -99,19 +99,19 @@
                                 <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
                                 <td th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
-                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)" th:attr="infid=${info.id}">
+                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)" th:attr="infoId=${info.id}">
                                        <i class="fa fa-pencil tooltips" data-toggle="tooltip" data-original-title="编辑"></i>
                                     </span>
                                     &nbsp;
-                                    <span class="cursor-point">
+                                    <span class="cursor-point" onclick="infoListHandler.turnList(this)" th:attr="infoId=${info.id}">
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="转发记录"></i>
                                     </span>
                                     &nbsp;
-                                    <span class="cursor-point">
+                                    <span class="cursor-point" onclick="infoListHandler.browseList(this)" th:attr="infoId=${info.id}">
                                         <i class="fa fa-pencil tooltips"  data-toggle="tooltip" data-original-title="浏览记录"></i>
                                     </span>
                                     &nbsp;
-                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infid=''+${info.id}" class="cursor-point">
+                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infoId=''+${info.id}" class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
                                     </span>
@@ -217,12 +217,22 @@
         },
 
         editInfo:function(obj){
-            var infoid = $(obj).attr("infid");
+            var infoid = $(obj).attr("infoId");
             window.location.href = "/mall/info/edit?id="+infoid;
         },
 
+        turnList:function(obj){
+            var infoid = $(obj).attr("infoId");
+            window.location.href = "/mall//info/turnRecord";
+        },
+
+        browseList:function(obj){
+            var infoid = $(obj).attr("infoId");
+            window.location.href = "/mall//info/browseRecord";
+        },
+
         deleteInfo:function(obj){
-            var infoid = $(obj).attr("infid");
+            var infoid = $(obj).attr("infoId");
             hot.ajax("/mall/info/deleteInfo", {
                 id:infoid
             }, function (result) {

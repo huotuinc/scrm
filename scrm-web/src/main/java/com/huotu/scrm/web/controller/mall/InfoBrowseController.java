@@ -55,6 +55,11 @@ public class InfoBrowseController extends MallBaseController{
       return "info/info_turn";
     }
 
+    /***
+     * 删除转发记录
+     * @param infoBrowseAndTurnSearch
+     * @return
+     */
     @RequestMapping("/info/deleteTurn")
     @ResponseBody
     public ApiResult deleteTurn(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
@@ -62,6 +67,16 @@ public class InfoBrowseController extends MallBaseController{
         logger.info(count);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
+
+
+    @RequestMapping("/info/browseRecord")
+    public String infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch, @ModelAttribute("customerId") Long customerId, Model model){
+        infoBrowseAndTurnSearch.setCustomerId(customerId);
+        Page<InfoBrowse> page =  infoBrowseServer.infoBrowseRecord(infoBrowseAndTurnSearch);
+        model.addAttribute("infoBrowseListPage",page);
+        return "info/info_browse";
+    }
+
 
 
 }

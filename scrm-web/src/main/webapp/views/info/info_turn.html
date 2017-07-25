@@ -146,9 +146,7 @@
     var infoListHandler = {
         deleteInfo:function(obj){
             var infoId = $(obj).attr("infoId");
-            alert(infoId);
             var sourceUserId = $(obj).attr("sourceUserId");
-            alert(sourceUserId);
             hot.ajax("/mall/info/deleteTurn", {
                 infoId:infoId,
                 sourceUserId:sourceUserId

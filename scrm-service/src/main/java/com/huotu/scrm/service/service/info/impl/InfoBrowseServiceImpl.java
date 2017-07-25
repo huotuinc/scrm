@@ -34,6 +34,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
             infoBrowseDate.setInfoId(infoBrowse.getInfoId());
             infoBrowseDate.setReadUserId(infoBrowse.getReadUserId());
             infoBrowseDate.setSourceUserId(infoBrowse.getSourceUserId());
+            infoBrowseDate.setBrowseTime(LocalDateTime.now());
             infoBrowseRepository.save(infoBrowseDate);
         }
     }
@@ -41,7 +42,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Override
     public Page<InfoBrowse> infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
-       return infoBrowseRepository.findAllBrowseRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+       return infoBrowseRepository.findAllTurnRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Override
     public Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
-        return infoBrowseRepository.findAllBrowseRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+        return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
     }
 
 
