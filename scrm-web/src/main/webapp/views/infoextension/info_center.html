@@ -28,7 +28,7 @@
 </div>
 <p style="height:30px"></p>
 <div class="weui_cells weui_cells_access">
-    <a class="weui_cell" href="javascript:void(0);">
+    <a class="weui_cell" href="/site/extension/getScoreRanking">
         <div class="weui_cell_bd weui_cell_primary">
             <p>点击查看明细</p>
         </div>
@@ -61,9 +61,10 @@
                 <p>累计积分</p>
             </a>
         </li>
-        <li>
+        <li th:if="${status}">
             <a href="javascript:void(0);">
-                <p class="sj" th:text="${statisticalInformation.followNum}"></p>
+                <p class="sj" th:text="${statisticalInformation.followNum}"
+                ></p>
                 <p>关注人数</p>
             </a>
         </li>
@@ -87,7 +88,8 @@
                                                               style="width: 18px;" th:text="${infoMode.visitorNum}">
                         </li>
                         <li class="weui_media_info_meta weui_media_info_meta_extra"><img
-                                src="../../resources/images/three.png" width="100%" th:text="${infoMode.releaseTime}">
+                                src="../../resources/images/three.png" width="100%"
+                                th:text="${infoMode.releaseTime}+小时前">
                         </li>
                     </ul>
                     <button type="button" class="tuiguang">推广</button>

@@ -43,4 +43,9 @@ public interface MonthReportService {
      * @return
      */
     int getFollowNum(Long userId, LocalDate minDate, LocalDate maxDate);
+
+    /**
+     * 定时保存每月统计信息
+     */
+    void saveMonthReportScheduled();
 }

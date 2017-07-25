@@ -42,7 +42,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     int countBySourceUserIdAndBrowseTime(Long sourceUserId, LocalDateTime minDate, LocalDateTime maxDate);
 
     @Query("select distinct t.sourceUserId from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<=?2")
-    List<Long> findBySourceUserId(LocalDateTime minDate, LocalDateTime maxDate);
+    List<Long> findSourceUserIdList(LocalDateTime minDate, LocalDateTime maxDate);
 
     //根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
     @Query("select count(distinct t.infoId) from InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2 and t.sourceUserId=?3")

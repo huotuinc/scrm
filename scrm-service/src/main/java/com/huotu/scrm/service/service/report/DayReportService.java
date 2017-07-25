@@ -28,4 +28,9 @@ public interface DayReportService {
      * @return
      */
     int getCumulativeScore(Long userId);
+
+    /**
+     * 定时保存每日统计信息
+     */
+    void saveDayReportScheduled();
 }

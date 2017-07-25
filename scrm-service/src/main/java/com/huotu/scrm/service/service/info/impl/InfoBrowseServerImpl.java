@@ -2,6 +2,7 @@ package com.huotu.scrm.service.service.info.impl;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.service.info.InfoBrowseServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

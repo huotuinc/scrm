@@ -11,6 +11,7 @@ import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.report.MonthReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +49,9 @@ public class MonthReportServiceImpl implements MonthReportService {
         List<Long> userIdList = reportDayRepository.findByUserId(lastFirstDay, lastEndDay);
         for (long userId : userIdList) {
             User user = userRepository.findOne(userId);
+            if (user == null) {
+                continue;
+            }
             MonthReport monthReport = new MonthReport();
             //设置用户ID
             monthReport.setUserId(userId);
@@ -57,6 +61,9 @@ public class MonthReportServiceImpl implements MonthReportService {
             monthReport.setLevelId(user.getLevelId());
             //设置是否为销售员
             UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+            if (userLevel == null) {
+                continue;
+            }
             monthReport.setSalesman(userLevel.isSalesman());
             //设置每月咨询转发量
             int forwardNum = getForwardNum(userId, lastFirstDay, lastEndDay);
@@ -77,11 +84,16 @@ public class MonthReportServiceImpl implements MonthReportService {
             //设置统计月份
             monthReport.setReportMonth(lastFirstDay);
             //保存数据
+            //先删除数据
+            List<MonthReport> monthReportList = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay);
+            monthReportList.forEach(p -> {
+                monthReportRepository.delete(p.getId());
+            });
             monthReportRepository.save(monthReport);
         }
         //设置排名
         for (long userId : userIdList) {
-            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay);
+            MonthReport monthReport = monthReportRepository.findByUserIdAndReportMonth(userId, lastFirstDay).get(0);
             //设置每月积分排名
             int scoreRanking = getScoreRanking(userId, lastFirstDay);
             monthReport.setScoreRanking(scoreRanking);
@@ -111,7 +123,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     /**
-     * 统计每月访客量
+     * 统计每月访客量(如果统计本月不含当天数据)
      *
      * @param userId  用户ID
      * @param minDate 统计起始时间
@@ -129,7 +141,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     /**
-     * 统计每月推广积分
+     * 统计每月推广积分(如果统计本月不含当天数据)
      *
      * @param userId  用户ID
      * @param minDate 统计起始时间
@@ -147,7 +159,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     /**
-     * 统计每月关注量（销售员特有）
+     * 统计每月关注量（销售员特有，如果统计本月不含当天数据)
      *
      * @param userId  用户ID
      * @param minDate 统计起始时间
@@ -172,7 +184,16 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     /**
-     * 统计每月推广积分排名
+     * 定时统计每月信息
+     */
+    @Override
+    @Scheduled(cron = "0 45 0 1 * *")
+    public void saveMonthReportScheduled() {
+        saveMonthReport();
+    }
+
+    /**
+     * 统计每月推广积分排名(如果统计本月不含当天数据)
      *
      * @param userId 用户ID
      * @param month  统计月份
@@ -191,7 +212,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     /**
-     * 统计关注量排名（销售员特有）
+     * 统计关注量排名（销售员特有，如果统计本月不含当天数据)
      *
      * @param userId 用户ID
      * @param month  统计月份

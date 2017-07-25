@@ -69,4 +69,12 @@ public interface InfoExtensionService {
      * @return
      */
     DayFollowNumInfo getFollowNumInfo(Long userId);
+
+    /**
+     * 判断是否为销售 (在小伙伴的前提下)
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    boolean checkIsSalesman(Long userId);
 }
