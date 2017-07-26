@@ -64,9 +64,6 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Override
     public int getUserType(Long userId) {
-        if (userId.equals(687500L) || userId.equals(237L)) {
-            return 1;
-        }
         return userRepository.findOne(userId).getUserType().ordinal();
     }
 
@@ -193,7 +190,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
         monthInfo.setMonth("本月");
-        monthInfo.setData(dayScoreRankingInfo.getHighestMonthScoreRanking());
+        monthInfo.setData(dayScoreRankingInfo.getMonthScoreRanking());
         monthStatisticInfoList.add(monthInfo);
         for (int i = 1; i < 5; i++) {
             MonthStatisticInfo monthStatisticInfo = getMonthStatisticInfo(userId, 0, i);
@@ -331,15 +328,16 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Override
     public boolean checkIsSalesman(Long userId) {
-        User user = userRepository.findOne(userId);
-        if (user == null) {
-            return false;
-        }
-        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-        if (userLevel == null) {
-            return false;
-        }
-        return userLevel.isSalesman();
+        return true;
+//        User user = userRepository.findOne(userId);
+//        if (user == null) {
+//            return false;
+//        }
+//        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+//        if (userLevel == null) {
+//            return false;
+//        }
+//        return userLevel.isSalesman();
     }
 
     /**

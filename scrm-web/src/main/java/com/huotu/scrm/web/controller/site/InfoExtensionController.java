@@ -60,8 +60,7 @@ public class InfoExtensionController extends SiteBaseController {
             //判断是否为销售员
             boolean status = infoExtensionService.checkIsSalesman(userId);
             model.addAttribute("statisticalInformation", statisticalInformation);
-//            model.addAttribute("status", status);
-            model.addAttribute("status", true);
+            model.addAttribute("status", status);
             return "infoextension/info_center";
         }
     }
