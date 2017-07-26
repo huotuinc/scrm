@@ -74,5 +74,17 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         return infoBrowseRepository.countByInfoId(infoId);
     }
 
+    @Override
+    public Page<InfoBrowse> infoSiteBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        Pageable pageable;
+        if(infoBrowseAndTurnSearch.getSourceType() == 0){
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, 6);
+        }else {
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, 12);
+        }
+        infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),pageable);
+        return null;
+    }
+
 
 }
