@@ -7,7 +7,7 @@
  * 2013-2017. All rights reserved.
  */
 
-package com.huotu.scrm.service.service;
+package com.huotu.scrm.service.service.activity;
 
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import org.springframework.data.domain.Page;
