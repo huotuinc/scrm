@@ -68,13 +68,35 @@ public class InfoBrowseController extends MallBaseController{
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
 
-
+    /**
+     * 获取某条资讯的浏览记录
+     * @param infoBrowseAndTurnSearch
+     * @param customerId
+     * @param model
+     * @return
+     */
     @RequestMapping("/info/browseRecord")
     public String infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch, @ModelAttribute("customerId") Long customerId, Model model){
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         Page<InfoBrowse> page =  infoBrowseServer.infoBrowseRecord(infoBrowseAndTurnSearch);
         model.addAttribute("infoBrowseListPage",page);
         return "info/info_browse";
+    }
+
+    /***
+     * 删除转发记录
+     * @param infoBrowseAndTurnSearch
+     * @return
+     */
+    @RequestMapping("/info/deleteBrowse")
+    @ResponseBody
+    public ApiResult deleteBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
+        int count = infoBrowseServer.updateInfoBrowse(infoBrowseAndTurnSearch);
+        if(count > 0){
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        }
+        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+
     }
 
 
