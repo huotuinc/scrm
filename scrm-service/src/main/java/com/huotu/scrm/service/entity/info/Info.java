@@ -98,6 +98,11 @@ public class Info {
     private boolean isDisable = false;
 
 
+//    /**
+//     * 资讯点赞数量
+//     */
+//    @Column(name = "Good_Num")
+//    private int goodNum;
 
 
 }
