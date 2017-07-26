@@ -62,7 +62,7 @@ public class InfoBrowse {
     /**
      * 转发记录是否删除   0 未  1 删除
      */
-    @Column(name = "Disable")
+    @Column(name = "Browse_Disable")
     private boolean isDisable=false;
 
 

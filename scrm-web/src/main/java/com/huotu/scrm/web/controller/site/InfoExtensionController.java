@@ -60,7 +60,8 @@ public class InfoExtensionController extends SiteBaseController {
             //判断是否为销售员
             boolean status = infoExtensionService.checkIsSalesman(userId);
             model.addAttribute("statisticalInformation", statisticalInformation);
-            model.addAttribute("status", status);
+//            model.addAttribute("status", status);
+            model.addAttribute("status", true);
             return "infoextension/info_center";
         }
     }
@@ -76,7 +77,7 @@ public class InfoExtensionController extends SiteBaseController {
     public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) {
         int userType = infoExtensionService.getUserType(userId);
         if (userType != 1) {
-            return "redirect:/extension/getInfoExtension";
+            return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
             DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(userId);
@@ -98,7 +99,7 @@ public class InfoExtensionController extends SiteBaseController {
     public String getScoreInfo(@ModelAttribute("userId") Long userId, Model model) {
         int userType = infoExtensionService.getUserType(userId);
         if (userType != 1) {
-            return "redirect:/extension/getInfoExtension";
+            return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
             DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(userId);
@@ -121,7 +122,7 @@ public class InfoExtensionController extends SiteBaseController {
     public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) {
         int userType = infoExtensionService.getUserType(userId);
         if (userType != 1) {
-            return "redirect:/extension/getInfoExtension";
+            return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
             DayFollowNumInfo dayFollowNumInfo = infoExtensionService.getFollowNumInfo(userId);
@@ -141,7 +142,7 @@ public class InfoExtensionController extends SiteBaseController {
     public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) {
         int userType = infoExtensionService.getUserType(userId);
         if (userType != 1) {
-            return "redirect:/extension/getInfoExtension";
+            return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
             DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(userId);
