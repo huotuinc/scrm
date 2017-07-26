@@ -33,7 +33,6 @@ public interface InfoBrowseService {
     @Transactional
     int updateInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
-
     /**
      * 查询资讯的转发记入
      * @param
@@ -41,5 +40,11 @@ public interface InfoBrowseService {
      */
     Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
-
+    /**
+     * 删除浏览记录
+     * @param infoBrowseAndTurnSearch
+     * @return
+     */
+    @Transactional
+    int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 }

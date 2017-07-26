@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "SCRM_InfoBrowseLog")
-@Cacheable(false)
+//@Cacheable(false)
 public class InfoBrowse {
 
     /**
@@ -105,6 +105,16 @@ public class InfoBrowse {
         this.turnTime = turnTime;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
+    }
+
+    public InfoBrowse(Long infoId, Long sourceUserId,Long readUserId, LocalDateTime browseTime, String imgUrl, String nickName,Long customerId) {
+        this.infoId = infoId;
+        this.sourceUserId = sourceUserId;
+        this.readUserId = readUserId;
+        this.browseTime = browseTime;
+        this.imgUrl = imgUrl;
+        this.nickName = nickName;
+        this.customerId = customerId;
     }
 
     public InfoBrowse(){

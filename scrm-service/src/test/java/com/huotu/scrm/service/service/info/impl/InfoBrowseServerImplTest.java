@@ -36,4 +36,11 @@ public class InfoBrowseServerImplTest extends CommonTestBase{
                 .stream().forEach(System.out::println);
 
     }
+
+
+    @Test
+    public void deleteBrowseRecord(){
+        int result =  infoBrowseRepository.updateBrowseInfo(1232L,1L,237L,true);
+        int b = 0;
+    }
 }

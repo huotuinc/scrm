@@ -217,24 +217,24 @@
         },
 
         editInfo:function(obj){
-            var infoid = $(obj).attr("infoId");
-            window.location.href = "/mall/info/edit?id="+infoid;
+            var infoId = $(obj).attr("infoId");
+            window.location.href = "/mall/info/edit?id="+infoId;
         },
 
         turnList:function(obj){
-            var infoid = $(obj).attr("infoId");
-            window.location.href = "/mall//info/turnRecord";
+            var infoId = $(obj).attr("infoId");
+            window.location.href = "/mall//info/turnRecord?infoId="+infoId;
         },
 
         browseList:function(obj){
-            var infoid = $(obj).attr("infoId");
-            window.location.href = "/mall//info/browseRecord";
+            var infoId = $(obj).attr("infoId");
+            window.location.href = "/mall/info/browseRecord?infoId="+infoId;
         },
 
         deleteInfo:function(obj){
-            var infoid = $(obj).attr("infoId");
+            var infoId = $(obj).attr("infoId");
             hot.ajax("/mall/info/deleteInfo", {
-                id:infoid
+                id:infoId
             }, function (result) {
                 if (result.code == 200) {
                     hot.tip.success("删除成功");

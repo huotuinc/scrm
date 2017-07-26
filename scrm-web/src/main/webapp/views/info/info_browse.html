@@ -40,19 +40,16 @@
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
-                            <!--/*@thymesVar id="infoBrowseListPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.InfoBrowse>"*/-->
-                            <!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
                             <tr th:each="infoBrowse ,infoState: ${infoBrowseListPage.content}">
                                 <td th:text="${infoState.index} + 1 + (${infoBrowseAndTurnSearch.pageNo} - 1) * ${infoBrowseAndTurnSearch.pageSize}">1</td>
                                 <td style="width: 20%;">
                                     <img th:src="${infoBrowse.imgUrl}"  src="../../resources/images/infoBg.png" width="60" height="60">
                                 </td>
-                                <td th:text="${infoBrowse.nickName}">
-
-                                </td>
-                                <td th:text="${#temporals.format(infoBrowse.turnTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
+                                <td th:text="${infoBrowse.nickName}"></td>
+                                <td  th:text="${#temporals.format(infoBrowse.browseTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
                                 <td>
-                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infoId=${infoBrowse.infoId},sourceUserId=${infoBrowse.sourceUserId}"
+                                    <span onclick="infoListHandler.deleteBrowseRecord(this)" th:attr="infoId=${infoBrowse.infoId},readUserId=${infoBrowse.readUserId},
+                                    sourceUserId=${infoBrowse.sourceUserId}"
                                      class="cursor-point">
                                         <i class="fa fa-trash tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除"></i>
@@ -144,11 +141,13 @@
     });
 
     var infoListHandler = {
-        deleteInfo:function(obj){
+        deleteBrowseRecord:function(obj){
             var infoId = $(obj).attr("infoId");
+            var readUserId = $(obj).attr("readUserId");
             var sourceUserId = $(obj).attr("sourceUserId");
-            hot.ajax("/mall/info/deleteTurn", {
+            hot.ajax("/mall/info/deleteBrowse", {
                 infoId:infoId,
+                readUserId:readUserId,
                 sourceUserId:sourceUserId
             }, function (result) {
                 if (result.code == 200) {

@@ -57,5 +57,12 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
     }
 
+    @Override
+    public int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
+
+        return infoBrowseRepository.updateBrowseInfo(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getReadUserId(),infoBrowseAndTurnSearch.getSourceUserId(),true);
+
+    }
+
 
 }
