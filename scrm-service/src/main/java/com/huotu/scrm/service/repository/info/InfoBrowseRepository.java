@@ -17,29 +17,34 @@ import java.util.List;
 public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, JpaSpecificationExecutor<InfoBrowse> {
 
 
-
+    //查找资讯
     InfoBrowse findOneByInfoIdAndSourceUserIdAndReadUserId(Long infoId, Long sourceId, Long readId);
 
-
+    //查询转发记录
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.sourceUserId where t.infoId=?1 and t.customerId=?2 and t.turnDisable=?3 group by t.infoId,t.sourceUserId,u.weixinImageUrl,u.wxNickName")
     Page<InfoBrowse> findAllTurnRecordAndCustomerId(Long infoId, Long customerId ,boolean disable,Pageable pageable);
 
-
+    //查询浏览记录
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,t.readUserId,t.browseTime,u.weixinImageUrl," +
             "u.wxNickName, t.customerId) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 and t.browseDisable=?3 ")
     Page<InfoBrowse> findAllBrowseRecord(Long infoId,Long customerId,boolean disable,Pageable pageable);
 
+    //删除转发记录
     @Query("update InfoBrowse t set t.turnDisable=?3 where t.infoId=?1 and t.sourceUserId=?2")
     @Modifying
     void updateInfoTurn(Long infoId, Long sourceUserId,boolean disable);
 
-
+    //删除浏览记录
     @Query("update InfoBrowse t set t.browseDisable=?4 where t.infoId=?1 and t.readUserId=?2 and t.sourceUserId=?3")
     @Modifying
     int updateBrowseInfo(Long infoId, Long readUserId, Long sourceUserId,boolean disable);
 
+    //获取资讯转发量
+    @Query("SELECT COUNT(DISTINCT t.sourceUserId) from InfoBrowse t WHERE t.infoId=?1")
+    int totleTurnCount(Long InfoId);
 
-    long countByInfoId(Long infoId);
+    //获取资讯浏览器
+    int countByInfoId(Long infoId);
 
 
     //根据转发用户ID和转发日期查询转发咨询的访问量

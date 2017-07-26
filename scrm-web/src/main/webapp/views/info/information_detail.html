@@ -14,6 +14,9 @@
 </head>
 <body class="grbg">
 <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
+<!--/*@thymesVar id="infoTurnNum" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="browseNum" type="java.lang.Integer"*/-->
+
 <div class="bm xzdd-list">
   <header class='demos-header'>
     <h3 style="padding:10px 10px 0px 10px;" class="demos-title" th:text="${info.title}">买了车以后，这些加装的配件到底要不要买？</h3>
@@ -23,9 +26,14 @@
     <img class="bmingyd" src="../../resources/images/sj@3x.png" style="width: 18px;vertical-align: middle;margin-top: -4px">
     <i th:text="${#temporals.format(info.createTime, 'yyyy-MM-dd')}">2017-08-18&nbsp;</i>
   </span>
-  <span class="little-list"><img class="bmingyd" src="../../resources/images/zf.png" style="width: 18px;vertical-align: middle;margin-top: -4px">&nbsp;201</span>
-  <span class="little-list"><img class="bmingyd" src="../../resources/images/ydll@3x.png" style="width: 18px;vertical-align: middle;margin-top: -4px">&nbsp;2256</span>
-  <span class="little-list"><img class="bmingyd" src="../../resources/images/dz.png" style="width: 18px;vertical-align: middle;margin-top: -4px">&nbsp;2256</span>
+  <span class="little-list">
+    <img class="bmingyd" src="../../resources/images/zf.png" style="width: 18px;vertical-align: middle;margin-top: -4px">
+    <i th:text="${infoTurnNum}"></i>
+  </span>
+  <span class="little-list"><img class="bmingyd" src="../../resources/images/ydll@3x.png" style="width: 18px;vertical-align: middle;margin-top: -4px">
+    <i th:text="${browseNum}"></i>
+  </span>
+  <!--<span class="little-list"><img class="bmingyd" src="../../resources/images/dz.png" style="width: 18px;vertical-align: middle;margin-top: -4px">&nbsp;2256</span>-->
 
   <article style="margin-top:10px;" class="weui_article">
     <section>
@@ -49,7 +57,8 @@
 <div class="weui_panel weui_panel_access xzdd-list">
   <div class="weui_panel_bd">
     <div class="weui_media_box weui_media_text">
-      <p class="weui_media_desc_one">浏览记录<i style="font-size: 12px">（100）</i>
+      <p class="weui_media_desc_one">浏览记录
+        <i style="font-size: 12px" th:text="'(' + ${browseNum}+')'">（100）</i>
         <i style="color: #4b4b4b;float: right;font-size: 14px;">查看更多></i></p>
     </div>
     <div class="weui_media_box weui_media_text" style="padding:10px; height:47px;">

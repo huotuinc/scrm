@@ -47,4 +47,20 @@ public interface InfoBrowseService {
      */
     @Transactional
     int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
+
+
+    /**
+     * 获取资讯转发量
+     * @param infoId
+     * @return
+     */
+    int countByTurn(Long infoId);
+
+
+    /**
+     * 获取资讯浏览量
+     * @param infoId
+     * @return
+     */
+    int countByBrowse(Long infoId);
 }
