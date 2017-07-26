@@ -63,4 +63,7 @@ public interface InfoBrowseService {
      * @return
      */
     int countByBrowse(Long infoId);
+
+
+    Page<InfoBrowse> infoSiteBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 }
