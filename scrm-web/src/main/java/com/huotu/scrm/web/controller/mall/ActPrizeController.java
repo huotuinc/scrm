@@ -13,7 +13,7 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
-import com.huotu.scrm.service.service.ActPrizeService;
+import com.huotu.scrm.service.service.activity.ActPrizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "SCRM_InfoBrowseLog")
-@Cacheable(false)
+//@Cacheable(false)
 public class InfoBrowse {
 
     /**
@@ -62,8 +62,15 @@ public class InfoBrowse {
     /**
      * 转发记录是否删除   0 未  1 删除
      */
+    @Column(name = "Turn_Disable")
+    private boolean turnDisable=false;
+
+
+    /**
+     * 转发记录是否删除   0 未  1 删除
+     */
     @Column(name = "Browse_Disable")
-    private boolean isDisable=false;
+    private boolean browseDisable=false;
 
 
     /**
@@ -98,6 +105,16 @@ public class InfoBrowse {
         this.turnTime = turnTime;
         this.imgUrl = imgUrl;
         this.nickName = nickName;
+    }
+
+    public InfoBrowse(Long infoId, Long sourceUserId,Long readUserId, LocalDateTime browseTime, String imgUrl, String nickName,Long customerId) {
+        this.infoId = infoId;
+        this.sourceUserId = sourceUserId;
+        this.readUserId = readUserId;
+        this.browseTime = browseTime;
+        this.imgUrl = imgUrl;
+        this.nickName = nickName;
+        this.customerId = customerId;
     }
 
     public InfoBrowse(){

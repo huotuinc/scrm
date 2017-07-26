@@ -13,6 +13,7 @@ import com.huotu.scrm.common.ienum.ActEnum;
 import com.huotu.scrm.common.ienum.EnumHelper;
 import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.entity.activity.Activity;
+import com.huotu.scrm.service.service.activity.ActivityService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

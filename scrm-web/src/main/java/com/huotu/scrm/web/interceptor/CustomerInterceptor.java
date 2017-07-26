@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Enumeration;
@@ -22,7 +21,7 @@ public class CustomerInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private Environment environment;
-    public static final String CUSTOMER_ID = "customerId";
+    private static final String CUSTOMER_ID = "customerId";
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -39,7 +38,7 @@ public class CustomerInterceptor extends HandlerInterceptorAdapter {
         }
         if (StringUtils.isEmpty(requestCustomerId)) {
             customerId = CookieUtils.getCookieValInteger(request, "UserID");
-            if (customerId <= 1 && environment.acceptsProfiles("development")) {
+            if (customerId <= 1 && environment.acceptsProfiles("!container")) {
                 customerId = 4421;
             }
             if (customerId == 0) {

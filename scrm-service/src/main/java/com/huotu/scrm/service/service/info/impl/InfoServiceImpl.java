@@ -45,7 +45,7 @@ public class InfoServiceImpl implements InfoService {
     public Info findOneByIdAndCustomerId(Long id,Long customerId){
         Info info;
         if (id != null && id != 0){
-            info = infoRepository.findOneByIdAndCustomerId(id,customerId);
+            info = infoRepository.findOneByIdAndCustomerIdAndIsDisable(id,customerId,false);
         }else {
             info = new Info();
         }
@@ -77,7 +77,7 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public boolean deleteInfo(Long customerId, Long id) {
-        Info info = infoRepository.findOneByIdAndCustomerId(id,customerId);
+        Info info = infoRepository.findOneByIdAndCustomerIdAndIsDisable(id,customerId,false);
         if(info != null){
             info.setDisable(true);
             infoRepository.save(info);
