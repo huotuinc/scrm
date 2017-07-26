@@ -19,7 +19,7 @@ import java.util.Enumeration;
  */
 @Component
 public class UserInterceptor extends HandlerInterceptorAdapter {
-    public static final String CUSTOMER_ID = "customerId";
+    private static final String CUSTOMER_ID = "customerId";
     private static final String USER_ID_PREFIX = "mem_authcode_";
     private static final String USER_ID_SECRET_KEY = "XjvDhKLvCsm9y7G7";
     @Autowired
@@ -29,7 +29,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (environment.acceptsProfiles("development", "test")) {
+        if (environment.acceptsProfiles("!container")) {
             String requestUserId = null;
             Enumeration<String> paramKeys = request.getParameterNames();
             while (paramKeys.hasMoreElements()) {

@@ -7,11 +7,11 @@
  * 2013-2017. All rights reserved.
  */
 
-package com.huotu.scrm.service.service.impl;
+package com.huotu.scrm.service.service.activity.impl;
 
 import com.huotu.scrm.service.entity.activity.ActPrize;
-import com.huotu.scrm.service.repository.ActPrizeRepository;
-import com.huotu.scrm.service.service.ActPrizeService;
+import com.huotu.scrm.service.repository.activity.ActPrizeRepository;
+import com.huotu.scrm.service.service.activity.ActPrizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
