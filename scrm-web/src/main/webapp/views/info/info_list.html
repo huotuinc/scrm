@@ -81,13 +81,13 @@
                             <tr th:each="info ,infoState: ${infoListsPage.content}">
                                 <td th:text="${info.id}">1</td>
                                 <td style="width: 20%;">
-                                    <a>
-                                        <p  style="width: 100%; height: 50px;">
-                                        <span  class="font-hidden" style="width: 95%;float: left;" th:text="${info.title}">
+                                    <p style="width: 100%; height: 50px;">
+                                        <span class="font-hidden" style="width: 95%;float: left;"
+                                              th:text="${info.title}" onclick="infoListHandler.detailInfo(this)"
+                                              th:attr="infoId=${info.id},customerId=${info.customerId}">
                                                 习近平对司法体制改革作出重要指示引起热烈反响
                                         </span>
-                                        </p>
-                                    </a>
+                                    </p>
                                 </td>
                                 <td style="width: 20%;">
                                     <span class="font-hidden" style="width: 95%;float: left;" th:text="${info.introduce}">
@@ -202,6 +202,13 @@
     });
 
     var infoListHandler = {
+
+        detailInfo:function (obj) {
+            var infoId = $(obj).attr("infoId");
+            var customerId = $(obj).attr("customerId");
+            window.location.href = "/site/info/infoDetail?infoId="+infoId+"&customerId="+customerId;
+        },
+
         search:function(pageNo) {
             var search = $("input:text[name='infoName']").val(pageIndex);
             $('#searchForm').submit();
