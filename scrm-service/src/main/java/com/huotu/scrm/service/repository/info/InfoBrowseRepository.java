@@ -38,7 +38,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      * @return
      */
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,u.weixinImageUrl," +
-            "u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 and t.browseDisable=?3 order by t.browseTime")
+            "u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 order by t.browseTime")
     Page<InfoBrowse> findAllBrowseRecordByLimit(Long infoId,Long customerId,Pageable pageable);
 
 
@@ -55,7 +55,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
 
     //获取资讯转发量
     @Query("SELECT COUNT(DISTINCT t.sourceUserId) from InfoBrowse t WHERE t.infoId=?1")
-    int totleTurnCount(Long InfoId);
+    int totalTurnCount(Long InfoId);
 
     //获取资讯浏览器
     int countByInfoId(Long infoId);

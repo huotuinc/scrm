@@ -66,7 +66,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
 
     @Override
     public int countByTurn(Long infoId) {
-        return infoBrowseRepository.totleTurnCount(infoId);
+        return infoBrowseRepository.totalTurnCount(infoId);
     }
 
     @Override
