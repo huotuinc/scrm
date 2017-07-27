@@ -61,19 +61,50 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     int countByInfoId(Long infoId);
 
 
-    //根据转发用户ID和转发日期查询转发咨询的访问量
-    @Query("select count (t) from InfoBrowse t where  t.browseTime>=?2 and t.browseTime<?3 and t.sourceUserId=?1 ")
-    int countBySourceUserIdAndBrowseTime(Long sourceUserId, LocalDateTime minDate, LocalDateTime maxDate);
+    /**
+     * 根据转发用户ID和转发日期查询转发咨询的访问量
+     *
+     * @param sourceUserId
+     * @param minDate
+     * @param maxDate
+     * @return
+     */
+    long countBySourceUserIdAndBrowseTimeBetween(Long sourceUserId, LocalDateTime minDate, LocalDateTime maxDate);
 
-    @Query("select distinct t.sourceUserId from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<=?2")
+    /**
+     * 根据某一商户和时间获取所有的转发用户
+     *
+     * @param minDate
+     * @param maxDate
+     * @return
+     */
+    @Query("select distinct (t.sourceUserId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<=?2")
     List<Long> findSourceUserIdList(LocalDateTime minDate, LocalDateTime maxDate);
 
-    //根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
+    @Query("select distinct (t.sourceUserId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<=?2 and t.customerId =?3")
+    List<Long> findSourceUserIdListByCustomerId(LocalDateTime minDate, LocalDateTime maxDate, Long customerId);
+
+    /**
+     * 根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
+     *
+     * @param minDate
+     * @param maxDate
+     * @param userId
+     * @return
+     */
     @Query("select count(distinct t.infoId) from InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2 and t.sourceUserId=?3")
     int findForwardNumBySourceUserId(LocalDateTime minDate, LocalDateTime maxDate, Long userId);
 
-    //查询咨询的转发量
+    /**
+     * 查询咨询的转发量
+     *
+     * @param infoId
+     * @return
+     */
     @Query("select  count(distinct t.sourceUserId) from InfoBrowse t where t.infoId=?1")
     int findInfoForwardNum(Long infoId);
+
+    @Query("select distinct (t.sourceUserId) from InfoBrowse t where t.customerId=?1")
+    List<Long> findByCustomerId(Long customerId);
 
 }

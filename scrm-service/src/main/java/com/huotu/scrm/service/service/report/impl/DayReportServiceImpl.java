@@ -2,24 +2,24 @@ package com.huotu.scrm.service.service.report.impl;
 
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
-import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
-import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.entity.report.MonthReport;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
+import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +42,8 @@ public class DayReportServiceImpl implements DayReportService {
     private InfoConfigureRepository infoConfigureRepository;
     @Autowired
     private BusinessCardRecordRepository businessCardRecordRepository;
+    @Autowired
+    private MonthReportRepository monthReportRepository;
 
     @Override
     @Transactional
@@ -53,10 +55,11 @@ public class DayReportServiceImpl implements DayReportService {
         //获取当前时间
         LocalDateTime now = LocalDateTime.now();
         //获取昨天时间（时分秒默认为零）
-        LocalDateTime lastTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.minusDays(1).getDayOfMonth(), 0, 0, 0);
+        LocalDateTime lastBeginTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.minusDays(1).getDayOfMonth(), 0, 0, 0);
+        LocalDateTime lastEndTime = LocalDateTime.of(now.getYear(), now.getMonth(), now.minusDays(1).getDayOfMonth(), 23, 59, 59);
         //获取当前时间（时分秒默认为零）
-        LocalDateTime todayBegin = LocalDateTime.of(now.getYear(), now.getMonth(), now.getDayOfMonth(), 0, 0, 0);
-        List<Long> bySourceUserIdList = infoBrowseRepository.findSourceUserIdList(lastTime, now.minusDays(1));
+        LocalDateTime todayBegin = lastBeginTime.plusDays(1);
+        List<Long> bySourceUserIdList = infoBrowseRepository.findSourceUserIdList(lastBeginTime, lastEndTime);
         for (long sourceUserId : bySourceUserIdList) {
             User user = userRepository.findOne(sourceUserId);
             if (user == null) {
@@ -70,23 +73,24 @@ public class DayReportServiceImpl implements DayReportService {
             //设置等级
             dayReport.setLevelId(user.getLevelId());
             //设置是否为销售员
-            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-            if (userLevel == null) {
-                continue;
-            }
-            dayReport.setSalesman(userLevel.isSalesman());
+//            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+//            if (userLevel == null) {
+//                continue;
+//            }
+//            dayReport.setSalesman(userLevel.isSalesman());
+            dayReport.setSalesman(true);
             //设置每日咨询转发量
-            int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(lastTime, todayBegin, sourceUserId);
+            int forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTime, todayBegin, sourceUserId);
             dayReport.setForwardNum(forwardNumBySourceUserId);
             //设置每日访客量
-            int countBySourceUserId = infoBrowseRepository.countBySourceUserIdAndBrowseTime(sourceUserId, lastTime, todayBegin);
+            int countBySourceUserId = (int) infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(sourceUserId, lastBeginTime, todayBegin);
             dayReport.setVisitorNum(countBySourceUserId);
             //设置每日推广积分（咨询转发奖励和转发咨询浏览奖励）
-            int extensionScore = getEstimateScore(sourceUserId, lastTime, todayBegin);
+            int extensionScore = getEstimateScore(sourceUserId, lastBeginTime, todayBegin);
             dayReport.setExtensionScore(extensionScore);
             //设置每日被关注量(销售员特有)
             if (dayReport.isSalesman()) {
-                int countByUserId = businessCardRecordRepository.countByUserId(sourceUserId, lastTime, todayBegin);
+                int countByUserId = (int) businessCardRecordRepository.countByUserIdAndFollowDateBetween(sourceUserId, lastBeginTime, todayBegin);
                 dayReport.setFollowNum(countByUserId);
             } else {
                 dayReport.setFollowNum(0);
@@ -100,8 +104,8 @@ public class DayReportServiceImpl implements DayReportService {
                 dayReportRepository.delete(p.getId());
             });
             dayReportRepository.save(dayReport);
-            //设置每日访客排名
         }
+        //设置每日访客排名
         for (long userId : bySourceUserIdList) {
             List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDay(userId, lastDay);
             if (dayReportList.isEmpty() || dayReportList == null) {
@@ -164,7 +168,7 @@ public class DayReportServiceImpl implements DayReportService {
             }
         }
         //获取用户访客量
-        int countBySourceUserId = infoBrowseRepository.countBySourceUserIdAndBrowseTime(userId, minDate, maxDate);
+        int countBySourceUserId = (int) infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, minDate, maxDate);
         //获取每日访客量奖励积分
         int visitorScore = 0;
         //获取访客量转换比例
@@ -189,15 +193,14 @@ public class DayReportServiceImpl implements DayReportService {
         }
         //获取注册时间
         Date regTime = user.getRegTime();
-        Instant instant = regTime.toInstant();
-        ZoneId zoneId = ZoneId.systemDefault();
-        // atZone()方法返回在指定时区从此Instant生成的ZonedDateTime。
-        LocalDate regTimeDate = instant.atZone(zoneId).toLocalDate();
-        List<DayReport> dayReports = dayReportRepository.findByReportDay(userId, regTimeDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(regTime);
+        LocalDate date = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1);
+        List<MonthReport> monthReports = monthReportRepository.findByUserIdAndReportMonthGreaterThanEqual(userId, date);
         int cumulativeScore = 0;
-        for (DayReport dayReport :
-                dayReports) {
-            cumulativeScore += dayReport.getExtensionScore();
+        for (MonthReport monthReport :
+                monthReports) {
+            cumulativeScore += monthReport.getExtensionScore();
         }
         return cumulativeScore;
     }
@@ -219,15 +222,9 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int visitorRanking(Long userId, LocalDate date) {
-        List<DayReport> sortAll = dayReportRepository.findByReportDayOrderByVisitorNumDesc(date);
-        int ranking = 0;
-        for (int i = 0; i < sortAll.size(); i++) {
-            if (userId.equals(sortAll.get(i).getUserId())) {
-                ranking = i + 1;
-                break;
-            }
-        }
-        return ranking;
+        User user = userRepository.findOne(userId);
+        List<DayReport> sortAll = dayReportRepository.findByReportDayAndCustomerIdOrderByVisitorNumDesc(date, user.getCustomerId());
+        return getRanking(sortAll, userId);
     }
 
     /**
@@ -238,15 +235,9 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int scoreRanking(Long userId, LocalDate date) {
-        List<DayReport> sortAll = dayReportRepository.findByReportDayOrderByExtensionScoreDesc(date);
-        int ranking = 0;
-        for (int i = 0; i < sortAll.size(); i++) {
-            if (userId.equals(sortAll.get(i).getUserId())) {
-                ranking = i + 1;
-                break;
-            }
-        }
-        return ranking;
+        User user = userRepository.findOne(userId);
+        List<DayReport> sortAll = dayReportRepository.findByReportDayAndCustomerIdOrderByExtensionScoreDesc(date, user.getCustomerId());
+        return getRanking(sortAll, userId);
     }
 
     /**
@@ -257,12 +248,27 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int followRanking(Long userId, LocalDate date) {
-        List<DayReport> sortAll = dayReportRepository.findByReportDayOrderByFollowNumDesc(date);
+        User user = userRepository.findOne(userId);
+        List<DayReport> sortAll = dayReportRepository.findByReportDayAndCustomerIdAndIsSalesmanTrueOrderByFollowNumDesc(date, user.getCustomerId());
+        return getRanking(sortAll, userId);
+    }
+
+    public int getRanking(List<DayReport> list, Long userId) {
         int ranking = 0;
-        for (int i = 0; i < sortAll.size(); i++) {
-            if (userId.equals(sortAll.get(i).getUserId())) {
+        boolean flag = false;
+        for (int i = 0; i < list.size(); i++) {
+            if (userId.equals(list.get(i).getUserId())) {
                 ranking = i + 1;
+                flag = true;
                 break;
+            }
+        }
+        //判断之前是否有统计
+        if (!flag) {
+            if (list.isEmpty() || list == null) {
+                ranking = 1;
+            } else {
+                ranking = list.size() + 1;
             }
         }
         return ranking;

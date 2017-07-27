@@ -22,7 +22,7 @@ public interface DayReportService {
     int getEstimateScore(Long userId, LocalDateTime minDate, LocalDateTime maxDate);
 
     /**
-     * 统计用户的累积积分（从注册以后开始计算）
+     * 统计用户的累积积分（从注册以后开始计算，没有计算本月积分）
      *
      * @param userId 用户ID
      * @return
