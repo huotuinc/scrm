@@ -64,9 +64,8 @@
         <i style="color: #4b4b4b;float: right;font-size: 14px;">查看更多></i></p>
     </div>
     <div class="weui_media_box weui_media_text" style="padding:10px; height:47px;">
-      <div th:each="infoBrowse : ${headImages}">
-        <img class="imgtoux" src="../../resources/images/moren.png" th:src="${infoBrowse.imgUrl} != null ? ${infoBrowse.imgUrl} :'../../resources/images/moren.png'"/>
-      </div>
+      <img class="imgtoux" src="../../resources/images/moren.png" th:each="infoBrowse : ${headImages}"
+           th:src="${infoBrowse.imgUrl} != null ? ${infoBrowse.imgUrl} :'../../resources/images/moren.png'"/>
     </div>
   </div>
 </div>

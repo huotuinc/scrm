@@ -58,4 +58,21 @@ public class InfoDetailController extends SiteBaseController {
         model.addAttribute("headImages",page.getContent());
         return "info/information_detail";
     }
+
+    @RequestMapping(value = "/info/infoDetailBrowse")
+    public String infoBrowse(@ModelAttribute("userId") Long userId, Long infoId, Long customerId, Model model) throws URISyntaxException {
+
+        //浏览记录
+        int browse = infoBrowseService.countByBrowse(infoId);
+        model.addAttribute("browseNum", new Integer(browse));
+
+        InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
+        infoBrowseAndTurnSearch.setCustomerId(customerId);
+        infoBrowseAndTurnSearch.setSourceType(1);
+        infoBrowseAndTurnSearch.setInfoId(infoId);
+        Page<InfoBrowse> page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        model.addAttribute("headImages",page.getContent());
+        return "info/browse_log";
+    }
+
 }
