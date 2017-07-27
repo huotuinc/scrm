@@ -9,11 +9,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
   <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
-<link rel="stylesheet" type="text/css" href="../../../../../../../../Desktop/2017.07.14香樟大道/css/weui.min-xz-diy.css"/>
+  <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css" th:href="@{../../resources/css/weui.min-xz-diy.css}"/>
 <title>资讯详情</title>
 </head>
 <body class="grbg">
 <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
+<!--/*@thymesVar id="headImages" type="java.lang.List<scrm.service.entity.info.InfoBrowse>"*/-->
+<!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
 <!--/*@thymesVar id="infoTurnNum" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="browseNum" type="java.lang.Integer"*/-->
 
@@ -62,14 +64,9 @@
         <i style="color: #4b4b4b;float: right;font-size: 14px;">查看更多></i></p>
     </div>
     <div class="weui_media_box weui_media_text" style="padding:10px; height:47px;">
-      <img class="imgtoux" src="../../resources/images/moren.png">
-      <img class="imgtoux" src="../../resources/images/moren.png">
-      <img class="imgtoux" src="../../resources/images/moren.png">
-      <img class="imgtoux" src="../../resources/images/moren.png">
-      <img class="imgtoux" src="../../resources/images/moren.png">
-      <img class="imgtoux" src="../../resources/images/moren.png">
-      <img class="imgtoux" src="../../resources/images/moren.png">
-      <img class="imgtoux" src="../../resources/images/moren.png">
+      <div th:each="infoBrowse : ${headImages}">
+        <img class="imgtoux" src="../../resources/images/moren.png" th:src="${infoBrowse.imgUrl} != null ? ${infoBrowse.imgUrl} :'../../resources/images/moren.png'"/>
+      </div>
     </div>
   </div>
 </div>

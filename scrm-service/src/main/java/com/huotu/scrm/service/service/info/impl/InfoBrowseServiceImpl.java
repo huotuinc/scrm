@@ -82,8 +82,8 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         }else {
             pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, 12);
         }
-        infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),pageable);
-        return null;
+        return infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),pageable);
+
     }
 
 

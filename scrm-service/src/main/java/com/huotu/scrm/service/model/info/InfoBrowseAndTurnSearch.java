@@ -17,5 +17,8 @@ public class InfoBrowseAndTurnSearch {
     private Long sourceUserId;
     private Long readUserId;
     private Long infoId;
+    /**
+     * 0 6条  1 12条
+     */
     private int sourceType = 0;
 }
