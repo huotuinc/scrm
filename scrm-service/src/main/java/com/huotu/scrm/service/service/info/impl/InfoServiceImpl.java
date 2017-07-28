@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -45,7 +46,7 @@ public class InfoServiceImpl implements InfoService {
     public Info findOneByIdAndCustomerId(Long id,Long customerId){
         Info info;
         if (id != null && id != 0){
-            info = infoRepository.findOneByIdAndCustomerIdAndIsDisable(id,customerId,false);
+            info = infoRepository.findOneByIdAndCustomerIdAndIsDisableFalse(id,customerId);
         }else {
             info = new Info();
         }
@@ -77,7 +78,7 @@ public class InfoServiceImpl implements InfoService {
 
     @Override
     public boolean deleteInfo(Long customerId, Long id) {
-        Info info = infoRepository.findOneByIdAndCustomerIdAndIsDisable(id,customerId,false);
+        Info info = infoRepository.findOneByIdAndCustomerIdAndIsDisableFalse(id,customerId);
         if(info != null){
             info.setDisable(true);
             infoRepository.save(info);
@@ -87,7 +88,9 @@ public class InfoServiceImpl implements InfoService {
     }
 
     public Page<Info> infoList(InformationSearch informationSearch) {
-        Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize());
+        Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize(),new Sort(
+            new Sort.Order(Sort.Direction.DESC,"createTime")
+        ));
         return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(informationSearch.getSearchCondition())){

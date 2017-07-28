@@ -39,14 +39,14 @@ public class Info {
     /**
      * 资讯简介
      */
-    @Column(name = "Introduce", length = 100)
+    @Column(name = "Introduce", length = 300)
     private String introduce;
 
 
     /**
      * 资讯详情
      */
-    @Column(name = "Content", length = 400)
+    @Column(name = "Content", length = 500)
     private String content;
 
 

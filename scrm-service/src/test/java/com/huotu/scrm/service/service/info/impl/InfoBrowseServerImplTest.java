@@ -43,4 +43,12 @@ public class InfoBrowseServerImplTest extends CommonTestBase{
         int result =  infoBrowseRepository.updateBrowseInfo(1232L,1L,237L,true);
         int b = 0;
     }
+
+
+    @Test
+    public void infoSiteBrowseRecord(){
+        Pageable pageable = new PageRequest(0, 6);
+        Page<InfoBrowse> page =  infoBrowseRepository.findAllBrowseRecordByLimit(10L,4421L,pageable);
+        int b = 0;
+    }
 }

@@ -125,4 +125,11 @@ public class InfoBrowse {
     public InfoBrowse(){
 
     }
+
+    public InfoBrowse(Long infoId,String imgUrl,String nickName,Long customerId){
+        this.imgUrl = imgUrl;
+        this.nickName = nickName;
+        this.infoId = infoId;
+        this.customerId = customerId;
+    }
 }
