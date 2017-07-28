@@ -7,11 +7,13 @@ import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
-import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardRecordService;
 import com.huotu.scrm.service.service.businesscard.BusinessCardService;
+import com.huotu.scrm.service.service.mall.UserLevelService;
+import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,7 +44,9 @@ public class BusinessCardController extends SiteBaseController {
     @Autowired
     private StaticResourceService staticResourceService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+    @Autowired
+    private UserLevelService userLevelService;
 
     /***
      * 编辑销售员名片信息
@@ -89,6 +93,16 @@ public class BusinessCardController extends SiteBaseController {
         }
 
         Long userId = this.getUserId(request);
+
+        User user = userService.getByIdAndCustomerId(userId , customerId);
+        if (user == null) {
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST , "不存在的用户",null);
+        }
+        UserLevel userLevel = userLevelService.findByCustomerIdAndId( user.getCustomerId() , user.getLevelId() );
+        if( userLevel ==null || !userLevel.isSalesman()){
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息",null);
+        }
+
         UploadResourceEnum uploadResourceType = UploadResourceEnum.USER;
         String fileName = btnFile.getOriginalFilename();
         String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
@@ -117,11 +131,16 @@ public class BusinessCardController extends SiteBaseController {
                                             @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
                                             @RequestParam(name = "type", required = false, defaultValue = "1") Integer type,
                                             @RequestParam(name = "value", required = false, defaultValue = "") String value) {
-        long userId = this.getUserId(request);
-        User user = userRepository.getOne(userId);
+         long userId = this.getUserId(request);
+        User user = userService.getByIdAndCustomerId(userId , customerId);
         if (user == null) {
-            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST , "不存在的用户",null);
         }
+        UserLevel userLevel = userLevelService.findByCustomerIdAndId( user.getCustomerId() , user.getLevelId() );
+        if( userLevel ==null || !userLevel.isSalesman()){
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息",null);
+        }
+
         BusinessCardUpdateTypeEnum typeEnum = EnumHelper.getEnumType(BusinessCardUpdateTypeEnum.class, type);
         BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, typeEnum, value);
 
@@ -176,7 +195,7 @@ public class BusinessCardController extends SiteBaseController {
         try {
             Long followerId = this.getUserId(request);
             businessCardRecordService.deleteByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
-            int numberOfFollower = businessCardRecordService.getFollowCountByCustomerIdAndUserId(customerId, salesmanId);
+            int numberOfFollower = businessCardRecordService.countNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);
             Map<Object, Object> resultMap = new HashMap<>();
             resultMap.put("numberOfFollower", numberOfFollower);
             resultMap.put("isFollowed", false);

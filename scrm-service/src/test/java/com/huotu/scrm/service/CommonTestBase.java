@@ -48,7 +48,7 @@ public class CommonTestBase {
         return customer;
     }
 
-    protected User mockUser(Long customerId, UserType userType) {
+    protected User mockUser(Long customerId, UserType userType , Long userLevelId ) {
         //新增用户
         Random random = new Random();
         User user = new User();
@@ -57,7 +57,7 @@ public class CommonTestBase {
         user.setLoginName(UUID.randomUUID().toString());
         user.setUserGender("男");
         user.setNickName(UUID.randomUUID().toString());
-        user.setLevelId(0);
+        user.setLevelId( userLevelId);
         user.setLockedBalance(random.nextDouble());
         user.setLockedIntegral(random.nextDouble());
         user.setRegTime(new Date());
@@ -71,7 +71,10 @@ public class CommonTestBase {
     }
 
     protected User mockUser(Long customerId) {
-        return mockUser(customerId, UserType.normal);
+        return mockUser(customerId, UserType.normal , 0L );
     }
 
+    protected User mockUser(Long customerId , UserType userType ) {
+        return mockUser(customerId, userType , 0L );
+    }
 }

@@ -26,8 +26,7 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @param salesmanId
      * @return
      */
-    @Query("select count(u) from BusinessCardRecord u where u.customerId=?1 and u.userId=?2")
-    Integer getNumberOfFollowerByCustomerIdAndUserId(Long customerId, Long salesmanId);
+    int countNumberOfFollowerByCustomerIdAndUserId(Long customerId, Long salesmanId);
 
     /***
      * 检测是否关注了指定的销售员名片
