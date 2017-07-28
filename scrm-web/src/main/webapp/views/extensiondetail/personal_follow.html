@@ -63,25 +63,30 @@
                 <ul class="dailiren-float-ul ka  pjf_3ge ">
                     <li>
                         <a>
-                            <p class="sj" th:text="${dayFollowNumInfo.followRanking}"></p>
+                            <p class="sj" th:text="${dayFollowNumInfo.followRanking}"
+                               th:if="${dayFollowNumInfo.followRanking}>0"></p>
+                            <p class="sj" th:unless="${dayFollowNumInfo.followRanking}>0">--</p>
                             <p>当前排名</p>
                         </a>
                     </li>
                     <li>
                         <a style="border-left: 1px solid #57acf0;">
-                            <p class="sj" th:text="${dayFollowNumInfo.highestFollowRanking}"></p>
+                            <p class="sj" th:text="${dayFollowNumInfo.highestFollowRanking}"
+                               th:if="${dayFollowNumInfo.highestFollowRanking}>0"></p>
+                            <p class="sj" th:unless="${dayFollowNumInfo.highestFollowRanking}>0">--</p>
                             <p>最高月排名</p>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" th:each="monthFollowInfo:${dayFollowNumInfo.monthFollowRankingList}">
+        <div class="weui_cells weui_cells_access" th:each="monthFollowInfo:${dayFollowNumInfo.monthFollowRankingList}">
+            <a class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
                     <p th:text="${monthFollowInfo.month}+'排名'"></p>
                 </div>
-                <div class="weui_cell_ft" th:text="${monthFollowInfo.data}+'位'"></div>
+                <div class="weui_cell_ft" th:text="${monthFollowInfo.data}+'位'" th:if="${monthFollowInfo.data}>0"></div>
+                <div class="weui_cell_ft" th:unless="${monthFollowInfo.data}>0">--</div>
             </a>
         </div>
     </div>

@@ -2,6 +2,7 @@ package com.huotu.scrm.service.entity.info;
 
 import lombok.Getter;
 import lombok.Setter;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,7 +10,7 @@ import javax.persistence.Table;
 
 /**
  * 资讯配置表
- *
+ * <p>
  * Created by montage on 2017/7/11.
  */
 @Entity
@@ -26,7 +27,7 @@ public class InfoConfigure {
     private Long customerId;
 
     /**
-     *  是否开启转发奖励
+     * 是否开启转发奖励
      */
     @Column(name = "Reward_Switch")
     private boolean isRewardSwitch;
@@ -93,4 +94,11 @@ public class InfoConfigure {
     @Column(name = "Info_IntroduceUrl")
     private String infoIntroduceUrl;
 
+    public boolean extensionIsBuddyAndIsReward() {
+        return isRewardLimitSwitch && rewardUserType == 1;
+    }
+
+    public boolean uvIsBuddyAndIsReward() {
+        return isExchangeSwitch && exchangeUserType == 1;
+    }
 }
