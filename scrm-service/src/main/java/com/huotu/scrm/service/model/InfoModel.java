@@ -15,6 +15,16 @@ import java.io.Serializable;
 public class InfoModel implements Serializable {
 
     /**
+     * 咨询编号
+     */
+    private Long infoId;
+
+    /**
+     * 商户编号
+     */
+    private Long customerId;
+
+    /**
      * 资讯标题
      */
     private String title;
@@ -41,7 +51,7 @@ public class InfoModel implements Serializable {
     private int visitorNum;
 
     /**
-     * 发布时间距现在多少时间，默认小时数
+     * 发布时间距现在多少时间（默认小时数，超过24小时提示天数）
      */
-    private int releaseTime;
+    private String releaseTime;
 }

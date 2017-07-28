@@ -47,7 +47,9 @@
         <div class="fa-bigbox">
             <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
                 <p class="phone">今日积分排名（位）</p>
-                <p style="color: #fff; font-size: 30px;" th:text="${dayScoreRankingInfo.dayScoreRanking}"></p>
+                <p style="color: #fff; font-size: 30px;" th:unless="${dayScoreRankingInfo.dayScoreRanking}>0">--</p>
+                <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}>0"
+                   th:text="${dayScoreRankingInfo.dayScoreRanking}"></p>
             </div>
             <p class="f-rgo" style="display:none">
                 <a href="">
@@ -63,25 +65,30 @@
                 <ul class="dailiren-float-ul ka  pjf_3ge ">
                     <li>
                         <a>
-                            <p class="sj" th:text="${dayScoreRankingInfo.monthScoreRanking}"></p>
+                            <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}>0"
+                               th:text="${dayScoreRankingInfo.monthScoreRanking}"></p>
+                            <p class="sj" th:unless="${dayScoreRankingInfo.monthScoreRanking}>0">--</p>
                             <p>本月积分排名（位）</p>
                         </a>
                     </li>
                     <li>
                         <a style="border-left: 1px solid #57acf0;">
-                            <p class="sj" th:text="${dayScoreRankingInfo.highestMonthScoreRanking}"></p>
+                            <p class="sj" th:if="${dayScoreRankingInfo.highestMonthScoreRanking}>0"
+                               th:text="${dayScoreRankingInfo.highestMonthScoreRanking}"></p>
+                            <p class="sj" th:unless="${dayScoreRankingInfo.highestMonthScoreRanking}>0">--</p>
                             <p>最高月积分排名（位）</p>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" th:each="monthRanking:${dayScoreRankingInfo.monthScoreRankingList}">
+        <div class="weui_cells weui_cells_access" th:each="monthRanking:${dayScoreRankingInfo.monthScoreRankingList}">
+            <a class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
                     <p th:text="${monthRanking.month}+'排名'"></p>
                 </div>
-                <div class="weui_cell_ft" th:text="${monthRanking.data}+'位'"></div>
+                <div class="weui_cell_ft" th:text="${monthRanking.data}+'位'" th:if="${monthRanking.data}>0"></div>
+                <div class="weui_cell_ft" th:unless="${monthRanking.data}>0">--</div>
             </a>
         </div>
     </div>

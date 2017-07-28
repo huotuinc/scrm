@@ -39,8 +39,10 @@
     <ul class="dailiren-float-ul ka  pjf_4ge ">
         <li>
             <a href="javascript:void(0);">
-                <p class="sj" th:text="${statisticalInformation.dayVisitorRanking}"></p>
-                <p>今日排名</p>
+                <p class="sj" th:unless="${statisticalInformation.dayVisitorRanking}>0">--</p>
+                <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}>0"
+                   th:text="${statisticalInformation.dayVisitorRanking}"></p>
+                <p>今日UV排名</p>
             </a>
         </li>
         <li>
@@ -72,27 +74,31 @@
 </div>
 <p style="height: 10px"></p>
 <div class="xzdd-list">
-    <div class="weui_panel" th:each="infoMode:${infoModes}">
+    <div class="weui_panel" th:each="infoModel:${infoModes}"
+         th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
         <div class="weui_panel_bd">
             <div class="weui_media_box weui_media_text">
                 <div class="weui_media_hd">
-                    <img class="weui_media_appmsg_thumb" th:src="${infoMode.thumbnailImageUrl}" alt="">
+                    <img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}" alt="">
                 </div>
                 <div class="left-font">
-                    <h4 class="weui_media_title" th:text="${infoMode.title}"></h4>
-                    <p class="weui_media_desc" th:text="${infoMode.introduce}"></p>
+                    <h4 class="weui_media_title" th:text="${infoModel.title}"></h4>
+                    <p class="weui_media_desc" th:text="${infoModel.introduce}"></p>
                     <ul class="weui_media_info" style="float: left">
                         <li class="weui_media_info_meta"><img src="../../resources/images/zf.png" width="100%"
-                                                              th:text="${infoMode.forwardNum}"></li>
+                                                              th:text="${infoModel.forwardNum}"></li>
                         <li class="weui_media_info_meta"><img src="../../resources/images/ydll@3x.png"
-                                                              style="width: 18px;" th:text="${infoMode.visitorNum}">
+                                                              style="width: 18px;" th:text="${infoModel.visitorNum}">
                         </li>
                         <li class="weui_media_info_meta weui_media_info_meta_extra"><img
                                 src="../../resources/images/three.png" width="100%"
-                                th:text="${infoMode.releaseTime}+小时前">
+                                th:text="${infoModel.releaseTime}+小时前">
                         </li>
                     </ul>
-                    <button type="button" class="tuiguang">推广</button>
+                    <button type="button" class="tuiguang"
+                            th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+                        推广
+                    </button>
                 </div>
             </div>
         </div>
@@ -102,3 +108,8 @@
 </html>
 <script src="weui/js/jquery-2.1.4.js"></script>
 <script src="weui/js/jquery-weui.js"></script>
+<script type="text/javascript">
+    function getInfoDetail(infoId, customerId) {
+        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
+    }
+</script>

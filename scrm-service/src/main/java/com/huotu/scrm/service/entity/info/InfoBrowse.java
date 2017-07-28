@@ -99,6 +99,11 @@ public class InfoBrowse {
                 '}';
     }
 
+    public InfoBrowse(Long infoId, Long sourceUserId) {
+        this.infoId = infoId;
+        this.sourceUserId = sourceUserId;
+    }
+
     public InfoBrowse(Long infoId, Long sourceUserId, LocalDateTime turnTime, String imgUrl, String nickName) {
         this.infoId = infoId;
         this.sourceUserId = sourceUserId;

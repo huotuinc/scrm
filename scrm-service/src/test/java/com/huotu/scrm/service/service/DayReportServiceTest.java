@@ -25,7 +25,7 @@ public class DayReportServiceTest extends CommonTestBase {
      */
     @Test
     public void testDayReportService() {
-       dayReportService.saveDayReport();
+        dayReportService.saveDayReport();
         List<DayReport> all = dayReportRepository.findAll();
         all.forEach(p -> {
             System.out.println(p.toString());

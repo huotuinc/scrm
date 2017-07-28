@@ -13,7 +13,7 @@ public interface DayReportService {
     void saveDayReport();
 
     /**
-     * 统计今日预计积分
+     * 统计某段时间预计积分
      *
      * @param userId  用户ID
      * @param minDate 统计起始日期
