@@ -33,7 +33,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">资讯标题</label>
                     <div class="col-sm-6">
-                        <input type="text" id="title" name="title" maxlength="30" class="form-control"
+                        <input type="text" id="title" name="title" maxlength="30" class="form-control" value=""
                                th:value="${info.title}" required>
                         <span class="help-block"><i class="fa fa-info-circle"></i>最多30个字符</span>
                     </div>
@@ -101,7 +101,7 @@
                     <label class="col-sm-2 control-label">资讯内容</label>
                     <div class="col-sm-8" id="eg">
                         <div class="ibox-content no-padding">
-                            <input type="hidden" name="content" th:value="${info.content}">
+                            <input type="hidden" name="content" id="content" value="" th:value="${info.content}">
                             <div style="display: none;" id="summerNote" th:utext="${info.content}">
 
                             </div>
@@ -152,11 +152,11 @@
             ignore: [],  //this is importent
             rules: {
                 imageUrl: "required",
-                content:"required",
+                content: "required",
             },
             messages: {
                 imageUrl: "请选择上传图片",
-                content:"请填写内容",
+                content: "请填写内容",
             }
         });
 
@@ -177,31 +177,27 @@
                         $('#imageShow').attr('src', data.fileUrl);
                         $("input:hidden[name='imageUrl']").val(data.fileUri);
                         hot.tip.success("图片上传成功");
+                    } else {
+                        hot.loading.hide();
                     }
                 },
                 error: function (data)// 服务器响应失败处理函数
                 {
-                    console.log(data + "服务器异常");
+                    hot.tip.error("服务器异常,请稍后再试");
                 }
             })
         },
         uploadInfo: function () {
-            $("input:hidden[name='content']").val($('#summerNote').code());
-            $('#infoSubmit').submit();
+            var cd = "<p><br></p>";
+            if ($('#summerNote').code() == cd) {
+                $("input:hidden[name='content']").val('');
+            } else {
+                $("input:hidden[name='content']").val($('#summerNote').code());
+            }
+            $('#editSaveInfo').valid()
+            $('#editSaveInfo').submit();
         }
-
     }
 </script>
-
 </body>
-
-
 </html>
-<!--<script type="text/javascript">-->
-<!--$('input[type="file"]').prettyFile();-->
-<!--$(function () {-->
-<!--var smnote = $(".summernote").summernote({-->
-<!--lang: "zh-CN"-->
-<!--});-->
-<!--});-->
-<!--</script>-->
