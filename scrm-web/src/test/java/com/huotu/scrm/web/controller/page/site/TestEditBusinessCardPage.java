@@ -2,11 +2,14 @@ package com.huotu.scrm.web.controller.page.site;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.web.controller.page.AbstractPage;
+import com.thoughtworks.selenium.Selenium;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.util.StringUtils;
 
 /**
@@ -90,11 +93,41 @@ public class TestEditBusinessCardPage extends AbstractPage {
         weuishow_qq.click();
         WebElement ele = webDriver.findElement( By.id("weui-prompt-input"));
         ele.sendKeys("51818549");
-        
-        ele = webDriver.findElement(By.className("weui_btn_dialog"));
-        ele.click();
 
-        //Assert.assertEquals( "51818549" , div_qq.getText());
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver , 10);
+        webDriverWait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement temp = webDriver.findElement(By.id("weui-prompt-input"));
+                if(temp != null && !temp.getAttribute("value").isEmpty()){
+                    return  true;
+                }
+                return  false;
+            }
+        });
+
+        Assert.assertEquals( ele.getAttribute("value") , "51818549" );
+
+
+        WebElement ele2 = webDriver.findElement(By.linkText("确定"));
+        ele2.click();
+
+
+
+        webDriverWait = new WebDriverWait(webDriver , 30);
+        webDriverWait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement temp = webDriver.findElement(By.id("div_qq"));
+                if(temp != null && !temp.getText().isEmpty()){
+                    return  true;
+                }
+                return false;
+            }
+        });
+
+
+        Assert.assertEquals( "51818549" , div_qq.getText());
 
     }
 }
