@@ -78,7 +78,7 @@ $(function () {
                 layer.close(layerIndex);
             },
             success:function (data) {
-                console.log(data);
+                console.log("data="+data);
                 if( data.code == 200 ) {
                     var $img_avatar = $("#img_avatar");
                     var imgUrl = data.data.avatar + "?r=" + Math.random() * 10;
@@ -89,8 +89,8 @@ $(function () {
                 }
             },
             error:function (error) {
-                console.log(error);
-                layer.msg(error);
+                console.log("error="+error);
+                layer.msg(error.responseText);
             }
         });
 
@@ -119,8 +119,8 @@ $(function () {
     function ajaxRequest( ele , updateType , text ) {
         var url = $('body').attr("js-data-update-url");
         var customerId = $customerId.val();
-        var userId = $userId.val();
-        var data ={ customerId : customerId , userId:userId , type: updateType , value:text};
+        //var userId = $userId.val();
+        var data ={ customerId : customerId , type: updateType , value:text};
 
         console.log("url="+url);
 
@@ -144,6 +144,7 @@ $(function () {
             },
             error:function (error) {
                console.log(error);
+               layer.msg(error.responseText);
             },
         });
     }

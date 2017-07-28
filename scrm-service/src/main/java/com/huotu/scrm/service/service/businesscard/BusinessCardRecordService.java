@@ -13,7 +13,7 @@ public interface BusinessCardRecordService {
      * @param userId
      * @return
      */
-    int getFollowCountByCustomerIdAndUserId(Long customerId, Long userId);
+    int countNumberOfFollowerByCustomerIdAndUserId(Long customerId, Long userId);
 
     /***
      * 删除关注信息

@@ -23,22 +23,22 @@ import java.util.List;
 @Transactional
 public class BusinessCardServiceImpl implements BusinessCardService {
     @Autowired
-    BusinessCardRepository businessCardReposity;
+    BusinessCardRepository businessCardRepository;
     @Autowired
-    BusinessCardRecordRepository businessCardRecordReposity;
+    BusinessCardRecordRepository businessCardRecordRepository;
     @Autowired
     UserRepository userRepository;
 
     public BusinessCard getBusinessCard(Long salesmanId, Long customerId) {
-        BusinessCard businessCard = businessCardReposity.getByUserIdAndCustomerId(salesmanId, customerId);
+        BusinessCard businessCard = businessCardRepository.getByUserIdAndCustomerId(salesmanId, customerId);
         return businessCard;
     }
 
     public SalesmanBusinessCard getSalesmanBusinessCard(Long customerId, Long salesmanId, Long followerId) {
-        BusinessCard businessCard = businessCardReposity.getByUserIdAndCustomerId(salesmanId, customerId);
+        BusinessCard businessCard = businessCardRepository.getByUserIdAndCustomerId(salesmanId, customerId);
         User user = userRepository.getByIdAndCustomerId(salesmanId, customerId);
-        Integer numberOfFollowers = businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);
-        Boolean isFollowed = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
+        Integer numberOfFollowers = businessCardRecordRepository.countNumberOfFollowerByCustomerIdAndUserId( customerId , salesmanId); //businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);
+        Boolean isFollowed = businessCardRecordRepository.existsByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
         SalesmanBusinessCard userBusinessCard = new SalesmanBusinessCard();
         userBusinessCard.setBusinessCard(businessCard);
         userBusinessCard.setSalesman(user);
@@ -52,7 +52,7 @@ public class BusinessCardServiceImpl implements BusinessCardService {
 
     public BusinessCard updateBusinessCard(Long customerId, Long userId, BusinessCardUpdateTypeEnum type, String text) {
 
-        BusinessCard model = businessCardReposity.getByUserIdAndCustomerId(userId, customerId);
+        BusinessCard model = businessCardRepository.getByUserIdAndCustomerId(userId, customerId);
         if (model == null) {
             model = new BusinessCard();
             model.setCustomerId(customerId);
@@ -74,13 +74,13 @@ public class BusinessCardServiceImpl implements BusinessCardService {
             model.setEmail(text);
         }
 
-        model = businessCardReposity.saveAndFlush(model);
+        model = businessCardRepository.saveAndFlush(model);
 
         return model;
     }
 
     public List<SalesmanBusinessCard> getMyBusinessCardList(Long customerId, Long userId) {
-        List<BusinessCardRecord> list = businessCardRecordReposity.findByCustomerIdAndFollowId(customerId, userId);
+        List<BusinessCardRecord> list = businessCardRecordRepository.findByCustomerIdAndFollowId(customerId, userId);
         List<SalesmanBusinessCard> myBusinessCards = new ArrayList<>();
         if (list.size() > 0) {
             for (BusinessCardRecord item : list) {

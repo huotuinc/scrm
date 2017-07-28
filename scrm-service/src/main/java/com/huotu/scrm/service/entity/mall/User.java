@@ -33,7 +33,7 @@ public class User {
      * 用户等级
      */
     @Column(name = "UB_LevelID")
-    private int levelId;
+    private Long levelId;
 
     /**
      * 登录名

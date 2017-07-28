@@ -15,30 +15,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class BusinessCardRecordServiceImpl implements BusinessCardRecordService {
 
     @Autowired
-    BusinessCardRecordRepository businessCardRecordReposity;
+    BusinessCardRecordRepository businessCardRecordRepository;
 
     @Override
-    public int getFollowCountByCustomerIdAndUserId(Long customerId, Long userId) {
-        return businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, userId);
+    public int countNumberOfFollowerByCustomerIdAndUserId(Long customerId, Long userId) {
+        return businessCardRecordRepository.countNumberOfFollowerByCustomerIdAndUserId(customerId, userId);
     }
 
     @Override
     public void deleteByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId) {
-        businessCardRecordReposity.deleteByCustomerIdAndUserIdAndFollowId(customerId, userId, followId);
+        businessCardRecordRepository.deleteByCustomerIdAndUserIdAndFollowId(customerId, userId, followId);
     }
 
     @Override
     public boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId) {
-        return businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId, userId, followId);
+        return businessCardRecordRepository.existsByCustomerIdAndUserIdAndFollowId(customerId, userId, followId);
     }
 
     @Override
     public boolean existsByCustomerIdAndFollowerIdNotInSalesmanId(Long customerId, Long followerId, Long salesmanId) {
-        return businessCardRecordReposity.existsByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId, salesmanId);
+        return businessCardRecordRepository.existsByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId, salesmanId);
     }
 
     @Override
     public BusinessCardRecord insert(BusinessCardRecord businessCardRecord) {
-        return businessCardRecordReposity.save(businessCardRecord);
+        return businessCardRecordRepository.save(businessCardRecord);
     }
 }

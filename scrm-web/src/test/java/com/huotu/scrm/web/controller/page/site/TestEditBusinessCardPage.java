@@ -2,7 +2,6 @@ package com.huotu.scrm.web.controller.page.site;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.web.controller.page.AbstractPage;
-import com.thoughtworks.selenium.Selenium;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -114,7 +113,7 @@ public class TestEditBusinessCardPage extends AbstractPage {
 
 
 
-        webDriverWait = new WebDriverWait(webDriver , 30);
+        webDriverWait = new WebDriverWait(webDriver , 40);
         webDriverWait.until(new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
@@ -128,6 +127,24 @@ public class TestEditBusinessCardPage extends AbstractPage {
 
 
         Assert.assertEquals( "51818549" , div_qq.getText());
+
+
+        btnFile.sendKeys("e:\\淡淡的222.jpg");
+
+        webDriverWait = new WebDriverWait(webDriver, 30);
+        webDriverWait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                if( img_avatar !=null && !img_avatar.getAttribute("src").isEmpty()){
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        String url = img_avatar.getAttribute("src");
+        Assert.assertFalse( url.isEmpty() );
 
     }
 }
