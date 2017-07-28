@@ -7,22 +7,18 @@
  * 2013-2017. All rights reserved.
  */
 
-package com.huotu.scrm.service.service.impl;
+package com.huotu.scrm.service.service.activity.impl;
 
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
-import com.huotu.scrm.service.repository.ActWinDetailRepository;
-import com.huotu.scrm.service.service.ActWinDetailService;
+import com.huotu.scrm.service.repository.activity.ActWinDetailRepository;
+import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by montage on 2017/7/13.

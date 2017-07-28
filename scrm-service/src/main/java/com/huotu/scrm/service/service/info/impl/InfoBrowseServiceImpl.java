@@ -34,6 +34,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
             infoBrowseDate.setInfoId(infoBrowse.getInfoId());
             infoBrowseDate.setReadUserId(infoBrowse.getReadUserId());
             infoBrowseDate.setSourceUserId(infoBrowse.getSourceUserId());
+            infoBrowseDate.setBrowseTime(LocalDateTime.now());
             infoBrowseRepository.save(infoBrowseDate);
         }
     }
@@ -41,7 +42,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Override
     public Page<InfoBrowse> infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
-       return infoBrowseRepository.findAllBrowseRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+       return infoBrowseRepository.findAllTurnRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
     }
 
     @Override
@@ -53,7 +54,36 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Override
     public Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
-        return infoBrowseRepository.findAllBrowseRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+        return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+    }
+
+    @Override
+    public int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
+
+        return infoBrowseRepository.updateBrowseInfo(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getReadUserId(),infoBrowseAndTurnSearch.getSourceUserId(),true);
+
+    }
+
+    @Override
+    public int countByTurn(Long infoId) {
+        return infoBrowseRepository.totalTurnCount(infoId);
+    }
+
+    @Override
+    public int countByBrowse(Long infoId) {
+        return infoBrowseRepository.countByInfoId(infoId);
+    }
+
+    @Override
+    public Page<InfoBrowse> infoSiteBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        Pageable pageable;
+        if(infoBrowseAndTurnSearch.getSourceType() == 0){
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, 6);
+        }else {
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, 12);
+        }
+        return infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),pageable);
+
     }
 
 

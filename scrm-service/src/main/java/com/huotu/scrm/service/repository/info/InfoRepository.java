@@ -15,12 +15,12 @@ public interface InfoRepository extends JpaRepository<Info, Long>, JpaSpecificat
 
     long countByIsDisable(boolean state);
 
-    Info findOneByIdAndCustomerId(Long id,Long customerId);
+    Info findOneByIdAndCustomerIdAndIsDisable(Long id,Long customerId,boolean disable);
 
     List<Info> findByTitleLike(String title);
 
-    List<Info> findByCustomerIdAndIsStatusAndIsExtendAndIsDisable(Long customerId, boolean status, boolean extend, boolean disable);
+    List<Info> findByCustomerIdAndIsStatusAndIsDisableFalse(Long customerId, boolean status);
 
-
+    List<Info> findByCustomerIdAndIsExtendAndAndIsDisableFalse(Long customerId, boolean extend);
 }
 

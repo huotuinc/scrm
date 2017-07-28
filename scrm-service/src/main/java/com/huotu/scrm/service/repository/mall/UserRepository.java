@@ -13,6 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @param customerId
      * @return
      */
-    User getByIdAndCustomerId(Long id , Long customerId);
+    User getByIdAndCustomerId(Long id, Long customerId);
 
 }

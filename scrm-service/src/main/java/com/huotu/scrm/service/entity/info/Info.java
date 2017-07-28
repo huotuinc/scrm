@@ -4,14 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -22,6 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Table(name = "SCRM_Info")
+@Cacheable(value = false)
 public class Info {
 
     @Id
@@ -98,6 +92,11 @@ public class Info {
     private boolean isDisable = false;
 
 
+//    /**
+//     * 资讯点赞数量
+//     */
+//    @Column(name = "Good_Num")
+//    private int goodNum;
 
 
 }

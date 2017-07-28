@@ -1,0 +1,105 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<head>
+    <meta name="viewport"
+          content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" content=""/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"
+          th:href="@{../../resources/css/weui.min-xz-diy.css}"/>
+    <title>资讯详情</title>
+</head>
+<body class="grbg">
+<!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
+<!--/*@thymesVar id="headImages" type="java.lang.List<scrm.service.entity.info.InfoBrowse>"*/-->
+<!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
+<!--/*@thymesVar id="infoTurnNum" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="browseNum" type="java.lang.Integer"*/-->
+
+<div class="bm xzdd-list">
+    <header class='demos-header'>
+        <h3 style="padding:10px 10px 0px 10px;" class="demos-title" th:text="${info.title}">买了车以后，这些加装的配件到底要不要买？</h3>
+    </header>
+
+    <span class="little-list">
+    <img class="bmingyd" src="../../resources/images/sj@3x.png"
+         style="width: 18px;vertical-align: middle;margin-top: -4px">
+    <i th:text="${#temporals.format(info.createTime, 'yyyy-MM-dd')}">2017-08-18&nbsp;</i>
+  </span>
+    <span class="little-list">
+    <img class="bmingyd" src="../../resources/images/zf.png"
+         style="width: 18px;vertical-align: middle;margin-top: -4px">
+    <i th:text="${infoTurnNum}"></i>
+  </span>
+    <span class="little-list"><img class="bmingyd" src="../../resources/images/ydll@3x.png"
+                                   style="width: 18px;vertical-align: middle;margin-top: -4px">
+    <i th:text="${browseNum}"></i>
+  </span>
+    <!--<span class="little-list"><img class="bmingyd" src="../../resources/images/dz.png" style="width: 18px;vertical-align: middle;margin-top: -4px">&nbsp;2256</span>-->
+
+    <article style="margin-top:10px;" class="weui_article">
+        <section>
+            <img src="../../resources/images/111.png" th:src="${info.imageUrl}" width="100%">
+
+            <div th:utext="${info.getContent()}">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute</p>
+
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </div>
+
+        </section>
+    </article>
+</div>
+<div class="weui_panel weui_panel_access xzdd-list">
+    <div class="weui_panel_bd">
+        <div class="weui_media_box weui_media_text">
+            <p class="weui_media_desc_one">浏览记录
+                <i style="font-size: 12px" th:text="'(' + ${browseNum}+')'">（100）</i>
+                <i style="color: #4b4b4b;float: right;font-size: 14px;" onclick="infoListHandler.seeMore(this)" th:attr="infoId=${info.id},
+                                    customerId=${info.customerId}">查看更多></i></p>
+        </div>
+        <div class="weui_media_box weui_media_text" style="padding:10px; height:47px;">
+            <img class="imgtoux" src="../../resources/images/moren.png" th:each="infoBrowse : ${headImages}"
+                 th:src="${infoBrowse.imgUrl} != null ? ${infoBrowse.imgUrl} :'../../resources/images/moren.png'"/>
+        </div>
+    </div>
+</div>
+<p style="height:20px"></p>
+
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js" th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/sweetalert/sweetalert.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
+<script>
+    var infoListHandler = {
+        seeMore:function (obj) {
+            var infoId = $(obj).attr("infoId");
+            var customerId = $(obj).attr("customerId");
+            window.location.href = "/site/info/infoDetailBrowse?infoId="+infoId+"&customerId="+customerId;
+        }
+    }
+</script>
+</body>
+
+
+</html>

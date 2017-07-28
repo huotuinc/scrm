@@ -25,7 +25,6 @@ public interface InfoBrowseService {
      */
     Page<InfoBrowse> infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
-
     /**
      * 删除转发记录
      * @param infoBrowseAndTurnSearch
@@ -34,42 +33,42 @@ public interface InfoBrowseService {
     @Transactional
     int updateInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
-
-
-
+    /**
+     * 查询资讯的转发记入
+     * @param
+     * @return
+     */
     Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
-//    /**
-//     * 查询资讯的浏览记入
-//     * @param infoBrowseAndTurnSearch
-//     * @return
-//     */
-//    Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
-//
-//
-//
-//    /**
-//     * 查找莫一条资讯转发总数
-//     *
-//     * @return
-//     */
-//    long infoListsCount(Long infoId);
-//
-//
-//
-//    /**
-//     * jpa 自带可以不用自己写  saveAndFlush
-//     * 创建资讯保存到数据库
-//     */
-//    @Transactional
-//    InfoBrowse infoBroseSave(InfoBrowse infoBrowse);
-//
-//
-//    /**
-//     * 通过资讯ID查找对应的浏览记录
-//     * @return
-//     */
-//    List <InfoBrowse> InfoBrowseByInfoId(Long infoId);
+    /**
+     * 删除浏览记录
+     * @param infoBrowseAndTurnSearch
+     * @return
+     */
+    @Transactional
+    int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
 
+    /**
+     * 获取资讯转发量
+     * @param infoId
+     * @return
+     */
+    int countByTurn(Long infoId);
+
+
+    /**
+     * 获取资讯浏览量
+     * @param infoId
+     * @return
+     */
+    int countByBrowse(Long infoId);
+
+
+    /**
+     * 前端浏览头像
+     * @param infoBrowseAndTurnSearch
+     * @return
+     */
+    Page<InfoBrowse> infoSiteBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 }

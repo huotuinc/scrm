@@ -1,7 +1,6 @@
 package com.huotu.scrm.service.service.report.impl;
 
 import com.huotu.scrm.service.entity.mall.User;
-import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
@@ -60,11 +59,12 @@ public class MonthReportServiceImpl implements MonthReportService {
             //设置等级
             monthReport.setLevelId(user.getLevelId());
             //设置是否为销售员
-            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-            if (userLevel == null) {
-                continue;
-            }
-            monthReport.setSalesman(userLevel.isSalesman());
+//            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+//            if (userLevel == null) {
+//                continue;
+//            }
+//            monthReport.setSalesman(userLevel.isSalesman());
+            monthReport.setSalesman(true);
             //设置每月咨询转发量
             int forwardNum = getForwardNum(userId, lastFirstDay, lastEndDay);
             monthReport.setForwardNum(forwardNum);
@@ -200,12 +200,23 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @return
      */
     public int getScoreRanking(Long userId, LocalDate month) {
-        List<MonthReport> sortAll = monthReportRepository.findByReportMonthOrderByExtensionScoreDesc(month);
+        User user = userRepository.findOne(userId);
+        List<MonthReport> sortAll = monthReportRepository.findByReportMonthAndCustomerIdOrderByExtensionScoreDesc(month, user.getCustomerId());
         int ranking = 0;
+        boolean flag = false;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {
                 ranking = i + 1;
+                flag = true;
                 break;
+            }
+        }
+        //判断之前是否有统计
+        if (!flag) {
+            if (sortAll.isEmpty() || sortAll == null) {
+                ranking = 1;
+            } else {
+                ranking = sortAll.size() + 1;
             }
         }
         return ranking;
@@ -219,12 +230,23 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @return
      */
     public int getFollowRanking(Long userId, LocalDate month) {
-        List<MonthReport> sortAll = monthReportRepository.findOrderByFollowNum(month);
+        User user = userRepository.findOne(userId);
+        List<MonthReport> sortAll = monthReportRepository.findByReportMonthAndCustomerIdAndIsSalesmanTrueOrderByFollowNumDesc(month, user.getCustomerId());
         int ranking = 0;
+        boolean flag = false;
         for (int i = 0; i < sortAll.size(); i++) {
             if (userId.equals(sortAll.get(i).getUserId())) {
                 ranking = i + 1;
+                flag = true;
                 break;
+            }
+        }
+        //判断之前是否有统计
+        if (!flag) {
+            if (sortAll.isEmpty() || sortAll == null) {
+                ranking = 1;
+            } else {
+                ranking = sortAll.size() + 1;
             }
         }
         return ranking;

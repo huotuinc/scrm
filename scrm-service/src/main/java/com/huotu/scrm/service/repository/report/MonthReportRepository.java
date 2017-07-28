@@ -12,20 +12,68 @@ import java.util.List;
  */
 public interface MonthReportRepository extends JpaRepository<MonthReport, Long> {
 
-    List<MonthReport> findByReportMonthOrderByExtensionScoreDesc(LocalDate date);
+    /**
+     * 根据某个商户下某个月份的积分排名（倒序）
+     *
+     * @param date
+     * @param customerId
+     * @return
+     */
+    List<MonthReport> findByReportMonthAndCustomerIdOrderByExtensionScoreDesc(LocalDate date, Long customerId);
 
-    @Query("select t from MonthReport  t where t.reportMonth=?1 and t.isSalesman = true order by t.followNum desc ")
-    List<MonthReport> findOrderByFollowNum(LocalDate date);
+    /**
+     * 根据某个商户下某个月份销售员的关注排名（倒序）
+     *
+     * @param date
+     * @param customerId
+     * @return
+     */
 
+    List<MonthReport> findByReportMonthAndCustomerIdAndIsSalesmanTrueOrderByFollowNumDesc(LocalDate date, Long customerId);
+
+    /**
+     * 根据用户和某个月份查询
+     *
+     * @param userId
+     * @param lastFirstDay
+     * @return
+     */
     List<MonthReport> findByUserIdAndReportMonth(long userId, LocalDate lastFirstDay);
 
+    /**
+     * 查询用户最高月的访客量排名
+     *
+     * @param userId
+     * @return
+     */
     @Query("select max(t.visitorNum) from MonthReport t where t.userId = ?1")
     int findMaxMonthVisitorNum(Long userId);
 
+    /**
+     * 查询用户最高月关注排名（销售员特有）
+     *
+     * @param userId
+     * @return
+     */
     @Query("select min(t.followRanking) from MonthReport t where t.userId = ?1")
     int findMaxMonthFollowNumRanking(Long userId);
 
+    /**
+     * 查询用户最高月的积分排名
+     *
+     * @param userId
+     * @return
+     */
     @Query("select min(t.scoreRanking) from MonthReport t where t.userId=?1")
     int findMaxScoreRanking(Long userId);
+
+    /**
+     * 查询用户某个月份之前的所有数据
+     *
+     * @param userId
+     * @param monthReport
+     * @return
+     */
+    List<MonthReport> findByUserIdAndReportMonthGreaterThanEqual(Long userId, LocalDate monthReport);
 
 }
