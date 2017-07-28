@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -87,7 +88,9 @@ public class InfoServiceImpl implements InfoService {
     }
 
     public Page<Info> infoList(InformationSearch informationSearch) {
-        Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize());
+        Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize(),new Sort(
+            new Sort.Order(Sort.Direction.DESC,"createTime")
+        ));
         return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(informationSearch.getSearchCondition())){
