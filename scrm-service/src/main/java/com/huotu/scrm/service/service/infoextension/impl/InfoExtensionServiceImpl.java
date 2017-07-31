@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.infoextension.impl;
 
+import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
@@ -59,9 +60,6 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     private MonthReportService monthReportService;
     @Autowired
     private BusinessCardRecordRepository businessCardRecordRepository;
-
-    private int monthNum = 5;
-
 
     @Override
     public int getUserType(Long userId) {
@@ -216,7 +214,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthInfo.setMonth("本月");
         monthInfo.setData(dayScoreRankingInfo.getMonthScoreRanking());
         monthStatisticInfoList.add(monthInfo);
-        for (int i = 1; i < monthNum; i++) {
+        for (int i = 1; i < Constant.MONTH_NUM; i++) {
             MonthStatisticInfo monthStatisticInfo = getMonthStatisticInfo(userId, 0, i);
             monthStatisticInfoList.add(monthStatisticInfo);
         }
@@ -258,7 +256,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monInfo.setData(monthScore);
         monInfo.setMonth("本月");
         monthStatisticInfoList.add(monInfo);
-        for (int i = 1; i < monthNum; i++) {
+        for (int i = 1; i < Constant.MONTH_NUM; i++) {
             MonthStatisticInfo monthStatisticInfo = getMonthStatisticInfo(userId, 1, i);
             monthStatisticInfoList.add(monthStatisticInfo);
         }
@@ -294,7 +292,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthInfo.setMonth("本月");
         monthInfo.setData(dayVisitorNumInfo.getMonthVisitorNum());
         monthStatisticInfoList.add(monthInfo);
-        for (int i = 1; i < monthNum; i++) {
+        for (int i = 1; i < Constant.MONTH_NUM; i++) {
             MonthStatisticInfo monthStatisticInfo = getMonthStatisticInfo(userId, 2, i);
             monthStatisticInfoList.add(monthStatisticInfo);
         }
@@ -342,7 +340,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int followNum = monthReportService.getFollowNum(userId, localDate.withDayOfMonth(1), localDate);
         monthInfo.setData(followNum + dayFollowNum);
         monthStatisticInfoList.add(monthInfo);
-        for (int i = 1; i < monthNum; i++) {
+        for (int i = 1; i < Constant.MONTH_NUM; i++) {
             MonthStatisticInfo monthStatisticInfo = getMonthStatisticInfo(userId, 3, i);
             monthStatisticInfoList.add(monthStatisticInfo);
         }

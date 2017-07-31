@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.report.impl;
 
+import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.report.DayReport;
@@ -51,8 +52,6 @@ public class DayReportServiceImpl implements DayReportService {
     private BusinessCardRecordRepository businessCardRecordRepository;
     @Autowired
     private MonthReportRepository monthReportRepository;
-
-    private int pageSize = 200;
 
     @Override
     @Transactional
@@ -219,7 +218,7 @@ public class DayReportServiceImpl implements DayReportService {
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             });
             Sort sort = new Sort(Sort.Direction.DESC, rankingAttribute);
-            Page<DayReport> dayReportPage = dayReportRepository.findAll(specification, new PageRequest(0, pageSize, sort));
+            Page<DayReport> dayReportPage = dayReportRepository.findAll(specification, new PageRequest(0, Constant.SORT_NUM, sort));
             List<DayReport> dayReportList = dayReportPage.getContent();
             for (int i = 0; i < dayReportList.size(); i++) {
                 DayReport dayReport = dayReportList.get(i);

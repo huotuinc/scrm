@@ -33,9 +33,8 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> ,JpaSp
     /**
      * 分页查询所有活动
      *
-     * @param isDelete
      * @param pageable
      * @return
      */
-    Page<Activity> findByIsDelete(boolean isDelete, Pageable pageable);
+    Page<Activity> findByIsDeleteFalse(Pageable pageable);
 }
