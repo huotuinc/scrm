@@ -11,7 +11,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 /**
  * 商城前端页面获取userId
@@ -30,22 +29,11 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (environment.acceptsProfiles("!container")) {
-            String requestUserId = null;
-            Enumeration<String> paramKeys = request.getParameterNames();
-            while (paramKeys.hasMoreElements()) {
-                String paramKey = paramKeys.nextElement();
-                if ("userId".equalsIgnoreCase(paramKey)) {
-                    requestUserId = request.getParameter(paramKey);
-                    request.setAttribute("userId", requestUserId);
-                    break;
-                }
-            }
-            if (requestUserId == null) {
-                //小伙伴
-                request.setAttribute("userId", 1058510);
-                //普通会员
-                //request.setAttribute("userId",1043094);
-            }
+            //小伙伴
+            request.setAttribute("userId", 1058510);
+            //普通会员
+            //request.setAttribute("userId",1043094);
+
             return true;
         }
         //先获取customerId

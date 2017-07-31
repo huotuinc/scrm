@@ -46,7 +46,7 @@ public class MonthReport {
      * 等级
      */
     @Column(name = "Level_Id")
-    private int levelId;
+    private Long levelId;
 
     /**
      * 是否是销售员（1：是 0：不是）
