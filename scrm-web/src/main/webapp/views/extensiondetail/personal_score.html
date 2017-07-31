@@ -78,8 +78,8 @@
                 </ul>
             </div>
         </div>
-        <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" th:each="monthScoreInfo:${dayScoreInfo.monthScoreList}">
+        <div class="weui_cells weui_cells_access" th:each="monthScoreInfo:${dayScoreInfo.monthScoreList}">
+            <a class="weui_cell">
                 <div class="weui_cell_bd weui_cell_primary">
                     <p th:text="${monthScoreInfo.month}"></p>
                 </div>

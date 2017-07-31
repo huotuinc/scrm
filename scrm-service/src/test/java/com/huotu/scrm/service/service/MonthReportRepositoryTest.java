@@ -7,7 +7,6 @@ import com.huotu.scrm.service.service.report.MonthReportService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -26,15 +25,8 @@ public class MonthReportRepositoryTest extends CommonTestBase {
         monthReportService.saveMonthReport();
         List<MonthReport> all = monthReportRepository.findAll();
         System.out.println(all.size());
-        all.forEach(p -> System.out.println(p.toString()));
-    }
-
-    /**
-     * 测试定时保存每月统计信息
-     *
-     * @throws IOException
-     */
-    @Test
-    public void testSaveMonthReportScheduled() throws IOException {
+        all.forEach(p -> {
+            System.out.println(p.toString());
+        });
     }
 }

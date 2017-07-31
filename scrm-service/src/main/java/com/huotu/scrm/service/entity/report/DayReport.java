@@ -45,7 +45,7 @@ public class DayReport {
      * 等级
      */
     @Column(name = "Level_Id")
-    private int levelId;
+    private Long levelId;
 
     /**
      * 是否是销售员（1：是 0：不是）
@@ -69,7 +69,7 @@ public class DayReport {
      * 每日访客排名
      */
     @Column(name = "Visitor_Ranking")
-    private int visitorRanking;
+    private int visitorRanking = 0;
 
     /**
      * 每日推广积分
@@ -81,7 +81,7 @@ public class DayReport {
      * 每日积分排名
      */
     @Column(name = "Score_Ranking")
-    private int scoreRanking;
+    private int scoreRanking = 0;
 
     /**
      * 每日被关注量（销售员特有）
@@ -93,7 +93,7 @@ public class DayReport {
      * 每日关注排名（销售员特有）
      */
     @Column(name = "Follow_Ranking")
-    private int followRanking;
+    private int followRanking = 0;
 
     /**
      * 统计日期

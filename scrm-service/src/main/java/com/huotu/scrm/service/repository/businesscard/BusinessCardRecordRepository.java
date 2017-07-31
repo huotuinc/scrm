@@ -26,8 +26,7 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @param salesmanId
      * @return
      */
-    @Query("select count(u) from BusinessCardRecord u where u.customerId=?1 and u.userId=?2")
-    Integer getNumberOfFollowerByCustomerIdAndUserId(Long customerId, Long salesmanId);
+    int countNumberOfFollowerByCustomerIdAndUserId(Long customerId, Long salesmanId);
 
     /***
      * 检测是否关注了指定的销售员名片
@@ -55,7 +54,7 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @param maxDate
      * @return
      */
-    long countByUserIdAndFollowDateBetween(Long userId, LocalDateTime minDate, LocalDateTime maxDate);
+    int countByUserIdAndFollowDateBetween(Long userId, LocalDateTime minDate, LocalDateTime maxDate);
 
     /***
      * 查询我关注的名片列表
@@ -64,5 +63,16 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @return
      */
     List<BusinessCardRecord> findByCustomerIdAndFollowId(Long customerId, Long followId);
+
+    /**
+     * 根据商户查询某段时间内的所有被关注用户
+     *
+     * @param customerId
+     * @param minDate
+     * @param maxDate
+     * @return
+     */
+    @Query("select distinct (t.userId) from BusinessCardRecord t where t.customerId=?1 and t.followDate>=?2 and t.followDate<?3")
+    List<Long> findByCustomerIdAndFollowDate(Long customerId, LocalDateTime minDate, LocalDateTime maxDate);
 
 }

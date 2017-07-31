@@ -1,6 +1,7 @@
 package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.web.CommonTestBase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -23,12 +24,12 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         if ("推广中心".equals(title)) {//小伙伴
             WebElement data = webDriver.findElement(By.className("sj"));
             //今日排名
-            System.out.println(".........:" + data.getText());
+            Assert.assertNotNull(data.getText());
         }
         if ("资讯推广".equals(title)) {//普通会员
             WebElement data = webDriver.findElement(By.className("weui_media_title"));
             //第一条咨询标题
-            System.out.println(".........:" + data.getText());
+            Assert.assertNotNull(data.getText());
         }
 
     }
@@ -43,7 +44,7 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         webDriver.get("http://localhost" + baseUrl + "/getScoreRanking");
         WebElement data = webDriver.findElement(By.className("sj"));
         //本月积分排名
-        System.out.println(".........:" + data.getText());
+        Assert.assertNotNull(data.getText());
     }
 
     /**
@@ -56,7 +57,7 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         webDriver.get("http://localhost" + baseUrl + "/getScoreInfo");
         WebElement data = webDriver.findElement(By.className("sj"));
         //昨日积分
-        System.out.println(".........:" + data.getText());
+        Assert.assertNotNull(data.getText());
     }
 
     /**
@@ -69,8 +70,7 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         webDriver.get("http://localhost" + baseUrl + "/getFollowInfo");
         WebElement data = webDriver.findElement(By.className("sj"));
         //当前排名
-        System.out.println(".........:" + data.getText());
-    }
+        Assert.assertNotNull(data.getText());    }
 
     /**
      * 测试今日访客量信息
@@ -82,6 +82,5 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         webDriver.get("http://localhost" + baseUrl + "/getVisitorInfo");
         WebElement data = webDriver.findElement(By.className("sj"));
         //本月UV（人）
-        System.out.println(".........:" + data.getText());
-    }
+        Assert.assertNotNull(data.getText());    }
 }

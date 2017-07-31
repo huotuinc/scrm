@@ -35,6 +35,25 @@
 </head>
 
 <body class="ddbg" js-data-update-url="updateBusinessCardInfo">
+    <div style="position: fixed;top:0px;left:0px;right:0px; z-index:99999">
+    <div class="sl-ka superli" style="font-size:12px">
+        <ul class="sl-float-ul ka  pjf_5ge custom-paixu">
+            <li >
+                <a th:href="${'http://msite.xiangzhang.com/UserCenter/UserSetting.aspx?customerid='+ businessCard.getCustomerId()}">
+                    个人设置
+                </a>
+            </li>
+            <li class="on">
+                <a href="#">
+                    名片设置
+                </a>
+            </li>
+        </ul>
+    </div>
+    </div>
+    <p style="height:40px"></p>
+
+
 <form name="avatarForm" id="avatarForm" action="uploadAvatar" method="post" enctype="multipart/form-data">
     <input type="hidden" id="customerId" name="customerId" th:value="${businessCard.getCustomerId()}">
     <input type="hidden" id="userId" name="userId" th:value="${businessCard.getUserId()}">
