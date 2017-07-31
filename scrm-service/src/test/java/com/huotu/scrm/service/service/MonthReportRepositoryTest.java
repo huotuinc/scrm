@@ -26,9 +26,7 @@ public class MonthReportRepositoryTest extends CommonTestBase {
         monthReportService.saveMonthReport();
         List<MonthReport> all = monthReportRepository.findAll();
         System.out.println(all.size());
-        all.forEach(p -> {
-            System.out.println(p.toString());
-        });
+        all.forEach(p -> System.out.println(p.toString()));
     }
 
     /**
@@ -38,6 +36,5 @@ public class MonthReportRepositoryTest extends CommonTestBase {
      */
     @Test
     public void testSaveMonthReportScheduled() throws IOException {
-        System.in.read();
     }
 }

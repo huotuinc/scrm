@@ -27,9 +27,7 @@ public class DayReportServiceTest extends CommonTestBase {
     public void testDayReportService() {
        dayReportService.saveDayReport();
         List<DayReport> all = dayReportRepository.findAll();
-        all.forEach(p -> {
-            System.out.println(p.toString());
-        });
+        all.forEach(p -> System.out.println(p.toString()));
     }
 
     /**
@@ -39,7 +37,6 @@ public class DayReportServiceTest extends CommonTestBase {
      */
     @Test
     public void testSaveDayReportScheduled() throws IOException {
-        System.in.read();
     }
 
 }

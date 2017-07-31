@@ -1,19 +1,18 @@
 package com.huotu.scrm.service.service;
 
-import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.CommonTestBase;
-import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
-import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -24,13 +23,13 @@ import java.util.UUID;
 public class BusinessCardRecordServiceTest extends CommonTestBase {
 
     @Autowired
-    BusinessCardRecordRepository businessCardRecordReposity;
+    private BusinessCardRecordRepository businessCardRecordReposity;
     @Autowired
-    BusinessCardService businessCardService;
+    private BusinessCardService businessCardService;
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Test
     public void existsByCustomerIdAndUserIdAndFollowId(){
@@ -111,7 +110,7 @@ public class BusinessCardRecordServiceTest extends CommonTestBase {
         //新增销售员
         Long customerId=customer1.getId();
         User salesman = this.mockUser( customerId);
-        salesman = userRepository.save(salesman);
+        salesman = userRepository.saveAndFlush(salesman);
 
         User salesman1 = userRepository.findOne(salesman.getId());
         Assert.assertEquals(salesman.getId() , salesman1.getId());
