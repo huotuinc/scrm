@@ -129,7 +129,7 @@ img {
 }
 
 .yellow-bg #app {
-  background: url("../img/bg.png") no-repeat;
+  background: url("../images/bg.png") no-repeat;
   background-size: 100% 5.04rem;
 }
 
@@ -145,7 +145,7 @@ img {
   left: 0;
   right: 0;
   z-index: 999;
-  background: #f1f1f1 url("../img/loading.gif") no-repeat center;
+  background: #f1f1f1 url("../images/loading.gif") no-repeat center;
   background-size: .3rem .3rem;
 }
 
@@ -157,7 +157,7 @@ img {
   width: .54rem;
   height: .54rem;
   z-index: 10;
-  background-image: url("../img/record.png");
+  background-image: url("../images/record.png");
   background-size: 100% 100%;
 }
 
@@ -175,7 +175,7 @@ img {
   height: .17rem;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-image: url("../img/rule.png");
+  background-image: url("../images/rule.png");
 }
 
 .game-time {
@@ -216,7 +216,7 @@ img {
   perspective: 1000;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-image: url("../img/circle.png");
+  background-image: url("../images/circle.png");
 }
 .game-body .circle .circle-box {
   position: absolute;
@@ -236,10 +236,10 @@ img {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   background-size: 100% 100%;
-  background-image: url("../img/start.png");
+  background-image: url("../images/start.png");
 }
 .game-body .start.disabled {
-  background-image: url("../img/start-2.png");
+  background-image: url("../images/start-2.png");
 }
 
 .game-body_wrapper {
@@ -271,11 +271,11 @@ img {
 }
 
 .radius-group.default {
-  background-image: url("../img/radius-1.png");
+  background-image: url("../images/radius-1.png");
 }
 
 .radius-group.toggle {
-  background-image: url("../img/radius-2.png");
+  background-image: url("../images/radius-2.png");
 }
 
 .point {
@@ -286,7 +286,7 @@ img {
   height: .34rem;
   -webkit-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
-  background: url("../img/point.png") no-repeat;
+  background: url("../images/point.png") no-repeat;
   background-size: 100% 100%;
 }
 
@@ -367,7 +367,7 @@ img {
   top: .08533333rem;
   width: .15rem;
   height: .15rem;
-  background-image: url("../img/close.png");
+  background-image: url("../images/close.png");
   background-size: 100% 100%;
   z-index: 101;
 }
@@ -380,7 +380,7 @@ img {
 .coupon-modal-showPrize .coupon-modal-showPrize-dialog .modal-header {
   width: 2.56rem;
   height: 1.856rem;
-  background-image: url("../img/header.png");
+  background-image: url("../images/header.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -391,7 +391,7 @@ img {
 .coupon-modal-showPrize .coupon-modal-showPrize-dialog .modal-body {
   width: 2.56rem;
   height: 2.58133333rem;
-  background-image: url("../img/body.png");
+  background-image: url("../images/body.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -409,7 +409,7 @@ img {
 .coupon-modal-showPrize .coupon-modal-showPrize-dialog .coupon-imageBg {
   width: 2.3936rem;
   height: 1.7024rem;
-  background-image: url("../img/imageBg.png");
+  background-image: url("../images/imageBg.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-position: center;
@@ -442,7 +442,7 @@ img {
   width: 100%;
   height: .06rem;
   content: '';
-  background-image: url("../img/dot.png");
+  background-image: url("../images/dot.png");
   background-repeat: repeat-x;
   background-size: .11rem .06rem;
 }
@@ -463,7 +463,7 @@ img {
   width: 2.7008rem;
   height: 1.57013333rem;
   display: block;
-  background-image: url("../img/ribbon.png");
+  background-image: url("../images/ribbon.png");
   background-size: cover;
   background-repeat: no-repeat;
   position: absolute;
@@ -492,7 +492,7 @@ img {
   opacity: 0;
 }
 .guide .guide-circle {
-  background-image: url("../img/quan.png");
+  background-image: url("../images/quan.png");
   background-repeat: no-repeat;
   width: .3rem;
   height: .3rem;
@@ -500,7 +500,7 @@ img {
   animation: guidCircle 1.5s linear infinite normal;
 }
 .guide .guide-hand {
-  background-image: url("../img/shou.png");
+  background-image: url("../images/shou.png");
   width: .9rem;
   height: .9rem;
   -webkit-animation: guideHand 1.5s linear infinite normal;
@@ -536,19 +536,19 @@ img {
   width: .25rem;
   height: .25rem;
   z-index: 200;
-  background-image: url("../img/close-big.png");
+  background-image: url("../images/close-big.png");
 }
 .recommend-modal .points {
   width: 2.865rem;
   height: 1.01rem;
-  background-image: url("../img/points.png");
+  background-image: url("../images/points.png");
   left: -.1rem;
   z-index: 100;
 }
 .recommend-modal .recommend-header {
   width: 2.7rem;
   height: .92rem;
-  background-image: url("../img/bg-2.png");
+  background-image: url("../images/bg-2.png");
   background-repeat: no-repeat;
   background-size: 100%;
   z-index: 50;
@@ -816,7 +816,7 @@ img {
   display: block;
   width: .33rem;
   height: .33rem;
-  background-image: url("../img/close-2.png");
+  background-image: url("../images/close-2.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
@@ -869,7 +869,7 @@ img {
   left: 50%;
   width: 7.6em;
   min-height: 7.6em;
-  background: rgba(0, 0, 0, 0.7) url("../img/loading.gif") no-repeat center;
+  background: rgba(0, 0, 0, 0.7) url("../images/loading.gif") no-repeat center;
   background-size: .3rem .3rem;
   text-align: center;
   border-radius: 5px;
