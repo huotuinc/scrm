@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by luohaibo on 2017/7/11.
@@ -24,7 +25,7 @@ public class InfoControllerTest extends CommonTestBase{
 
     @Test
     public void searchInfoListTitleLike() throws Exception {
-        List<Info> info= infoService.findListsByWord("李");
+        List<Info> info= infoService.findListsByWord(UUID.randomUUID().toString());
         info.stream()
                 .forEach(System.out::println);
     }
