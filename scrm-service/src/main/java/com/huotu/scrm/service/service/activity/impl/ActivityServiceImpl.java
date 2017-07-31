@@ -37,7 +37,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Page<Activity> findAllActivity(int pageNo, int pageSize) {
         Pageable pageable = new PageRequest(pageNo - 1, pageSize);
-        return activityRepository.findByIsDelete(false, pageable);
+        return activityRepository.findByIsDeleteFalse(pageable);
     }
 
     @Override

@@ -16,19 +16,19 @@ import java.util.Date;
 
 /**
  * String工具类
- *
+ * <p>
  * Created by montage on 2017/7/13.
  */
 public class DateUtil {
     /**
-     *
      * 字符串转日期
+     *
      * @param str
      * @return
      */
     public static Date stringToDate(String str) {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date  date = null;
+        Date date = null;
         try {
             date = format.parse(str);
         } catch (ParseException e) {

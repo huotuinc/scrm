@@ -1,16 +1,10 @@
-package com.huotu.scrm.service.repository.mall;
+package com.huotu.scrm.service.service.mall;
 
 import com.huotu.scrm.service.entity.mall.UserLevel;
-import org.springframework.data.domain.Example;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-/**
- * Created by hxh on 2017-07-13.
- */
-public interface UserLevelRepository extends JpaRepository<UserLevel, Long> {
-
+public interface UserLevelService {
     //根据等级和商户ID查询等级
     UserLevel findByLevelAndCustomerId(Long level, Long customerId);
 
@@ -29,4 +23,11 @@ public interface UserLevelRepository extends JpaRepository<UserLevel, Long> {
      * @return
      */
     UserLevel findByCustomerIdAndId(Long customerId , Long id);
+
+    /**
+     *
+     * @param userLevel
+     * @return
+     */
+    UserLevel save(UserLevel userLevel);
 }

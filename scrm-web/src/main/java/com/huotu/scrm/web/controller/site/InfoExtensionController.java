@@ -34,7 +34,7 @@ public class InfoExtensionController extends SiteBaseController {
      * 进入资讯状态（普通会员：进入资讯推广 小伙伴：进入推广中心）
      *
      * @param userId 用户ID
-     * @param model
+     * @param model model
      * @return
      * @throws URISyntaxException
      */
@@ -49,7 +49,7 @@ public class InfoExtensionController extends SiteBaseController {
             String thumbnailImageUrl = infoModel.getThumbnailImageUrl();
             if (!StringUtils.isEmpty(thumbnailImageUrl)) {
                 URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, thumbnailImageUrl);
-                infoModel.setThumbnailImageUrl(uri.getPath());
+                infoModel.setThumbnailImageUrl(uri.toString());
             }
         }
         model.addAttribute("infoModes", infoModels);
@@ -69,7 +69,7 @@ public class InfoExtensionController extends SiteBaseController {
      * 转到今日积分排名页面
      *
      * @param userId 用户ID
-     * @param model
+     * @param model model
      * @return
      */
     @RequestMapping("/extension/getScoreRanking")
@@ -114,7 +114,7 @@ public class InfoExtensionController extends SiteBaseController {
      * 转到今日关注统计页面
      *
      * @param userId 用户ID
-     * @param model
+     * @param model model
      * @return
      */
     @RequestMapping("/extension/getFollowInfo")
@@ -133,8 +133,8 @@ public class InfoExtensionController extends SiteBaseController {
     /**
      * 转到今日访问量页面
      *
-     * @param userId
-     * @param model
+     * @param userId 用户ID
+     * @param model model
      * @return
      */
     @RequestMapping("/extension/getVisitorInfo")

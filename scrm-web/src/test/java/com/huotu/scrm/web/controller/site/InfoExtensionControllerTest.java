@@ -6,6 +6,7 @@ import com.huotu.scrm.service.model.DayScoreRankingInfo;
 import com.huotu.scrm.service.model.DayVisitorNumInfo;
 import com.huotu.scrm.service.model.InfoModel;
 import com.huotu.scrm.web.CommonTestBase;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -33,11 +34,9 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("infoModes"))
                 .andReturn();
-        System.out.println("................:" + mvcResult.getModelAndView().getViewName());
         List<InfoModel> list = (List<InfoModel>) mvcResult.getModelAndView().getModel().get("infoModes");
-        list.forEach(infoModel -> {
-            System.out.println("..............:" + infoModel.toString());
-        });
+        Assert.assertNotNull(list);
+
     }
 
     /**
@@ -51,9 +50,9 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("dayScoreRankingInfo"))
                 .andReturn();
-        System.out.println("................:" + mvcResult.getModelAndView().getViewName());
+        Assert.assertEquals("extensiondetail/personal_ranking", mvcResult.getModelAndView().getViewName());
         DayScoreRankingInfo dayScoreRankingInfo = (DayScoreRankingInfo) mvcResult.getModelAndView().getModel().get("dayScoreRankingInfo");
-        System.out.println("................:" + dayScoreRankingInfo.toString());
+        Assert.assertNotNull(dayScoreRankingInfo);
     }
 
     /**
@@ -67,9 +66,9 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("dayScoreInfo"))
                 .andReturn();
-        System.out.println("................:" + mvcResult.getModelAndView().getViewName());
+        Assert.assertEquals("extensiondetail/personal_score", mvcResult.getModelAndView().getViewName());
         DayScoreInfo dayScoreInfo = (DayScoreInfo) mvcResult.getModelAndView().getModel().get("dayScoreInfo");
-        System.out.println("................:" + dayScoreInfo.toString());
+        Assert.assertNotNull(dayScoreInfo);
     }
 
     /**
@@ -83,9 +82,9 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("dayFollowNumInfo"))
                 .andReturn();
-        System.out.println("................:" + mvcResult.getModelAndView().getViewName());
+        Assert.assertEquals("extensiondetail/personal_follow", mvcResult.getModelAndView().getViewName());
         DayFollowNumInfo dayFollowNumInfo = (DayFollowNumInfo) mvcResult.getModelAndView().getModel().get("dayFollowNumInfo");
-        System.out.println("................:" + dayFollowNumInfo.toString());
+        Assert.assertNotNull(dayFollowNumInfo);
     }
 
     /**
@@ -99,8 +98,8 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("dayVisitorNumInfo"))
                 .andReturn();
-        System.out.println("................:" + mvcResult.getModelAndView().getViewName());
+        Assert.assertEquals("extensiondetail/personal_uv", mvcResult.getModelAndView().getViewName());
         DayVisitorNumInfo dayVisitorNumInfo = (DayVisitorNumInfo) mvcResult.getModelAndView().getModel().get("dayVisitorNumInfo");
-        System.out.println("................:" + dayVisitorNumInfo.toString());
+        Assert.assertNotNull(dayVisitorNumInfo);
     }
 }

@@ -15,6 +15,7 @@
 <body class="grbg">
 <div class="xzdd-list">
 <div class="weui_panel" th:each="businesscard :${myBusinessCards}" >
+  <a th:href="${'showBusinessCard?customerId='+ businesscard.getBusinessCard().getCustomerId()+'&salesmanId='+ businesscard.getBusinessCard().getUserId()}">
   <div class="weui_panel_bd">
     <div class="weui_media_box weui_media_text">
       <div class="weui_media_hd">
@@ -31,6 +32,7 @@
       </div>
     </div>
   </div>
+  </a>
 </div>
 </div>
 

@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.util.StringUtils;
 
 /**
@@ -91,10 +93,58 @@ public class TestEditBusinessCardPage extends AbstractPage {
         WebElement ele = webDriver.findElement( By.id("weui-prompt-input"));
         ele.sendKeys("51818549");
 
-        ele = webDriver.findElement(By.className("weui_btn_dialog"));
-        ele.click();
+        WebDriverWait webDriverWait = new WebDriverWait(webDriver , 10);
+        webDriverWait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement temp = webDriver.findElement(By.id("weui-prompt-input"));
+                if(temp != null && !temp.getAttribute("value").isEmpty()){
+                    return  true;
+                }
+                return  false;
+            }
+        });
 
-        //Assert.assertEquals( "51818549" , div_qq.getText());
+        Assert.assertEquals( ele.getAttribute("value") , "51818549" );
+
+
+        WebElement ele2 = webDriver.findElement(By.linkText("确定"));
+        ele2.click();
+
+
+
+        webDriverWait = new WebDriverWait(webDriver , 40);
+        webDriverWait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement temp = webDriver.findElement(By.id("div_qq"));
+                if(temp != null && !temp.getText().isEmpty()){
+                    return  true;
+                }
+                return false;
+            }
+        });
+
+
+        Assert.assertEquals( "51818549" , div_qq.getText());
+
+
+        btnFile.sendKeys("e:\\淡淡的222.jpg");
+
+        webDriverWait = new WebDriverWait(webDriver, 30);
+        webDriverWait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                if( img_avatar !=null && !img_avatar.getAttribute("src").isEmpty()){
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        String url = img_avatar.getAttribute("src");
+        Assert.assertFalse( url.isEmpty() );
 
     }
 }

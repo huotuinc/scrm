@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,12 +23,12 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
 
     //查询转发记录
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.sourceUserId where t.infoId=?1 and t.customerId=?2 and t.turnDisable=?3 group by t.infoId,t.sourceUserId,u.weixinImageUrl,u.wxNickName")
-    Page<InfoBrowse> findAllTurnRecordAndCustomerId(Long infoId, Long customerId ,boolean disable,Pageable pageable);
+    Page<InfoBrowse> findAllTurnRecordAndCustomerId(Long infoId, Long customerId, boolean disable, Pageable pageable);
 
     //查询浏览记录
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,t.readUserId,t.browseTime,u.weixinImageUrl," +
             "u.wxNickName, t.customerId) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 and t.browseDisable=?3 ")
-    Page<InfoBrowse> findAllBrowseRecord(Long infoId,Long customerId,boolean disable,Pageable pageable);
+    Page<InfoBrowse> findAllBrowseRecord(Long infoId, Long customerId, boolean disable, Pageable pageable);
 
 
     /**
@@ -46,64 +47,67 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     //删除转发记录
     @Query("update InfoBrowse t set t.turnDisable=?3 where t.infoId=?1 and t.sourceUserId=?2")
     @Modifying
-    void updateInfoTurn(Long infoId, Long sourceUserId,boolean disable);
+    void updateInfoTurn(Long infoId, Long sourceUserId, boolean disable);
 
     //删除浏览记录
     @Query("update InfoBrowse t set t.browseDisable=?4 where t.infoId=?1 and t.readUserId=?2 and t.sourceUserId=?3")
     @Modifying
-    int updateBrowseInfo(Long infoId, Long readUserId, Long sourceUserId,boolean disable);
+    int updateBrowseInfo(Long infoId, Long readUserId, Long sourceUserId, boolean disable);
 
     //获取资讯转发量
     @Query("SELECT COUNT(DISTINCT t.sourceUserId) from InfoBrowse t WHERE t.infoId=?1")
     int totalTurnCount(Long InfoId);
 
-    //获取资讯浏览器
+    //获取资讯浏览浏览量
     int countByInfoId(Long infoId);
 
 
     /**
      * 根据转发用户ID和转发日期查询转发咨询的访问量
      *
-     * @param sourceUserId
-     * @param minDate
-     * @param maxDate
+     * @param sourceUserId 转发来源用户ID
+     * @param minTime      起始时间
+     * @param maxTime      结束日时间
      * @return
      */
-    long countBySourceUserIdAndBrowseTimeBetween(Long sourceUserId, LocalDateTime minDate, LocalDateTime maxDate);
-
+    int countBySourceUserIdAndBrowseTimeBetween(Long sourceUserId, LocalDateTime minTime, LocalDateTime maxTime);
+//   List<InfoBrowse> findBySourceUserIdAndAndBrowseTimeBetween(Long sourceUserId, LocalDateTime minTime, LocalDateTime maxTime);
     /**
      * 根据某一商户和时间获取所有的转发用户
      *
-     * @param minDate
-     * @param maxDate
+     * @param minTime 起始时间
+     * @param maxTime 结束时间
      * @return
      */
-    @Query("select distinct (t.sourceUserId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<=?2")
-    List<Long> findSourceUserIdList(LocalDateTime minDate, LocalDateTime maxDate);
-
-    @Query("select distinct (t.sourceUserId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<=?2 and t.customerId =?3")
-    List<Long> findSourceUserIdListByCustomerId(LocalDateTime minDate, LocalDateTime maxDate, Long customerId);
+    @Query("select distinct (t.sourceUserId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2")
+    List<Long> findSourceUserIdList(LocalDateTime minTime, LocalDateTime maxTime);
 
     /**
      * 根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
      *
-     * @param minDate
-     * @param maxDate
-     * @param userId
+     * @param minDate 起始日期
+     * @param maxDate 结束日期
+     * @param userId  用户ID
      * @return
      */
-    @Query("select count(distinct t.infoId) from InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2 and t.sourceUserId=?3")
-    int findForwardNumBySourceUserId(LocalDateTime minDate, LocalDateTime maxDate, Long userId);
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  from InfoBrowse t group by t.infoId,t.sourceUserId having min (t.browseTime)>=?1 and min (t.browseTime)<?2 and t.sourceUserId=?3 ")
+    List<InfoBrowse> findForwardNumBySourceUserId(Date minDate, Date maxDate, Long userId);
 
     /**
      * 查询咨询的转发量
      *
-     * @param infoId
+     * @param infoId 咨询ID
      * @return
      */
-    @Query("select  count(distinct t.sourceUserId) from InfoBrowse t where t.infoId=?1")
-    int findInfoForwardNum(Long infoId);
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  from InfoBrowse t group by t.infoId,t.sourceUserId having  t.infoId=?1 ")
+    List<InfoBrowse> findInfoForwardNum(Long infoId);
 
+    /**
+     * 查询某个商户下的所有用户（去除重复）
+     *
+     * @param customerId 商户ID
+     * @return
+     */
     @Query("select distinct (t.sourceUserId) from InfoBrowse t where t.customerId=?1")
     List<Long> findByCustomerId(Long customerId);
 

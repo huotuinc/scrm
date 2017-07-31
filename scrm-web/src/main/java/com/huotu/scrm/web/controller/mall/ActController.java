@@ -30,7 +30,6 @@ import java.util.Map;
  */
 
 @Controller
-@RequestMapping("/act")
 public class ActController extends MallBaseController{
     @Autowired
     private ActivityService activityService;
@@ -45,7 +44,7 @@ public class ActController extends MallBaseController{
      * @param model
      * @return
      */
-    @RequestMapping(value = "/list")
+    @RequestMapping(value = "/act/list")
     public String actList(@RequestParam (required = false,defaultValue = "1") int pageIndex, Model model) {
         Page<Activity> allActivity = activityService.findAllActivity(pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("activities", allActivity.getContent());

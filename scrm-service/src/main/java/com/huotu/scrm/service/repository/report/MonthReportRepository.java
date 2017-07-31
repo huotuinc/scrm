@@ -2,6 +2,7 @@ package com.huotu.scrm.service.repository.report;
 
 import com.huotu.scrm.service.entity.report.MonthReport;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDate;
@@ -10,40 +11,21 @@ import java.util.List;
 /**
  * Created by hxh on 2017-07-12.
  */
-public interface MonthReportRepository extends JpaRepository<MonthReport, Long> {
-
-    /**
-     * 根据某个商户下某个月份的积分排名（倒序）
-     *
-     * @param date
-     * @param customerId
-     * @return
-     */
-    List<MonthReport> findByReportMonthAndCustomerIdOrderByExtensionScoreDesc(LocalDate date, Long customerId);
-
-    /**
-     * 根据某个商户下某个月份销售员的关注排名（倒序）
-     *
-     * @param date
-     * @param customerId
-     * @return
-     */
-
-    List<MonthReport> findByReportMonthAndCustomerIdAndIsSalesmanTrueOrderByFollowNumDesc(LocalDate date, Long customerId);
+public interface MonthReportRepository extends JpaRepository<MonthReport, Long>, JpaSpecificationExecutor<MonthReport> {
 
     /**
      * 根据用户和某个月份查询
      *
-     * @param userId
-     * @param lastFirstDay
+     * @param userId 用户ID
+     * @param month  统计月份
      * @return
      */
-    List<MonthReport> findByUserIdAndReportMonth(long userId, LocalDate lastFirstDay);
+    List<MonthReport> findByUserIdAndReportMonth(long userId, LocalDate month);
 
     /**
      * 查询用户最高月的访客量排名
      *
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     @Query("select max(t.visitorNum) from MonthReport t where t.userId = ?1")
@@ -52,7 +34,7 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long> 
     /**
      * 查询用户最高月关注排名（销售员特有）
      *
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     @Query("select min(t.followRanking) from MonthReport t where t.userId = ?1")
@@ -61,7 +43,7 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long> 
     /**
      * 查询用户最高月的积分排名
      *
-     * @param userId
+     * @param userId 用户ID
      * @return
      */
     @Query("select min(t.scoreRanking) from MonthReport t where t.userId=?1")
@@ -70,10 +52,26 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long> 
     /**
      * 查询用户某个月份之前的所有数据
      *
-     * @param userId
-     * @param monthReport
+     * @param userId 用户ID
+     * @param month  统计月份
      * @return
      */
-    List<MonthReport> findByUserIdAndReportMonthGreaterThanEqual(Long userId, LocalDate monthReport);
+    List<MonthReport> findByUserIdAndReportMonthGreaterThanEqual(Long userId, LocalDate month);
 
+    /**
+     * 查询某个月份下的所有商户
+     *
+     * @param month 统计月份
+     * @return
+     */
+    @Query("select distinct t.customerId from MonthReport  t where t.reportMonth=?1")
+    List<Long> findCustomerByReportDay(LocalDate month);
+
+    /**
+     * 查询某个用户所有数据
+     *
+     * @param userId 用户ID
+     * @return
+     */
+    List<MonthReport> findByUserId(Long userId);
 }

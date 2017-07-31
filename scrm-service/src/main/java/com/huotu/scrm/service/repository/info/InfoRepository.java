@@ -19,8 +19,8 @@ public interface InfoRepository extends JpaRepository<Info, Long>, JpaSpecificat
 
     List<Info> findByTitleLike(String title);
 
-    List<Info> findByCustomerIdAndIsStatusAndIsDisableFalse(Long customerId, boolean status);
+    List<Info> findByCustomerIdAndIsStatusTrueAndIsDisableFalse(Long customerId);
 
-    List<Info> findByCustomerIdAndIsExtendAndAndIsDisableFalse(Long customerId, boolean extend);
+    List<Info> findByCustomerIdAndIsExtendTrueAndIsDisableFalse(Long customerId);
 }
 

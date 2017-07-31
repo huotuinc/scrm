@@ -7,7 +7,6 @@ import com.huotu.scrm.service.service.report.DayReportService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -25,21 +24,10 @@ public class DayReportServiceTest extends CommonTestBase {
      */
     @Test
     public void testDayReportService() {
-       dayReportService.saveDayReport();
+        dayReportService.saveDayReport();
         List<DayReport> all = dayReportRepository.findAll();
         all.forEach(p -> {
             System.out.println(p.toString());
         });
     }
-
-    /**
-     * 测试定时任务
-     *
-     * @throws IOException
-     */
-    @Test
-    public void testSaveDayReportScheduled() throws IOException {
-        System.in.read();
-    }
-
 }
