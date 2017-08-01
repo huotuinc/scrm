@@ -68,7 +68,8 @@
                                                                   data-toggle="tooltip" data-original-title="参与记录"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-cog tooltips" data-placement="top"
-                                                                  data-toggle="tooltip" data-original-title="奖品设置"></i></span>
+                                                                  data-toggle="tooltip" data-original-title="奖品设置"
+                                                                  th:onclick="'javascript:actInfoHandler.setPrize('+${activity.actId}+')'"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
@@ -122,7 +123,7 @@
     var requestDate = {};
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
     paging.init(function (p) {
-        window.location.href=ajaxUrl +'/act/list?pageIndex='+p;
+        window.location.href = ajaxUrl + '/act/list?pageIndex=' + p;
     });
     var actInfoHandler = {
         deleteAct: function (actId) {
@@ -145,6 +146,9 @@
             } else {
                 window.location.href = ajaxUrl + "/act/detail";
             }
+        },
+        setPrize:function (actId) {
+            console.log(actId)
         }
     }
 </script>

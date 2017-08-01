@@ -33,6 +33,7 @@ public class ActPrizeController extends MallBaseController {
     @Autowired
     private ActPrizeService actPrizeService;
 
+
     /**
      * 分页查询所有奖品
      *
@@ -49,6 +50,11 @@ public class ActPrizeController extends MallBaseController {
         model.addAttribute("pageIndex", pageIndex);
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
         return "activity/prize_list";
+    }
+
+    @RequestMapping("/prize/detail")
+    public String getPrizeDetail(Long actId){
+        return "activity/activity_detail";
     }
 
     /**

@@ -14,7 +14,7 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/jsTree/style.min.css" rel="stylesheet">
-    <base target="_blank">
+    <!--<base target="_blank">-->
 </head>
 
 <body class="gray-bg">
@@ -73,6 +73,56 @@
                     </div>
                 </div>
             </form>
+            <div class="panel-body">
+                <table class="table table-bordered table-hover table-center">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th class="col-sm-2">奖品名称</th>
+                        <th class="col-sm-3">奖品图片</th>
+                        <th>奖品类型</th>
+                        <th>奖品总量</th>
+                        <th>奖品剩余数量</th>
+                        <th>中奖概率</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody th:remove="all-but-first">
+                    <tr th:each="prizes:${prizeList}">
+                        <td th:text="${prizes.prizeId}">1</td>
+                        <td th:text="${prizes.prizeName}">
+                            <div class="checkbox checkbox-primary m-b-none m-t-none">
+                            </div>
+                        </td>
+                        <td th:text="${prizes.prizeImageUrl}" style="width: 5%;">
+                            <p style="width: 100%; height: 50px;">
+                            </p>
+                        </td>
+                        <td th:text="${prizes.prizeType}"></td>
+                        <td th:text="${prizes.prizeCount}"></td>
+                        <td th:text="${prizes.remainCount}"></td>
+                        <td th:text="${prizes.winRate}"></td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i></span>
+                            &nbsp;&nbsp;
+                            <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top" data-toggle="tooltip" data-original-title="删除"></i></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                共
+                <th:block th:text="${totalRecords}">100</th:block>
+                条记录，当前第
+                <th:block th:text="${pageIndex}">1</th:block>
+                /
+                <th:block th:text="${totalPages}">15</th:block>
+                ，每页
+                <th:block th:text="${pageSize}">10</th:block>
+                条记录
+                <ul style="float: right;" class="pagination pagination-split">
+                </ul>
+            </div>
         </div>
     </div>
 </div>
