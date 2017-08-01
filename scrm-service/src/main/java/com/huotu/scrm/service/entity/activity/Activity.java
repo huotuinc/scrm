@@ -3,6 +3,7 @@ package com.huotu.scrm.service.entity.activity;
 import com.huotu.scrm.common.ienum.ActEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,11 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 活动表
- *
+ * <p>
  * Created by montage on 2017/7/11.
  */
 
@@ -54,14 +55,16 @@ public class Activity {
     /**
      * 开始时间
      */
-    @Column(name = "Start_Date")
-    private Date startDate;
+    @Column(name = "Start_Date", columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startDate;
 
     /**
      * 结束时间
      */
-    @Column(name = "End_Date")
-    private Date endDate;
+    @Column(name = "End_Date", columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endDate;
 
     /**
      * 开启状态
@@ -88,12 +91,12 @@ public class Activity {
     @Column(name = "Rate_Desc")
     private String rateDesc;
 
-   /**
+    /**
      * 是否删除
      * 0:未删除,1:已删除，默认是0
      */
     @Column(name = "Is_Delete")
-    private boolean isDelete ;
+    private boolean isDelete;
 
 
     @Override

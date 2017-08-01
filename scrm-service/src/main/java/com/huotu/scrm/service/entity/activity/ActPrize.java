@@ -3,12 +3,7 @@ package com.huotu.scrm.service.entity.activity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * 活动奖品表
@@ -28,6 +23,12 @@ public class ActPrize {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Prize_Id")
     private Long prizeId;
+
+
+    /**所属活动*/
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
+    @JoinColumn(name="Act_Id")
+    private Activity activity;
 
     /**
      * 奖品名称

@@ -14,10 +14,13 @@ import com.huotu.scrm.common.utils.IpUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
+import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
+import com.huotu.scrm.service.service.mall.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,13 +33,35 @@ import java.util.*;
  */
 
 @Controller
-@RequestMapping("/act/prize")
 public class ActWinController extends SiteBaseController {
 
     @Autowired
     private ActPrizeService actPrizeService;
     @Autowired
     private ActWinDetailService actWinDetailService;
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping("/activity/index")
+    public String marketingActivity(@ModelAttribute("userId") Long userId,Long customerId,Long actid){
+
+        //todo 1 获取用户可用积分
+
+
+        User user =  userService.getByIdAndCustomerId(userId,customerId);
+
+
+        //todo 2 获取活动1次消耗的积分 算出可用参与次数
+
+
+
+        //todo 3 获取活动的相关信息奖品信息
+
+
+
+        return "activity/game";
+    }
+
 
     /**
      * 参加抽奖活动

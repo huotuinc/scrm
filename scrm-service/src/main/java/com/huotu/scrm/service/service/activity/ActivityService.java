@@ -34,18 +34,17 @@ public interface ActivityService {
      */
     Activity findByActId(Long actId);
 
-    /**
+    /**d
      * 保存活动
      */
-    Activity saveActivity(Activity activity);
+    void saveActivity(Activity activity);
 
     /**
      * 逻辑删除活动
      *
-     * @param actId    活动Id
-     * @param isDelete 是否删除
+     * @param actId 活动Id
      */
-    void updateActivity(Long actId, boolean isDelete);
+    void updateActivity(Long actId);
 
 
 }

@@ -70,18 +70,18 @@ public class ActivityServiceTest extends CommonTestBase {
         activity.setActTitle("agsghsdhdh");
         activity.setActType(enumType);
         activity.setOpenStatus(false);
-        activity.setStartDate(now);
-        activity.setEndDate(newNow);
+//        activity.setStartDate(now);
+//        activity.setEndDate(newNow);
         activity.setGameCostlyScore(40);
         activity.setRuleDesc("gsghhdhgdshedjtyjdt");
         activity.setRateDesc("agtrshdhdsfhasegwyhqehjrjhtr");
         activity.setDelete(false);
-        activity = activityService.saveActivity(activity);
+        activityService.saveActivity(activity);
         System.out.println(activity.toString());
     }
 
     @Test
     public void updateActTest() throws Exception{
-        activityService.updateActivity(7L,true);
+        activityService.updateActivity(7L);
     }
 }
