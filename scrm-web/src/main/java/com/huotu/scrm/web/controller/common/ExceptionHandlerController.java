@@ -1,16 +1,10 @@
 package com.huotu.scrm.web.controller.common;
 
-import com.alibaba.fastjson.JSON;
-import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.ResultCodeEnum;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,42 +14,23 @@ import javax.servlet.http.HttpServletResponse;
  * Created by Jinxiangdong on 2016/7/19.
  */
 @ControllerAdvice
-public class ExceptionHandlerController {
-    /***
-     * 处理404 异常
-     * @param exception
-     * @return
-     */
-    @ExceptionHandler(value = {NoHandlerFoundException.class})
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView error404(Exception exception) {
-        ModelAndView mv = new ModelAndView("error");
-        mv.addObject("exception", exception);
-        return mv;
-    }
+public class ExceptionHandlerController extends DefaultHandlerExceptionResolver{
 
-    /***
-     * 处理 500 异常
-     * @param exception
-     * @param request
-     * @return
-     */
-    @ExceptionHandler(value = {Exception.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ModelAndView error500(Exception exception, HttpServletRequest request , HttpServletResponse response) {
-        exception.printStackTrace();
 
+    @ExceptionHandler(Exception.class)
+    @Override
+    protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        ModelAndView modelAndView =  super.doResolveException(request, response, handler, ex);
         boolean isAjaxOrJson = isAjaxRequestOrBackJson( request);
         if(isAjaxOrJson){
             try {
-                response.getWriter().write( exception.getMessage() );
-            }catch (Exception ex){ex.printStackTrace();}
+                response.getWriter().write( ex.getMessage() );
+            }catch (Exception exception){exception.printStackTrace();}
             return null;
         }
-
-        ModelAndView mv = new ModelAndView("error");
-        mv.addObject("exception", exception);
-        return mv;
+        modelAndView.setViewName("error");
+        modelAndView.addObject("exception", ex);
+        return modelAndView;
     }
 
     /***
