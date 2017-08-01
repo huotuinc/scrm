@@ -36,12 +36,10 @@ $(function () {
             });
         },
         getOrder: function () {//NEW
-            var actid = utils.getQueryString('actid', '0');
-            var cid = utils.getQueryString('cid', '');
             $.ajax({
                 type: 'POST',
                 url: '/activity/dojoin',
-                data: { actid: actid, cid: cid },
+                data: { actid: 1, cid: 2 },
                 dataType: 'json',
                 success: function (res) {
                     if (res.resultCode !== 2000) {
@@ -109,11 +107,12 @@ $(function () {
                         return -r * ((e = e / o - 1) * e * e * e - 1) + i
                     },
                     callback: function () {
-                        if (data.lottery.beanid > 0) {
-                            game.showModal(data);
-                        } else {
-                            game.errorModals('继续加油哦');
-                        }
+                        // if (data.lottery.beanid > 0) {
+                        //
+                        // } else {
+                        //     game.errorModals('继续加油哦');
+                        // }
+                        game.showModal(data);
                         game.renderElement();
                         game.running = false;
                     }
@@ -165,19 +164,18 @@ $(function () {
             }
         },
         createGoodsModal: function (data) {//NEW
-            var linkurl = utils.appendQueryString(data.lottery.linkurl, utils.formatString('hotsourcekey={0}&joinid={1}',utils.getQueryString('cid',''),data.joinid));
             return '<div class="J_modalShowPrize coupon-modal-showPrize">' +
                 '<span class="close coupon-modal-close"></span>' +
                 '<div class="coupon-modal-showPrize-dialog">' +
                 '<div class="modal-header"></div>' +
                 '<div class="modal-body withoutCode">' +
-                '<p class="modal-title">' + data.lottery.title + '</p>' +
+                '<p class="modal-title">' + data.orderTitle + '</p>' +
                 '<div class="coupon-imageBg">' +
                 '<div class="coupon-image">' +
-                '<a href="' + linkurl + '"><img src="' + data.lottery.imgurl + '"></a>' +
+                '<a href="#"><img src="' + data.orderImg + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="' + linkurl + '" class="coupon-use">' + data.lottery.btntext + '</a>' +
+                '<a href="#" class="coupon-use">' + data.orderTitle + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +
