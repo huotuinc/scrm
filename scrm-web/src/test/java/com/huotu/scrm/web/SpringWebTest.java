@@ -1,6 +1,7 @@
 package com.huotu.scrm.web;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.huotu.scrm.web.controller.filter.ParamFilter;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.WebDriver;
@@ -21,11 +22,13 @@ public class SpringWebTest {
     protected MockMvc mockMvc;
     protected WebClient webClient;
     protected WebDriver webDriver;
+    protected ParamFilter paramFilter = new ParamFilter();
 
     @Before
     public void setup() {
-
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
+                .addFilters(paramFilter)
+                .build();
         this.webClient = MockMvcWebClientBuilder
                 .mockMvcSetup(this.mockMvc)
                 .build();

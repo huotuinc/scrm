@@ -5,13 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 活动表
@@ -32,6 +31,13 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long actId;
+
+
+    /**
+     * 获取活动相关的奖品
+     */
+    @OneToMany(mappedBy = "Activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private List<ActPrize> actPrizes = new ArrayList<>();
 
     /**
      * 商户Id

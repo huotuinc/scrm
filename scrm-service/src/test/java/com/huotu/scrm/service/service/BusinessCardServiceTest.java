@@ -22,9 +22,9 @@ public class BusinessCardServiceTest extends CommonTestBase {
     @Autowired
     private BusinessCardService businessCardService;
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Test
     public void getSalesmanBusinessCard(){
@@ -41,7 +41,7 @@ public class BusinessCardServiceTest extends CommonTestBase {
         //测试存在用户基本信息和不存在名片信息
 
         User user = mockUser(customerId);
-        user = userRepository.save(user);
+        user = userRepository.saveAndFlush(user);
         User user1 = userRepository.findOne(user.getId());
         User user2 = userRepository.getByIdAndCustomerId(user.getId(),customerId);
         Assert.assertEquals(user.getId(),user2.getId());

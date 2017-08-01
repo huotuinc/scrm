@@ -17,7 +17,6 @@ import com.huotu.scrm.service.service.activity.ActivityService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.test.annotation.Rollback;
 
 import java.util.Date;
 import java.util.List;
@@ -36,7 +35,6 @@ public class ActivityServiceTest extends CommonTestBase {
      * 测试 分页查询所有活动
      */
     @Test
-    @Rollback(false)
     public void findAllActivityTest(){
         Page<Activity> allActivity = activityService.findAllActivity(1, 2);
         System.out.println(allActivity.getTotalElements());
@@ -51,7 +49,6 @@ public class ActivityServiceTest extends CommonTestBase {
      * 根据Id 查询活动
      */
     @Test
-    @Rollback(false)
     public void findByIdTest(){
         long ActId = 2;
         Activity activity = activityService.findByActId(ActId);
@@ -63,7 +60,6 @@ public class ActivityServiceTest extends CommonTestBase {
      * 保存活动
      */
     @Test
-    @Rollback(false)
     public void saveActTest() throws Exception{
         Date now = new Date();
         ActEnum.Activity enumType = EnumHelper.getEnumType(ActEnum.Activity.class, 0);
@@ -85,7 +81,6 @@ public class ActivityServiceTest extends CommonTestBase {
     }
 
     @Test
-    @Rollback(false)
     public void updateActTest() throws Exception{
         activityService.updateActivity(7L);
     }

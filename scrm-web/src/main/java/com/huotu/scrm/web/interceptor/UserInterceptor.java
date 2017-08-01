@@ -19,8 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class UserInterceptor extends HandlerInterceptorAdapter {
     private static final String CUSTOMER_ID = "customerId";
-    private static final String USER_ID_PREFIX = "mem_authcode_";
-    private static final String USER_ID_SECRET_KEY = "XjvDhKLvCsm9y7G7";
+    public static final String USER_ID_PREFIX = "mem_authcode_";
+    public static final String USER_ID_SECRET_KEY = "XjvDhKLvCsm9y7G7";
     @Autowired
     private Environment environment;
     @Autowired
@@ -28,7 +28,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (environment.acceptsProfiles("!container")) {
+        if (environment.acceptsProfiles("development")) {
             //小伙伴
             request.setAttribute("userId", 1058510);
             //普通会员
@@ -52,7 +52,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
                 return false;
             }
         }
-        Integer userId = Integer.valueOf(EncryptUtils.aesDecrypt(userIdValue, USER_ID_SECRET_KEY));
+        Long userId = Long.valueOf(EncryptUtils.aesDecrypt(userIdValue, USER_ID_SECRET_KEY));
         request.setAttribute("userId", userId);
         return true;
     }
