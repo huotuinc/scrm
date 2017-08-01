@@ -46,6 +46,8 @@ public class ActWinController extends SiteBaseController {
     public String marketingActivity(@ModelAttribute("userId") Long userId,Long customerId,Long actid){
 
         //todo 1 获取用户可用积分
+
+
         User user =  userService.getByIdAndCustomerId(userId,customerId);
 
 

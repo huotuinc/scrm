@@ -4,14 +4,9 @@ import com.huotu.scrm.common.ienum.ActEnum;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.*;
 
 /**
  * 活动表
@@ -96,6 +91,12 @@ public class Activity {
     @Column(name = "Is_Delete")
     private boolean isDelete ;
 
+
+    /**
+     * 获取活动相关的奖品
+     */
+    @OneToMany(mappedBy = "Activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private Set<ActPrize> actPrizes = new HashSet<>();
 
     @Override
     public String toString() {

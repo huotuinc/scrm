@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.test.annotation.Rollback;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -74,8 +75,8 @@ public class ActivityServiceTest extends CommonTestBase {
         activity.setActTitle("agsghsdhdh");
         activity.setActType(enumType);
         activity.setOpenStatus(false);
-        activity.setStartDate(now);
-        activity.setEndDate(newNow);
+        activity.setStartDate(LocalDateTime.now());
+        activity.setEndDate(LocalDateTime.now());
         activity.setGameCostlyScore(40);
         activity.setRuleDesc("gsghhdhgdshedjtyjdt");
         activity.setRateDesc("agtrshdhdsfhasegwyhqehjrjhtr");
