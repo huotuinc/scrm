@@ -36,8 +36,8 @@ public class Activity {
     /**
      * 获取活动相关的奖品
      */
-    @OneToMany(mappedBy = "Activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    private List<ActPrize> actPrizes = new ArrayList<>();
+    @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private List<ActPrize> actPrizes;
 
     /**
      * 商户Id
