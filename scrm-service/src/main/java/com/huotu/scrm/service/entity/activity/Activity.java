@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -55,13 +56,13 @@ public class Activity {
      * 开始时间
      */
     @Column(name = "Start_Date")
-    private Date startDate;
+    private LocalDateTime startDate;
 
     /**
      * 结束时间
      */
     @Column(name = "End_Date")
-    private Date endDate;
+    private LocalDateTime endDate;
 
     /**
      * 开启状态
@@ -111,5 +112,14 @@ public class Activity {
                 ", rateDesc='" + rateDesc + '\'' +
                 ", isDelete=" + isDelete +
                 '}';
+    }
+
+    /**
+     * 活动本身可用情况
+     * @return true 表示活动本身可用  false 表示活动本身不可用
+     */
+    public boolean actItSelfStatus() {
+        LocalDateTime now =  LocalDateTime.now();
+        return isDelete == false && now.isAfter(startDate) && now.isBefore(endDate);
     }
 }
