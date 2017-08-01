@@ -3,14 +3,19 @@ package com.huotu.scrm.service.entity.activity;
 import com.huotu.scrm.common.ienum.ActEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.*;
 
 /**
  * 活动表
- *
+ * <p>
  * Created by montage on 2017/7/11.
  */
 
@@ -50,13 +55,15 @@ public class Activity {
     /**
      * 开始时间
      */
-    @Column(name = "Start_Date")
+    @Column(name = "Start_Date", columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDate;
 
     /**
      * 结束时间
      */
-    @Column(name = "End_Date")
+    @Column(name = "End_Date", columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endDate;
 
     /**
@@ -84,19 +91,13 @@ public class Activity {
     @Column(name = "Rate_Desc")
     private String rateDesc;
 
-   /**
+    /**
      * 是否删除
      * 0:未删除,1:已删除，默认是0
      */
     @Column(name = "Is_Delete")
-    private boolean isDelete ;
+    private boolean isDelete;
 
-
-    /**
-     * 获取活动相关的奖品
-     */
-    @OneToMany(mappedBy = "Activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    private Set<ActPrize> actPrizes = new HashSet<>();
 
     @Override
     public String toString() {
@@ -113,14 +114,5 @@ public class Activity {
                 ", rateDesc='" + rateDesc + '\'' +
                 ", isDelete=" + isDelete +
                 '}';
-    }
-
-    /**
-     * 活动本身可用情况
-     * @return true 表示活动本身可用  false 表示活动本身不可用
-     */
-    public boolean actItSelfStatus() {
-        LocalDateTime now =  LocalDateTime.now();
-        return isDelete == false && now.isAfter(startDate) && now.isBefore(endDate);
     }
 }

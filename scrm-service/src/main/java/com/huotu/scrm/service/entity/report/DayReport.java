@@ -69,7 +69,7 @@ public class DayReport {
      * 每日访客排名
      */
     @Column(name = "Visitor_Ranking")
-    private int visitorRanking = 0;
+    private int visitorRanking;
 
     /**
      * 每日推广积分
@@ -81,7 +81,7 @@ public class DayReport {
      * 每日积分排名
      */
     @Column(name = "Score_Ranking")
-    private int scoreRanking = 0;
+    private int scoreRanking;
 
     /**
      * 每日被关注量（销售员特有）
@@ -93,7 +93,7 @@ public class DayReport {
      * 每日关注排名（销售员特有）
      */
     @Column(name = "Follow_Ranking")
-    private int followRanking = 0;
+    private int followRanking;
 
     /**
      * 统计日期

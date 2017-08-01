@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -30,7 +31,7 @@ import java.util.Map;
  */
 
 @Controller
-public class ActController extends MallBaseController{
+public class ActController extends MallBaseController {
     @Autowired
     private ActivityService activityService;
 
@@ -44,8 +45,8 @@ public class ActController extends MallBaseController{
      * @param model
      * @return
      */
-    @RequestMapping(value = "/act/list")
-    public String actList(@RequestParam (required = false,defaultValue = "1") int pageIndex, Model model) {
+    @RequestMapping("/act/list")
+    public String actList(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
         Page<Activity> allActivity = activityService.findAllActivity(pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("activities", allActivity.getContent());
         model.addAttribute("totalPages", allActivity.getTotalPages());
@@ -56,23 +57,37 @@ public class ActController extends MallBaseController{
     }
 
     /**
+     * 跳转到活动编辑和保存页面
+     *
+     * @param actId 活动Id
+     * @param model
+     * @return
+     */
+    @RequestMapping("/act/detail")
+    public String getActDetail(@RequestParam(required = false, defaultValue = "0") Long actId, Model model) {
+        Activity activity = new Activity();
+        if (actId != 0) {
+            activity = activityService.findByActId(actId);
+        }
+        model.addAttribute("activity", activity);
+        return "activity/activity_detail";
+    }
+
+    /**
      * 保存活动
      *
      * @param activity
      * @return
      */
-    @RequestMapping(value = "/list/save")
-    @ResponseBody
-    public ApiResult saveAct(Activity activity) {
-        if (activity.getActId() != null && activity.getActId() > 0){
-            Activity newActivity = activityService.findByActId(activity.getActId());
-            activity.setDelete(newActivity.isDelete());
+    @RequestMapping("/act/save")
+    public String saveAct(Activity activity, @ModelAttribute("customerId") Long customerId) {
+        if (activity != null) {
+            activity.setCustomerId(customerId);
+            activityService.saveActivity(activity);
+        } else {
+            return "error";
         }
-        activity = activityService.saveActivity(activity);
-        if (activity != null){
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
-        }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+        return "redirect:/mall/act/list";
     }
 
     /**
@@ -81,14 +96,14 @@ public class ActController extends MallBaseController{
      * @param actId 活动Id
      * @return
      */
-    @RequestMapping(value = "/list/delete")
+    @RequestMapping("/act/delete")
     @ResponseBody
     public ApiResult deleteAct(Long actId) {
-        if (actId != null && actId > 0){
-            activityService.updateActivity(actId,true);
+        if (actId != null) {
+            activityService.updateActivity(actId);
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
         }
-            return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
+        return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
     }
 
     /**
@@ -98,12 +113,12 @@ public class ActController extends MallBaseController{
      * @param model
      * @return
      */
-    @RequestMapping(value = "/win/list")
-    public String prizeDetailList(@RequestParam (required = false,defaultValue = "1") int pageIndex, Model model){
+    @RequestMapping("/win/list")
+    public String prizeDetailList(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
         Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(pageIndex, Constant.PAGE_SIZE);
-        model.addAttribute("prizeDetailList",pageActWinDetail.getContent());
-        model.addAttribute("totalPages",pageActWinDetail.getTotalPages());
-        model.addAttribute("totalRecords",pageActWinDetail.getTotalElements());
+        model.addAttribute("prizeDetailList", pageActWinDetail.getContent());
+        model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
+        model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
         model.addAttribute("pageIndex", pageIndex);
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
         return "activity/winPrize_list";
@@ -115,13 +130,13 @@ public class ActController extends MallBaseController{
      * @param response
      * @throws IOException
      */
-    @RequestMapping(value = "/downloadAllWinDetail")
+    @RequestMapping("/downloadAllWinDetail")
     public void downloadAllWinDetail(HttpServletResponse response) throws IOException {
         //完善配置信息
-        String fileName = LocalDate.now().toString()+"活动中奖记录文件";
+        String fileName = LocalDate.now().toString() + "活动中奖记录文件";
         List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord();
-        List<String> keys = Arrays.asList("winDetailId","userId","actName","prizeName","winnerName","winnerTel","winTime","ipAddress");
-        List<String> columnNames = Arrays.asList("序号","用户编号","活动名称","奖品名称","姓名","电话","日期","IP");
+        List<String> keys = Arrays.asList("winDetailId", "userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
+        List<String> columnNames = Arrays.asList("序号", "用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ExceUtil.createWorkBook(excelRecord, keys, columnNames).write(os);
         byte[] bytes = os.toByteArray();
@@ -137,14 +152,14 @@ public class ActController extends MallBaseController{
         try {
             bis = new BufferedInputStream(is);
             bos = new BufferedOutputStream(os);
-            byte[] buff = new byte[2048*10];
+            byte[] buff = new byte[2048 * 10];
             int bytesRead;
             while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
                 bos.write(buff, 0, bytesRead);
             }
-        }catch (IOException e){
-               e.printStackTrace();
-        }finally {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
             if (bis != null)
                 bis.close();
             if (bos != null)

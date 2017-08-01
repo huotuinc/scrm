@@ -9,8 +9,6 @@
 
 package com.huotu.scrm.service.service.activity.impl;
 
-import com.huotu.scrm.common.ienum.ActEnum;
-import com.huotu.scrm.common.ienum.EnumHelper;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.repository.activity.ActivityRepository;
 import com.huotu.scrm.service.service.activity.ActivityService;
@@ -46,29 +44,15 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public Activity saveActivity(Activity activity) {
-        Activity newActivity;
-        if (activity.getActId() != null && activity.getActId() != 0) {
-            newActivity = activityRepository.findOne(activity.getActId());
-        } else {
-            newActivity = new Activity();
-        }
-        newActivity.setCustomerId(activity.getCustomerId());
-        newActivity.setActTitle(activity.getActTitle());
-        newActivity.setActType(EnumHelper.getEnumType(ActEnum.Activity.class, activity.getActType()));
-        newActivity.setStartDate(activity.getStartDate());
-        newActivity.setEndDate(activity.getEndDate());
-        newActivity.setOpenStatus(activity.isOpenStatus());
-        newActivity.setGameCostlyScore(activity.getGameCostlyScore());
-        newActivity.setRuleDesc(activity.getRuleDesc());
-        newActivity.setRateDesc(activity.getRateDesc());
-        newActivity.setDelete(false);
-        return activityRepository.save(newActivity);
+    public void saveActivity(Activity activity) {
+        activityRepository.save(activity);
     }
 
     @Override
-    public void updateActivity(Long actId, boolean isDelete) {
-        activityRepository.updateActivityByActId(isDelete, actId);
+    public void updateActivity(Long actId) {
+        Activity activity = activityRepository.findOne(actId);
+        activity.setDelete(true);
+        activityRepository.save(activity);
     }
 
 
