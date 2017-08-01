@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * Created by luohaibo on 2017/7/5.
@@ -55,6 +54,9 @@ public class Info {
      */
     @Column(name = "Image")
     private String imageUrl;
+
+    @Transient
+    private String mallImageUrl;
 
 
     /**

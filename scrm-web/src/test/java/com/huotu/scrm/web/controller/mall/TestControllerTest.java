@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -30,11 +31,13 @@ public class TestControllerTest extends CommonTestBase {
         //expect:method not allowed
         mockMvc.perform(post(indexControllerUrl)
                 .param("customerId", String.valueOf(customerId)))
-                .andExpect(status().isMethodNotAllowed());
+                .andDo(print())
+                .andExpect(status().isMethodNotAllowed())
+                .andExpect(view().name("error"));
 
         //case 2:no param
         //expect:redirect to login page
-        testWithNoParam(indexControllerUrl,0);
+        testWithNoParam(indexControllerUrl, 0);
 
         //case 3: get with param
         //expect: return msg
@@ -44,6 +47,21 @@ public class TestControllerTest extends CommonTestBase {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(200))
                 .andExpect(jsonPath("$.data").value(expectResultMsg));
+
+        //case 4:404test
+        mockMvc.perform(post(baseUrl + "/index/noPageException")
+                .param("customerId", String.valueOf(customerId)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testIndex() throws Exception{
+        //case 4:404test
+        mockMvc.perform(post(baseUrl + "/123")
+                .param("customerId", String.valueOf(customerId)))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -57,11 +75,11 @@ public class TestControllerTest extends CommonTestBase {
 
         //case 2:no param
         //expect:redirect to login page
-        testWithNoParam(htmlIndexControllerUrl,0);
+        testWithNoParam(htmlIndexControllerUrl, 0);
 
         //case 3:
         mockMvc.perform(get(htmlIndexControllerUrl)
-        .param("customerId", String.valueOf(customerId)))
+                .param("customerId", String.valueOf(customerId)))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("title"))
                 .andExpect(view().name("test"));
@@ -69,7 +87,7 @@ public class TestControllerTest extends CommonTestBase {
     }
 
     @Test
-    public void htmlIndexPageTest(){
+    public void htmlIndexPageTest() {
         //test selenium
         webDriver.get("http://localhost" + htmlIndexControllerUrl + "?customerId=" + customerId);
         TestIndexPage textIndex = initPage(TestIndexPage.class);

@@ -7,163 +7,73 @@ import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
-import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import com.huotu.scrm.service.service.mall.UserLevelService;
-import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.CommonTestBase;
 import com.huotu.scrm.web.controller.page.site.ShowBusinessCardPage;
 import com.huotu.scrm.web.controller.page.site.TestEditBusinessCardPage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by Administrator on 2017/7/17.
  */
-@ActiveProfiles(value = {"development"})
 public class BusinessCardControllerTest extends CommonTestBase {
-    String editUrl = "http://localhost/site/businessCard/editBusinessCard";
+    private String editUrl = "http://localhost/site/businessCard/editBusinessCard";
     @Autowired
-    BusinessCardService businessCardService;
+    private BusinessCardService businessCardService;
     @Autowired
-    UserLevelService userLevelService;
-    @Autowired
-    UserService userService;
-    @Autowired
-    CustomerRepository customerRepository;
-
-
-    private Long customerId =0L;
-
+    private UserLevelService userLevelService;
+    private Long customerId = 0L;
+    private UserLevel userLevel;
+    private User user, followerUser;
 
     @Before
     public void init() {
-        customerId = Long.valueOf(random.nextInt(10000));
+        Customer customer = mockCustomer();
+        customerId = customer.getId();
+        //名片只有销售员才有
+        userLevel = mockUserLevel(customerId, UserType.buddy, true);
+        List<UserLevel> userLevelList = userLevelService.findByCustomerIdAndIsSalesman(customerId, true);
+        Assert.assertEquals(1, userLevelList.size());
+        user = mockUser(customerId, userLevel);
+        followerUser = mockUser(customerId, userLevel);
     }
 
-
     @Test
-    public void editBusinessCard(){
-        Random random = new Random();
-        Customer customer = new Customer();
-        customer.setLoginName(UUID.randomUUID().toString().replace("-", ""));
-        customer.setEnabled(true);
-        customer.setLoginPassword(UUID.randomUUID().toString().replace("-", ""));
-        customer.setNickName(UUID.randomUUID().toString().replace("-", ""));
-        customer.setMobile(String.valueOf(random.nextInt()));
-        customer.setNickName(UUID.randomUUID().toString().replace("-", ""));
-        customer.setSubDomain(UUID.randomUUID().toString().replace("-", ""));
-        customer.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        customer = customerRepository.save(customer);
-
-        Long customerId = customer.getId();
-
-        UserLevel userLevel = new UserLevel();
-        userLevel.setCustomerId(customerId);
-        userLevel.setLevel(0);
-        userLevel.setLevelName(UUID.randomUUID().toString());
-        userLevel.setSalesman(true);
-        userLevel.setType(UserType.buddy);
-        userLevelService.save(userLevel);
-
-        List<UserLevel> userLevelList = userLevelService.findByCustomerIdAndIsSalesman(customer.getId(), true);
-        Assert.assertTrue( userLevelList.size() == 1 );
-
-        User user = new User();
-        user.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        user.setCustomerId(customerId);
-        user.setLoginName(UUID.randomUUID().toString());
-        user.setUserGender("男");
-        user.setNickName(UUID.randomUUID().toString());
-        user.setLevelId( userLevelList.get(0).getId() );
-        user.setLockedBalance(random.nextDouble());
-        user.setLockedIntegral(random.nextDouble());
-        user.setRegTime(new Date());
-        user.setUserMobile(String.valueOf(random.nextInt()));
-        user.setUserBalance(random.nextDouble());
-        user.setUserType(UserType.buddy);
-        user.setUserTempIntegral(random.nextInt());
-        user.setWeixinImageUrl(UUID.randomUUID().toString());
-        user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
-        user = userService.save(user);
-
-        Long userId= user.getId();
-        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, "a.jpg");
-
+    public void editBusinessCard() throws Exception {
+        Long userId = user.getId();
+        // TODO: 2017-08-01 修改图片后验证？其他字段为什么不验证？？单元测试需要包含所有case
+        //设置名片图片
+        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, "a.jpg");
         //BusinessCard businessCard = businessCardService.getBusinessCard( customerId , userId );
 
-        editUrl +="?customerId="+customerId+"&userId="+userId;
+        editUrl += "?customerId=" + customerId + "&userId=" + userId;
+        System.out.println("customerId:" + customerId + ";userId=" + userId);
+        //以 userId 登录
+        mockUserLogin(userId,customerId);
         webDriver.get(editUrl);
         TestEditBusinessCardPage editBusinessCardPage = this.initPage(TestEditBusinessCardPage.class);
         editBusinessCardPage.setBusinessCard(businessCard);
+        editBusinessCardPage.setUserRepository(userRepository);
         //WebElement ele = webDriver.findElement(By.id("div_job"));
         editBusinessCardPage.validate();
 
     }
 
     @Test
-    public void showBusinessCard(){
+    public void showBusinessCard() {
 
-        UserLevel userLevel = new UserLevel();
-        userLevel.setType(UserType.buddy);
-        userLevel.setSalesman(true);
-        userLevel.setLevelName(UUID.randomUUID().toString());
-        userLevel.setLevel(1);
-        userLevel.setCustomerId(customerId);
-        userLevel = userLevelService.save(userLevel);
+        // TODO: 2017-08-01 这个 update 放到 editBusinessCard 方法中？？
+        businessCardService.updateBusinessCard(customerId, user.getId(), BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB, "job");
 
-        User user = new User();
-        user.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        user.setCustomerId(customerId);
-        user.setLoginName(UUID.randomUUID().toString());
-        user.setUserGender("男");
-        user.setNickName(UUID.randomUUID().toString());
-        user.setLevelId( userLevel.getId() );
-        user.setLockedBalance(random.nextDouble());
-        user.setLockedIntegral(random.nextDouble());
-        user.setRegTime(new Date());
-        user.setUserMobile(String.valueOf(random.nextInt()));
-        user.setUserBalance(random.nextDouble());
-        user.setUserType(userLevel.getType());
-        user.setUserTempIntegral(random.nextInt());
-        user.setWeixinImageUrl(UUID.randomUUID().toString());
-        user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
-       user = userService.save(user);
+        SalesmanBusinessCard salesmanBusinessCard = businessCardService.getSalesmanBusinessCard(customerId, user.getId(), followerUser.getId());
 
-        businessCardService.updateBusinessCard( customerId , user.getId() , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB , "job" );
-
-        User follower =  new User();
-        user.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        user.setCustomerId(customerId);
-        user.setLoginName(UUID.randomUUID().toString());
-        user.setUserGender("男");
-        user.setNickName(UUID.randomUUID().toString());
-        user.setLevelId( userLevel.getId() );
-        user.setLockedBalance(random.nextDouble());
-        user.setLockedIntegral(random.nextDouble());
-        user.setRegTime(new Date());
-        user.setUserMobile(String.valueOf(random.nextInt()));
-        user.setUserBalance(random.nextDouble());
-        user.setUserType(userLevel.getType());
-        user.setUserTempIntegral(random.nextInt());
-        user.setWeixinImageUrl(UUID.randomUUID().toString());
-        user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
-        user = userService.save(user);
-
-
-        SalesmanBusinessCard salesmanBusinessCard= businessCardService.getSalesmanBusinessCard(customerId , user.getId() , follower.getId() );
-
-        String url="http://localhost/site/businessCard/seeBusinessCard?customerId="+customerId+"&salesmanId="+ user.getId()+"&userId="+follower.getId();
+        String url = "http://localhost/site/businessCard/seeBusinessCard?customerId=" + customerId + "&salesmanId=" + user.getId() + "&userId=" + followerUser.getId();
         webDriver.get(url);
         ShowBusinessCardPage page = this.initPage(ShowBusinessCardPage.class);
         page.setSalesmanBusinessCard(salesmanBusinessCard);
