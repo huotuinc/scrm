@@ -20,7 +20,7 @@
     <div class="weui_media_box weui_media_text">
       <div class="weui_media_hd">
         <img class="weui_media_appmsg_thumb borderfive"
-             th:src="${businesscard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg': ${businesscard.getBusinessCard().getAvatar()}" alt="">
+             th:src="${businesscard.getBusinessCard().getAvatar() != null} ? '../../resources/images/mrtx.jpg': ${businesscard.getBusinessCard().getAvatar()}" alt="">
       </div>
       <div class="left-font">
         <h4 class="weui_media_title">

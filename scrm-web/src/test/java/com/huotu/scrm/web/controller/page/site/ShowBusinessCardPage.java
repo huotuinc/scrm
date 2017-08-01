@@ -22,6 +22,6 @@ public class ShowBusinessCardPage extends AbstractPage {
 
     @Override
     public void validate() {
-
+        // TODO: 2017-08-01  
     }
 }

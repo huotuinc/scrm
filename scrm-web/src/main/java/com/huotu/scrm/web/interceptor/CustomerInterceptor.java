@@ -38,7 +38,7 @@ public class CustomerInterceptor extends HandlerInterceptorAdapter {
         }
         if (StringUtils.isEmpty(requestCustomerId)) {
             customerId = CookieUtils.getCookieValInteger(request, "UserID");
-            if (customerId <= 1 && environment.acceptsProfiles("!container")) {
+            if (customerId <= 1 && environment.acceptsProfiles("development")) {
                 customerId = 4421;
             }
             if (customerId == 0) {
