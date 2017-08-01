@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 
 @Controller
-@RequestMapping("/prize")
 public class ActPrizeController extends MallBaseController {
 
     @Autowired
@@ -41,7 +40,7 @@ public class ActPrizeController extends MallBaseController {
      * @param model
      * @return
      */
-    @RequestMapping("/list")
+    @RequestMapping("/prize/list")
     public String prizeList(@RequestParam(required = false,defaultValue = "1") int pageIndex, Model model){
         Page<ActPrize> pageActPrize = actPrizeService.getPageActPrize(pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("prizeList",pageActPrize.getContent());
@@ -58,7 +57,7 @@ public class ActPrizeController extends MallBaseController {
      * @param actPrize 奖品实体
      * @return
      */
-    @RequestMapping("/list/save")
+    @RequestMapping("/prize/save")
     @ResponseBody
     public ApiResult savePrize(ActPrize actPrize){
         if (actPrize.getPrizeId() != null && actPrize.getPrizeId()>0){
@@ -77,7 +76,7 @@ public class ActPrizeController extends MallBaseController {
      * @param prizeId 奖品Id
      * @return
      */
-    @RequestMapping("/list/delete")
+    @RequestMapping("/prize/delete")
     @ResponseBody
     public ApiResult deletePrize(Long prizeId){
         if (prizeId != null && prizeId > 0){

@@ -121,8 +121,8 @@
     var ajaxUrl = "[[@{/mall}]]";
     var requestDate = {};
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
-    paging.init(function () {
-        console.log(1);
+    paging.init(function (p) {
+        window.location.href=ajaxUrl +'/act/list?pageIndex='+p;
     });
     var actInfoHandler = {
         deleteAct: function (actId) {

@@ -2,6 +2,7 @@ package com.huotu.scrm.service.entity.activity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,12 +13,13 @@ import javax.persistence.Table;
 
 /**
  * 活动奖品表
- *
+ * <p>
  * Created by montage on 2017/7/11.
  */
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "SCRM_ActPrize")
 public class ActPrize {
 

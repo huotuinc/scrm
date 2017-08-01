@@ -40,17 +40,7 @@ public class ActPrizeServiceImpl implements ActPrizeService {
 
     @Override
     public ActPrize saveActPrize(ActPrize actPrize) {
-        ActPrize newActPrize;
-        if (actPrize.getPrizeId() != null && actPrize.getPrizeId() != 0) {
-            newActPrize = actPrizeRepository.findOne(actPrize.getPrizeId());
-        } else {
-            newActPrize = new ActPrize();
-        }
-        newActPrize.setPrizeName(actPrize.getPrizeName());
-        newActPrize.setPrizeImageUrl(actPrize.getPrizeImageUrl());
-        newActPrize.setWinRate(actPrize.getWinRate());
-        newActPrize.setSort(actPrize.getSort());
-        return actPrizeRepository.save(newActPrize);
+        return actPrizeRepository.save(actPrize);
     }
 
     @Override

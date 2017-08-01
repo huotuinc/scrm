@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>奖品列表</title>
-    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <!-- Morris -->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.7.css" rel="stylesheet">
     <!--checkbox-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
     <!--datetimepick-->
@@ -26,7 +26,7 @@
                         <label class="">奖品列表</label>
                     </div>
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">新增奖品</button>
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="actInfoHandler.editPrize()">新增奖品</button>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -86,6 +86,8 @@
 
 <!--基础框架js-->
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js"
+        th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
@@ -96,19 +98,19 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
-<script src="../js/infoJs/infoLists.js"></script>
 
-<script type="text/javascript"  th:inline="javascript">
-    var pageIndex = /*[[${informationSearch.pageNo}]]*/ 1;
-    var totalPage = /*[[${infoListsPage.totalPages}]]*/ 20;
+<script type="text/javascript">
+    var pageIndex = [[${pageIndex}]];
+    var totalPage = [[${totalPages}]];
+    var ajaxUrl = "[[@{/mall}]]";
     //初始化分页
-    var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
+    var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
 
-    pageinate.init(function (p) {
-        infoListHandler.search(p);
+    paging.init(function (p) {
+       window.location.href = ajaxUrl+'/prize/list?pageIndex='+p;
     });
 
-    var infoListHandler = {
+    var prizeListHandler = {
         search:function(pageNo) {
             var search = $("input:text[name='infoName']").val(pageIndex);
             $('#searchForm').submit();
@@ -121,16 +123,8 @@
         search: function(pageNo){
             $("input[name=pageNo]").val(pageNo);
             $('#searchForm').submit();
-        },
+        }
     }
-
-    $('.js-search').click(function () {
-        infoListHandler.search(1);
-    });
-
-    $('.js-searchAll').click(function(){
-        infoListHandler.searchAll();
-    });
 </script>
 </body>
 
