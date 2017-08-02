@@ -20,12 +20,16 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockServletContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+import java.util.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Created by Administrator on 2017/7/17.
@@ -49,6 +53,21 @@ public class BusinessCardControllerTest extends CommonTestBase {
     @Before
     public void init() {
         customerId = Long.valueOf(random.nextInt(10000));
+    }
+
+    @Test
+    public void updateBusinessCardInfo() throws Exception {
+
+        String updateBusinessCardUrl = "http://localhost/site/businessCard/updateBusinessCardInfo";
+
+        
+
+         mockMvc.perform( post(updateBusinessCardUrl)
+                 .param("customerId" , "4421")
+                 .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB.getCode()) )
+                 .param("typeValue" ,"job")
+         ).andExpect( jsonPath("$.code").value(200) );
+
     }
 
 
@@ -97,12 +116,13 @@ public class BusinessCardControllerTest extends CommonTestBase {
         user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
         user = userService.save(user);
 
-        Long userId= user.getId();
-        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, "a.jpg");
 
+        customerId=4421L;
+        Long userId= 1058510L;//user.getId();
+        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, "a.jpg");
         //BusinessCard businessCard = businessCardService.getBusinessCard( customerId , userId );
 
-        editUrl +="?customerId="+customerId+"&userId="+userId;
+        editUrl +="?customerId="+customerId;//+"&userId="+userId;
         webDriver.get(editUrl);
         TestEditBusinessCardPage editBusinessCardPage = this.initPage(TestEditBusinessCardPage.class);
         editBusinessCardPage.setBusinessCard(businessCard);

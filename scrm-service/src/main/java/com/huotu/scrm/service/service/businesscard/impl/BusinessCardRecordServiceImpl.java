@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class BusinessCardRecordServiceImpl implements BusinessCardRecordService {
 
     @Autowired
-    BusinessCardRecordRepository businessCardRecordRepository;
+    private BusinessCardRecordRepository businessCardRecordRepository;
 
     @Override
     public int countNumberOfFollowerByCustomerIdAndUserId(Long customerId, Long userId) {

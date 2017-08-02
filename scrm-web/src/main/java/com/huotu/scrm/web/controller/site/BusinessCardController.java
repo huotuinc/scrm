@@ -18,10 +18,7 @@ import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -128,10 +125,10 @@ public class BusinessCardController extends SiteBaseController {
     @RequestMapping(value = "/updateBusinessCardInfo", method = RequestMethod.POST)
     @ResponseBody
     public ApiResult updateBusinessCardInfo(HttpServletRequest request,
-                                            @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
-                                            @RequestParam(name = "type", required = false, defaultValue = "1") Integer type,
-                                            @RequestParam(name = "value", required = false, defaultValue = "") String value) {
-         long userId = this.getUserId(request);
+                                            @RequestParam( name = "customerId", required = false ,defaultValue = "0") Long customerId,
+                                            @RequestParam( name= "type" , required = false , defaultValue = "1") Integer type,
+                                            @RequestParam( name = "typeValue" , required = false , defaultValue = "") String value) {
+        long userId = this.getUserId(request);
         User user = userService.getByIdAndCustomerId(userId , customerId);
         if (user == null) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST , "不存在的用户",null);
