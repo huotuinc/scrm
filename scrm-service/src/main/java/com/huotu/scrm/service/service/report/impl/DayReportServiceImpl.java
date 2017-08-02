@@ -79,7 +79,7 @@ public class DayReportServiceImpl implements DayReportService {
             //设置等级
             dayReport.setLevelId(user.getLevelId());
             //设置是否为销售员
-            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+            UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
             if (userLevel == null) {
                 continue;
             }

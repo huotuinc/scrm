@@ -9,7 +9,7 @@
     <!-- Morris -->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.7.css" rel="stylesheet">
     <!--checkbox-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
           rel="stylesheet">
@@ -48,19 +48,19 @@
                             </thead>
                             <tbody th:remove="all-but-first">
                             <tr th:each="actWinDetail,itenSatus:${joinRecord}">
-                                <td th:text="${itenSatus.index}"></td>
+                                <td th:text="${itenSatus.index}+1"></td>
                                 <td th:text="${actWinDetail.userId}">
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
                                     </div>
                                 </td>
-                                <td th:text="${actWinDetail.prize.activity.}" style="width: 5%;">
+                                <td th:text="${actWinDetail.prize.activity.actTitle}" style="width: 5%;">
                                     <p style="width: 100%; height: 50px;">
                                     </p>
                                 </td>
-                                <td></td>
+                                <td th:text="${actWinDetail.prize.prizeName}"></td>
                                 <td th:text="${actWinDetail.winnerName}"></td>
                                 <td th:text="${actWinDetail.winnerTel}"></td>
-                                <td th:text="${actWinDetail.win_Time}"></td>
+                                <td th:text="${#dates.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td th:text="${actWinDetail.ipAddress}"></td>
                             </tr>
                             </tbody>
@@ -96,9 +96,9 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 
-<script type="text/javascript" th:inline="javascript">
-    var pageIndex = [[${informationSearch.pageNo}]];
-    var totalPage = [[${infoListsPage.totalPages}]];
+<script type="text/javascript">
+    var pageIndex = [[${pageIndex}]];
+    var totalPage = [[${totalPages}]];
     var ajaxUrl = "[[@{/site}]]";
     //初始化分页
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);

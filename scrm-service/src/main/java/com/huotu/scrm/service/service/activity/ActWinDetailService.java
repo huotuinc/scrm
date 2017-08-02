@@ -23,7 +23,7 @@ import java.util.Map;
 public interface ActWinDetailService {
 
     /**
-     * \分页查询所有中奖记录
+     * 分页查询所有中奖记录
      *
      * @param userId
      * @param pageNo

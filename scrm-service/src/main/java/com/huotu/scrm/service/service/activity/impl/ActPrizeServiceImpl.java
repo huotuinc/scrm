@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class ActPrizeServiceImpl implements ActPrizeService {
     }
 
     @Override
+    @Transactional
     public ActPrize saveActPrize(ActPrize actPrize) {
         return actPrizeRepository.save(actPrize);
     }

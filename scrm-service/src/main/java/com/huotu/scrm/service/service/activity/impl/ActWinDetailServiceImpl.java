@@ -39,9 +39,9 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
 
     @Override
     public Page<ActWinDetail> getPageActWinDetail(Long userId, int pageNo, int pageSize) {
-        Sort sort = new Sort(Sort.Direction.DESC, "win_Time");
+        Sort sort = new Sort(Sort.Direction.DESC, "winTime");
         Pageable pageable = new PageRequest(pageNo - 1, pageSize, sort);
-        return actWinDetailRepository.findByUserId(userId, pageable);
+        return actWinDetailRepository.findAllByUserId(userId, pageable);
     }
 
     @Override
@@ -64,10 +64,9 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
             mapValue.put("prizeName", actWinDetail.getPrize().getPrizeName());
             mapValue.put("winnerName", actWinDetail.getWinnerName());
             mapValue.put("winnerTel", actWinDetail.getWinnerTel());
-            mapValue.put("winTime", actWinDetail.getWin_Time());
+            mapValue.put("winTime", actWinDetail.getWinTime());
             mapValue.put("ipAddress", actWinDetail.getIpAddress());
         });
         return listMap;
     }
-
 }

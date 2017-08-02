@@ -90,8 +90,8 @@ public class ActWinController extends SiteBaseController {
      */
     @RequestMapping("/join/record")
     public String getJoinRecord(@ModelAttribute("userId") Long userId, @RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(userId,pageIndex, Constant.PAGE_SIZE);
-        model.addAttribute("joinRecord", pageActWinDetail.getContent());
+        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(userId, pageIndex, Constant.PAGE_SIZE);
+        model.addAttribute("joinRecord", pageActWinDetail);
         model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
         model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
         model.addAttribute("pageIndex", pageIndex);
@@ -148,7 +148,7 @@ public class ActWinController extends SiteBaseController {
         actWinDetail.setPrize(prize);
         actWinDetail.setIpAddress(IpUtil.IpAddress(request));
         actWinDetail.setUserId(Long.valueOf(userId));
-        actWinDetail.setWin_Time(new Date());
+        actWinDetail.setWinTime(new Date());
         actWinDetail.setWinnerName(userName);
         actWinDetail.setWinnerTel(userTel);
         actWinDetail = actWinDetailService.saveActWinDetail(actWinDetail);

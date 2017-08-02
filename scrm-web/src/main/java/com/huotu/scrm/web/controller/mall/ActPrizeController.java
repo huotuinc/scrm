@@ -79,6 +79,9 @@ public class ActPrizeController extends MallBaseController {
     @RequestMapping("/prize/save")
     public String savePrize(ActPrize actPrize, Long actId) {
         Activity activity = activityService.findByActId(actId);
+        if ((actPrize.getPrizeId() == null)) {
+            actPrize.setPrizeCount(actPrize.getRemainCount());
+        }
         actPrize.setActivity(activity);
         actPrizeService.saveActPrize(actPrize);
         return "redirect:/mall/prize/list?actId=" + actId;

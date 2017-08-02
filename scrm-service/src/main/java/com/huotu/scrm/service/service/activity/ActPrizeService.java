@@ -33,6 +33,7 @@ public interface ActPrizeService {
      *
      * @param actPrize 奖品实体类
      */
+    @Transactional
     ActPrize saveActPrize(ActPrize actPrize);
 
     /**

@@ -116,7 +116,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int monthScore = monthReportService.getExtensionScore(userId, localDate.withDayOfMonth(1), localDate);
         statisticalInformation.setAccumulateScore(monthScore + accumulateScore);
         //获取关注人数（销售员特有）
-        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
         int followNum = 0;
         if (userLevel != null) {
             if (userLevel.isSalesman()) {
@@ -346,7 +346,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         if (user == null) {
             return false;
         }
-        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
         if (userLevel == null) {
             return false;
         }

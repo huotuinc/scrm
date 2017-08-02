@@ -17,13 +17,11 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 
-
 /**
  * Created by montage on 2017/7/12.
  */
 
 @Repository
 public interface ActWinDetailRepository extends JpaRepository<ActWinDetail, Long>, JpaSpecificationExecutor<ActWinDetail> {
-
-    Page<ActWinDetail> findByUserId(Long userId, Pageable pageable);
+    Page<ActWinDetail> findAllByUserId(Long userId, Pageable pageable);
 }
