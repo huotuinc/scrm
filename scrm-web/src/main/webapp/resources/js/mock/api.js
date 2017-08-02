@@ -10,7 +10,7 @@ Mock.mock(/\/activity\/dojoin/, "post", {
     "resultCode": 2000,
     "resultMsg": "ok",
     "data": {
-        "awardtype": 4,
+        "awardId": 2,
         "orderId": "6546789400763",
         "orderTitle": "超级超级超级便宜的东西",
         "orderImg": "//yun.duiba.com.cn/tuia/img/mwd6ugaxbo.jpg",

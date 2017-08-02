@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Array;
 import java.net.URISyntaxException;
 import java.util.*;
 
@@ -53,9 +54,12 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping("/activity/index")
     public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId,Model model){
 
+        //查询用户积分
         User user =  userService.getByIdAndCustomerId(1058823L,customerId);
         double score = user.getUserIntegral() - user.getLockedIntegral();
+        //获取奖品
         Activity  activity = activityService.findByActId(actId);
+        activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
         activity.getActPrizes().forEach(p -> {
             try {
                 p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
@@ -63,6 +67,7 @@ public class ActWinController extends SiteBaseController {
                 e.printStackTrace();
             }
         });
+        //计算抽奖次数
         boolean actStatus =  activity.actItSelfStatus();
         int costScore = activity.getGameCostlyScore();
         if (actStatus && score > costScore){
@@ -86,7 +91,47 @@ public class ActWinController extends SiteBaseController {
     public ApiResult joinAct(
             HttpServletRequest request, String userId, int userScore,
             @RequestParam(required = false, defaultValue = "null") String userName,
-            @RequestParam(required = false, defaultValue = "null") String userTel) {
+            @RequestParam(required = false, defaultValue = "null") String userTel,
+            Long actId) {
+
+
+        // TODO: 2017/8/2 获取活动的奖品
+        //获取奖品
+        Activity  activity = activityService.findByActId(actId);
+        activity.getActPrizes().forEach(p->{
+
+//            1、20
+//            2、0，0.2
+//            3 1 (0,0.2)
+//
+//            1、50
+//            2、0.2  0.5
+//            3、2 （0.2, 0.5）
+//
+//            1、60
+//            2、0.5  0.6
+//            3、3 （0.5, 0.6）
+//
+//            1、65
+//            2、0.6  0.65
+//            3、4 （0.6, 0.65）
+//
+//            1、90
+//            2、0.65，0.9
+//            3、5 (0.65,0.9)
+//
+//            1、100
+//            2、0.9，1
+//            3、6 (0.9,1)
+
+        });
+
+
+
+//        Map<Integer,Map<Integer,Integer>> prizesMap = new HashMap<>();
+
+
+
         //回归算法得到奖品
         int proCount = 100;
         String minRate = "min";

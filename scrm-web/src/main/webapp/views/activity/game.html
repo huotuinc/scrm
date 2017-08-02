@@ -49,37 +49,37 @@
             <div class="radius-group default"></div>
             <div class="circle" id="J_circle">
                 <div class="circle-box" th:remove="all-but-first">
-                    <div class="prize" data-index="0" data-id="200" data-type="1" th:each="prize : ${active.actPrizes}">
+                    <div class="prize" data-index="0" data-id="4"  data-type="0" th:attr="data-index=${status.index},data-type=${prize.prizeType}?1:0,data-id=${prize.prizeId}"   th:each="prize,status : ${active.actPrizes}">
                         <div class="prize-dialog">
                             <p th:text="${prize.prizeName}">谢谢参与</p>
                             <img th:src="${prize.prizeImageUrl}" src="../../resources/images/prize-xxcy.png">
                         </div>
                     </div>
-                    <div class="prize prize-packet"  data-index="1" data-id="401" data-level="3" data-type="2">
+                    <div class="prize prize-packet"  data-index="1" data-id="6" data-level="3" data-type="1">
                         <div class="prize-dialog">
                             <p>100元话费</p>
                             <img src="../../resources/images/prize1.png">
                         </div>
                     </div>
-                    <div class="prize prize-packet"  data-index="2" data-id="402" data-level="4" data-type="3">
+                    <div class="prize prize-packet"  data-index="2" data-id="2" data-level="4" data-type="1">
                         <div class="prize-dialog">
                             <p>66元现金红包</p>
                             <img src="../../resources/images/prize2.png">
                         </div>
                     </div>
-                    <div class="prize" data-index="3" data-id="300" data-type="0">
+                    <div class="prize" data-index="3" data-id="10" data-type="1">
                         <div class="prize-dialog">
                             <p>幸运袋</p>
                             <img src="../../resources/images/prize-fd.png">
                         </div>
                     </div>
-                    <div class="prize prize-packet" data-index="4" data-level="1" data-id="403" data-type="4">
+                    <div class="prize prize-packet" data-index="4" data-level="1" data-id="23" data-type="1">
                         <div class="prize-dialog">
                             <p>华为智能手环</p>
                             <img src="../../resources/images/prize3.png" data-type="packet">
                         </div>
                     </div>
-                    <div class="prize prize-packet" data-id="404" data-level="2" data-index="5" data-type="5">
+                    <div class="prize prize-packet" data-id="55" data-level="2" data-index="5" data-type="1">
                         <div class="prize-dialog">
                             <p>蓝牙耳机</p>
                             <img src="../../resources/images/prize4.png">
@@ -111,6 +111,23 @@
 <div class="prize-detail-modal" id="J_prizeModal">
     <div class="prize-detail-dialog">
         <div class="prize-detail-slidebox">
+            <div class="prize-detail-content on" data-level="5">
+                <div class="prize-detail-info">
+                    <h3>66元现金红包</h3>
+                </div>
+                <div class="prize-detail-description">
+                    <h3><b>66元现金红包，支付宝直充你账户，随你花！</b></h3>
+                    <h3><br></h3>
+                    <p>【商品详情】</p>
+                    <p>商品名称：66元现金红包</p>
+                    <p>&nbsp;</p>
+                    <p>【领取说明】</p>
+                    <p>获奖后，请详细填写个人手机号（将作为支付宝充值号码），我们会在5-10个工作日内为您充值，若因个人原因导致号码错误、误充错充，不会进行补充，敬请谅解</p>
+                    <p>&nbsp;</p>
+                    <p>【特别说明】</p>
+                    <p>暂无</p>
+                </div>
+            </div>
             <div class="prize-detail-content on" data-level="4">
                 <div class="prize-detail-info">
                     <h3>66元现金红包</h3>
@@ -185,38 +202,37 @@
 </div>
 <!--6.29更新-->
 <!--6.29更新-->
+
+<!--规则说明-->
 <div class="rule-modal" id="J_ruleModal">
     <div class="rule-modal-dialog">
         <header><i></i><span>活动说明</span></header>
         <section>
             <div class="description">
-                <div class="description-scroller"><h3>
-                    今天有惊喜，现金红包送你，快领个红包放肆吃喝玩乐吧！</h3>
-                    <h3>活动说明：参与活动即有机会获得幸运奖，每天8次免费抽奖机会。此活动为概率中奖，奖品数量有限，祝好运。</h3>
-                    <p><br></p>
-                    <p>惊喜一：华为智能手环</p>
-                    <p>惊喜二：蓝牙耳机</p>
-                    <p>惊喜三：100元话费</p>
-                    <p>惊喜四：66元现金红包</p>
-                    <p>惊喜五：幸运奖</p>
-                    <p>－－－－－－－－－－－－－－－－</p>
-                    <p>重要声明</p>
-                    <p>1、实物类奖品将在活动结束后5-10个工作日安排发货，请耐心等待</p>
-                    <p>2、优惠券类奖品的使用规则详见每个优惠券的介绍页</p>
-                    <p>3、请兑换后仔细阅读使用流程，如有疑问，可直接联系客服专线：400-006-6855或客服QQ：4000066855（工作日9:00至18:00）</p>
-                    <p>4、通过非法途径获得奖品的，主办方有权不提供奖品</p>
-                    <p>5、本页面广告/内容由第三方提供并承担责任。</p></div>
+                <div class="description-scroller">
+                    <span th:utext="${active.ruleDesc}">
+                        <h3>活动说明：参与活动即有机会获得幸运奖，每天8次免费抽奖机会。此活动为概率中奖，奖品数量有限，祝好运。</h3>
+                        <p><br></p>
+                        <p>惊喜一：华为智能手环</p>
+                        <p>惊喜二：蓝牙耳机</p>
+                        <p>惊喜三：100元话费</p>
+                        <p>惊喜四：66元现金红包</p>
+                        <p>惊喜五：幸运奖</p>
+                        <p>－－－－－－－－－－－－－－－－</p>
+                        <p>重要声明</p>
+                        <p>1、实物类奖品将在活动结束后5-10个工作日安排发货，请耐心等待</p>
+                        <p>2、优惠券类奖品的使用规则详见每个优惠券的介绍页</p>
+                        <p>3、请兑换后仔细阅读使用流程，如有疑问，可直接联系客服专线：400-006-6855或客服QQ：4000066855（工作日9:00至18:00）</p>
+                        <p>4、通过非法途径获得奖品的，主办方有权不提供奖品</p>
+                        <p>5、本页面广告/内容由第三方提供并承担责任。</p>
+                    </span>
+                </div>
             </div>
             <div class="probability">
                 <div class="nav"><span>更多概率说明</span><i></i></div>
                 <div class="text">
                     <div class="probability-wrapper">
-                        <ul>
-                            <li>华为智能手环，共2份，中奖概率0.01%<br></li>
-                            <li>蓝牙耳机，共4份，中奖概率0.02%<br></li>
-                            <li>100元话费，共6份，中奖概率0.03%<br></li>
-                            <li>幸运奖，共20份，中奖概率1%</li>
-                        </ul>
+                        <span th:utext="${active.rateDesc}"></span>
                     </div>
                 </div>
             </div>
