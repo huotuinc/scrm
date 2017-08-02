@@ -8,7 +8,9 @@
  */
 
 package com.huotu.scrm.web.controller.site;
+
 import com.huotu.scrm.common.utils.ApiResult;
+import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.common.utils.IpUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
@@ -21,15 +23,21 @@ import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.ui.Model;
+
 import javax.servlet.http.HttpServletRequest;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by montage on 2017/7/17.
@@ -51,11 +59,10 @@ public class ActWinController extends SiteBaseController {
     ActivityService activityService;
 
     @RequestMapping("/activity/index")
-    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId,Model model){
-
-        User user =  userService.getByIdAndCustomerId(1058823L,customerId);
+    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
+        User user = userService.getByIdAndCustomerId(1058823L, customerId);
         double score = user.getUserIntegral() - user.getLockedIntegral();
-        Activity  activity = activityService.findByActId(actId);
+        Activity activity = activityService.findByActId(actId);
         activity.getActPrizes().forEach(p -> {
             try {
                 p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
@@ -63,18 +70,34 @@ public class ActWinController extends SiteBaseController {
                 e.printStackTrace();
             }
         });
-        boolean actStatus =  activity.actItSelfStatus();
+        boolean actStatus = activity.actItSelfStatus();
         int costScore = activity.getGameCostlyScore();
-        if (actStatus && score > costScore){
-            model.addAttribute("times",(int)score/costScore);
-        }else {
-            model.addAttribute("times",0);
+        if (actStatus && score > costScore) {
+            model.addAttribute("times", (int) score / costScore);
+        } else {
+            model.addAttribute("times", 0);
         }
-        model.addAttribute("active",activity);
+        model.addAttribute("active", activity);
         return "activity/game";
-
     }
 
+    /**
+     * 获取用户参与记录（中奖记录）
+     *
+     * @param userId
+     * @param model
+     * @return
+     */
+    @RequestMapping("/join/record")
+    public String getJoinRecord(@ModelAttribute("userId") Long userId, @RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
+        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(userId,pageIndex, Constant.PAGE_SIZE);
+        model.addAttribute("joinRecord", pageActWinDetail.getContent());
+        model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
+        model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
+        model.addAttribute("pageIndex", pageIndex);
+        model.addAttribute("pageSize", Constant.PAGE_SIZE);
+        return "activity/winPrize_list";
+    }
 
     /**
      * 参加抽奖活动

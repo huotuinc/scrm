@@ -3,6 +3,7 @@ package com.huotu.scrm.service.service.report.impl;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
@@ -78,11 +79,11 @@ public class DayReportServiceImpl implements DayReportService {
             //设置等级
             dayReport.setLevelId(user.getLevelId());
             //设置是否为销售员
-//            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-//            if (userLevel == null) {
-//                continue;
-//            }
-//            dayReport.setSalesman(userLevel.isSalesman());
+            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+            if (userLevel == null) {
+                continue;
+            }
+            dayReport.setSalesman(userLevel.isSalesman());
             dayReport.setSalesman(true);
             //设置每日咨询转发量
             Date lastBeginTimeDate = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(lastBeginTime);

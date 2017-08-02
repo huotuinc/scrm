@@ -65,7 +65,7 @@
                                                                   data-toggle="tooltip" data-original-title="活动链接"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-paste tooltips" data-placement="top"
-                                                                  data-toggle="tooltip" data-original-title="参与记录"></i></span>
+                                                                  data-toggle="tooltip" data-original-title="参与记录" th:onclick=""></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-cog tooltips" data-placement="top"
                                                                   data-toggle="tooltip" data-original-title="奖品设置"
@@ -149,6 +149,9 @@
         },
         setPrize: function (actId) {
             window.location.href = ajaxUrl + "/prize/list?actId=" + actId;
+        },
+        joinRecord:function () {
+            
         }
     }
 </script>

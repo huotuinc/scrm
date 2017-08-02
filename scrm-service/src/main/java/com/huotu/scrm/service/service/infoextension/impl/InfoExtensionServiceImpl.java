@@ -118,28 +118,20 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         //获取关注人数（销售员特有）
         UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
         int followNum = 0;
-//        if (userLevel != null) {
-//            if (userLevel.isSalesman()) {
-//                List<MonthReport> monthReportList = monthReportRepository.findByUserId(userId);
-//                for (MonthReport monthReport : monthReportList
-//                        ) {
-//                    followNum += monthReport.getFollowNum();
-//                }
-//                //获取本月关注人数
-//                int monthFollowNum = businessCardRecordRepository.countByUserIdAndFollowDateBetween(userId, firstDay.atStartOfDay(), now);
-//                statisticalInformation.setFollowNum(followNum + monthFollowNum);
-//            }
-//        } else {
-//            statisticalInformation.setFollowNum(0);
-//        }
-        List<MonthReport> monthReportList = monthReportRepository.findByUserId(userId);
-        for (MonthReport monthReport : monthReportList
-                ) {
-            followNum += monthReport.getFollowNum();
+        if (userLevel != null) {
+            if (userLevel.isSalesman()) {
+                List<MonthReport> monthReportList = monthReportRepository.findByUserId(userId);
+                for (MonthReport monthReport : monthReportList
+                        ) {
+                    followNum += monthReport.getFollowNum();
+                }
+                //获取本月关注人数
+                int monthFollowNum = businessCardRecordRepository.countByUserIdAndFollowDateBetween(userId, firstDay.atStartOfDay(), now);
+                statisticalInformation.setFollowNum(followNum + monthFollowNum);
+            }
+        } else {
+            statisticalInformation.setFollowNum(0);
         }
-        //获取本月关注人数
-        int monthFollowNum = businessCardRecordRepository.countByUserIdAndFollowDateBetween(userId, firstDay.atStartOfDay(), now);
-        statisticalInformation.setFollowNum(followNum + monthFollowNum);
         //获取访客量排名
         Map<Long, Integer> map = new TreeMap<>();
         List<Long> sourceUserIdList = infoBrowseRepository.findByCustomerId(user.getCustomerId());
@@ -350,16 +342,15 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Override
     public boolean checkIsSalesman(Long userId) {
-        return true;
-//        User user = userRepository.findOne(userId);
-//        if (user == null) {
-//            return false;
-//        }
-//        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-//        if (userLevel == null) {
-//            return false;
-//        }
-//        return userLevel.isSalesman();
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            return false;
+        }
+        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        if (userLevel == null) {
+            return false;
+        }
+        return userLevel.isSalesman();
     }
 
     /**

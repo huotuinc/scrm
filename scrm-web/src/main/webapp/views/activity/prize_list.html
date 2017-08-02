@@ -59,7 +59,7 @@
                                 <td th:text="${prize.prizeCount}"></td>
                                 <td th:text="${prize.remainCount}"></td>
                                 <td>
-                                    <span th:text="${prize.winRate}"></span><span th:if="${prize.winRate}>0">%</span>
+                                    <span class="js_winRate" th:text="${prize.winRate}"></span><span th:if="${prize.winRate}>0">%</span>
                                 </td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -118,10 +118,11 @@
                     }
                 })
             })
-
-
         }
     }
+    $(function () {
+
+    });
 </script>
 </body>
 </html>
