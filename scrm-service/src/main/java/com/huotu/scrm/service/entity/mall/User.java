@@ -72,6 +72,15 @@ public class User {
      */
     @Column(name = "UB_UserBalance")
     private Double userBalance;
+
+
+    /**
+     * 积分
+     */
+    @Column(name = "UB_UserIntegral")
+    private Integer userIntegral;
+
+
     /**
      * 临时积分
      */

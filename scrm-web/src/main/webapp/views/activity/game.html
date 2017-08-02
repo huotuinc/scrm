@@ -38,8 +38,8 @@
 
 
     <div class="game-time">
-        <p>游戏次数： <span>8</span>次</p>
-        <input type="hidden" value="7" id="J_RemainTimes">
+        <p th:text="'游戏次数： '+${times}+'次'">游戏次数： 8次</p>
+        <input type="hidden" value="7" th:value="${times}" id="J_RemainTimes">
     </div>
 
     <!--6.29更新-->
@@ -48,10 +48,10 @@
             <div class="turntable-border"></div>
             <div class="radius-group default"></div>
             <div class="circle" id="J_circle">
-                <div class="circle-box">
-                    <div class="prize" data-index="0" data-id="200" data-type="1">
+                <div class="circle-box" th:remove="all-but-first">
+                    <div class="prize" data-index="0" data-id="200" data-type="1" th:each="prize : ${active.actPrizes}">
                         <div class="prize-dialog">
-                            <p>谢谢参与</p>
+                            <p th:text="${prize.prizeName}">谢谢参与</p>
                             <img src="../../resources/images/prize-xxcy.png">
                         </div>
                     </div>

@@ -121,4 +121,13 @@ public class Activity {
                 ", isDelete=" + isDelete +
                 '}';
     }
+
+    /**
+     * 活动本身可用情况
+     * @return true 表示活动本身可用  false 表示活动本身不可用
+     */
+    public boolean actItSelfStatus() {
+        LocalDateTime now =  LocalDateTime.now();
+        return isDelete == false && now.isAfter(startDate) && now.isBefore(endDate);
+    }
 }
