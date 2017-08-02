@@ -8,24 +8,27 @@
  */
 
 package com.huotu.scrm.web.controller.site;
-
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.IpUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
+import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
+import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.mall.UserService;
+import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -35,31 +38,41 @@ import java.util.*;
 @Controller
 public class ActWinController extends SiteBaseController {
 
+
+    @Autowired
+    StaticResourceService staticResourceService;
     @Autowired
     private ActPrizeService actPrizeService;
     @Autowired
     private ActWinDetailService actWinDetailService;
     @Autowired
     private UserService userService;
+    @Autowired
+    ActivityService activityService;
 
     @RequestMapping("/activity/index")
-    public String marketingActivity(@ModelAttribute("userId") Long userId,Long customerId,Long actid){
+    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId,Model model){
 
-        //todo 1 获取用户可用积分
-
-
-        User user =  userService.getByIdAndCustomerId(userId,customerId);
-
-
-        //todo 2 获取活动1次消耗的积分 算出可用参与次数
-
-
-
-        //todo 3 获取活动的相关信息奖品信息
-
-
-
+        User user =  userService.getByIdAndCustomerId(1058823L,customerId);
+        double score = user.getUserIntegral() - user.getLockedIntegral();
+        Activity  activity = activityService.findByActId(actId);
+        activity.getActPrizes().forEach(p -> {
+            try {
+                p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        });
+        boolean actStatus =  activity.actItSelfStatus();
+        int costScore = activity.getGameCostlyScore();
+        if (actStatus && score > costScore){
+            model.addAttribute("times",(int)score/costScore);
+        }else {
+            model.addAttribute("times",0);
+        }
+        model.addAttribute("active",activity);
         return "activity/game";
+
     }
 
 

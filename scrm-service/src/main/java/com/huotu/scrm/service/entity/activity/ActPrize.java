@@ -44,6 +44,13 @@ public class ActPrize {
     @Column(name = "Prize_Image_Url")
     private String prizeImageUrl;
 
+
+    /**
+     * 奖品详细图片
+     */
+    @Transient
+    private String mallPrizeImageUrl;
+
     /**
      * 奖品类型
      * 0:谢谢惠顾,1:奖品

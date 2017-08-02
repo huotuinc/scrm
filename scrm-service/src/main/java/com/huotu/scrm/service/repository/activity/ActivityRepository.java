@@ -37,4 +37,6 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> ,JpaSp
      * @return
      */
     Page<Activity> findByIsDeleteFalse(Pageable pageable);
+
+
 }

@@ -36,8 +36,8 @@ public class Activity {
     /**
      * 获取活动相关的奖品
      */
-    @OneToMany(mappedBy = "Activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    private List<ActPrize> actPrizes = new ArrayList<>();
+    @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private List<ActPrize> actPrizes;
 
     /**
      * 商户Id
@@ -119,5 +119,14 @@ public class Activity {
                 ", rateDesc='" + rateDesc + '\'' +
                 ", isDelete=" + isDelete +
                 '}';
+    }
+
+    /**
+     * 活动本身可用情况
+     * @return true 表示活动本身可用  false 表示活动本身不可用
+     */
+    public boolean actItSelfStatus() {
+        LocalDateTime now =  LocalDateTime.now();
+        return isDelete == false && openStatus && now.isAfter(startDate) && now.isBefore(endDate);
     }
 }
