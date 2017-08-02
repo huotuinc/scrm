@@ -128,6 +128,6 @@ public class Activity {
      */
     public boolean actItSelfStatus() {
         LocalDateTime now =  LocalDateTime.now();
-        return isDelete == false && now.isAfter(startDate) && now.isBefore(endDate);
+        return isDelete == false && openStatus && now.isAfter(startDate) && now.isBefore(endDate);
     }
 }

@@ -52,7 +52,7 @@
                     <div class="prize" data-index="0" data-id="200" data-type="1" th:each="prize : ${active.actPrizes}">
                         <div class="prize-dialog">
                             <p th:text="${prize.prizeName}">谢谢参与</p>
-                            <img src="../../resources/images/prize-xxcy.png">
+                            <img th:src="${prize.prizeImageUrl}" src="../../resources/images/prize-xxcy.png">
                         </div>
                     </div>
                     <div class="prize prize-packet"  data-index="1" data-id="401" data-level="3" data-type="2">

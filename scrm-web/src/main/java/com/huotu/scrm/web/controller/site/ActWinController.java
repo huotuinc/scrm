@@ -19,6 +19,7 @@ import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.mall.UserService;
+import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
+import java.net.URISyntaxException;
 import java.util.*;
 
 /**
@@ -36,6 +38,9 @@ import java.util.*;
 @Controller
 public class ActWinController extends SiteBaseController {
 
+
+    @Autowired
+    StaticResourceService staticResourceService;
     @Autowired
     private ActPrizeService actPrizeService;
     @Autowired
@@ -51,6 +56,13 @@ public class ActWinController extends SiteBaseController {
         User user =  userService.getByIdAndCustomerId(1058823L,customerId);
         double score = user.getUserIntegral() - user.getLockedIntegral();
         Activity  activity = activityService.findByActId(actId);
+        activity.getActPrizes().forEach(p -> {
+            try {
+                p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        });
         boolean actStatus =  activity.actItSelfStatus();
         int costScore = activity.getGameCostlyScore();
         if (actStatus && score > costScore){
