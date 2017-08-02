@@ -42,8 +42,8 @@
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
-                            <tr th:each="activity:${activities}">
-                                <td class="js-actId" th:text="${activity.actId}">
+                            <tr th:each="activity,iterStat:${activities}">
+                                <td class="js-actId" th:text="${iterStat.index}+1">
                                     <span id="customerId" th:text="${activity.customerId}" th:type="hidden"></span>
                                 </td>
                                 <td th:text="${activity.actTitle}"></td>
@@ -147,8 +147,8 @@
                 window.location.href = ajaxUrl + "/act/detail";
             }
         },
-        setPrize:function (actId) {
-            console.log(actId)
+        setPrize: function (actId) {
+            window.location.href = ajaxUrl + "/prize/list?actId=" + actId;
         }
     }
 </script>

@@ -12,6 +12,7 @@ package com.huotu.scrm.service.service.activity;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import org.springframework.data.domain.Page;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -39,6 +40,7 @@ public interface ActPrizeService {
      *
      * @param prizeId 奖品Id
      */
+    @Transactional
     void deleteActPrize(Long prizeId);
 
     /**

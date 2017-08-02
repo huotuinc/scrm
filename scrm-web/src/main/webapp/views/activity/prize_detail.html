@@ -1,39 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>奖品编辑</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/switchery/switchery.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/jsTree/style.min.css" rel="stylesheet">
-    <!--<base target="_blank">-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.7.css" rel="stylesheet">
+    <!--checkbox-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
 
 <body class="gray-bg">
-<div class="wrapper-content animated fadeInRight tooltip-demo">
-    <div class="ibox float-e-margins" >
-        <div class="ibox-content" >
-            <form method="post" th:action="" class="form-horizontal" >
+<div class="wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form method="post" th:action="@{/mall/prize/save}" class="form-horizontal" id="editSavePrize">
+                <input type="hidden" th:value="${actPrize.activity.actId}" name="actId">
+                <input type="hidden" th:value="${actPrize.prizeCount}" name="prizeCount">
+                <input type="hidden" th:value="${actPrize.prizeId}" name="prizeId">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品名称:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品名称" class="form-control">
+                        <input type="text" placeholder="奖品名称" class="form-control" name="prizeName"
+                               th:value="${actPrize.prizeName}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品类型:</label>
                     <div class="col-sm-2">
-                        <select class="form-control input" name="sortNum" id="sortNum">
-                            <option selected="selected" value="2">谢谢惠顾</option>
-                            <option selected="selected" value="2">奖品</option>
+                        <select class="form-control input" name="prizeType" id="prizeType">
+                            <option selected="selected" value="0">谢谢惠顾</option>
+                            <option selected="selected" value="1">奖品</option>
                         </select>
                     </div>
                 </div>
@@ -41,108 +45,103 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">上传图片</label>
                     <div class="col-sm-3">
-                        <input type="hidden" id="txtcover" value="" />
-                        <input type="file" id="uploadfile" name="uploadfile" readonly="readonly" class="form-control">
-                        <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：400*200</span>
-
-                        <img class="imgpreview" src="../static/img/bg.png" style="width:200px;height:200px;" />
+                        <input type="hidden" name="prizeImageUrl" th:value="${actPrize.prizeImageUrl}"/>
+                        <input type="file" id="uploadFile" name="uploadFile" readonly="readonly" class="form-control">
+                        <button class="btn btn-success" id="uploadImage" type="button"
+                                onclick="prizeEditHandler.uploadFile()">上传图片
+                        </button>
+                        <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
+                        <img class="imageShow" src="../../resources/images/infoBg.png"
+                             th:src="${actPrize.prizeImageUrl}" style="width:200px;height:200px;"/>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品数量:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品数量" class="form-control">
+                        <input type="text" placeholder="奖品数量" class="form-control" name="remainCount"
+                               th:value="${actPrize.remainCount}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">中奖概率:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="中奖概率" class="form-control">
+                        <input type="text" placeholder="中奖概率" th:value="${actPrize.winRate}" name="winRate"
+                               class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">排序字段:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="排序字段" class="form-control">
+                        <input type="text" placeholder="排序字段" class="form-control" th:value="${actPrize.sort}"
+                               name="sort">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-5">
-                        <button class="btn btn-primary" type="submit">保存</button>
+                        <button class="btn btn-primary btn-success" type="button" onclick="prizeEditHandler.screen()">
+                            保存
+                        </button>
                     </div>
                 </div>
             </form>
-            <div class="panel-body">
-                <table class="table table-bordered table-hover table-center">
-                    <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th class="col-sm-2">奖品名称</th>
-                        <th class="col-sm-3">奖品图片</th>
-                        <th>奖品类型</th>
-                        <th>奖品总量</th>
-                        <th>奖品剩余数量</th>
-                        <th>中奖概率</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody th:remove="all-but-first">
-                    <tr th:each="prizes:${prizeList}">
-                        <td th:text="${prizes.prizeId}">1</td>
-                        <td th:text="${prizes.prizeName}">
-                            <div class="checkbox checkbox-primary m-b-none m-t-none">
-                            </div>
-                        </td>
-                        <td th:text="${prizes.prizeImageUrl}" style="width: 5%;">
-                            <p style="width: 100%; height: 50px;">
-                            </p>
-                        </td>
-                        <td th:text="${prizes.prizeType}"></td>
-                        <td th:text="${prizes.prizeCount}"></td>
-                        <td th:text="${prizes.remainCount}"></td>
-                        <td th:text="${prizes.winRate}"></td>
-                        <td>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top" data-toggle="tooltip" data-original-title="编辑"></i></span>
-                            &nbsp;&nbsp;
-                            <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top" data-toggle="tooltip" data-original-title="删除"></i></span>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                共
-                <th:block th:text="${totalRecords}">100</th:block>
-                条记录，当前第
-                <th:block th:text="${pageIndex}">1</th:block>
-                /
-                <th:block th:text="${totalPages}">15</th:block>
-                ，每页
-                <th:block th:text="${pageSize}">10</th:block>
-                条记录
-                <ul style="float: right;" class="pagination pagination-split">
-                </ul>
-            </div>
         </div>
     </div>
 </div>
 
-</div>
-
 <!--基础框架js-->
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js"
+        th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
-<!--validate-->
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-<script src="../../resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-utils.js"
-        th:src="@{/resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
-<script src="../../resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-init.js"
-        th:src="@{/resources/bootstrap/js/plugins/hot/bootstrap.hot.extra-init.js}"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 
+<script type="text/javascript">
+    var prizeType = [[${actPrize.prizeType}]];
+    if (prizeType) {
+        prizeType = 1;
+    } else {
+        prizeType = 0;
+    }
+    $("#prizeType").val(prizeType);
+    var prizeEditHandler = {
+        uploadFile: function () {
+            hot.loading.show();
+            $.ajaxFileUpload({
+                url: "/common/upload",
+                secureuri: false,// 一般设置为false
+                fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                dataType: 'json',// 返回值类型 一般设置为json
+                type: "post",
+                success: function (data) // 服务器成功响应处理函数
+                {
+                    if (data.code == 200) {
+                        $('#imageShow').attr('src', data.fileUrl);
+                        $("input:hidden[name='prizeImageUrl']").val(data.fileUri);
+                        hot.tip.success("图片上传成功");
+                    } else {
+                        hot.loading.hide();
+                    }
+                },
+                error: function ()// 服务器响应失败处理函数
+                {
+                    hot.tip.error("服务器异常,请稍后再试");
+                }
+            })
+        },
+        screen: function () {
+            $("#editSavePrize").submit();
+        }
+    }
+</script>
 </body>
-<script src="../../resources/js/manager.js" th:src="@{/resources/js/manager.js}"></script>
+
 </html>

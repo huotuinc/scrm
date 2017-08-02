@@ -81,12 +81,8 @@ public class ActController extends MallBaseController {
      */
     @RequestMapping("/act/save")
     public String saveAct(Activity activity, @ModelAttribute("customerId") Long customerId) {
-        if (activity != null) {
-            activity.setCustomerId(customerId);
-            activityService.saveActivity(activity);
-        } else {
-            return "error";
-        }
+        activity.setCustomerId(customerId);
+        activityService.saveActivity(activity);
         return "redirect:/mall/act/list";
     }
 

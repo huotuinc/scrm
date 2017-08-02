@@ -10,12 +10,12 @@
 package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
+import com.huotu.scrm.service.service.activity.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,29 +32,42 @@ public class ActPrizeController extends MallBaseController {
 
     @Autowired
     private ActPrizeService actPrizeService;
-
+    @Autowired
+    private ActivityService activityService;
 
     /**
-     * 分页查询所有奖品
+     * 显示某个活动对应的奖品页面
      *
-     * @param pageIndex 当前页数
+     * @param actId
      * @param model
      * @return
      */
     @RequestMapping("/prize/list")
-    public String prizeList(@RequestParam(required = false,defaultValue = "1") int pageIndex, Model model){
-        Page<ActPrize> pageActPrize = actPrizeService.getPageActPrize(pageIndex, Constant.PAGE_SIZE);
-        model.addAttribute("prizeList",pageActPrize.getContent());
-        model.addAttribute("totalPages",pageActPrize.getTotalPages());
-        model.addAttribute("totalRecords",pageActPrize.getTotalElements());
-        model.addAttribute("pageIndex", pageIndex);
-        model.addAttribute("pageSize", Constant.PAGE_SIZE);
+    public String getPrizeDetail(Long actId, Model model) {
+        Activity activity = activityService.findByActId(actId);
+        model.addAttribute("prizeList", activity.getActPrizes());
+        model.addAttribute("actId", actId);
         return "activity/prize_list";
     }
 
+    /**
+     * 转到奖品编辑和保存页面
+     *
+     * @param prizeId
+     * @param model
+     * @return
+     */
     @RequestMapping("/prize/detail")
-    public String getPrizeDetail(Long actId){
-        return "activity/activity_detail";
+    public String getPrizeEdit(Long actId, @RequestParam(required = false, defaultValue = "0") Long prizeId, Model model) {
+        ActPrize actPrize = new ActPrize();
+        if (prizeId != 0) {
+            actPrize = actPrizeService.findByPrizeId(prizeId);
+        } else {
+            Activity activity = activityService.findByActId(actId);
+            actPrize.setActivity(activity);
+        }
+        model.addAttribute("actPrize", actPrize);
+        return "activity/prize_detail";
     }
 
     /**
@@ -64,16 +77,11 @@ public class ActPrizeController extends MallBaseController {
      * @return
      */
     @RequestMapping("/prize/save")
-    @ResponseBody
-    public ApiResult savePrize(ActPrize actPrize){
-        if (actPrize.getPrizeId() != null && actPrize.getPrizeId()>0){
-            actPrize = actPrizeService.findByPrizeId(actPrize.getPrizeId());
-        }
-        actPrize = actPrizeService.saveActPrize(actPrize);
-        if (actPrize != null){
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
-        }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+    public String savePrize(ActPrize actPrize, Long actId) {
+        Activity activity = activityService.findByActId(actId);
+        actPrize.setActivity(activity);
+        actPrizeService.saveActPrize(actPrize);
+        return "redirect:/mall/prize/list?actId=" + actId;
     }
 
     /**
@@ -84,8 +92,8 @@ public class ActPrizeController extends MallBaseController {
      */
     @RequestMapping("/prize/delete")
     @ResponseBody
-    public ApiResult deletePrize(Long prizeId){
-        if (prizeId != null && prizeId > 0){
+    public ApiResult deletePrize(Long prizeId) {
+        if (prizeId != null && prizeId > 0) {
             actPrizeService.deleteActPrize(prizeId);
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
         }
