@@ -5,6 +5,7 @@ import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.repository.activity.ActWinDetailRepository;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,14 +26,8 @@ public class ActWinServiceTest extends CommonTestBase {
 
     @Test
     public void testActWinDetailService() {
-        List<ActWinDetail> all = actWinDetailRepository.findAll();
-        all.forEach(actWinDetail -> {
-            System.out.println(actWinDetail.toString());
-        });
-        Page<ActWinDetail> winDetailList = actWinDetailService.getPageActWinDetail(1L, 1, 20);
+        Page<ActWinDetail> winDetailList = actWinDetailService.getPageActWinDetail(1, 20);
         List<ActWinDetail> content = winDetailList.getContent();
-        content.forEach(actWinDetail -> {
-            System.out.println(actWinDetail.toString());
-        });
+        Assert.assertNotNull(content);
     }
 }

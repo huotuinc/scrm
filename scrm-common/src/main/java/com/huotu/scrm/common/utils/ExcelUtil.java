@@ -14,19 +14,19 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by montage on 2017/7/17.
  */
-public class ExceUtil {
+public class ExcelUtil {
 
     /**
      * 创建excel文档，
      *
      * @param list        数据
-     * @param keys        list中map的key数组集合
      * @param columnNames excel的列名
      */
     public static Workbook createWorkBook(List<Map<String, Object>> list, List<String> keys, List<String> columnNames) {
@@ -34,6 +34,11 @@ public class ExceUtil {
         Workbook wb = new HSSFWorkbook();
         // 创建第一个sheet页
         Sheet sheet = wb.createSheet(list.get(0).get("sheetName").toString());
+        // 手动设置列宽。第一个参数表示要为第几列设；第二个参数表示列的宽度，n为列高的像素数。
+        for (int i = 0; i < keys.size(); i++) {
+            sheet.setColumnWidth((short) i, (short) (35.7 * 150));
+        }
+
         // 创建第一行
         Row row = sheet.createRow((short) 0);
         //设置列名
@@ -41,12 +46,6 @@ public class ExceUtil {
             Cell cell = row.createCell(i);
             cell.setCellValue(columnNames.get(i));
         }
-//
-//        columnNames.forEach(c -> {
-//            Cell cell = row.createCell(columnNames.size());
-//            cell.setCellValue(c);
-//        });
-
         //设置每行每列的值
         for (short i = 1; i < list.size(); i++) {
             // Row 行,Cell 方格 , Row 和 Cell 都是从0开始计数的
@@ -59,5 +58,6 @@ public class ExceUtil {
             }
         }
         return wb;
+        
     }
 }

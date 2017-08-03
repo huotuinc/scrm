@@ -11,6 +11,7 @@ package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.Constant;
+import com.huotu.scrm.common.utils.ExcelUtil;
 import com.huotu.scrm.common.utils.IpUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
@@ -31,8 +32,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -82,15 +92,14 @@ public class ActWinController extends SiteBaseController {
     }
 
     /**
-     * 获取用户参与记录（中奖记录）
+     * 获取参与记录（中奖记录）
      *
-     * @param userId
      * @param model
      * @return
      */
     @RequestMapping("/join/record")
-    public String getJoinRecord(@ModelAttribute("userId") Long userId, @RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(userId, pageIndex, Constant.PAGE_SIZE);
+    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
+        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("joinRecord", pageActWinDetail);
         model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
         model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
@@ -156,6 +165,49 @@ public class ActWinController extends SiteBaseController {
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
         }
         return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+    }
+
+    /**
+     * 中奖记录导出Excel表格
+     *
+     * @param response
+     * @throws IOException
+     */
+    @RequestMapping("/downloadWinDetail")
+    public void downloadAllWinDetail(HttpServletResponse response) throws IOException {
+        //完善配置信息
+        String fileName = "活动中奖记录";
+        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord();
+        List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
+        List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ExcelUtil.createWorkBook(excelRecord, keys, columnNames).write(os);
+        byte[] bytes = os.toByteArray();
+        InputStream is = new ByteArrayInputStream(bytes);
+        // 设置response参数，可以打开下载页面
+        response.reset();
+        response.setContentType("application/vnd.ms -excel;charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String((fileName + ".xls").getBytes(), "iso-8859-1"));
+        ServletOutputStream out = response.getOutputStream();
+        BufferedInputStream bis = null;
+        BufferedOutputStream bos = null;
+        //开流数据导出
+        try {
+            bis = new BufferedInputStream(is);
+            bos = new BufferedOutputStream(out);
+            byte[] buff = new byte[2048 * 10];
+            int bytesRead;
+            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+                bos.write(buff, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (bis != null)
+                bis.close();
+            if (bos != null)
+                bos.close();
+        }
     }
 
 }

@@ -46,7 +46,7 @@
                     <label class="col-sm-3 control-label">上传图片</label>
                     <div class="col-sm-3">
                         <input type="hidden" name="prizeImageUrl" th:value="${actPrize.prizeImageUrl}"/>
-                        <input type="file" id="uploadFile" name="uploadFile" readonly="readonly" class="form-control">
+                        <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
                         <button class="btn btn-success" id="uploadImage" type="button"
                                 onclick="prizeEditHandler.uploadFile()">上传图片
                         </button>
@@ -103,6 +103,7 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
 <script type="text/javascript">
     var prizeType = [[${actPrize.prizeType}]];
@@ -116,7 +117,7 @@
         uploadFile: function () {
             hot.loading.show();
             $.ajaxFileUpload({
-                url: "/common/upload",
+                url: "/mall/common/upload",
                 secureuri: false,// 一般设置为false
                 fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
                 dataType: 'json',// 返回值类型 一般设置为json
@@ -126,7 +127,7 @@
                     if (data.code == 200) {
                         $('#imageShow').attr('src', data.fileUrl);
                         $("input:hidden[name='prizeImageUrl']").val(data.fileUri);
-                        hot.tip.success("图片上传成功");
+                        hot.tip.success(data.msg);
                     } else {
                         hot.loading.hide();
                     }

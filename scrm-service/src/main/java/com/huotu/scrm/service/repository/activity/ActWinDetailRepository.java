@@ -10,11 +10,11 @@
 package com.huotu.scrm.service.repository.activity;
 
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 /**
@@ -23,5 +23,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ActWinDetailRepository extends JpaRepository<ActWinDetail, Long>, JpaSpecificationExecutor<ActWinDetail> {
-    Page<ActWinDetail> findAllByUserId(Long userId, Pageable pageable);
+    List<ActWinDetail> findByUserId(Long userId);
 }
