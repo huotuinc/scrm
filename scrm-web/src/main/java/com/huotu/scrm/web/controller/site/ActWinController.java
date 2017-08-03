@@ -27,6 +27,7 @@ import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Array;
 import java.net.URISyntaxException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -53,7 +54,6 @@ public class ActWinController extends SiteBaseController {
 
         //查询用户积分
         User user =  userService.getByIdAndCustomerId(userId,customerId);
-        double score = user.getUserIntegral() - user.getLockedIntegral();
         //获取奖品
         Activity  activity = activityService.findByActId(actId);
         activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
@@ -64,19 +64,12 @@ public class ActWinController extends SiteBaseController {
                 e.printStackTrace();
             }
         });
-        //计算抽奖次数
-        boolean actStatus =  activity.actItSelfStatus();
-        int costScore = activity.getGameCostlyScore();
-        if (actStatus && score > costScore){
-            model.addAttribute("times",(int)score/costScore);
-        }else {
-            model.addAttribute("times",0);
-        }
+        //用户可参与次数
+        model.addAttribute("times",activityUseTimes(activity,user));
         model.addAttribute("active",activity);
         return "activity/game";
 
     }
-
 
     /**
      * 参加抽奖活动
@@ -85,16 +78,34 @@ public class ActWinController extends SiteBaseController {
      */
     @RequestMapping(value = "/join/act")
     @ResponseBody
-    public ApiResult joinAct(
+    public ApiResult joinAct(HttpServletRequest request,
             @ModelAttribute("userId") Long userId,
-            Long actId) {
+            Long actId,Long customerId) {
 
-        //抽取
-        Long priezeId =  WinArithmetic(actId);
 
+        //查询用户积分
+        User user =  userService.getByIdAndCustomerId(userId,customerId);
         //获取奖品
         Activity  activity = activityService.findByActId(actId);
 
+        if (activityUseTimes(activity,user) > 0){
+
+            //抽取中奖奖品
+            Long priezeId =  WinArithmetic(actId);
+            // TODO: 2017/8/3  调商城接口扣除积分
+
+            // TODO: 2017/8/3 插入零时中奖记入
+            ActWinDetail actWinDetail = new ActWinDetail();
+            actWinDetail.setUserId(userId);
+            actWinDetail.setWinTime(LocalDateTime.now());
+
+
+
+            // TODO: 2017/8/3 返回前端
+        }
+        
+        
+        
         return null;
 
 //        //TODO 用户积分没有得到 无法计算游戏消耗积分
@@ -145,5 +156,21 @@ public class ActWinController extends SiteBaseController {
             }
         }
         return winAwardId;
+    }
+
+    /**
+     * 判读用户参与活动次数
+     * @param activity
+     * @param user
+     * @return
+     */
+    private int activityUseTimes(Activity activity, User user) {
+        double score = user.getUserIntegral() - user.getLockedIntegral();
+        //计算抽奖次数
+        boolean actStatus = activity.actItSelfStatus();
+        int costScore = activity.getGameCostlyScore();
+        if (actStatus && score > costScore)
+            return (int) (score / costScore);
+        return 0;
     }
 }

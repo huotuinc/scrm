@@ -1,6 +1,5 @@
 package com.huotu.scrm.service.entity.activity;
 
-import com.huotu.scrm.service.converter.prizeTypeConverter;
 import com.huotu.scrm.service.model.prizeTypeEnum;
 import lombok.Getter;
 import lombok.Setter;

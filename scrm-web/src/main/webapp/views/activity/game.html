@@ -48,7 +48,7 @@
             <div class="radius-group default"></div>
             <div class="circle" id="J_circle">
                 <div class="circle-box" th:remove="all-but-first">
-                    <div class="prize" data-index="0" data-id="4"  data-type="0" th:attr="data-index=${status.index},data-type=${prize.prizeType}?1:0,data-id=${prize.prizeId}"   th:each="prize,status : ${active.actPrizes}">
+                    <div class="prize" data-index="0" data-id="4"  data-type="0" th:attr="data-index=${status.index},data-type=${prize.prizeType.code} > 0 ? 1 : 0,data-id=${prize.prizeId}"   th:each="prize,status : ${active.actPrizes}">
                         <div class="prize-dialog">
                             <p th:text="${prize.prizeName}">谢谢参与</p>
                             <img th:src="${prize.prizeImageUrl}" src="../../resources/images/prize-xxcy.png">
