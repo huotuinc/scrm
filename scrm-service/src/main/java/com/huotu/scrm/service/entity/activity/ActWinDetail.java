@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -58,7 +59,7 @@ public class ActWinDetail {
      * 中奖日期
      */
     @Column(name = "Win_Time")
-    private Date winTime;
+    private LocalDateTime winTime;
 
     /**
      * 中奖Ip地址
