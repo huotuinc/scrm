@@ -17,8 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -27,7 +27,6 @@ import java.util.List;
  */
 
 @Service
-@Transactional
 public class ActPrizeServiceImpl implements ActPrizeService {
 
     @Autowired
@@ -39,18 +38,9 @@ public class ActPrizeServiceImpl implements ActPrizeService {
     }
 
     @Override
+    @Transactional
     public ActPrize saveActPrize(ActPrize actPrize) {
-        ActPrize newActPrize;
-        if (actPrize.getPrizeId() != null && actPrize.getPrizeId() != 0) {
-            newActPrize = actPrizeRepository.findOne(actPrize.getPrizeId());
-        } else {
-            newActPrize = new ActPrize();
-        }
-        newActPrize.setPrizeName(actPrize.getPrizeName());
-        newActPrize.setPrizeImageUrl(actPrize.getPrizeImageUrl());
-        newActPrize.setWinRate(actPrize.getWinRate());
-        newActPrize.setSort(actPrize.getSort());
-        return actPrizeRepository.save(newActPrize);
+        return actPrizeRepository.save(actPrize);
     }
 
     @Override

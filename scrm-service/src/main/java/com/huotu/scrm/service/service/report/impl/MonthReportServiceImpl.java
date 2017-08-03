@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.service.report.impl;
 
 import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
@@ -63,11 +64,11 @@ public class MonthReportServiceImpl implements MonthReportService {
             //设置等级
             monthReport.setLevelId(user.getLevelId());
             //设置是否为销售员
-//            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-//            if (userLevel == null) {
-//                continue;
-//            }
-//            monthReport.setSalesman(userLevel.isSalesman());
+            UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
+            if (userLevel == null) {
+                continue;
+            }
+            monthReport.setSalesman(userLevel.isSalesman());
             monthReport.setSalesman(true);
             //设置每月咨询转发量
             int forwardNum = getForwardNum(userId, lastFirstDay, lastEndDay);

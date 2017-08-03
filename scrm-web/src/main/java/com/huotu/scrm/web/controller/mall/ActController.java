@@ -4,7 +4,6 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.common.utils.ExceUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
-import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import com.huotu.scrm.service.service.activity.ActivityService;
@@ -19,7 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -81,12 +85,8 @@ public class ActController extends MallBaseController {
      */
     @RequestMapping("/act/save")
     public String saveAct(Activity activity, @ModelAttribute("customerId") Long customerId) {
-        if (activity != null) {
-            activity.setCustomerId(customerId);
-            activityService.saveActivity(activity);
-        } else {
-            return "error";
-        }
+        activity.setCustomerId(customerId);
+        activityService.saveActivity(activity);
         return "redirect:/mall/act/list";
     }
 
@@ -104,24 +104,6 @@ public class ActController extends MallBaseController {
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
         }
         return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
-    }
-
-    /**
-     * 分页查询中奖记录
-     *
-     * @param pageIndex 当前页数
-     * @param model
-     * @return
-     */
-    @RequestMapping("/win/list")
-    public String prizeDetailList(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(pageIndex, Constant.PAGE_SIZE);
-        model.addAttribute("prizeDetailList", pageActWinDetail.getContent());
-        model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
-        model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
-        model.addAttribute("pageIndex", pageIndex);
-        model.addAttribute("pageSize", Constant.PAGE_SIZE);
-        return "activity/winPrize_list";
     }
 
     /**

@@ -2,6 +2,7 @@ package com.huotu.scrm.service.entity.activity;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "SCRM_WinDetail")
 public class ActWinDetail {
 
@@ -56,7 +58,7 @@ public class ActWinDetail {
      * 中奖日期
      */
     @Column(name = "Win_Time")
-    private Date win_Time;
+    private Date winTime;
 
     /**
      * 中奖Ip地址

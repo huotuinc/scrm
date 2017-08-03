@@ -15,7 +15,7 @@ public class UserLevelServiceImpl implements UserLevelService {
 
     @Override
     public UserLevel findByLevelAndCustomerId(Long level, Long customerId) {
-        return userLevelRepository.findByLevelAndCustomerId(level,customerId);
+        return userLevelRepository.findByIdAndCustomerId(level,customerId);
     }
 
     @Override

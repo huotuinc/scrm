@@ -42,8 +42,8 @@
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
-                            <tr th:each="activity:${activities}">
-                                <td class="js-actId" th:text="${activity.actId}">
+                            <tr th:each="activity,iterStat:${activities}">
+                                <td class="js-actId" th:text="${iterStat.index}+1">
                                     <span id="customerId" th:text="${activity.customerId}" th:type="hidden"></span>
                                 </td>
                                 <td th:text="${activity.actTitle}"></td>
@@ -65,10 +65,12 @@
                                                                   data-toggle="tooltip" data-original-title="活动链接"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-paste tooltips" data-placement="top"
-                                                                  data-toggle="tooltip" data-original-title="参与记录"></i></span>
+                                                                  data-toggle="tooltip" data-original-title="参与记录"
+                                                                  onclick="actInfoHandler.joinRecord()"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-cog tooltips" data-placement="top"
-                                                                  data-toggle="tooltip" data-original-title="奖品设置"></i></span>
+                                                                  data-toggle="tooltip" data-original-title="奖品设置"
+                                                                  th:onclick="'javascript:actInfoHandler.setPrize('+${activity.actId}+')'"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
@@ -79,6 +81,11 @@
                                                                   data-toggle="tooltip"
                                                                   data-original-title="删除"
                                                                   th:onclick="'javascript:actInfoHandler.deleteAct('+${activity.actId}+')'"></i></span>
+                                    <div style="text-align:right;">
+                                        <button th:if="${activity.openStatus}" class="btn btn-danger btn-xs">禁用</button>
+                                        <button th:unless="${activity.openStatus}" class="btn btn-success btn-xs">启用
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
@@ -121,8 +128,8 @@
     var ajaxUrl = "[[@{/mall}]]";
     var requestDate = {};
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
-    paging.init(function () {
-        console.log(1);
+    paging.init(function (p) {
+        window.location.href = ajaxUrl + '/act/list?pageIndex=' + p;
     });
     var actInfoHandler = {
         deleteAct: function (actId) {
@@ -145,6 +152,12 @@
             } else {
                 window.location.href = ajaxUrl + "/act/detail";
             }
+        },
+        setPrize: function (actId) {
+            window.location.href = ajaxUrl + "/prize/list?actId=" + actId;
+        },
+        joinRecord: function () {
+            window.location.href = "/site/join/record"
         }
     }
 </script>
