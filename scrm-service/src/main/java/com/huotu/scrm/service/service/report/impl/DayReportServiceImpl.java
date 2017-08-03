@@ -136,6 +136,7 @@ public class DayReportServiceImpl implements DayReportService {
         if (infoConfigure == null) {
             return 0;
         }
+
         //获取转发咨询浏览量奖励积分
         int forwardScore = 0;
         //获取咨询转发转换比例
