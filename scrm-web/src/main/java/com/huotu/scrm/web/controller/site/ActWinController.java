@@ -89,95 +89,63 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/join/act")
     @ResponseBody
     public ApiResult joinAct(
-            HttpServletRequest request, String userId, int userScore,
+            HttpServletRequest request, String userId,
             @RequestParam(required = false, defaultValue = "null") String userName,
             @RequestParam(required = false, defaultValue = "null") String userTel,
             Long actId) {
 
+        //抽取
+        Long priezeId =  WinArithmetic(actId);
 
-        // TODO: 2017/8/2 获取活动的奖品
+        return null;
+
+//        //TODO 用户积分没有得到 无法计算游戏消耗积分
+//        ActWinDetail actWinDetail = new ActWinDetail();
+//        actWinDetail.setPrize(prize);
+//        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
+//        actWinDetail.setUserId(Long.valueOf(userId));
+//        actWinDetail.setWin_Time(new Date());
+//        actWinDetail.setWinnerName(userName);
+//        actWinDetail.setWinnerTel(userTel);
+//        actWinDetail = actWinDetailService.saveActWinDetail(actWinDetail);
+//        if (actWinDetail != null) {
+//            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+//        }
+//        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+    }
+
+    /**
+     * 抽奖算法
+     * @param actId
+     * @return
+     */
+    private Long WinArithmetic(Long actId) {
         //获取奖品
         Activity  activity = activityService.findByActId(actId);
-        activity.getActPrizes().forEach(p->{
-
-//            1、20
-//            2、0，0.2
-//            3 1 (0,0.2)
-//
-//            1、50
-//            2、0.2  0.5
-//            3、2 （0.2, 0.5）
-//
-//            1、60
-//            2、0.5  0.6
-//            3、3 （0.5, 0.6）
-//
-//            1、65
-//            2、0.6  0.65
-//            3、4 （0.6, 0.65）
-//
-//            1、90
-//            2、0.65，0.9
-//            3、5 (0.65,0.9)
-//
-//            1、100
-//            2、0.9，1
-//            3、6 (0.9,1)
-
-        });
-
-
-
-//        Map<Integer,Map<Integer,Integer>> prizesMap = new HashMap<>();
-
-
-
-        //回归算法得到奖品
-        int proCount = 100;
-        String minRate = "min";
-        String maxRate = "max";
-        Integer tempInt = 0;
-        //待中奖奖品数组
-        Map<Long, Map<String, Integer>> prizesMap = new HashMap<>();
-        List<ActPrize> actPrizeList = actPrizeService.findAll();
-        for (ActPrize actPrize : actPrizeList) {
-            Map<String, Integer> oddMap = new HashMap<>();
-            oddMap.put(minRate, tempInt);
-            tempInt += actPrize.getWinRate();
-            oddMap.put(maxRate, tempInt);
-            prizesMap.put(actPrize.getPrizeId(), oddMap);
+        double  totalProbability = 0;
+        Map<Long,Map<Double,Double>> prizesMap = new HashMap<>();
+        for (ActPrize p:activity.getActPrizes()
+                ) {
+            double temp = (totalProbability + p.getWinRate());
+            Map<Double,Double> tpRange = new HashMap<>();
+            tpRange.put(new Double(totalProbability/100),new Double(temp/100));
+            prizesMap.put(p.getPrizeId(),tpRange);
+            totalProbability = temp;
         }
-        //得到随机数
-        int random = (int) Math.random() * proCount;
-        ActPrize prize = null;
-        String format = null;
+        //抽奖奖项
+        Long winAwardId = -1L;
+        double ran = Math.random();
         Set<Long> prizeIds = prizesMap.keySet();
-        for (Long prizeId : prizeIds) {
-            Map<String, Integer> oddsMap = prizesMap.get(prizeId);
-            Integer minNum = oddsMap.get(minRate);
-            Integer maxNum = oddsMap.get(maxRate);
-            //验证random 在哪件奖品中间
-            if (minNum <= random && maxNum > random) {
-                prize = actPrizeService.findByPrizeId(prizeId);
-                if (prize.getRemainCount() == 0) {
-                    prize = actPrizeService.findByPrizeType(false);
-                }
+        for (Long prizeId: prizeIds
+                ) {
+            Map<Double,Double> tpRange = prizesMap.get(prizeId);
+            Double key = (Double)tpRange.keySet().toArray()[0];
+            Double value = tpRange.get(key);
+            if (ran >= key.doubleValue() && ran < value.doubleValue()){
+                winAwardId = prizeId;
                 break;
             }
         }
-        //TODO 用户积分没有得到 无法计算游戏消耗积分
-        ActWinDetail actWinDetail = new ActWinDetail();
-        actWinDetail.setPrize(prize);
-        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
-        actWinDetail.setUserId(Long.valueOf(userId));
-        actWinDetail.setWin_Time(new Date());
-        actWinDetail.setWinnerName(userName);
-        actWinDetail.setWinnerTel(userTel);
-        actWinDetail = actWinDetailService.saveActWinDetail(actWinDetail);
-        if (actWinDetail != null) {
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
-        }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+        return winAwardId;
     }
-
 }
