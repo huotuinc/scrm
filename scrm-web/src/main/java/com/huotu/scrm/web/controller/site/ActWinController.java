@@ -11,6 +11,7 @@ package com.huotu.scrm.web.controller.site;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ExcelUtil;
 import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
