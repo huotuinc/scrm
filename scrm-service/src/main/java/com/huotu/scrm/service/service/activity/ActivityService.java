@@ -24,7 +24,7 @@ public interface ActivityService {
      *
      * @return 活动集合
      */
-    Page<Activity> findAllActivity(int pageNo, int pageSize);
+    Page<Activity> findAllActivity(Long customerId, int pageNo, int pageSize);
 
     /**
      * 根据Id查询
@@ -34,7 +34,8 @@ public interface ActivityService {
      */
     Activity findByActId(Long actId);
 
-    /**d
+    /**
+     * d
      * 保存活动
      */
     void saveActivity(Activity activity);

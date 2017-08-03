@@ -33,9 +33,9 @@ public class ActivityServiceImpl implements ActivityService {
     private ActivityRepository activityRepository;
 
     @Override
-    public Page<Activity> findAllActivity(int pageNo, int pageSize) {
+    public Page<Activity> findAllActivity(Long customerId, int pageNo, int pageSize) {
         Pageable pageable = new PageRequest(pageNo - 1, pageSize);
-        return activityRepository.findByIsDeleteFalse(pageable);
+        return activityRepository.findByIsDeleteFalseAndCustomerId(customerId, pageable);
     }
 
     @Override

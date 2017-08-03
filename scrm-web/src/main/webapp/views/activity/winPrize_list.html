@@ -99,7 +99,7 @@
 <script type="text/javascript">
     var pageIndex = [[${pageIndex}]];
     var totalPage = [[${totalPages}]];
-    var ajaxUrl = "[[@{/site}]]";
+    var ajaxUrl = "[[@{/mall}]]";
     //初始化分页
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
 
@@ -109,8 +109,7 @@
 
     var winListHandler = {
         download: function () {
-//            window.location.href = ajaxUrl + "/downloadWinDetail";
-            window.open(ajaxUrl + "/downloadWinDetail");
+            window.location.href = ajaxUrl + "/downloadWinDetail";
         }
     }
 </script>

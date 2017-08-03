@@ -22,21 +22,6 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
-                <form class="search-panel" method="get" action="#"  id="searchForm">
-                    <!--用来传递页码-->
-                    <input type="hidden" name="pageNo" value=""/>
-                    <div class="ibox-content p-m no-borders">
-                        <div class="form-inline ">
-                            <div class="form-group m-r-sm">
-                                <label class="control-label" for="searchCondition">活动关键字：</label>
-                                <input type="text" class="form-control input-sm mb10" id="searchCondition"
-                                        placeholder="活动标题"/>
-                                <button type="button" class="btn btn-success js-search">筛选</button>
-                                <button type="button" class="btn btn-success js-searchAll">显示全部</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
                 <div class="ibox-content p-xxs no-top-border">
                     <div style="text-align:right;">
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
@@ -176,7 +161,7 @@
             window.location.href = ajaxUrl + "/prize/list?actId=" + actId;
         },
         joinRecord: function () {
-            window.location.href = "/site/join/record"
+            window.location.href = ajaxUrl + "/join/record"
         },
         actDisable: function (actId) {
             hot.ajax(ajaxUrl + "/act/disable", {actId: actId}, function (res) {
