@@ -20,8 +20,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +38,10 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     private ActWinDetailRepository actWinDetailRepository;
 
     @Override
-    public Page<ActWinDetail> getPageActWinDetail(Long userId, int pageNo, int pageSize) {
+    public Page<ActWinDetail> getPageActWinDetail(int pageNo, int pageSize) {
         Sort sort = new Sort(Sort.Direction.DESC, "winTime");
         Pageable pageable = new PageRequest(pageNo - 1, pageSize, sort);
-        return actWinDetailRepository.findAllByUserId(userId, pageable);
+        return actWinDetailRepository.findAll(pageable);
     }
 
     @Override
@@ -57,15 +57,15 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
         map.put("sheetName", "sheet1");
         listMap.add(map);
         actWinDetailList.forEach(actWinDetail -> {
-            Map<String, Object> mapValue = new HashMap<>();
-            mapValue.put("winDetailId", actWinDetail.getWinDetailId());
+            Map<String, Object> mapValue = new LinkedHashMap<>();
             mapValue.put("userId", actWinDetail.getUserId());
-            mapValue.put("actName", actWinDetail.getActName());
+            mapValue.put("actName", actWinDetail.getPrize().getActivity().getActTitle());
             mapValue.put("prizeName", actWinDetail.getPrize().getPrizeName());
             mapValue.put("winnerName", actWinDetail.getWinnerName());
             mapValue.put("winnerTel", actWinDetail.getWinnerTel());
-            mapValue.put("winTime", actWinDetail.getWinTime());
+            mapValue.put("winTime", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(actWinDetail.getWinTime()));
             mapValue.put("ipAddress", actWinDetail.getIpAddress());
+            listMap.add(mapValue);
         });
         return listMap;
     }

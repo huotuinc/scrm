@@ -102,5 +102,4 @@ public class ActPrizeController extends MallBaseController {
         }
         return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
     }
-
 }

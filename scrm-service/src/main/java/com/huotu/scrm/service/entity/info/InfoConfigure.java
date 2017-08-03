@@ -95,7 +95,7 @@ public class InfoConfigure {
     private String infoIntroduceUrl;
 
     public boolean extensionIsBuddyAndIsReward() {
-        return isRewardLimitSwitch && rewardUserType == 1;
+        return isRewardSwitch && rewardUserType == 1;
     }
 
     public boolean uvIsBuddyAndIsReward() {

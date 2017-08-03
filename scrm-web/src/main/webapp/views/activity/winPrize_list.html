@@ -29,7 +29,7 @@
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
-                                onclick="articleHelper.edit(0)">导出
+                                onclick="winListHandler.download()">导出
                         </button>
                     </div>
                     <div class="panel-body">
@@ -107,7 +107,12 @@
         window.location.href = ajaxUrl + '/join/record?pageIndex=' + p;
     });
 
-    var winListHandler = {}
+    var winListHandler = {
+        download: function () {
+//            window.location.href = ajaxUrl + "/downloadWinDetail";
+            window.open(ajaxUrl + "/downloadWinDetail");
+        }
+    }
 </script>
 </body>
 

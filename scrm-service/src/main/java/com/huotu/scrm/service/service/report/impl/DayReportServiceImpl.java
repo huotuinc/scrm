@@ -136,13 +136,19 @@ public class DayReportServiceImpl implements DayReportService {
         if (infoConfigure == null) {
             return 0;
         }
+
         //获取转发咨询浏览量奖励积分
         int forwardScore = 0;
         //获取咨询转发转换比例
         int rewardScore = infoConfigure.getRewardScore();
         //判断是否开启咨询转发积分奖励
         if (infoConfigure.extensionIsBuddyAndIsReward()) {
-            int rewardNum = Math.min(infoConfigure.getRewardLimitNum(), forwardNum);
+            int rewardNum = 0;
+            if (infoConfigure.isExchangeSwitch()) {
+                rewardNum = Math.min(infoConfigure.getRewardLimitNum(), forwardNum);
+            } else {
+                rewardNum = forwardNum;
+            }
             forwardScore = rewardNum * rewardScore;
         }
         //获取用户访客量
@@ -153,7 +159,11 @@ public class DayReportServiceImpl implements DayReportService {
         int exchangeRate = infoConfigure.getExchangeRate();
         //判断是否开启访客量积分奖励
         if (infoConfigure.uvIsBuddyAndIsReward()) {
-            visitorScore = Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / exchangeRate);
+            if (infoConfigure.isDayExchangeLimitSwitch()) {
+                visitorScore = Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / exchangeRate);
+            } else {
+                visitorScore = visitorNum / exchangeRate;
+            }
         }
         return forwardScore + visitorScore;
     }
