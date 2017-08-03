@@ -1,5 +1,7 @@
 package com.huotu.scrm.service.entity.activity;
 
+import com.huotu.scrm.service.converter.prizeTypeConverter;
+import com.huotu.scrm.service.model.prizeTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -56,7 +58,7 @@ public class ActPrize {
      * 0:谢谢惠顾,1:奖品
      */
     @Column(name = "Prize_Type")
-    private boolean prizeType;
+    private prizeTypeEnum prizeType;
 
     /**
      * 奖品总数量

@@ -1,33 +1,41 @@
 package com.huotu.scrm.web.controller.site;
 
+import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.entity.activity.Activity;
+import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.web.CommonTestBase;
+import com.huotu.scrm.web.controller.mall.InfoController;
+import com.huotu.scrm.web.service.StaticResourceService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.junit.Assert.*;
 
 /**
- * Created by hxh on 2017-08-03.
+ * Created by luohaibo on 2017/8/3.
  */
-public class ActWinControllerTest extends CommonTestBase {
+public class ActWinControllerTest extends CommonTestBase{
+
+    private Log logger = LogFactory.getLog(ActWinControllerTest.class);
+    @Autowired
+    StaticResourceService staticResourceService;
+    @Autowired
+    ActivityService activityService;
+
     @Test
-    public void downloadAllWinDetail() throws Exception {
-        byte[] contentAsByteArray = mockMvc.perform(get("/site/downloadWinDetail")
-        )
-                .andReturn().getResponse().getContentAsByteArray();
+    public void marketingActivity() throws Exception {
 
-
-        File dir = new File("D:\\");
-        if (!dir.exists() && dir.isDirectory()) {//判断文件目录是否存在
-            dir.mkdirs();
-        }
-        File file = new File(dir + "中奖信息.xls");
-        FileOutputStream fos = new FileOutputStream(file);
-        BufferedOutputStream bos = new BufferedOutputStream(fos);
-        bos.write(contentAsByteArray);
-        bos.flush();
     }
+
+    @Test
+    public void joinAct() throws Exception {
+
+    }
+
 }

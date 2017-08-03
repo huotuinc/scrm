@@ -8,14 +8,9 @@
  */
 
 package com.huotu.scrm.web.controller.site;
-
 import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.common.utils.ExcelUtil;
-import com.huotu.scrm.common.utils.IpUtil;
-import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
-import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
@@ -24,16 +19,13 @@ import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -43,7 +35,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,10 +61,14 @@ public class ActWinController extends SiteBaseController {
     ActivityService activityService;
 
     @RequestMapping("/activity/index")
-    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
-        User user = userService.getByIdAndCustomerId(1058823L, customerId);
+    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId,Model model){
+
+        //查询用户积分
+        User user =  userService.getByIdAndCustomerId(userId,customerId);
         double score = user.getUserIntegral() - user.getLockedIntegral();
-        Activity activity = activityService.findByActId(actId);
+        //获取奖品
+        Activity  activity = activityService.findByActId(actId);
+        activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
         activity.getActPrizes().forEach(p -> {
             try {
                 p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
@@ -80,33 +76,19 @@ public class ActWinController extends SiteBaseController {
                 e.printStackTrace();
             }
         });
-        boolean actStatus = activity.actItSelfStatus();
+        //计算抽奖次数
+        boolean actStatus =  activity.actItSelfStatus();
         int costScore = activity.getGameCostlyScore();
-        if (actStatus && score > costScore) {
-            model.addAttribute("times", (int) score / costScore);
-        } else {
-            model.addAttribute("times", 0);
+        if (actStatus && score > costScore){
+            model.addAttribute("times",(int)score/costScore);
+        }else {
+            model.addAttribute("times",0);
         }
-        model.addAttribute("active", activity);
+        model.addAttribute("active",activity);
         return "activity/game";
+
     }
 
-    /**
-     * 获取参与记录（中奖记录）
-     *
-     * @param model
-     * @return
-     */
-    @RequestMapping("/join/record")
-    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(pageIndex, Constant.PAGE_SIZE);
-        model.addAttribute("joinRecord", pageActWinDetail);
-        model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
-        model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
-        model.addAttribute("pageIndex", pageIndex);
-        model.addAttribute("pageSize", Constant.PAGE_SIZE);
-        return "activity/winPrize_list";
-    }
 
     /**
      * 参加抽奖活动
@@ -116,55 +98,65 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/join/act")
     @ResponseBody
     public ApiResult joinAct(
-            HttpServletRequest request, String userId, int userScore,
-            @RequestParam(required = false, defaultValue = "null") String userName,
-            @RequestParam(required = false, defaultValue = "null") String userTel) {
-        //回归算法得到奖品
-        int proCount = 100;
-        String minRate = "min";
-        String maxRate = "max";
-        Integer tempInt = 0;
-        //待中奖奖品数组
-        Map<Long, Map<String, Integer>> prizesMap = new HashMap<>();
-        List<ActPrize> actPrizeList = actPrizeService.findAll();
-        for (ActPrize actPrize : actPrizeList) {
-            Map<String, Integer> oddMap = new HashMap<>();
-            oddMap.put(minRate, tempInt);
-            tempInt += actPrize.getWinRate();
-            oddMap.put(maxRate, tempInt);
-            prizesMap.put(actPrize.getPrizeId(), oddMap);
+            @ModelAttribute("userId") Long userId,
+            Long actId) {
+
+        //抽取
+        Long priezeId =  WinArithmetic(actId);
+
+        //获取奖品
+        Activity  activity = activityService.findByActId(actId);
+
+        return null;
+
+//        //TODO 用户积分没有得到 无法计算游戏消耗积分
+//        ActWinDetail actWinDetail = new ActWinDetail();
+//        actWinDetail.setPrize(prize);
+//        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
+//        actWinDetail.setUserId(Long.valueOf(userId));
+//        actWinDetail.setWin_Time(new Date());
+//        actWinDetail.setWinnerName(userName);
+//        actWinDetail.setWinnerTel(userTel);
+//        actWinDetail = actWinDetailService.saveActWinDetail(actWinDetail);
+//        if (actWinDetail != null) {
+//            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+//        }
+//        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+    }
+
+    /**
+     * 抽奖算法
+     * @param actId
+     * @return
+     */
+    private Long WinArithmetic(Long actId) {
+        //获取奖品
+        Activity  activity = activityService.findByActId(actId);
+        double  totalProbability = 0;
+        Map<Long,Map<Double,Double>> prizesMap = new HashMap<>();
+        for (ActPrize p:activity.getActPrizes()
+                ) {
+            double temp = (totalProbability + p.getWinRate());
+            Map<Double,Double> tpRange = new HashMap<>();
+            tpRange.put(new Double(totalProbability/100),new Double(temp/100));
+            prizesMap.put(p.getPrizeId(),tpRange);
+            totalProbability = temp;
         }
-        //得到随机数
-        int random = (int) Math.random() * proCount;
-        ActPrize prize = null;
-        String format = null;
+        //抽奖奖项
+        Long winAwardId = -1L;
+        double ran = Math.random();
         Set<Long> prizeIds = prizesMap.keySet();
-        for (Long prizeId : prizeIds) {
-            Map<String, Integer> oddsMap = prizesMap.get(prizeId);
-            Integer minNum = oddsMap.get(minRate);
-            Integer maxNum = oddsMap.get(maxRate);
-            //验证random 在哪件奖品中间
-            if (minNum <= random && maxNum > random) {
-                prize = actPrizeService.findByPrizeId(prizeId);
-                if (prize.getRemainCount() == 0) {
-                    prize = actPrizeService.findByPrizeType(false);
-                }
+        for (Long prizeId: prizeIds
+                ) {
+            Map<Double,Double> tpRange = prizesMap.get(prizeId);
+            Double key = (Double)tpRange.keySet().toArray()[0];
+            Double value = tpRange.get(key);
+            if (ran >= key.doubleValue() && ran < value.doubleValue()){
+                winAwardId = prizeId;
                 break;
             }
         }
-        //TODO 用户积分没有得到 无法计算游戏消耗积分
-        ActWinDetail actWinDetail = new ActWinDetail();
-        actWinDetail.setPrize(prize);
-        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
-        actWinDetail.setUserId(Long.valueOf(userId));
-        actWinDetail.setWinTime(new Date());
-        actWinDetail.setWinnerName(userName);
-        actWinDetail.setWinnerTel(userTel);
-        actWinDetail = actWinDetailService.saveActWinDetail(actWinDetail);
-        if (actWinDetail != null) {
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
-        }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+        return winAwardId;
     }
 
     /**
