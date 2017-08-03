@@ -36,10 +36,12 @@ $(function () {
             });
         },
         getOrder: function () {
+
+            var actId =  $("body").attr("activeId");
             $.ajax({
                 type: 'POST',
-                url: '/activity/dojoin',
-                data: {},
+                url: '/site/join/act',
+                data: {actId:actId},
                 dataType: 'json',
                 success: function (res) {
                     if (res.resultCode !== 2000) {

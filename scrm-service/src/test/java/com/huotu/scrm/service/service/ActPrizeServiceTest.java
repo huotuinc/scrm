@@ -2,6 +2,7 @@ package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.model.prizeTypeEnum;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class ActPrizeServiceTest extends CommonTestBase {
         ActPrize actPrize = new ActPrize();
         actPrize.setPrizeName("手机");
         actPrize.setPrizeImageUrl("dasdsa");
-        actPrize.setPrizeType(true);
+        actPrize.setPrizeType(prizeTypeEnum.PRIZE_TYPE_ENTITY_PRIZE);
         actPrize.setPrizeCount(12);
         actPrize.setRemainCount(10);
         actPrize.setWinRate(20);

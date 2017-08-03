@@ -25,11 +25,10 @@
     </script>
     <link rel="stylesheet" href="../../resources/css/index.css">
 </head>
-<body>
+<body th:attr="activeId=${active.actId}" activeId="2">
 <section id="app">
 
     <a class="record" href="recordList.html"></a>
-
 
     <div class="banner">
         <img src="../../resources/images/theme.png" th:src="@{../../resources/images/theme.png}">
@@ -266,7 +265,7 @@
 <script src="http://resali.huobanplus.com/cdn/game/awardRotate.js"></script>
 <!--正式删除-->
 <script src="../../resources/js/mock/mock-min.js"></script>
-<script src="../../resources/js/mock/api.js"></script>
+<script src="../../resources/js/mock/api.js" th:remove="all"></script>
 <!--正式删除-->
 <script src="../../resources/js/game.js"></script>
 </html>

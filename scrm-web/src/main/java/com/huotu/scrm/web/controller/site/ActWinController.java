@@ -22,10 +22,7 @@ import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Array;
@@ -55,7 +52,7 @@ public class ActWinController extends SiteBaseController {
     public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId,Model model){
 
         //查询用户积分
-        User user =  userService.getByIdAndCustomerId(1058823L,customerId);
+        User user =  userService.getByIdAndCustomerId(userId,customerId);
         double score = user.getUserIntegral() - user.getLockedIntegral();
         //获取奖品
         Activity  activity = activityService.findByActId(actId);
@@ -89,13 +86,14 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/join/act")
     @ResponseBody
     public ApiResult joinAct(
-            HttpServletRequest request, String userId,
-            @RequestParam(required = false, defaultValue = "null") String userName,
-            @RequestParam(required = false, defaultValue = "null") String userTel,
+            @ModelAttribute("userId") Long userId,
             Long actId) {
 
         //抽取
         Long priezeId =  WinArithmetic(actId);
+
+        //获取奖品
+        Activity  activity = activityService.findByActId(actId);
 
         return null;
 
