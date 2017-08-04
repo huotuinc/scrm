@@ -1,6 +1,5 @@
 package com.huotu.scrm.web.controller.site;
 
-import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.model.DayFollowNumInfo;
 import com.huotu.scrm.service.model.DayScoreInfo;
 import com.huotu.scrm.service.model.DayScoreRankingInfo;
@@ -105,17 +104,5 @@ public class InfoExtensionControllerTest extends CommonTestBase {
         Assert.assertEquals("extensiondetail/personal_uv", mvcResult.getModelAndView().getViewName());
         DayVisitorNumInfo dayVisitorNumInfo = (DayVisitorNumInfo) mvcResult.getModelAndView().getModel().get("dayVisitorNumInfo");
         Assert.assertNotNull(dayVisitorNumInfo);
-    }
-    @Test
-    public void getInfo(){
-        Info info1 = new Info();
-        info1.setCustomerId(4421L);
-        info1.setStatus(true);
-        info1.setExtend(true);
-        infoRepository.save(info1);
-        List<Info> list = infoRepository.findByCustomerIdAndIsExtendTrueAndIsDisableFalse(4421L);
-        list.forEach(info -> {
-            System.out.println(info.toString());
-        });
     }
 }
