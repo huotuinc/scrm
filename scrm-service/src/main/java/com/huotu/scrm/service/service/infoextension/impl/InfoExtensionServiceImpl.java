@@ -110,13 +110,13 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int followNum = 0;
         if (userLevel != null) {
             if (userLevel.isSalesman()) {
-                List<MonthReport> monthReportList = monthReportRepository.findByUserId(userId);
+                List<MonthReport> monthReportList = monthReportRepository.findByUserId(user.getId());
                 for (MonthReport monthReport : monthReportList
                         ) {
                     followNum += monthReport.getFollowNum();
                 }
                 //获取本月关注人数
-                int monthFollowNum = businessCardRecordRepository.countByUserIdAndFollowDateBetween(userId, firstDay.atStartOfDay(), now);
+                int monthFollowNum = businessCardRecordRepository.countByUserIdAndFollowDateBetween(user.getId(), firstDayOfMonth.atStartOfDay(), now);
                 statisticalInformation.setFollowNum(followNum + monthFollowNum);
             }
         } else {
@@ -229,6 +229,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             dayScoreInfo.setLastDayScore(dayReport.getExtensionScore());
         }
         //设置历史累积积分
+        // TODO: 2017-08-04 历史累计积分从积分表中获取 
         int cumulativeScore = dayReportService.getCumulativeScore(userId);
         //获取本月预计积分
         int monthScore = monthReportService.getExtensionScore(userId, localDate.withDayOfMonth(1), localDate);
@@ -362,33 +363,6 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      */
     private int getVisitorNum(Long infoId) {
         return infoBrowseRepository.countByInfoId(infoId);
-    }
-
-    /**
-     * 获取资讯发布时间距现在多少时间，默认小时数
-     *
-     * @param infoId 咨询ID
-     * @return
-     */
-    private String getReleaseTime(Long infoId) {
-        LocalDateTime createTime = infoRepository.findOne(infoId).getCreateTime();
-        Date now = new Date();
-        long releaseTime = (now.getTime() - localDateTimeToDate(createTime).getTime()) / (60 * 60 * 1000);
-        int releaseHour = (int) releaseTime;
-        if (releaseHour < 24) {
-            return String.valueOf(releaseHour);
-        }
-        int releaseDay = releaseHour / 24;
-        releaseHour = releaseHour % 24;
-        return releaseDay + "天" + releaseHour;
-    }
-
-
-    private Date localDateTimeToDate(LocalDateTime time) {
-        ZoneId zone = ZoneId.systemDefault();
-        Instant instant = time.atZone(zone).toInstant();
-        Date date = Date.from(instant);
-        return date;
     }
 
     /**

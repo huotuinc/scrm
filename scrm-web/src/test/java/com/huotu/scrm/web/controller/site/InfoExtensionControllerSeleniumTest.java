@@ -2,6 +2,7 @@ package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.web.CommonTestBase;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -9,6 +10,8 @@ import org.openqa.selenium.WebElement;
 /**
  * Created by hxh on 2017-07-21.
  */
+@Ignore
+// TODO: 2017-08-04 待修改
 public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
     private String baseUrl = "/site/extension";
 
