@@ -35,11 +35,13 @@ $(function () {
                 }
             });
         },
-        getOrder: function () {//NEW
+        getOrder: function () {
+
+            var actId =  $("body").attr("activeId");
             $.ajax({
                 type: 'POST',
-                url: '/activity/dojoin',
-                data: { actid: 1, cid: 2 },
+                url: '/site/join/act',
+                data: {actId:actId},
                 dataType: 'json',
                 success: function (res) {
                     if (res.resultCode !== 2000) {
@@ -59,9 +61,9 @@ $(function () {
                 }
             });
         },
-        reset: function () {
+        reset: function () { // 2017.08.02
             game.toggleLight();
-            var i = $(".circle-box").find("[data-type='1']").data("index");
+            var i = $(".circle-box").find("[data-type='0']").data("index");
             game.thanksDeg = 60 * (5 - i) + 30;
             game.circleEle.rotate(game.thanksDeg);
             game.circleEle.rotate({
@@ -90,11 +92,11 @@ $(function () {
                 }
             })
         },
-        rotateFn: function (data) {//NEW
+        rotateFn: function (data) { // 2017.08.02
             var r;
             $("#J_circle").find('.prize').each(function () {
-                //匹配awardid
-                if ($(this).data("type") === +data.awardtype) {
+                //匹配awardId
+                if ($(this).data("id") === +data.awardId) {
                     return void (r = 60 * (5 - $(this).data("index")) + 30)
                 }
             });
@@ -107,11 +109,6 @@ $(function () {
                         return -r * ((e = e / o - 1) * e * e * e - 1) + i
                     },
                     callback: function () {
-                        // if (data.lottery.beanid > 0) {
-                        //
-                        // } else {
-                        //     game.errorModals('继续加油哦');
-                        // }
                         game.showModal(data);
                         game.renderElement();
                         game.running = false;
@@ -163,7 +160,7 @@ $(function () {
                 $(".game-time p").html('抽奖机会已用完');
             }
         },
-        createGoodsModal: function (data) {//NEW
+        createGoodsModal: function (data) {
             return '<div class="J_modalShowPrize coupon-modal-showPrize">' +
                 '<span class="close coupon-modal-close"></span>' +
                 '<div class="coupon-modal-showPrize-dialog">' +

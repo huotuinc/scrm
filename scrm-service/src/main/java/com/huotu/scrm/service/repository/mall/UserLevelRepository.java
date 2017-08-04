@@ -1,7 +1,6 @@
 package com.huotu.scrm.service.repository.mall;
 
 import com.huotu.scrm.service.entity.mall.UserLevel;
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 public interface UserLevelRepository extends JpaRepository<UserLevel, Long> {
 
     //根据等级和商户ID查询等级
-    UserLevel findByLevelAndCustomerId(Long level, Long customerId);
+    UserLevel findByIdAndCustomerId(Long level, Long customerId);
 
     /**
      * 根据商户id和销售员标记字段，获得等级列表

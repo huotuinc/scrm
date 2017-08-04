@@ -25,6 +25,8 @@ public interface ActWinDetailService {
     /**
      * 分页查询所有中奖记录
      *
+     * @param pageNo
+     * @param pageSize
      * @return
      */
     Page<ActWinDetail> getPageActWinDetail(int pageNo, int pageSize);
@@ -43,4 +45,5 @@ public interface ActWinDetailService {
      * @return
      */
     List<Map<String, Object>> createExcelRecord();
+
 }

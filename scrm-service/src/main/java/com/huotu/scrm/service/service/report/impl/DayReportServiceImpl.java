@@ -3,6 +3,7 @@ package com.huotu.scrm.service.service.report.impl;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
@@ -14,6 +15,7 @@ import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -74,6 +76,12 @@ public class DayReportServiceImpl implements DayReportService {
             dayReport.setUserId(sourceUserId);
             dayReport.setCustomerId(user.getCustomerId());
             dayReport.setLevelId(user.getLevelId());
+            //设置是否为销售员
+            UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
+            if (userLevel == null) {
+                continue;
+            }
+            dayReport.setSalesman(userLevel.isSalesman());
             //设置每日咨询转发量
             int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTime, todayBeginTime, sourceUserId).size();
             dayReport.setForwardNum(forwardNum);
@@ -126,16 +134,27 @@ public class DayReportServiceImpl implements DayReportService {
         int forwardScore = 0;
         //判断是否开启咨询转发积分奖励
         if (infoConfigure.extensionIsBuddyAndIsReward()) {
-            int rewardNum = Math.min(infoConfigure.getRewardLimitNum(), forwardNum);
+            int rewardNum = 0;
+            if (infoConfigure.isExchangeSwitch()) {
+                rewardNum = Math.min(infoConfigure.getRewardLimitNum(), forwardNum);
+            } else {
+                rewardNum = forwardNum;
+            }
             forwardScore = rewardNum * infoConfigure.getRewardScore();
         }
         //获取用户访客量
         int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, beginLocalDateTime, endLocalDateTime);
         //获取每日访客量奖励积分
         int visitorScore = 0;
+        //获取访客量转换比例
+        int exchangeRate = infoConfigure.getExchangeRate();
         //判断是否开启访客量积分奖励
         if (infoConfigure.uvIsBuddyAndIsReward()) {
-            visitorScore = Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / infoConfigure.getExchangeRate());
+            if (infoConfigure.isDayExchangeLimitSwitch()) {
+                visitorScore = Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / exchangeRate);
+            } else {
+                visitorScore = visitorNum / exchangeRate;
+            }
         }
         return forwardScore + visitorScore;
     }

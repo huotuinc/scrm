@@ -15,10 +15,16 @@ import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by montage on 2017/7/13.
@@ -33,7 +39,9 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
 
     @Override
     public Page<ActWinDetail> getPageActWinDetail(int pageNo, int pageSize) {
-        return actWinDetailRepository.findAll(new PageRequest(pageNo - 1, pageSize));
+        Sort sort = new Sort(Sort.Direction.DESC, "winTime");
+        Pageable pageable = new PageRequest(pageNo - 1, pageSize, sort);
+        return actWinDetailRepository.findAll(pageable);
     }
 
     @Override
@@ -42,22 +50,22 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     }
 
     @Override
-    public  List<Map<String, Object>> createExcelRecord() {
+    public List<Map<String, Object>> createExcelRecord() {
         List<ActWinDetail> actWinDetailList = actWinDetailRepository.findAll();
         List<Map<String, Object>> listMap = new ArrayList<>();
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("sheetName", "sheet1");
         listMap.add(map);
-        actWinDetailList.forEach( actWinDetail -> {
-            Map<String,Object> mapValue = new HashMap<>();
-            mapValue.put("winDetailId",actWinDetail.getWinDetailId());
-            mapValue.put("userId",actWinDetail.getUserId());
-            mapValue.put("actName",actWinDetail.getActName());
-            mapValue.put("prizeName",actWinDetail.getPrize().getPrizeName());
-            mapValue.put("winnerName",actWinDetail.getWinnerName());
-            mapValue.put("winnerTel",actWinDetail.getWinnerTel());
-            mapValue.put("winTime",actWinDetail.getWin_Time());
-            mapValue.put("ipAddress",actWinDetail.getIpAddress());
+        actWinDetailList.forEach(actWinDetail -> {
+            Map<String, Object> mapValue = new LinkedHashMap<>();
+            mapValue.put("userId", actWinDetail.getUserId());
+            mapValue.put("actName", actWinDetail.getPrize().getActivity().getActTitle());
+            mapValue.put("prizeName", actWinDetail.getPrize().getPrizeName());
+            mapValue.put("winnerName", actWinDetail.getWinnerName());
+            mapValue.put("winnerTel", actWinDetail.getWinnerTel());
+            mapValue.put("winTime", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(actWinDetail.getWinTime()));
+            mapValue.put("ipAddress", actWinDetail.getIpAddress());
+            listMap.add(mapValue);
         });
         return listMap;
     }

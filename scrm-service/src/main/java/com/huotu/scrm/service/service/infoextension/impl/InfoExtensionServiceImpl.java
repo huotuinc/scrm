@@ -105,19 +105,23 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         statisticalInformation.setDayScore(dayScore);
         statisticalInformation.setAccumulateScore(monthScore + accumulateScore);
         //获取关注人数（销售员特有）
-        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-
         // TODO: 2017-08-04 关注人数并不是累计的，而是随时变化的，所以不用累计每月统计数，需要你自己改掉！！！
+        UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
         int followNum = 0;
-        List<MonthReport> monthReportList = monthReportRepository.findByUserId(user.getId());
-        for (MonthReport monthReport : monthReportList
-                ) {
-            followNum += monthReport.getFollowNum();
+        if (userLevel != null) {
+            if (userLevel.isSalesman()) {
+                List<MonthReport> monthReportList = monthReportRepository.findByUserId(userId);
+                for (MonthReport monthReport : monthReportList
+                        ) {
+                    followNum += monthReport.getFollowNum();
+                }
+                //获取本月关注人数
+                int monthFollowNum = businessCardRecordRepository.countByUserIdAndFollowDateBetween(userId, firstDay.atStartOfDay(), now);
+                statisticalInformation.setFollowNum(followNum + monthFollowNum);
+            }
+        } else {
+            statisticalInformation.setFollowNum(0);
         }
-        //获取本月关注人数
-        int monthFollowNum = businessCardRecordRepository.countByUserIdAndFollowDateBetween(user.getId(), firstDayOfMonth.atStartOfDay(), now);
-        statisticalInformation.setFollowNum(followNum + monthFollowNum);
-
         // TODO: 2017-08-04 访客量排名通过schedule放到map里面，否则太消耗了
         //获取访客量排名
         Map<Long, Integer> map = new TreeMap<>();
@@ -329,16 +333,15 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
 
     @Override
     public boolean checkIsSalesman(Long userId) {
-        return true;
-//        User user = userRepository.findOne(userId);
-//        if (user == null) {
-//            return false;
-//        }
-//        UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-//        if (userLevel == null) {
-//            return false;
-//        }
-//        return userLevel.isSalesman();
+        User user = userRepository.findOne(userId);
+        if (user == null) {
+            return false;
+        }
+        UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
+        if (userLevel == null) {
+            return false;
+        }
+        return userLevel.isSalesman();
     }
 
     /**
@@ -359,6 +362,33 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      */
     private int getVisitorNum(Long infoId) {
         return infoBrowseRepository.countByInfoId(infoId);
+    }
+
+    /**
+     * 获取资讯发布时间距现在多少时间，默认小时数
+     *
+     * @param infoId 咨询ID
+     * @return
+     */
+    private String getReleaseTime(Long infoId) {
+        LocalDateTime createTime = infoRepository.findOne(infoId).getCreateTime();
+        Date now = new Date();
+        long releaseTime = (now.getTime() - localDateTimeToDate(createTime).getTime()) / (60 * 60 * 1000);
+        int releaseHour = (int) releaseTime;
+        if (releaseHour < 24) {
+            return String.valueOf(releaseHour);
+        }
+        int releaseDay = releaseHour / 24;
+        releaseHour = releaseHour % 24;
+        return releaseDay + "天" + releaseHour;
+    }
+
+
+    private Date localDateTimeToDate(LocalDateTime time) {
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant = time.atZone(zone).toInstant();
+        Date date = Date.from(instant);
+        return date;
     }
 
     /**

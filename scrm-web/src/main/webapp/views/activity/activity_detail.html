@@ -4,120 +4,106 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>活动编辑</title>
-    <link rel="shortcut icon" href="favicon.ico">
-    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/sweetalert/sweetalert.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/switchery/switchery.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.7.css" rel="stylesheet">
+    <!--checkbox-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
           rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/jsTree/style.min.css" rel="stylesheet">
     <link href="../../resources/css/daterangepicker.css" rel="stylesheet">
     <!--<base target="_blank">-->
 </head>
 
 <body class="gray-bg">
-<div class="page-content">
-    <div class="wrapper wrapper-content">
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
-                <form method="post" class="form-horizontal" id="actDetail" th:action="@{/mall/act/save}">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">活动类型:</label>
-                        <div class="col-sm-2">
-                            <select class="form-control input" id="actType">
-                                <option selected="selected" value="0">幸运大转盘</option>
-                            </select>
-                        </div>
-                    </div>
-                    <input th:type="hidden" th:value="${activity.actId}" name="actId"/>
-                    <input name="rateDesc" type="hidden">
-                    <input name="ruleDesc" type="hidden">
-                    <input name="actType" type="hidden">
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">活动标题:</label>
-                        <div class="col-sm-3">
-                            <input type="text" placeholder="活动标题" class="form-control" th:value="${activity.actTitle}"
-                                   name="actTitle">
-                        </div>
-                    </div>
-                    <div class="form-group m-r-sm">
-                        <label class="col-sm-3 control-label" for="actTime">活动时间:</label>
-                        <div class="col-sm-3">
-                            <input type="text" id="actTime"
-                                   placeholder="开始时间-结束时间" style="width: 277px;"/>
-                            <input type="hidden" id="startDate" name="startDate"
-                                   th:if="${not #lists.isEmpty(activity.startDate)}"
-                                   th:value="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}"
-                            /> <input type="hidden" id="startDate" name="startDate"
-                                      th:if="${ #lists.isEmpty(activity.startDate)}"
-                        />
-                            <input type="hidden" id="endDate" name="endDate"
-                                   th:if="${not #lists.isEmpty(activity.endDate)}"
-                                   th:value="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"
-                            /><input type="hidden" id="endDate" name="endDate"
-                                     th:if="${#lists.isEmpty(activity.endDate)}"
-                        />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">开启状态:</label>
-                        <div class="switch">
-                            <div class="onoffswitch">
-                                <input type="checkbox" checked="" class="onoffswitch-checkbox" id="example1"
-                                       th:checked="${activity.openStatus}" name="openStatus">
-                                <label class="onoffswitch-label" for="example1">
-                                    <span class="onoffswitch-inner"></span>
-                                    <span class="onoffswitch-switch"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-3 control-label">游戏消耗积分:</label>
-                        <div class="col-sm-3">
-                            <input type="text" placeholder="游戏消耗积分" class="form-control"
-                                   th:value="${activity.gameCostlyScore}" name="gameCostlyScore">
-                        </div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">规则简介:</label>
-                        <div class="col-sm-8">
-                            <div class="ibox-content no-padding">
-                                <div style="display: none;" class="js_summerNote" id="ruleDesc"
-                                     th:utext="${activity.ruleDesc}">
 
-                                </div>
-                            </div>
-                        </div>
+<div class="wrapper wrapper-content">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <form method="post" class="form-horizontal" id="actDetail" th:action="@{/mall/act/save}">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">活动类型:</label>
+                    <div class="col-sm-2">
+                        <select class="form-control input" id="actType">
+                            <option selected="selected" value="0">幸运大转盘</option>
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">概率简介:</label>
-                        <div class="col-sm-8">
-                            <div class="ibox-content no-padding">
-                                <div style="display: none;" class="js_summerNote" id="rateDesc"
-                                     th:utext="${activity.rateDesc}">
+                </div>
+                <input th:type="hidden" th:value="${activity.actId}" name="actId"/>
+                <input name="rateDesc" type="hidden">
+                <input name="ruleDesc" type="hidden">
+                <input name="actType" type="hidden">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">活动标题:</label>
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="活动标题" class="form-control" th:value="${activity.actTitle}"
+                               name="actTitle">
+                    </div>
+                </div>
+                <div class="form-group m-r-sm">
+                    <label class="col-sm-3 control-label" for="actTime">活动时间:</label>
+                    <div class="col-sm-3">
+                        <input type="text" id="actTime" class="form-control"
+                               placeholder="开始时间-结束时间" />
+                        <input type="hidden" id="startDate" name="startDate"
+                               th:if="${not #lists.isEmpty(activity.startDate)}"
+                               th:value="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}"
+                        /> <input type="hidden" id="startDate" name="startDate"
+                                  th:if="${ #lists.isEmpty(activity.startDate)}"
+                    />
+                        <input type="hidden" id="endDate" name="endDate"
+                               th:if="${not #lists.isEmpty(activity.endDate)}"
+                               th:value="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"
+                        /><input type="hidden" id="endDate" name="endDate"
+                                 th:if="${#lists.isEmpty(activity.endDate)}"
+                    />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">游戏消耗积分:</label>
+                    <div class="col-sm-3">
+                        <input type="text" placeholder="游戏消耗积分" class="form-control"
+                               th:value="${activity.gameCostlyScore}" name="gameCostlyScore">
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">规则简介:</label>
+                    <div class="col-sm-8">
+                        <div class="ibox-content no-padding">
+                            <div style="display: none;" class="js_summerNote" id="ruleDesc"
+                                 th:utext="${activity.ruleDesc}">
 
-                                </div>
                             </div>
                         </div>
                     </div>
-                    <div>
-                        <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-primary" type="submit" onclick="actDetailHandler.screen()">保存
-                            </button>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">概率简介:</label>
+                    <div class="col-sm-8">
+                        <div class="ibox-content no-padding">
+                            <div style="display: none;" class="js_summerNote" id="rateDesc"
+                                 th:utext="${activity.rateDesc}">
+
+                            </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                </div>
+                <div>
+                    <div class="col-sm-4 col-sm-offset-2">
+                        <button class="btn btn-primary btn-success" type="submit" onclick="actDetailHandler.screen()">保存
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
-
 </div>
+
 
 <!--基础框架js-->
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>

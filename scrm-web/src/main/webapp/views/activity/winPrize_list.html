@@ -9,9 +9,10 @@
     <!-- Morris -->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.7.css" rel="stylesheet">
     <!--checkbox-->
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
     <!--datetimepick-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
@@ -27,7 +28,9 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button" onclick="articleHelper.edit(0)">导出</button>
+                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
+                                onclick="winListHandler.download()">导出
+                        </button>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -44,21 +47,21 @@
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
-                            <tr th:each="prDeList: ${prizeDetailList}">
-                                <td th:text="${prDeList.winDetailId}">1</td>
-                                <td th:text="${prDeList.userId}">
+                            <tr th:each="actWinDetail,itenSatus:${joinRecord}">
+                                <td th:text="${itenSatus.index}+1"></td>
+                                <td th:text="${actWinDetail.userId}">
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
                                     </div>
                                 </td>
-                                <td th:text="${}" style="width: 5%;">
+                                <td th:text="${actWinDetail.prize.activity.actTitle}" style="width: 5%;">
                                     <p style="width: 100%; height: 50px;">
                                     </p>
                                 </td>
-                                <td th:text="${jdGood.skuId}"></td>
-                                <td th:text="${prDeList.winnerName}"></td>
-                                <td th:text="${prDeList.winnerTel}"></td>
-                                <td th:text="${prDeList.win_Time}"></td>
-                                <td th:text="${prDeList.ipAddress}"></td>
+                                <td th:text="${actWinDetail.prize.prizeName}"></td>
+                                <td th:text="${actWinDetail.winnerName}"></td>
+                                <td th:text="${actWinDetail.winnerTel}"></td>
+                                <td th:text="${#dates.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td th:text="${actWinDetail.ipAddress}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -92,41 +95,24 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
-<script src="../js/infoJs/infoLists.js"></script>
 
-<script type="text/javascript"  th:inline="javascript">
-    var pageIndex = /*[[${informationSearch.pageNo}]]*/ 1;
-    var totalPage = /*[[${infoListsPage.totalPages}]]*/ 20;
+<script type="text/javascript">
+    var pageIndex = [[${pageIndex}]];
+    var totalPage = [[${totalPages}]];
+    var ajaxUrl = "[[@{/site}]]";
     //初始化分页
-    var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
+    var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
 
-    pageinate.init(function (p) {
-        infoListHandler.search(p);
+    paging.init(function (p) {
+        window.location.href = ajaxUrl + '/join/record?pageIndex=' + p;
     });
 
-    var infoListHandler = {
-        search:function(pageNo) {
-            var search = $("input:text[name='infoName']").val(pageIndex);
-            $('#searchForm').submit();
-        },
-
-        searchAll:function(){
-            window.location.href = "/mall/infoLists";
-        },
-
-        search: function(pageNo){
-            $("input[name=pageNo]").val(pageNo);
-            $('#searchForm').submit();
-        },
+    var winListHandler = {
+        download: function () {
+//            window.location.href = ajaxUrl + "/downloadWinDetail";
+            window.open(ajaxUrl + "/downloadWinDetail");
+        }
     }
-
-    $('.js-search').click(function () {
-        infoListHandler.search(1);
-    });
-
-    $('.js-searchAll').click(function(){
-        infoListHandler.searchAll();
-    });
 </script>
 </body>
 

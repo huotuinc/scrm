@@ -45,7 +45,7 @@ public class DayReportRepositoryTest extends CommonTestBase {
 
     @Test
     public void testUserLevelRepository() {
-        UserLevel byLevelAndCustomerId = userLevelRepository.findByLevelAndCustomerId(1L, 842L);
+        UserLevel byLevelAndCustomerId = userLevelRepository.findByIdAndCustomerId(1L, 842L);
         System.out.println(byLevelAndCustomerId.getId());
     }
 }

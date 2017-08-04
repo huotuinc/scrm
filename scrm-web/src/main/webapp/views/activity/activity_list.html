@@ -22,10 +22,28 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
+                <form class="search-panel" method="get" action="#"  id="searchForm">
+                    <!--用来传递页码-->
+                    <input type="hidden" name="pageNo" value=""/>
+                    <div class="ibox-content p-m no-borders">
+                        <div class="form-inline ">
+                            <div class="form-group m-r-sm">
+                                <label class="control-label" for="searchCondition">活动关键字：</label>
+                                <input type="text" class="form-control input-sm mb10" id="searchCondition"
+                                        placeholder="活动标题"/>
+                                <button type="button" class="btn btn-success js-search">筛选</button>
+                                <button type="button" class="btn btn-success js-searchAll">显示全部</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <div class="ibox-content p-xxs no-top-border">
                     <div style="text-align:right;">
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
-                                onclick="actInfoHandler.editAct()">新增
+                                onclick="actListHandler.editAct()">新增
+                        </button>
+                        <button class="btn btn-w-m btn-success" type="button"
+                                onclick="actListHandler.joinRecord()">中奖记录
                         </button>
                     </div>
                     <div class="panel-body">
@@ -42,8 +60,8 @@
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
-                            <tr th:each="activity:${activities}">
-                                <td class="js-actId" th:text="${activity.actId}">
+                            <tr th:each="activity,iterStat:${activities}">
+                                <td class="js-actId" th:text="${iterStat.index}+1">
                                     <span id="customerId" th:text="${activity.customerId}" th:type="hidden"></span>
                                 </td>
                                 <td th:text="${activity.actTitle}"></td>
@@ -64,21 +82,29 @@
                                     <span class="cursor-point"><i class="fa fa-link tooltips" data-placement="top"
                                                                   data-toggle="tooltip" data-original-title="活动链接"></i></span>
                                     &nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-paste tooltips" data-placement="top"
-                                                                  data-toggle="tooltip" data-original-title="参与记录"></i></span>
-                                    &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-cog tooltips" data-placement="top"
-                                                                  data-toggle="tooltip" data-original-title="奖品设置"></i></span>
+                                                                  data-toggle="tooltip" data-original-title="奖品设置"
+                                                                  th:onclick="'javascript:actListHandler.setPrize('+${activity.actId}+')'"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="编辑"
-                                                                  th:onclick="'javascript:actInfoHandler.editAct('+${activity.actId}+')'"></i></span>
+                                                                  th:onclick="'javascript:actListHandler.editAct('+${activity.actId}+')'"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="删除"
-                                                                  th:onclick="'javascript:actInfoHandler.deleteAct('+${activity.actId}+')'"></i></span>
+                                                                  th:onclick="'javascript:actListHandler.deleteAct('+${activity.actId}+')'"></i></span>
+                                    <div style="text-align:right;">
+                                        <button th:if="${activity.openStatus}" class="btn btn-danger btn-xs"
+                                                th:onclick="'javascript:actListHandler.actDisable('+${activity.actId}+')'">
+                                            禁用
+                                        </button>
+                                        <button th:unless="${activity.openStatus}" class="btn btn-success btn-xs"
+                                                th:onclick="'javascript:actListHandler.actEnable('+${activity.actId}+')'">
+                                            启用
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             </tbody>
@@ -121,10 +147,10 @@
     var ajaxUrl = "[[@{/mall}]]";
     var requestDate = {};
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
-    paging.init(function () {
-        console.log(1);
+    paging.init(function (p) {
+        window.location.href = ajaxUrl + '/act/list?pageIndex=' + p;
     });
-    var actInfoHandler = {
+    var actListHandler = {
         deleteAct: function (actId) {
             hot.confirm("确定要删除么？", function () {
                 requestDate = {actId: actId};
@@ -145,6 +171,32 @@
             } else {
                 window.location.href = ajaxUrl + "/act/detail";
             }
+        },
+        setPrize: function (actId) {
+            window.location.href = ajaxUrl + "/prize/list?actId=" + actId;
+        },
+        joinRecord: function () {
+            window.location.href = "/site/join/record"
+        },
+        actDisable: function (actId) {
+            hot.ajax(ajaxUrl + "/act/disable", {actId: actId}, function (res) {
+                if (res.code == 200) {
+                    hot.tip.success("禁用成功", function () {
+                        window.location.reload();
+                    })
+                }
+            })
+        },
+        actEnable: function (actId) {
+            hot.ajax(ajaxUrl + "/act/enable", {actId: actId}, function (res) {
+                if (res.code == 200) {
+                    hot.tip.success("启用成功", function () {
+                        window.location.reload();
+                    })
+                } else {
+                    hot.tip.error("启用失败")
+                }
+            })
         }
     }
 </script>

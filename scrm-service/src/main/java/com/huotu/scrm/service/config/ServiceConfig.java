@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ComponentScan({
         "com.huotu.scrm.service",
-        "com.huotu.scrm.common"
+        "com.huotu.scrm.common",
 })
 @EnableJpaRepositories(basePackages = "com.huotu.scrm.service.repository")
 @EnableTransactionManagement

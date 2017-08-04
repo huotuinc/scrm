@@ -104,7 +104,6 @@ public class Activity {
     @Column(name = "Is_Delete")
     private boolean isDelete;
 
-
     @Override
     public String toString() {
         return "Activity{" +
