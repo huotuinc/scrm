@@ -1,10 +1,16 @@
 package com.huotu.scrm.web.controller.site;
 
-import com.huotu.scrm.service.model.*;
+import com.huotu.scrm.service.model.DayFollowNumInfo;
+import com.huotu.scrm.service.model.DayScoreInfo;
+import com.huotu.scrm.service.model.DayScoreRankingInfo;
+import com.huotu.scrm.service.model.DayVisitorNumInfo;
+import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.web.CommonTestBase;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
@@ -17,11 +23,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by hxh on 2017-07-21.
  */
-
 @Ignore
 // TODO: 2017-08-04 待修改
 public class InfoExtensionControllerTest extends CommonTestBase {
     private String baseUrl = "/site/extension";
+    @Autowired
+    private InfoRepository infoRepository;
 
     /**
      * 测试进入资讯状态

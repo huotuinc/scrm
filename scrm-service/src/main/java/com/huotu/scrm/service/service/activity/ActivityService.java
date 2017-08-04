@@ -11,6 +11,7 @@ package com.huotu.scrm.service.service.activity;
 
 import com.huotu.scrm.service.entity.activity.Activity;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 活动service层接口
@@ -24,7 +25,7 @@ public interface ActivityService {
      *
      * @return 活动集合
      */
-    Page<Activity> findAllActivity(int pageNo, int pageSize);
+    Page<Activity> findAllActivity(Long customerId, int pageNo, int pageSize);
 
     /**
      * 根据Id查询
@@ -34,9 +35,11 @@ public interface ActivityService {
      */
     Activity findByActId(Long actId);
 
-    /**d
+    /**
+     * d
      * 保存活动
      */
+    @Transactional
     void saveActivity(Activity activity);
 
     /**
@@ -44,6 +47,7 @@ public interface ActivityService {
      *
      * @param actId 活动Id
      */
+    @Transactional
     void updateActivity(Long actId);
 
 

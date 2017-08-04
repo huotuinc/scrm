@@ -51,7 +51,7 @@ public class ActivityServiceTest extends CommonTestBase {
      */
     @Test
     public void findAllActivityTest(){
-        Page<Activity> allActivity = activityService.findAllActivity(1, 2);
+        Page<Activity> allActivity = activityService.findAllActivity(3344L,1, 2);
         System.out.println(allActivity.getTotalElements());
         System.out.println(allActivity.getTotalPages());
         List<Activity> activityList = allActivity.getContent();
@@ -134,12 +134,10 @@ public class ActivityServiceTest extends CommonTestBase {
         Assert.assertTrue(actPrize1 == realActivity.getActPrizes().get(0));
 
         //删除actPrize1
-        actPrizeRepository.delete(actPrize1);
-//        entityManager.clear();
-//        entityManager.flush();
-//        entityManager.refresh(realActivity);
-        realActivity = activityRepository.findOne(activity.getActId());
-        Assert.assertEquals(1,realActivity.getActPrizes().size());
+        activity.getActPrizes().remove(actPrize1);
+        activityRepository.saveAndFlush(activity);
+        actPrize1 = actPrizeRepository.findOne(actPrize1.getPrizeId());
+        Assert.assertNull(actPrize1);
     }
 
 }

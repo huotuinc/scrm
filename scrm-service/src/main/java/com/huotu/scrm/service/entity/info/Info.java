@@ -2,6 +2,7 @@ package com.huotu.scrm.service.entity.info;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "SCRM_Info")
 @Cacheable(value = false)
 public class Info {

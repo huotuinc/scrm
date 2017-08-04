@@ -69,7 +69,6 @@ public class MonthReportServiceImpl implements MonthReportService {
                 continue;
             }
             monthReport.setSalesman(userLevel.isSalesman());
-            monthReport.setSalesman(true);
             //设置每月咨询转发量
             int forwardNum = getForwardNum(userId, lastFirstDay, lastEndDay);
             monthReport.setForwardNum(forwardNum);
