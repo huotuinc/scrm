@@ -7,10 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 活动表
@@ -36,7 +33,7 @@ public class Activity {
     /**
      * 获取活动相关的奖品
      */
-    @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY,orphanRemoval = true)
     private List<ActPrize> actPrizes;
 
     /**

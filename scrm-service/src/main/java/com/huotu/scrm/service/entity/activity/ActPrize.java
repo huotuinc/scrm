@@ -29,7 +29,7 @@ public class ActPrize {
 
 
     /**所属活动*/
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH,CascadeType.PERSIST},optional=false)
     @JoinColumn(name="Act_Id")
     private Activity activity;
 

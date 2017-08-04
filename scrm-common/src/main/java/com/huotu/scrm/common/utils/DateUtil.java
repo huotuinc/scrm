@@ -12,14 +12,17 @@ package com.huotu.scrm.common.utils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * String工具类
  * <p>
  * Created by montage on 2017/7/13.
  */
 public class DateUtil {
+    private static final long HOURS_PER_DAY = 24;
+
     /**
      * 字符串转日期
      *
@@ -35,5 +38,28 @@ public class DateUtil {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static String compareLocalDateTime(LocalDateTime localDateTime1, LocalDateTime localDateTime2) {
+        Duration duration = Duration.between(localDateTime1, localDateTime2);
+        System.out.println(duration.toHours());
+        long totalDays = duration.toDays();
+        long totalHours = duration.toHours();
+        long totalMin = duration.toMinutes();
+        StringBuilder sb = new StringBuilder();
+        //显示了天就不用显示分了
+        boolean isDay = false;
+        if (totalDays > 0) {
+            sb.append(totalDays).append("天");
+            isDay = true;
+        }
+        if (totalHours > 0) {
+            sb.append(totalHours).append("时");
+        }
+        if(totalMin > 0 && !isDay){
+            sb.append(totalMin).append("分");
+        }
+        sb.append("前");
+        return sb.toString();
     }
 }
