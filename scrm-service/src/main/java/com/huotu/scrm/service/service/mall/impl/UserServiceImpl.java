@@ -12,7 +12,7 @@ public class UserServiceImpl implements UserService{
     private UserRepository userRepository;
     @Override
     public User getByIdAndCustomerId(Long id, Long customerId) {
-        return userRepository.findOneByIdAndCustomerId(id,customerId);
+        return userRepository.getByIdAndCustomerId(id,customerId);
     }
 
     @Override

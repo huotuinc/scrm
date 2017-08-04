@@ -41,15 +41,18 @@ $(function () {
             $.ajax({
                 type: 'POST',
                 url: '/site/join/act',
-                data: {actId:actId},
+                data: {actId:actId,
+                    customerId:4421
+                },
                 dataType: 'json',
                 success: function (res) {
-                    if (res.resultCode !== 2000) {
+                    console.log(res);
+                    if (res.code !== 200) {
                         game.errorModals(res.resultMsg);
                         return;
                     }
-                    if (res.data.joinid <= 0) {
-                        game.errorModals(res.data.desc);
+                    if (res.data.code <= 0) {
+                        game.errorModals(res.data.value);
                         return;
                     }
                     game.gameTimes--;
@@ -96,7 +99,7 @@ $(function () {
             var r;
             $("#J_circle").find('.prize').each(function () {
                 //匹配awardId
-                if ($(this).data("id") === +data.awardId) {
+                if ($(this).data("id") === +data.prizeId) {
                     return void (r = 60 * (5 - $(this).data("index")) + 30)
                 }
             });
@@ -166,13 +169,13 @@ $(function () {
                 '<div class="coupon-modal-showPrize-dialog">' +
                 '<div class="modal-header"></div>' +
                 '<div class="modal-body withoutCode">' +
-                '<p class="modal-title">' + data.orderTitle + '</p>' +
+                '<p class="modal-title">' + data.prizeName + '</p>' +
                 '<div class="coupon-imageBg">' +
                 '<div class="coupon-image">' +
-                '<a href="#"><img src="' + data.orderImg + '"></a>' +
+                '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="#" class="coupon-use">' + data.orderTitle + '</a>' +
+                '<a href="#" class="coupon-use">' + "xxxxxx" + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +

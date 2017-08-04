@@ -8,12 +8,16 @@
  */
 
 package com.huotu.scrm.web.controller.site;
+
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ExcelUtil;
+import com.huotu.scrm.common.utils.IpUtil;
+import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.model.ActivityStatus;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import com.huotu.scrm.service.service.activity.ActivityService;
@@ -65,13 +69,13 @@ public class ActWinController extends SiteBaseController {
     ActivityService activityService;
 
     @RequestMapping("/activity/index")
-    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId,Model model){
+    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
 
         //查询用户积分
-        User user =  userService.getByIdAndCustomerId(userId,customerId);
+        User user = userService.getByIdAndCustomerId(userId, customerId);
         double score = user.getUserIntegral() - user.getLockedIntegral();
         //获取奖品
-        Activity  activity = activityService.findByActId(actId);
+        Activity activity = activityService.findByActId(actId);
         activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
         activity.getActPrizes().forEach(p -> {
             try {
@@ -81,8 +85,9 @@ public class ActWinController extends SiteBaseController {
             }
         });
         //用户可参与次数
-        model.addAttribute("times",activityUseTimes(activity,user));
-        model.addAttribute("active",activity);
+        int times = activityUseTimes(activity, user);
+        model.addAttribute("times", times);
+        model.addAttribute("active", activity);
         return "activity/game";
 
     }
@@ -95,99 +100,138 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/join/act")
     @ResponseBody
     public ApiResult joinAct(HttpServletRequest request,
-            @ModelAttribute("userId") Long userId,
-            Long actId,Long customerId) {
-
-
+                             @ModelAttribute("userId") Long userId,
+                             Long actId, Long customerId) {
         //查询用户积分
-        User user =  userService.getByIdAndCustomerId(userId,customerId);
-        //获取奖品
-        Activity  activity = activityService.findByActId(actId);
-
-        if (activityUseTimes(activity,user) > 0){
-
-            //抽取中奖奖品
-            Long priezeId =  WinArithmetic(actId);
-            // TODO: 2017/8/3  调商城接口扣除积分
-
-            // TODO: 2017/8/3 插入零时中奖记入
-            ActWinDetail actWinDetail = new ActWinDetail();
-            actWinDetail.setUserId(userId);
-            actWinDetail.setWinTime(LocalDateTime.now());
-
-
-
-            // TODO: 2017/8/3 返回前端
+        User user = userService.getByIdAndCustomerId(userId, customerId);
+        //获取活动
+        Activity activity = activityService.findByActId(actId);
+        //活动情况
+        //1、活动还没开始
+        if (!activity.activeBegin()) {
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_UNBEGIN);
+        }
+        //2、活动结束
+        if (!activity.activeEnd()) {
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_END);
         }
 
+        if (activityUseTimes(activity, user) > 0) { //判读用户是否有抽奖机会
 
+            //抽取中奖奖品
+            Long prizeId = WinArithmetic(actId);
 
-        return null;
+            // TODO: 2017/8/3  调商城接口扣除积分
 
-//        //TODO 用户积分没有得到 无法计算游戏消耗积分
-//        ActWinDetail actWinDetail = new ActWinDetail();
-//        actWinDetail.setPrize(prize);
-//        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
-//        actWinDetail.setUserId(Long.valueOf(userId));
-//        actWinDetail.setWin_Time(new Date());
-//        actWinDetail.setWinnerName(userName);
-//        actWinDetail.setWinnerTel(userTel);
-//        actWinDetail = actWinDetailService.saveActWinDetail(actWinDetail);
-//        if (actWinDetail != null) {
-//            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
-//        }
-//        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+            //记入中奖激励
+            ActWinDetail actWinDetail = winPrizeRecord(request, prizeId, userId, activity);
+            if (actWinDetail != null) {
+                ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
+                if (actPrize.getPrizeCount() <= 0) {
+                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER.toString());
+                }
+                Map<String, Object> data = new HashMap<>();
+                data.put("prizeId", prizeId);
+                data.put("prizeName", actPrize.getPrizeName());
+                try {
+                    String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
+                    data.put("prizeImageUrl", imageUrl);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                return ApiResult.resultWith(ResultCodeEnum.SUCCESS, data);
+            }
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+        }
+        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "没有抽奖机会");
     }
 
     /**
-     * 抽奖算法
-     * @param actId
+     * 记入中奖记入
+     *
+     * @param request
+     * @param userId
+     * @param activity
      * @return
      */
-    private Long WinArithmetic(Long actId) {
-        //获取奖品
-        Activity  activity = activityService.findByActId(actId);
-        double  totalProbability = 0;
-        Map<Long,Map<Double,Double>> prizesMap = new HashMap<>();
-        for (ActPrize p:activity.getActPrizes()
+    private ActWinDetail winPrizeRecord(HttpServletRequest request, Long priezeId, Long userId,
+                                        Activity activity) {
+
+        ActWinDetail actWinDetail = new ActWinDetail();
+        actWinDetail.setUserId(userId);
+        actWinDetail.setWinTime(LocalDateTime.now());
+        actWinDetail.setPrize(getPrizeByPrizeId(activity, priezeId));
+        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
+        return actWinDetailService.saveActWinDetail(actWinDetail);
+    }
+
+
+    /**
+     * 通过id查找对应奖品
+     *
+     * @param activity
+     * @param prizeId
+     * @return
+     */
+    private ActPrize getPrizeByPrizeId(Activity activity, Long prizeId) {
+        for (ActPrize actPrize : activity.getActPrizes()
                 ) {
-            double temp = (totalProbability + p.getWinRate());
-            Map<Double,Double> tpRange = new HashMap<>();
-            tpRange.put(new Double(totalProbability/100),new Double(temp/100));
-            prizesMap.put(p.getPrizeId(),tpRange);
-            totalProbability = temp;
-        }
-        //抽奖奖项
-        Long winAwardId = -1L;
-        double ran = Math.random();
-        Set<Long> prizeIds = prizesMap.keySet();
-        for (Long prizeId: prizeIds
-                ) {
-            Map<Double,Double> tpRange = prizesMap.get(prizeId);
-            Double key = (Double)tpRange.keySet().toArray()[0];
-            Double value = tpRange.get(key);
-            if (ran >= key.doubleValue() && ran < value.doubleValue()){
-                winAwardId = prizeId;
-                break;
+            if (actPrize.getPrizeId().longValue() == prizeId.longValue()) {
+                return actPrize;
             }
         }
-        return winAwardId;
+        return null;
     }
 
     /**
      * 判读用户参与活动次数
+     *
      * @param activity
      * @param user
      * @return
      */
     private int activityUseTimes(Activity activity, User user) {
         double score = user.getUserIntegral() - user.getLockedIntegral();
-        //计算抽奖次数
-        boolean actStatus = activity.actItSelfStatus();
         int costScore = activity.getGameCostlyScore();
-        if (actStatus && score > costScore)
+        if (score > costScore)
             return (int) (score / costScore);
         return 0;
+    }
+
+    /**
+     * 抽奖算法
+     *
+     * @param actId
+     * @return
+     */
+    private Long WinArithmetic(Long actId) {
+        //获取奖品
+        Activity activity = activityService.findByActId(actId);
+        double totalProbability = 0;
+        Map<Long, Map<Double, Double>> prizesMap = new HashMap<>();
+        for (ActPrize p : activity.getActPrizes()
+                ) {
+            double temp = (totalProbability + p.getWinRate());
+            Map<Double, Double> tpRange = new HashMap<>();
+            tpRange.put(new Double(totalProbability / 100), new Double(temp / 100));
+            prizesMap.put(p.getPrizeId(), tpRange);
+            totalProbability = temp;
+        }
+        //抽奖奖项
+        Long winAwardId = -1L;
+        double ran = Math.random();
+        Set<Long> prizeIds = prizesMap.keySet();
+        for (Long prizeId : prizeIds
+                ) {
+            Map<Double, Double> tpRange = prizesMap.get(prizeId);
+            Double key = (Double) tpRange.keySet().toArray()[0];
+            Double value = tpRange.get(key);
+            if (ran >= key.doubleValue() && ran < value.doubleValue()) {
+                winAwardId = prizeId;
+                break;
+            }
+        }
+        return winAwardId;
     }
 
     /**

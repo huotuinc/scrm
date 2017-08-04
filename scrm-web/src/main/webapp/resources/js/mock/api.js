@@ -6,11 +6,11 @@ Mock.setup({
     timeout: '1000'
 });
 
-Mock.mock(/\/activity\/dojoin/, "post", {
-    "resultCode": 2000,
+Mock.mock("/site/join/act", "post", {
+    "resultCode": 200,
     "resultMsg": "ok",
     "data": {
-        "awardId": 2,
+        "awardId": "2",
         "orderId": "6546789400763",
         "orderTitle": "超级超级超级便宜的东西",
         "orderImg": "//yun.duiba.com.cn/tuia/img/mwd6ugaxbo.jpg",

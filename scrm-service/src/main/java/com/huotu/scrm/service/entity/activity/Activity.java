@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.entity.activity;
 
 import com.huotu.scrm.common.ienum.ActEnum;
+import com.huotu.scrm.service.model.ActivityStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -122,11 +123,22 @@ public class Activity {
     }
 
     /**
-     * 活动本身可用情况
-     * @return true 表示活动本身可用  false 表示活动本身不可用
+     * 活动还未开始
+     * @return true 表示活动开启
      */
-    public boolean actItSelfStatus() {
+    public boolean activeBegin() {
         LocalDateTime now =  LocalDateTime.now();
-        return isDelete == false && openStatus && now.isAfter(startDate) && now.isBefore(endDate);
+        return  openStatus && now.isAfter(startDate);
     }
+
+    /**
+     * 活动还未开始
+     * @return true 表示活动开启
+     */
+    public boolean activeEnd() {
+        LocalDateTime now =  LocalDateTime.now();
+        return now.isBefore(startDate);
+    }
+
+
 }
