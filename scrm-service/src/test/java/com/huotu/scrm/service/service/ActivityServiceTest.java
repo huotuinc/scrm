@@ -134,12 +134,10 @@ public class ActivityServiceTest extends CommonTestBase {
         Assert.assertTrue(actPrize1 == realActivity.getActPrizes().get(0));
 
         //删除actPrize1
-        actPrizeRepository.delete(actPrize1);
-//        entityManager.clear();
-//        entityManager.flush();
-//        entityManager.refresh(realActivity);
-        realActivity = activityRepository.findOne(activity.getActId());
-        Assert.assertEquals(1,realActivity.getActPrizes().size());
+        activity.getActPrizes().remove(actPrize1);
+        activityRepository.saveAndFlush(activity);
+        actPrize1 = actPrizeRepository.findOne(actPrize1.getPrizeId());
+        Assert.assertNull(actPrize1);
     }
 
 }
