@@ -64,7 +64,7 @@ public class InfoExtensionController extends SiteBaseController {
         } else {//小伙伴
             StatisticalInformation statisticalInformation = infoExtensionService.getInformation(user);
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(userId);
+            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
             model.addAttribute("statisticalInformation", statisticalInformation);
             model.addAttribute("status", status);
             return "infoextension/info_center";
@@ -91,7 +91,7 @@ public class InfoExtensionController extends SiteBaseController {
             //获取统计性能（积分，排名等）
             DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(userId,user.getCustomerId());
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(userId);
+            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
             model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
             model.addAttribute("status", status);
             return "extensiondetail/personal_ranking";
@@ -116,7 +116,7 @@ public class InfoExtensionController extends SiteBaseController {
             //获取统计性能（积分，排名等）
             DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(userId,user.getCustomerId());
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(userId);
+            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
             model.addAttribute("dayScoreInfo", dayScoreInfo);
             model.addAttribute("status", status);
             return "extensiondetail/personal_score";
@@ -132,11 +132,11 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/extension/getFollowInfo")
     public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception{
-        UserType userType = userRepository.findUserTypeById(userId);
-        if(userType == null){
+        User user = userRepository.findOne(userId);
+        if(user == null){
             throw new ApiResultException("用户不存在");
         }
-        if (userType != UserType.buddy) {
+        if (user.getUserType() != UserType.buddy) {
             return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
@@ -155,17 +155,17 @@ public class InfoExtensionController extends SiteBaseController {
      */
     @RequestMapping("/extension/getVisitorInfo")
     public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception {
-        UserType userType = userRepository.findUserTypeById(userId);
-        if(userType == null){
+        User user = userRepository.findOne(userId);
+        if(user == null){
             throw new ApiResultException("用户不存在");
         }
-        if (userType != UserType.buddy) {
+        if (user.getUserType() != UserType.buddy) {
             return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
             DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(userId);
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(userId);
+            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
             model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
             model.addAttribute("status", status);
             return "extensiondetail/personal_uv";

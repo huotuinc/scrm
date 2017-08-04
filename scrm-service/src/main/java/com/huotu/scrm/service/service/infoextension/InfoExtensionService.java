@@ -22,7 +22,7 @@ public interface InfoExtensionService {
     /**
      * 查询用户所有相关资讯
      *
-     * @param user   用户
+     * @param user 用户
      * @return
      */
     List<InfoModel> findInfo(User user);
@@ -41,7 +41,7 @@ public interface InfoExtensionService {
      * @param userId 用户ID
      * @return
      */
-    DayScoreRankingInfo getScoreRankingInfo(Long userId,Long customerId);
+    DayScoreRankingInfo getScoreRankingInfo(Long userId, Long customerId);
 
     /**
      * 统计用户积分信息
@@ -49,7 +49,7 @@ public interface InfoExtensionService {
      * @param userId 用户ID
      * @return
      */
-    DayScoreInfo getScoreInfo(Long userId,Long customerId);
+    DayScoreInfo getScoreInfo(Long userId, Long customerId);
 
     /**
      * 统计访问量信息
@@ -70,8 +70,7 @@ public interface InfoExtensionService {
     /**
      * 判断是否为销售 (在小伙伴的前提下)
      *
-     * @param userId 用户ID
      * @return
      */
-    boolean checkIsSalesman(Long userId);
+    boolean checkIsSalesman(Long levelId, Long customerId);
 }

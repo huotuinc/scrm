@@ -50,11 +50,11 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * 根据某段时间查询用户ID关注人数
      *
      * @param userId
-     * @param minDate
-     * @param maxDate
+     * @param beginTime
+     * @param endTime
      * @return
      */
-    int countByUserIdAndFollowDateBetween(Long userId, LocalDateTime minDate, LocalDateTime maxDate);
+    int countByUserIdAndFollowDateBetween(Long userId, LocalDateTime beginTime, LocalDateTime endTime);
 
     /***
      * 查询我关注的名片列表
@@ -68,11 +68,11 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * 根据商户查询某段时间内的所有被关注用户
      *
      * @param customerId
-     * @param minDate
-     * @param maxDate
+     * @param beginTime
+     * @param endTime
      * @return
      */
     @Query("select distinct (t.userId) from BusinessCardRecord t where t.customerId=?1 and t.followDate>=?2 and t.followDate<?3")
-    List<Long> findByCustomerIdAndFollowDate(Long customerId, LocalDateTime minDate, LocalDateTime maxDate);
+    List<Long> findByCustomerIdAndFollowDate(Long customerId, LocalDateTime beginTime, LocalDateTime endTime);
 
 }

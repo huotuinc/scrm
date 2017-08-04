@@ -65,45 +65,36 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      * 根据转发用户ID和转发日期查询转发咨询的访问量
      *
      * @param sourceUserId 转发来源用户ID
-     * @param minTime      起始时间
-     * @param maxTime      结束日时间
+     * @param beginTime    起始时间
+     * @param endTime      结束日时间
      * @return
      */
-    int countBySourceUserIdAndBrowseTimeBetween(Long sourceUserId, LocalDateTime minTime, LocalDateTime maxTime);
+    int countBySourceUserIdAndBrowseTimeBetween(Long sourceUserId, LocalDateTime beginTime, LocalDateTime endTime);
 
     /**
-     * 根据某一商户和时间获取所有的转发用户
+     * 根据某段时间获取所有的转发用户
      *
-     * @param minTime 起始时间
-     * @param maxTime 结束时间
+     * @param beginTime 起始时间
+     * @param endTime   结束时间
      * @return
      */
     @Query("select distinct (t.sourceUserId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2")
-    List<Long> findSourceUserIdList(LocalDateTime minTime, LocalDateTime maxTime);
+    List<Long> findSourceUserIdList(LocalDateTime beginTime, LocalDateTime endTime);
 
     /**
      * 根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
      *
-     * @param minDate 起始日期
-     * @param maxDate 结束日期
-     * @param userId  用户ID
+     * @param beginTime 起始日期
+     * @param endTime   结束日期
+     * @param userId    用户ID
      * @return
      */
-    /*@Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  " +
-            "from InfoBrowse t " +
-            "where t.sourceUserId = ?3 " +
-            "group by t.infoId,t.sourceUserId " +
-            "having min (t.browseTime)>=?1 and min (t.browseTime)<?2")
-    List<InfoBrowse> findForwardNumBySourceUserId(Date minDate, Date maxDate, Long userId);*/
-
-
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  " +
             "from InfoBrowse t " +
             "where t.sourceUserId = ?3 " +
             "group by t.infoId,t.sourceUserId " +
             "having min (t.browseTime)>=?1 and min (t.browseTime)<?2")
-    List<InfoBrowse> findForwardNumBySourceUserId(LocalDateTime minDate, LocalDateTime maxDate, Long userId);
-
+    List<InfoBrowse> findForwardNumBySourceUserId(LocalDateTime beginTime, LocalDateTime endTime, Long userId);
 
 
     /**
@@ -116,12 +107,32 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     List<InfoBrowse> findInfoForwardNum(Long infoId);
 
     /**
-     * 查询某个商户下的所有用户（去除重复）
+     * 查询某个商户某段时间下的所有用户（去除重复）
      *
      * @param customerId 商户ID
      * @return
      */
     @Query("select distinct (t.sourceUserId) from InfoBrowse t where t.customerId=?1")
-    List<Long> findByCustomerId(Long customerId);
+    List<Long> findSourceIdByCustomerId(Long customerId, LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 根据某段时间获取所有的转发用户
+     *
+     * @param beginTime 起始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @Query("select distinct (t.customerId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2")
+    List<Long> findCustomerIdList(LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 根据商户编号查询所有对应用户
+     *
+     * @param customerId
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    List<InfoBrowse> findByCustomerIdAndBrowseTimeBetween(Long customerId, LocalDateTime beginTime, LocalDateTime endTime);
 
 }
