@@ -146,8 +146,9 @@ $(function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
-                if($(this).attr("prizeType")!=0){
+                if($(this).attr("prizeType")==0){
 
+                    game.showNameAndTel();
                     console.log(111);
                 }
 
@@ -214,6 +215,10 @@ $(function () {
                 $('#J_ruleModal').show();
                 game.toggleFilter();
             });
+        },
+        showNameAndTel: function () {
+            $('#J_addTel').show();
+            game.toggleFilter();
         },
         closeRuleModal: function () {
             $('#J_ruleModal').find('.close').click(function () {

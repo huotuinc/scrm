@@ -155,13 +155,13 @@ public class ActWinController extends SiteBaseController {
      * @param activity
      * @return
      */
-    private ActWinDetail winPrizeRecord(HttpServletRequest request, Long priezeId, Long userId,
+    private ActWinDetail winPrizeRecord(HttpServletRequest request, Long prizeId, Long userId,
                                         Activity activity) {
 
         ActWinDetail actWinDetail = new ActWinDetail();
         actWinDetail.setUserId(userId);
         actWinDetail.setWinTime(LocalDateTime.now());
-        actWinDetail.setPrize(getPrizeByPrizeId(activity, priezeId));
+        actWinDetail.setPrize(getPrizeByPrizeId(activity, prizeId));
         actWinDetail.setIpAddress(IpUtil.IpAddress(request));
         return actWinDetailService.saveActWinDetail(actWinDetail);
     }
