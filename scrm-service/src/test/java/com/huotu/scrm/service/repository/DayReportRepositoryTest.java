@@ -11,10 +11,8 @@ import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.convert.Jsr310Converters;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,9 +35,8 @@ public class DayReportRepositoryTest extends CommonTestBase {
 
     @Test
     public void testDayReportRepository() {
-        Date now = new Date();
-        Date date = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(LocalDateTime.now().minusDays(3));
-        List<InfoBrowse> list = infoBrowseRepository.findForwardNumBySourceUserId(date,now, 1L);
+        LocalDateTime now = LocalDateTime.now(),threeDayBefore = now.minusDays(3);
+        List<InfoBrowse> list = infoBrowseRepository.findForwardNumBySourceUserId(threeDayBefore,now, 1L);
         System.out.println("............"+list.size());
         list.forEach(infoBrowse -> {
             System.out.println(infoBrowse.toString());

@@ -3,12 +3,7 @@ package com.huotu.scrm.service.entity.report;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 
@@ -48,10 +43,11 @@ public class DayReport {
     private Long levelId;
 
     /**
-     * 是否是销售员（1：是 0：不是）
+     * 是否是销售员（1：是 0：不是），
+     * 目前转发资讯只有销售员才有这个功能，所以默认设置为true
      */
     @Column(name = "Is_Salesman")
-    private boolean isSalesman;
+    private boolean isSalesman = true;
 
     /**
      * 每日资讯转发量

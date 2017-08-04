@@ -14,7 +14,6 @@ import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.convert.Jsr310Converters;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -64,6 +63,7 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDateTime todayBeginTime = today.atStartOfDay();
         //获取昨天时间（时分秒默认为零）
         LocalDateTime lastBeginTime = todayBeginTime.minusDays(1);
+        //获取昨日转发过资讯的用户
         List<Long> bySourceUserIdList = infoBrowseRepository.findSourceUserIdList(lastBeginTime, todayBeginTime);
         for (long sourceUserId : bySourceUserIdList) {
             User user = userRepository.findOne(sourceUserId);
@@ -71,29 +71,17 @@ public class DayReportServiceImpl implements DayReportService {
                 continue;
             }
             DayReport dayReport = new DayReport();
-            //设置用户ID
             dayReport.setUserId(sourceUserId);
-            //设置商户号
             dayReport.setCustomerId(user.getCustomerId());
-            //设置等级
             dayReport.setLevelId(user.getLevelId());
-            //设置是否为销售员
-//            UserLevel userLevel = userLevelRepository.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
-//            if (userLevel == null) {
-//                continue;
-//            }
-//            dayReport.setSalesman(userLevel.isSalesman());
-            dayReport.setSalesman(true);
             //设置每日咨询转发量
-            Date lastBeginTimeDate = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(lastBeginTime);
-            Date todayBeginDate = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(todayBeginTime);
-            int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTimeDate, todayBeginDate, sourceUserId).size();
+            int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTime, todayBeginTime, sourceUserId).size();
             dayReport.setForwardNum(forwardNum);
             //设置每日访客量
             int countBySourceUserId = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(sourceUserId, lastBeginTime, todayBeginTime);
             dayReport.setVisitorNum(countBySourceUserId);
             //设置每日推广积分（咨询转发奖励和转发咨询浏览奖励）
-            int extensionScore = getEstimateScore(sourceUserId, lastBeginTime, todayBeginTime);
+            int extensionScore = getEstimateScore(sourceUserId, user.getCustomerId(), lastBeginTime, todayBeginTime);
             dayReport.setExtensionScore(extensionScore);
             //设置每日被关注量(销售员特有)
             if (dayReport.isSalesman()) {
@@ -119,40 +107,35 @@ public class DayReportServiceImpl implements DayReportService {
 
     /**
      * 统计推广积分
+     * 这里的 beginLocalDateTime 和 endLocalDateTime 必须是同一天的
      *
-     * @param userId  用户ID
-     * @param minDate 统计起始日期
-     * @param maxDate 统计最后日期
+     * @param userId             用户ID
+     * @param customerId         商户ID
+     * @param beginLocalDateTime 统计起始时间
+     * @param endLocalDateTime   统计最后时间
      * @return
      */
     @Override
-    public int getEstimateScore(Long userId, LocalDateTime minDate, LocalDateTime maxDate) {
-        User user = userRepository.findOne(userId);
-        Date lastBeginTimeDate = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(minDate);
-        Date todayBeginDate = Jsr310Converters.LocalDateTimeToDateConverter.INSTANCE.convert(maxDate);
-        int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTimeDate, todayBeginDate, userId).size();
-        InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
+    public int getEstimateScore(Long userId, Long customerId, LocalDateTime beginLocalDateTime, LocalDateTime endLocalDateTime) {
+        int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(beginLocalDateTime, endLocalDateTime, userId).size();
+        InfoConfigure infoConfigure = infoConfigureRepository.findOne(customerId);
         if (infoConfigure == null) {
             return 0;
         }
         //获取转发咨询浏览量奖励积分
         int forwardScore = 0;
-        //获取咨询转发转换比例
-        int rewardScore = infoConfigure.getRewardScore();
         //判断是否开启咨询转发积分奖励
         if (infoConfigure.extensionIsBuddyAndIsReward()) {
             int rewardNum = Math.min(infoConfigure.getRewardLimitNum(), forwardNum);
-            forwardScore = rewardNum * rewardScore;
+            forwardScore = rewardNum * infoConfigure.getRewardScore();
         }
         //获取用户访客量
-        int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, minDate, maxDate);
+        int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, beginLocalDateTime, endLocalDateTime);
         //获取每日访客量奖励积分
         int visitorScore = 0;
-        //获取访客量转换比例
-        int exchangeRate = infoConfigure.getExchangeRate();
         //判断是否开启访客量积分奖励
         if (infoConfigure.uvIsBuddyAndIsReward()) {
-            visitorScore = Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / exchangeRate);
+            visitorScore = Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / infoConfigure.getExchangeRate());
         }
         return forwardScore + visitorScore;
     }

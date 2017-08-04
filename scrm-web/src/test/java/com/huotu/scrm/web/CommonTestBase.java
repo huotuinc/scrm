@@ -146,6 +146,7 @@ public abstract class CommonTestBase extends SpringWebTest {
         return userRepository.saveAndFlush(user);
     }
 
+    @SuppressWarnings("Duplicates")
     protected UserLevel mockUserLevel(Long customerId, UserType userType, boolean isSalesman) {
         UserLevel userLevel = new UserLevel();
         userLevel.setCustomerId(customerId);

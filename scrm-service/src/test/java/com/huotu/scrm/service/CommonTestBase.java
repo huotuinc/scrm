@@ -12,14 +12,22 @@ package com.huotu.scrm.service;
 
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.config.ServiceConfig;
+import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.mall.CustomerRepository;
+import com.huotu.scrm.service.repository.mall.UserLevelRepository;
+import com.huotu.scrm.service.repository.mall.UserRepository;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -33,6 +41,16 @@ import java.util.UUID;
 @RunWith(SpringJUnit4ClassRunner.class)
 @Transactional
 public class CommonTestBase {
+    @Autowired
+    protected CustomerRepository customerRepository;
+    @Autowired
+    protected UserRepository userRepository;
+    @Autowired
+    protected UserLevelRepository userLevelRepository;
+    @Autowired
+    protected InfoBrowseRepository infoBrowseRepository;
+
+    protected Random random = new Random();
 
     protected Customer mockCustomer() {
         Customer customer = new Customer();
@@ -45,12 +63,11 @@ public class CommonTestBase {
         customer.setNickName(UUID.randomUUID().toString().replace("-", ""));
         customer.setSubDomain(UUID.randomUUID().toString().replace("-", ""));
         customer.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        return customer;
+        return customerRepository.saveAndFlush(customer);
     }
 
     protected User mockUser(Long customerId, UserType userType , Long userLevelId ) {
         //新增用户
-        Random random = new Random();
         User user = new User();
         user.setId(Long.valueOf(String.valueOf(random.nextInt())));
         user.setCustomerId(customerId);
@@ -67,7 +84,7 @@ public class CommonTestBase {
         user.setUserTempIntegral(random.nextInt());
         user.setWeixinImageUrl(UUID.randomUUID().toString());
         user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
-        return user;
+        return userRepository.saveAndFlush(user);
     }
 
     protected User mockUser(Long customerId) {
@@ -76,5 +93,26 @@ public class CommonTestBase {
 
     protected User mockUser(Long customerId , UserType userType ) {
         return mockUser(customerId, userType , 0L );
+    }
+
+    @SuppressWarnings("Duplicates")
+    protected UserLevel mockUserLevel(Long customerId, UserType userType, boolean isSalesman) {
+        UserLevel userLevel = new UserLevel();
+        userLevel.setCustomerId(customerId);
+        userLevel.setLevel(random.nextInt());
+        userLevel.setLevelName(UUID.randomUUID().toString());
+        userLevel.setType(userType);
+        userLevel.setSalesman(isSalesman);
+        return userLevelRepository.saveAndFlush(userLevel);
+    }
+
+    protected InfoBrowse mockInfoBrowse(Long infoId,Long sourceUserId,Long readUserId,Long customerId){
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setInfoId(infoId);
+        infoBrowse.setSourceUserId(sourceUserId);
+        infoBrowse.setReadUserId(readUserId);
+        infoBrowse.setCustomerId(customerId);
+        infoBrowse.setBrowseTime(LocalDateTime.now().minusHours(1));
+        return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
 }

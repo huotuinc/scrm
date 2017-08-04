@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,8 +89,22 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      * @param userId  用户ID
      * @return
      */
-    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  from InfoBrowse t group by t.infoId,t.sourceUserId having min (t.browseTime)>=?1 and min (t.browseTime)<?2 and t.sourceUserId=?3 ")
-    List<InfoBrowse> findForwardNumBySourceUserId(Date minDate, Date maxDate, Long userId);
+    /*@Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  " +
+            "from InfoBrowse t " +
+            "where t.sourceUserId = ?3 " +
+            "group by t.infoId,t.sourceUserId " +
+            "having min (t.browseTime)>=?1 and min (t.browseTime)<?2")
+    List<InfoBrowse> findForwardNumBySourceUserId(Date minDate, Date maxDate, Long userId);*/
+
+
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  " +
+            "from InfoBrowse t " +
+            "where t.sourceUserId = ?3 " +
+            "group by t.infoId,t.sourceUserId " +
+            "having min (t.browseTime)>=?1 and min (t.browseTime)<?2")
+    List<InfoBrowse> findForwardNumBySourceUserId(LocalDateTime minDate, LocalDateTime maxDate, Long userId);
+
+
 
     /**
      * 查询咨询的转发量
