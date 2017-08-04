@@ -31,8 +31,8 @@ public class ActPrizeServiceTest extends CommonTestBase {
         actPrize.setRemainCount(10);
         actPrize.setWinRate(20);
         actPrize.setSort(20);
-        ActPrize prize = actPrizeService.saveActPrize(actPrize);
-        System.out.println(prize.toString());
+//        ActPrize prize = actPrizeService.saveActPrize(actPrize);
+//        System.out.println(prize.toString());
     }
 
     @Test

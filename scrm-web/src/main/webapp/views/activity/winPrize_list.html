@@ -29,7 +29,7 @@
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
-                                onclick="winListHandler.download()">导出
+                                onclick="winListHandler.download()">导出所有
                         </button>
                     </div>
                     <div class="panel-body">
@@ -60,7 +60,7 @@
                                 <td th:text="${actWinDetail.prize.prizeName}"></td>
                                 <td th:text="${actWinDetail.winnerName}"></td>
                                 <td th:text="${actWinDetail.winnerTel}"></td>
-                                <td th:text="${#dates.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td th:text="${#temporals.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td th:text="${actWinDetail.ipAddress}"></td>
                             </tr>
                             </tbody>
@@ -99,7 +99,7 @@
 <script type="text/javascript">
     var pageIndex = [[${pageIndex}]];
     var totalPage = [[${totalPages}]];
-    var ajaxUrl = "[[@{/site}]]";
+    var ajaxUrl = "[[@{/mall}]]";
     //初始化分页
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
 
@@ -109,8 +109,7 @@
 
     var winListHandler = {
         download: function () {
-//            window.location.href = ajaxUrl + "/downloadWinDetail";
-            window.open(ajaxUrl + "/downloadWinDetail");
+            window.location.href = ajaxUrl + "/downloadWinDetail";
         }
     }
 </script>

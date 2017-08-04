@@ -51,7 +51,7 @@ public class ActivityServiceTest extends CommonTestBase {
      */
     @Test
     public void findAllActivityTest(){
-        Page<Activity> allActivity = activityService.findAllActivity(1, 2);
+        Page<Activity> allActivity = activityService.findAllActivity(3344L,1, 2);
         System.out.println(allActivity.getTotalElements());
         System.out.println(allActivity.getTotalPages());
         List<Activity> activityList = allActivity.getContent();
