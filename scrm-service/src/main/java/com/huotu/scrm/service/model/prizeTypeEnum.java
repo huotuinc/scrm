@@ -1,11 +1,13 @@
 package com.huotu.scrm.service.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.huotu.scrm.common.ienum.ICommonEnum;
 
 /**
  * 活动的奖品类型
  * Created by luohaibo on 2017/8/3.
  */
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum prizeTypeEnum implements ICommonEnum {
 
     PRIZE_TYPE_THANKS(0, "谢谢参与"),

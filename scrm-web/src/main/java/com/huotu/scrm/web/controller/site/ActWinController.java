@@ -133,6 +133,7 @@ public class ActWinController extends SiteBaseController {
                 Map<String, Object> data = new HashMap<>();
                 data.put("prizeId", prizeId);
                 data.put("prizeName", actPrize.getPrizeName());
+                data.put("prizeType",actPrize.getPrizeType());
                 try {
                     String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
                     data.put("prizeImageUrl", imageUrl);

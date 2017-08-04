@@ -34,6 +34,8 @@ $(function () {
                     game.toggleFilter();
                 }
             });
+
+
         },
         getOrder: function () {
 
@@ -140,7 +142,7 @@ $(function () {
             game.toggleFilter();
         },
         hideModal: function () {
-            $(document).on('click', '.coupon-modal-close', function () {
+            $(document).on('click', '.coupon-use, .coupon-modal-close', function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
@@ -175,7 +177,7 @@ $(function () {
                 '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="#" class="coupon-use">' + "xxxxxx" + '</a>' +
+                '<a href="javascript:;" class="coupon-use">' + "确定" + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +
@@ -197,10 +199,10 @@ $(function () {
             });
         },
         closePrizeModal: function () {
-            $('#J_slideUp').click(function () {
+            $(document).on('click', '#J_slideUp', function () {
                 game.prizeModal.removeClass('show');
                 game.toggleFilter();
-            });
+            })
         },
         showRuleModal: function () {
             $('#J_ruleBtn').click(function () {

@@ -129,12 +129,12 @@ public class Activity {
     }
 
     /**
-     * 活动还未开始
+     * 活动结束了
      * @return true 表示活动开启
      */
     public boolean activeEnd() {
         LocalDateTime now =  LocalDateTime.now();
-        return now.isBefore(startDate);
+        return now.isBefore(endDate);
     }
 
 
