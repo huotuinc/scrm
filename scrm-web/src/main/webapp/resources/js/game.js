@@ -146,6 +146,11 @@ $(function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
+                if($(this).attr("prizeType")!=0){
+
+                    console.log(111);
+                }
+
             });
         },
         reInit: function () {
@@ -160,7 +165,7 @@ $(function () {
         },
         renderElement: function () {
             if (game.gameTimes > 0) {
-                $(".game-time span").html(game.gameTimes);
+                $(".game-time p").html("游戏次数： "+game.gameTimes+"次");
             } else {
                 $(".game-time p").html('抽奖机会已用完');
             }
@@ -177,7 +182,7 @@ $(function () {
                 '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="javascript:;" class="coupon-use">' + "确定" + '</a>' +
+                '<a href="javascript:;" class="coupon-use" prizeType="'+data.prizeType.code+'">' + "确定" + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +
