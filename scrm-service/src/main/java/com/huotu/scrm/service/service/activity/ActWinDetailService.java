@@ -11,6 +11,7 @@ package com.huotu.scrm.service.service.activity;
 
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,7 @@ public interface ActWinDetailService {
      * @param actWinDetail 中奖记录实体
      * @return
      */
+    @Transactional
     ActWinDetail saveActWinDetail(ActWinDetail actWinDetail);
 
     /**
