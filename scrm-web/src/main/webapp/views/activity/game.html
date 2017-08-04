@@ -11,7 +11,7 @@
             a = n ? Math.min(i.devicePixelRatio, 3) : 1,
             m = "orientationchange" in window ? "orientationchange" : "resize";
         t.dataset.dpr = a;
-        for (var d, l, c = !1, o = e.getElementsByTagName("meta"), r = 0; r < o.length; r++)l = o[r], "viewport" == l.name && (c = !0, d = l);
+        for (var d, l, c = !1, o = e.getElementsByTagName("meta"), r = 0; r < o.length; r++) l = o[r], "viewport" == l.name && (c = !0, d = l);
         if (c) d.content = "width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no"; else {
             var o = e.createElement("meta");
             o.name = "viewport", o.content = "width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no", t.firstElementChild.appendChild(o)
@@ -48,19 +48,21 @@
             <div class="radius-group default"></div>
             <div class="circle" id="J_circle">
                 <div class="circle-box" th:remove="all-but-first">
-                    <div class="prize" data-index="0" data-id="4"  data-type="0" th:attr="data-index=${status.index},data-type=${prize.prizeType.code} > 0 ? 1 : 0,data-id=${prize.prizeId}"   th:each="prize,status : ${active.actPrizes}">
+                    <div class="prize" data-index="0" data-id="4" data-type="0"
+                         th:attr="data-index=${status.index},data-type=${prize.prizeType.code} > 0 ? 1 : 0,data-id=${prize.prizeId}"
+                         th:each="prize,status : ${active.actPrizes}">
                         <div class="prize-dialog">
                             <p th:text="${prize.prizeName}">谢谢参与</p>
                             <img th:src="${prize.prizeImageUrl}" src="../../resources/images/prize-xxcy.png">
                         </div>
                     </div>
-                    <div class="prize prize-packet"  data-index="1" data-id="6" data-level="3" data-type="1">
+                    <div class="prize prize-packet" data-index="1" data-id="6" data-level="3" data-type="1">
                         <div class="prize-dialog">
                             <p>100元话费</p>
                             <img src="../../resources/images/prize1.png">
                         </div>
                     </div>
-                    <div class="prize prize-packet"  data-index="2" data-id="2" data-level="4" data-type="1">
+                    <div class="prize prize-packet" data-index="2" data-id="2" data-level="4" data-type="1">
                         <div class="prize-dialog">
                             <p>66元现金红包</p>
                             <img src="../../resources/images/prize2.png">
@@ -96,7 +98,7 @@
     <span class="guide-circle"></span>
     <span class="guide-hand"></span>
 </div>
-<div class="recommend-modal" id="J_recommend" >
+<div class="recommend-modal" id="J_recommend">
     <div class="recommend-modal-dialog">
         <i class="icon close"></i>
         <i class="icon points"></i>
@@ -107,19 +109,18 @@
     </div>
 </div>
 
-
-<form class="recommend-modal" id="J_addTel" th:bgcolor="w">
-    <div>
-        姓名: <input type="text">
-    </div>
-    <div>
-        电话: <input type="tel">
-    </div>
-    <input type="submit"> </input>
-    </div>
-</form>
-
-<!--6.29更新-->
+<div class="recommend-modal" id="J_addTel">
+    <form action="">
+        <div>
+            姓名: <input type="text">
+        </div>
+        <div>
+            电话: <input type="tel">
+        </div>
+        <input type="submit">
+    </form>
+</div>
+<div></div>
 <div class="prize-detail-modal" id="J_prizeModal">
     <div class="prize-detail-dialog">
         <div class="prize-detail-slidebox">
@@ -277,7 +278,7 @@
 <script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
 <script src="http://resali.huobanplus.com/cdn/game/awardRotate.js"></script>
 <!--正式删除-->
-<script src="../../resources/js/mock/mock-min.js"></script>
+<script src="../../resources/js/mock/mock-min.js" th:remove="all"></script>
 <script src="../../resources/js/mock/api.js" th:remove="all"></script>
 <!--正式删除-->
 <script src="../../resources/js/game.js"></script>
