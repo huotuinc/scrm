@@ -15,11 +15,12 @@ public interface DayReportService {
     /**
      * 统计某段时间预计积分
      *
-     * @param userId  用户ID
-     * @param minDate 统计起始日期
-     * @param maxDate 统计最后日期
+     * @param userId     用户ID
+     * @param customerId 商户ID
+     * @param beginLocalDateTime    统计起始日期
+     * @param endLocalDateTime    统计最后日期
      */
-    int getEstimateScore(Long userId, LocalDateTime minDate, LocalDateTime maxDate);
+    int getEstimateScore(Long userId, Long customerId, LocalDateTime beginLocalDateTime, LocalDateTime endLocalDateTime);
 
     /**
      * 统计用户的累积积分（从注册以后开始计算，没有计算本月积分）
