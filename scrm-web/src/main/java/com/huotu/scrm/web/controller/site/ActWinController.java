@@ -8,8 +8,8 @@
  */
 
 package com.huotu.scrm.web.controller.site;
+
 import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.ExcelUtil;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
@@ -26,22 +26,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -65,13 +54,13 @@ public class ActWinController extends SiteBaseController {
     ActivityService activityService;
 
     @RequestMapping("/activity/index")
-    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId,Model model){
+    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
 
         //查询用户积分
-        User user =  userService.getByIdAndCustomerId(userId,customerId);
+        User user = userService.getByIdAndCustomerId(userId, customerId);
         double score = user.getUserIntegral() - user.getLockedIntegral();
         //获取奖品
-        Activity  activity = activityService.findByActId(actId);
+        Activity activity = activityService.findByActId(actId);
         activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
         activity.getActPrizes().forEach(p -> {
             try {
@@ -81,8 +70,8 @@ public class ActWinController extends SiteBaseController {
             }
         });
         //用户可参与次数
-        model.addAttribute("times",activityUseTimes(activity,user));
-        model.addAttribute("active",activity);
+        model.addAttribute("times", activityUseTimes(activity, user));
+        model.addAttribute("active", activity);
         return "activity/game";
 
     }
@@ -95,19 +84,19 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/join/act")
     @ResponseBody
     public ApiResult joinAct(HttpServletRequest request,
-            @ModelAttribute("userId") Long userId,
-            Long actId,Long customerId) {
+                             @ModelAttribute("userId") Long userId,
+                             Long actId, Long customerId) {
 
 
         //查询用户积分
-        User user =  userService.getByIdAndCustomerId(userId,customerId);
+        User user = userService.getByIdAndCustomerId(userId, customerId);
         //获取奖品
-        Activity  activity = activityService.findByActId(actId);
+        Activity activity = activityService.findByActId(actId);
 
-        if (activityUseTimes(activity,user) > 0){
+        if (activityUseTimes(activity, user) > 0) {
 
             //抽取中奖奖品
-            Long priezeId =  WinArithmetic(actId);
+            Long priezeId = WinArithmetic(actId);
             // TODO: 2017/8/3  调商城接口扣除积分
 
             // TODO: 2017/8/3 插入零时中奖记入
@@ -116,10 +105,8 @@ public class ActWinController extends SiteBaseController {
             actWinDetail.setWinTime(LocalDateTime.now());
 
 
-
             // TODO: 2017/8/3 返回前端
         }
-
 
 
         return null;
@@ -141,32 +128,33 @@ public class ActWinController extends SiteBaseController {
 
     /**
      * 抽奖算法
+     *
      * @param actId
      * @return
      */
     private Long WinArithmetic(Long actId) {
         //获取奖品
-        Activity  activity = activityService.findByActId(actId);
-        double  totalProbability = 0;
-        Map<Long,Map<Double,Double>> prizesMap = new HashMap<>();
-        for (ActPrize p:activity.getActPrizes()
+        Activity activity = activityService.findByActId(actId);
+        double totalProbability = 0;
+        Map<Long, Map<Double, Double>> prizesMap = new HashMap<>();
+        for (ActPrize p : activity.getActPrizes()
                 ) {
             double temp = (totalProbability + p.getWinRate());
-            Map<Double,Double> tpRange = new HashMap<>();
-            tpRange.put(new Double(totalProbability/100),new Double(temp/100));
-            prizesMap.put(p.getPrizeId(),tpRange);
+            Map<Double, Double> tpRange = new HashMap<>();
+            tpRange.put(new Double(totalProbability / 100), new Double(temp / 100));
+            prizesMap.put(p.getPrizeId(), tpRange);
             totalProbability = temp;
         }
         //抽奖奖项
         Long winAwardId = -1L;
         double ran = Math.random();
         Set<Long> prizeIds = prizesMap.keySet();
-        for (Long prizeId: prizeIds
+        for (Long prizeId : prizeIds
                 ) {
-            Map<Double,Double> tpRange = prizesMap.get(prizeId);
-            Double key = (Double)tpRange.keySet().toArray()[0];
+            Map<Double, Double> tpRange = prizesMap.get(prizeId);
+            Double key = (Double) tpRange.keySet().toArray()[0];
             Double value = tpRange.get(key);
-            if (ran >= key.doubleValue() && ran < value.doubleValue()){
+            if (ran >= key.doubleValue() && ran < value.doubleValue()) {
                 winAwardId = prizeId;
                 break;
             }
@@ -176,6 +164,7 @@ public class ActWinController extends SiteBaseController {
 
     /**
      * 判读用户参与活动次数
+     *
      * @param activity
      * @param user
      * @return
@@ -189,48 +178,4 @@ public class ActWinController extends SiteBaseController {
             return (int) (score / costScore);
         return 0;
     }
-
-    /**
-     * 中奖记录导出Excel表格
-     *
-     * @param response
-     * @throws IOException
-     */
-    @RequestMapping("/downloadWinDetail")
-    public void downloadAllWinDetail(HttpServletResponse response) throws IOException {
-        //完善配置信息
-        String fileName = "活动中奖记录";
-        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord();
-        List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
-        List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ExcelUtil.createWorkBook(excelRecord, keys, columnNames).write(os);
-        byte[] bytes = os.toByteArray();
-        InputStream is = new ByteArrayInputStream(bytes);
-        // 设置response参数，可以打开下载页面
-        response.reset();
-        response.setContentType("application/vnd.ms -excel;charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment;filename=" + new String((fileName + ".xls").getBytes(), "iso-8859-1"));
-        ServletOutputStream out = response.getOutputStream();
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-        //开流数据导出
-        try {
-            bis = new BufferedInputStream(is);
-            bos = new BufferedOutputStream(out);
-            byte[] buff = new byte[2048 * 10];
-            int bytesRead;
-            while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-                bos.write(buff, 0, bytesRead);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (bis != null)
-                bis.close();
-            if (bos != null)
-                bos.close();
-        }
-    }
-
 }

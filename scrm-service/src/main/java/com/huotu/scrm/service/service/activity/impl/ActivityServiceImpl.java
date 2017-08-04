@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 活动Service层实现类
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 @Service
-@Transactional
 public class ActivityServiceImpl implements ActivityService {
 
 

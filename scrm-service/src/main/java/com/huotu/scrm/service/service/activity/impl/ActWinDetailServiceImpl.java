@@ -20,7 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -63,7 +63,7 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
             mapValue.put("prizeName", actWinDetail.getPrize().getPrizeName());
             mapValue.put("winnerName", actWinDetail.getWinnerName());
             mapValue.put("winnerTel", actWinDetail.getWinnerTel());
-            mapValue.put("winTime", (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(actWinDetail.getWinTime()));
+            mapValue.put("winTime", actWinDetail.getWinTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             mapValue.put("ipAddress", actWinDetail.getIpAddress());
             listMap.add(mapValue);
         });

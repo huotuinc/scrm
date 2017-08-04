@@ -83,7 +83,8 @@ public class ActPrizeController extends MallBaseController {
             actPrize.setPrizeCount(actPrize.getRemainCount());
         }
         actPrize.setActivity(activity);
-        actPrizeService.saveActPrize(actPrize);
+        activity.getActPrizes().add(actPrize);
+        actPrizeService.saveActPrize(activity);
         return "redirect:/mall/prize/list?actId=" + actId;
     }
 

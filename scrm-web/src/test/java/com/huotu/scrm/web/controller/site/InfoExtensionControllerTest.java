@@ -1,13 +1,16 @@
 package com.huotu.scrm.web.controller.site;
 
+import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.model.DayFollowNumInfo;
 import com.huotu.scrm.service.model.DayScoreInfo;
 import com.huotu.scrm.service.model.DayScoreRankingInfo;
 import com.huotu.scrm.service.model.DayVisitorNumInfo;
 import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.web.CommonTestBase;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.List;
@@ -22,7 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class InfoExtensionControllerTest extends CommonTestBase {
     private String baseUrl = "/site/extension";
-
+    @Autowired
+    private InfoRepository infoRepository;
     /**
      * 测试进入资讯状态
      *
@@ -101,5 +105,17 @@ public class InfoExtensionControllerTest extends CommonTestBase {
         Assert.assertEquals("extensiondetail/personal_uv", mvcResult.getModelAndView().getViewName());
         DayVisitorNumInfo dayVisitorNumInfo = (DayVisitorNumInfo) mvcResult.getModelAndView().getModel().get("dayVisitorNumInfo");
         Assert.assertNotNull(dayVisitorNumInfo);
+    }
+    @Test
+    public void getInfo(){
+        Info info1 = new Info();
+        info1.setCustomerId(4421L);
+        info1.setStatus(true);
+        info1.setExtend(true);
+        infoRepository.save(info1);
+        List<Info> list = infoRepository.findByCustomerIdAndIsExtendTrueAndIsDisableFalse(4421L);
+        list.forEach(info -> {
+            System.out.println(info.toString());
+        });
     }
 }

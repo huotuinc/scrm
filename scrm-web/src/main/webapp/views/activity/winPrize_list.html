@@ -29,7 +29,7 @@
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
-                                onclick="winListHandler.download()">导出
+                                onclick="winListHandler.download()">导出所有
                         </button>
                     </div>
                     <div class="panel-body">
@@ -60,7 +60,7 @@
                                 <td th:text="${actWinDetail.prize.prizeName}"></td>
                                 <td th:text="${actWinDetail.winnerName}"></td>
                                 <td th:text="${actWinDetail.winnerTel}"></td>
-                                <td th:text="${#dates.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td th:text="${#temporals.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td th:text="${actWinDetail.ipAddress}"></td>
                             </tr>
                             </tbody>

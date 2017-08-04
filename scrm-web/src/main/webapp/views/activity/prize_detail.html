@@ -24,7 +24,9 @@
             <form method="post" th:action="@{/mall/prize/save}" class="form-horizontal" id="editSavePrize">
                 <input type="hidden" th:value="${actPrize.activity.actId}" name="actId">
                 <input type="hidden" th:value="${actPrize.prizeCount}" name="prizeCount">
-                <input type="hidden" th:value="${actPrize.prizeId}" name="prizeId">
+                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeId)}" th:value="${actPrize.prizeId}" name="prizeId">
+                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeType)}" th:value="${actPrize.prizeType.code}" name="prizeType">
+                <input type="hidden" th:if="${#lists.isEmpty(actPrize.prizeType)}" value="0" name="prizeType">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品名称:</label>
                     <div class="col-sm-3">
@@ -35,7 +37,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品类型:</label>
                     <div class="col-sm-2">
-                        <select class="form-control input" name="prizeType" id="prizeType">
+                        <select class="form-control input" id="prizeType">
                             <option selected="selected" value="0">谢谢惠顾</option>
                             <option selected="selected" value="1">奖品</option>
                         </select>
@@ -106,13 +108,10 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
 <script type="text/javascript">
-    var prizeType = [[${actPrize.prizeType}]];
-    if (prizeType) {
-        prizeType = 1;
-    } else {
-        prizeType = 0;
-    }
+    var prizeType = $("input:hidden[name='prizeType']").val();
+    console.log(prizeType);
     $("#prizeType").val(prizeType);
+    console.log(prizeType)
     var prizeEditHandler = {
         uploadFile: function () {
             hot.loading.show();
@@ -139,6 +138,12 @@
             })
         },
         screen: function () {
+            var type = $("#prizeType").val();
+            if (type == 0) {
+                $("input:hidden[name='prizeType']").val("PRIZE_TYPE_THANKS");
+            } else {
+                $("input:hidden[name='prizeType']").val("PRIZE_TYPE_ENTITY_PRIZE");
+            }
             $("#editSavePrize").submit();
         }
     }

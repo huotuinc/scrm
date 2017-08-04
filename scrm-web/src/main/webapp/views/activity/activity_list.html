@@ -62,7 +62,10 @@
                                     <p th:if="${not #lists.isEmpty(activity.endDate)}"
                                        th:text="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"></p>
                                 </td>
-                                <td th:text="${activity.openStatus}"></td>
+                                <td>
+                                    <span th:if="${activity.openStatus}">已启用</span>
+                                    <span th:unless="${activity.openStatus}">已禁用</span>
+                                </td>
                                 <td>
                                     <span class="cursor-point"><i class="fa fa-link tooltips" data-placement="top"
                                                                   data-toggle="tooltip" data-original-title="活动链接"></i></span>
@@ -80,16 +83,17 @@
                                                                   data-toggle="tooltip"
                                                                   data-original-title="删除"
                                                                   th:onclick="'javascript:actListHandler.deleteAct('+${activity.actId}+')'"></i></span>
-                                    <div style="text-align:right;">
-                                        <button th:if="${activity.openStatus}" class="btn btn-danger btn-xs"
-                                                th:onclick="'javascript:actListHandler.actDisable('+${activity.actId}+')'">
-                                            禁用
-                                        </button>
-                                        <button th:unless="${activity.openStatus}" class="btn btn-success btn-xs"
-                                                th:onclick="'javascript:actListHandler.actEnable('+${activity.actId}+')'">
-                                            启用
-                                        </button>
-                                    </div>
+                                    &nbsp;&nbsp;
+                                    <span th:unless="${activity.openStatus}" class="cursor-point"><i
+                                            class="fa fa-edit tooltips" data-placement="top"
+                                            data-toggle="tooltip"
+                                            data-original-title="启用"
+                                            th:onclick="'javascript:actListHandler.actEnable('+${activity.actId}+')'"></i></span>
+                                    <span th:if="${activity.openStatus}" class="cursor-point"><i
+                                            class="fa fa-edit tooltips" data-placement="top"
+                                            data-toggle="tooltip"
+                                            data-original-title="禁用"
+                                            th:onclick="'javascript:actListHandler.actDisable('+${activity.actId}+')'"></i></span>
                                 </td>
                             </tr>
                             </tbody>
@@ -141,9 +145,7 @@
                 requestDate = {actId: actId};
                 hot.ajax(ajaxUrl + "/act/delete", requestDate, function (res) {
                     if (res.code == 200) {
-                        hot.tip.success("删除成功", function () {
-                            window.location.reload();
-                        });
+                        window.location.reload();
                     } else {
                         hot.tip.error(res.msg);
                     }
@@ -166,18 +168,14 @@
         actDisable: function (actId) {
             hot.ajax(ajaxUrl + "/act/disable", {actId: actId}, function (res) {
                 if (res.code == 200) {
-                    hot.tip.success("禁用成功", function () {
-                        window.location.reload();
-                    })
+                    window.location.reload();
                 }
             })
         },
         actEnable: function (actId) {
             hot.ajax(ajaxUrl + "/act/enable", {actId: actId}, function (res) {
                 if (res.code == 200) {
-                    hot.tip.success("启用成功", function () {
-                        window.location.reload();
-                    })
+                    window.location.reload();
                 } else {
                     hot.tip.error("启用失败")
                 }
