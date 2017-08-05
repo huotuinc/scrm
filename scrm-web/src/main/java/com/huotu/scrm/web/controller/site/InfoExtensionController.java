@@ -64,7 +64,7 @@ public class InfoExtensionController extends SiteBaseController {
         } else {//小伙伴
             StatisticalInformation statisticalInformation = infoExtensionService.getInformation(user);
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
+            boolean status = infoExtensionService.checkIsSalesman(user);
             model.addAttribute("statisticalInformation", statisticalInformation);
             model.addAttribute("status", status);
             return "infoextension/info_center";
@@ -89,9 +89,9 @@ public class InfoExtensionController extends SiteBaseController {
             return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
-            DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(userId,user.getCustomerId());
+            DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(user);
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
+            boolean status = infoExtensionService.checkIsSalesman(user);
             model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
             model.addAttribute("status", status);
             return "extensiondetail/personal_ranking";
@@ -114,9 +114,9 @@ public class InfoExtensionController extends SiteBaseController {
             return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
-            DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(userId,user.getCustomerId());
+            DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(user);
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
+            boolean status = infoExtensionService.checkIsSalesman(user);
             model.addAttribute("dayScoreInfo", dayScoreInfo);
             model.addAttribute("status", status);
             return "extensiondetail/personal_score";
@@ -140,7 +140,7 @@ public class InfoExtensionController extends SiteBaseController {
             return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
-            DayFollowNumInfo dayFollowNumInfo = infoExtensionService.getFollowNumInfo(userId);
+            DayFollowNumInfo dayFollowNumInfo = infoExtensionService.getFollowNumInfo(user);
             model.addAttribute("dayFollowNumInfo", dayFollowNumInfo);
             return "extensiondetail/personal_follow";
         }
@@ -163,9 +163,9 @@ public class InfoExtensionController extends SiteBaseController {
             return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
-            DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(userId);
+            DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(user);
             //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(user.getLevelId(),user.getCustomerId());
+            boolean status = infoExtensionService.checkIsSalesman(user);
             model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
             model.addAttribute("status", status);
             return "extensiondetail/personal_uv";

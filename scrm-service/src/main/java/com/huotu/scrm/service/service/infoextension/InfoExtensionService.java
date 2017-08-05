@@ -38,39 +38,40 @@ public interface InfoExtensionService {
     /**
      * 统计用户积分排名信息
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    DayScoreRankingInfo getScoreRankingInfo(Long userId, Long customerId);
+    DayScoreRankingInfo getScoreRankingInfo(User user);
 
     /**
      * 统计用户积分信息
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    DayScoreInfo getScoreInfo(Long userId, Long customerId);
+    DayScoreInfo getScoreInfo(User user);
 
     /**
      * 统计访问量信息
      *
-     * @param userId 用户ID
+     * @param user 用户ID
      * @return
      */
-    DayVisitorNumInfo getVisitorNumInfo(Long userId);
+    DayVisitorNumInfo getVisitorNumInfo(User user);
 
     /**
      * 统计关注量信息
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    DayFollowNumInfo getFollowNumInfo(Long userId);
+    DayFollowNumInfo getFollowNumInfo(User user);
 
     /**
      * 判断是否为销售 (在小伙伴的前提下)
      *
+     * @param user
      * @return
      */
-    boolean checkIsSalesman(Long levelId, Long customerId);
+    boolean checkIsSalesman(User user);
 }

@@ -125,14 +125,4 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     @Query("select distinct (t.customerId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2")
     List<Long> findCustomerIdList(LocalDateTime beginTime, LocalDateTime endTime);
 
-    /**
-     * 根据商户编号查询所有对应用户
-     *
-     * @param customerId
-     * @param beginTime
-     * @param endTime
-     * @return
-     */
-    List<InfoBrowse> findByCustomerIdAndBrowseTimeBetween(Long customerId, LocalDateTime beginTime, LocalDateTime endTime);
-
 }

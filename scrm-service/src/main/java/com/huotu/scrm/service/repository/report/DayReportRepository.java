@@ -32,6 +32,8 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
      */
     DayReport findByUserIdAndReportDay(Long userId, LocalDate date);
 
+    List<DayReport> findByUserIdAndReportDayGreaterThanEqual(Long userId,LocalDate date);
+
     /**
      * 查询某天日期下的所有商户
      *
@@ -40,5 +42,7 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
      */
     @Query("select distinct t.customerId from DayReport  t where t.reportDay=?1")
     List<Long> findCustomerByReportDay(LocalDate date);
+
+
 
 }

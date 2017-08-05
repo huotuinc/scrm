@@ -47,14 +47,12 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
     Boolean existsByCustomerIdAndFollowIdAndUserIdNot(Long customerId, Long followId, Long userId);
 
     /**
-     * 根据某段时间查询用户ID关注人数
+     * 查询用户被关注关注人数
      *
      * @param userId
-     * @param beginTime
-     * @param endTime
      * @return
      */
-    int countByUserIdAndFollowDateBetween(Long userId, LocalDateTime beginTime, LocalDateTime endTime);
+    int countByUserId(Long userId);
 
     /***
      * 查询我关注的名片列表

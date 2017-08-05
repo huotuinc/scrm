@@ -12,8 +12,14 @@ package com.huotu.scrm.service.repository.mall;
 import com.huotu.scrm.service.entity.mall.UserFormalIntegral;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 /**
  * Created by helloztt on 2017-08-04.
  */
-public interface UserFormalIntegralRepository extends JpaRepository<UserFormalIntegral,Long> {
+public interface UserFormalIntegralRepository extends JpaRepository<UserFormalIntegral, Long> {
+
+    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatusAndTimeBetween(Long userId, Long customerId, int status, LocalDateTime beginTime, LocalDateTime endTime);
+    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatus(Long userId,Long customerId,int status);
 }
