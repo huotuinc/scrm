@@ -7,15 +7,15 @@ Mock.setup({
 });
 
 Mock.mock("/site/join/act", "post", {
-    "resultCode": 200,
+    "code": 200,
     "resultMsg": "ok",
     "data": {
-        "awardId": "2",
-        "orderId": "6546789400763",
-        "orderTitle": "超级超级超级便宜的东西",
-        "orderImg": "//yun.duiba.com.cn/tuia/img/mwd6ugaxbo.jpg",
-        "prizeId": "300",
-        "prizeType": "lucky"
+        "prizeType": {
+            "code": 0
+        },
+        "prizeId": 2,
+        "prizeName": "超级超级超级便宜的东西",
+        "prizeImageUrl": "//yun.duiba.com.cn/tuia/img/mwd6ugaxbo.jpg"
     }
 });
 

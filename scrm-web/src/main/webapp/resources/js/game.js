@@ -36,17 +36,19 @@ $(function () {
             });
         },
         getOrder: function () {
-
-            var actId =  $("body").attr("activeId");
+            var actId = $("body").attr("activeId");
+            game.loadingModal();
             $.ajax({
                 type: 'POST',
                 url: '/site/join/act',
-                data: {actId:actId,
-                    customerId:4421
+                data: {
+                    actId: actId,
+                    customerId: 4421
                 },
                 dataType: 'json',
                 success: function (res) {
                     console.log(res);
+                    game.closeLoadModal();
                     if (res.code !== 200) {
                         game.errorModals(res.resultMsg);
                         return;
@@ -57,10 +59,10 @@ $(function () {
                     }
                     game.gameTimes--;
                     game.rotateFn(res.data);
+                    game.closeLoadModal();
                 },
                 error: function (xhr, type) {
                     game.errorModals('发生错误，请稍后重试');
-
                 }
             });
         },
@@ -140,10 +142,14 @@ $(function () {
             game.toggleFilter();
         },
         hideModal: function () {
-            $(document).on('click', '.coupon-modal-close', function () {
+            $(document).on('click', '.coupon-use, .coupon-modal-close', function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
+                if ($(this).attr("prizeType") == 0) {
+                    game.showNameAndTel();
+                }
+
             });
         },
         reInit: function () {
@@ -158,7 +164,7 @@ $(function () {
         },
         renderElement: function () {
             if (game.gameTimes > 0) {
-                $(".game-time span").html(game.gameTimes);
+                $(".game-time p").html("游戏次数： " + game.gameTimes + "次");
             } else {
                 $(".game-time p").html('抽奖机会已用完');
             }
@@ -175,7 +181,7 @@ $(function () {
                 '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="#" class="coupon-use">' + "xxxxxx" + '</a>' +
+                '<a href="javascript:;" class="coupon-use" prizeType="' + data.prizeType.code + '">' + "确定" + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +
@@ -191,22 +197,26 @@ $(function () {
             $('.prize-packet').click(function () {
                 var level = $(this).data('level');
                 $('.prize-detail-content.on').removeClass('on');
-                $('.prize-detail-content[data-level="'+level+'"]').addClass('on');
+                $('.prize-detail-content[data-level="' + level + '"]').addClass('on');
                 game.prizeModal.addClass('show');
                 game.toggleFilter();
             });
         },
         closePrizeModal: function () {
-            $('#J_slideUp').click(function () {
+            $(document).on('click', '#J_slideUp', function () {
                 game.prizeModal.removeClass('show');
                 game.toggleFilter();
-            });
+            })
         },
         showRuleModal: function () {
             $('#J_ruleBtn').click(function () {
                 $('#J_ruleModal').show();
                 game.toggleFilter();
             });
+        },
+        showNameAndTel: function () {
+            $('#J_addTel').show();
+            game.toggleFilter();
         },
         closeRuleModal: function () {
             $('#J_ruleModal').find('.close').click(function () {
