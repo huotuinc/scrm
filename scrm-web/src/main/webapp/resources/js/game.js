@@ -47,7 +47,6 @@ $(function () {
                 },
                 dataType: 'json',
                 success: function (res) {
-                    console.log(res);
                     game.closeLoadModal();
                     if (res.code !== 200) {
                         game.errorModals(res.resultMsg);
@@ -97,7 +96,7 @@ $(function () {
                 }
             })
         },
-        rotateFn: function (data) { // 2017.08.02
+        rotateFn: function (data) {
             var r;
             $("#J_circle").find('.prize').each(function () {
                 //匹配awardId
@@ -146,8 +145,8 @@ $(function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
-                if ($(this).attr("prizeType") == 0) {
-                    game.showNameAndTel();
+                if ($(this).attr("data-type") == 0) {
+                    game.showUserInfo();
                 }
 
             });
@@ -181,7 +180,7 @@ $(function () {
                 '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="javascript:;" class="coupon-use" prizeType="' + data.prizeType.code + '">' + "确定" + '</a>' +
+                '<a href="javascript:;" class="coupon-use" data-type="' + data.prizeType.code + '">' + "确定" + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +
@@ -214,9 +213,15 @@ $(function () {
                 game.toggleFilter();
             });
         },
-        showNameAndTel: function () {
+        showUserInfo: function () {
             $('#J_addTel').show();
             game.toggleFilter();
+        },
+        closeNameAndTel: function () {
+            $('#J_addTel').find('.close').click(function () {
+                $('#J_addTel').hide();
+                game.toggleFilter();
+            })
         },
         closeRuleModal: function () {
             $('#J_ruleModal').find('.close').click(function () {
@@ -258,6 +263,7 @@ $(function () {
             this.showRuleModal();
             this.closeRuleModal();
             this.closeErrorModal();
+            this.closeNameAndTel();
         }
     };
     game.init();
@@ -265,4 +271,92 @@ $(function () {
     imagesLoaded(document.querySelector('body'), function () {
         $('.pre-loader').hide();
     });
+
+    $('#J_userFormBtn').click(function (e) {
+        e.preventDefault();
+        if(verifyForm()) {
+            $('#J_userInfo').submit();
+        }
+    });
+
+    //短信接口，下面为mock，请用实际
+    var sendAuthCodeUrl = '/api/authCode';
+
+    $('#J_sendAuth').click(function () {
+        var self = $(this);
+        var mobile = $('#J_userInfo').find('input[name="mobile"]').val();
+        if (!/^1([34578])\d{9}$/.test(mobile)) {
+            showMsg('请输入正确的手机号');
+            return;
+        }
+        sendSMS(self);
+        $.ajax(sendAuthCodeUrl, {
+            method: 'POST',
+            data: {
+                mobile: mobile
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.resultCode === 400) {
+                    showMsg(data.resultMsg);
+                    return false;
+                }
+                if (data.resultCode !== 200) {
+                    showMsg("发送失败，请重试");
+                    return false;
+                }
+            },
+            error: function () {
+                showMsg("系统错误");
+            }
+        })
+    });
+
+    function verifyForm() {
+        var form = $('#J_userInfo');
+        var name = form.find('input[name="name"]').val();
+        var mobile = form.find('input[name="mobile"]').val();
+        var authCode = form.find('input[name="authCode"]').val();
+        if(!name) {
+            showMsg('姓名不能为空');
+            return false;
+        }
+        if(!(/^1([34578])\d{9}$/.test(mobile))) {
+            showMsg('请填写正确的手机号');
+            return false;
+        }
+        if(!authCode) {
+            showMsg('验证码不能为空');
+            return false;
+        }
+        return true;
+    }
+    var time;
+
+    function showMsg(t) {
+        clearTimeout(time);
+        var modal = $('#J_msgModal');
+        var p = modal.find('p');
+        p.text(t);
+        modal.addClass('show');
+        time = setTimeout(function () {
+            modal.removeClass('show');
+        }, 2000);
+    }
+
+    function sendSMS(ele) {
+        ele.prop('disabled', true)
+            .addClass('disabled');
+        var s = 60;
+        var t = setInterval(function () {
+            ele.text('重新发送'+ s-- + '秒');
+            if (s === -1) {
+                clearInterval(t);
+                ele.text('获取验证码')
+                    .prop('disabled', false)
+                    .removeClass('disabled');
+            }
+        }, 1000);
+    }
+
 });
