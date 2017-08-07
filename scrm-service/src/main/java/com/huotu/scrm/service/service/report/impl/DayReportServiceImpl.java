@@ -232,6 +232,9 @@ public class DayReportServiceImpl implements DayReportService {
         int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, endTime);
         //获取访客量奖励积分
         InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
+        if (infoConfigure == null) {
+            return 0;
+        }
         int visitorScore = 0;
         int exchangeRate = infoConfigure.getExchangeRate();
         //判断是否开启访客量积分奖励
