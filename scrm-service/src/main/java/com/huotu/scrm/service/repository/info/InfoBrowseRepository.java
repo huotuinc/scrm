@@ -112,7 +112,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      * @param customerId 商户ID
      * @return
      */
-    @Query("select distinct (t.sourceUserId) from InfoBrowse t where t.customerId=?1")
+    @Query("select distinct (t.sourceUserId) from InfoBrowse t where t.customerId=?1 and t.browseTime>=?2 and t.browseTime<?3")
     List<Long> findSourceIdByCustomerId(Long customerId, LocalDateTime beginTime, LocalDateTime endTime);
 
     /**

@@ -28,9 +28,7 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
-                                onclick="winListHandler.download()">导出所有
-                        </button>
+                        <button type="button" class="btn btn-white" id="btnBatchExport">批量导出</button>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -82,7 +80,17 @@
         </div>
     </div>
 </div>
-
+<!--批量导出-->
+<div id="batchExportModal" class="modal-content-tag">
+    <div class="form-inline">
+        <div class="form-group">
+            <label class=" control-label" for="startPage">导出记录：</label>
+            第<input type="text" class="form-control input-sm mb10" id="startPage" style="width: 80px;"/>页 至
+            第<input type="text" class="form-control input-sm mb10" id="endPage" style="width: 80px;"/>页
+            <span th:text="至多+${totalPages}+页" style="color: red"></span>
+        </div>
+    </div>
+</div>
 <!--基础框架js-->
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
@@ -100,6 +108,21 @@
     var pageIndex = [[${pageIndex}]];
     var totalPage = [[${totalPages}]];
     var ajaxUrl = "[[@{/mall}]]";
+    var isInteger = /^[0-9]*[1-9][0-9]*$/;
+    var batchExportModal = $("#batchExportModal").modal("批量导出", function () {
+        var startPage = $("#startPage").val();
+        var endPage = $("#endPage").val();
+        if (isInteger.test(startPage) && isInteger.test(endPage)) {
+            if (startPage <= endPage && startPage > 0) {
+                batchExportModal.hide();
+                window.location.href = ajaxUrl + "/downloadWinDetail?startPage=" + startPage + "&endPage=" + endPage;
+            } else {
+                hot.tip.error("页码输入有误");
+            }
+        } else {
+            hot.tip.error("页码输入有误");
+        }
+    });
     //初始化分页
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
 
@@ -107,11 +130,12 @@
         window.location.href = ajaxUrl + '/join/record?pageIndex=' + p;
     });
 
-    var winListHandler = {
-        download: function () {
-            window.location.href = ajaxUrl + "/downloadWinDetail";
-        }
-    }
+    var winListHandler = {}
+    $(function () {
+        $("#btnBatchExport").click(function () {
+            batchExportModal.show();
+        });
+    });
 </script>
 </body>
 

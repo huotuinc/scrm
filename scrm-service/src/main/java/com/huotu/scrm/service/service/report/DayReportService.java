@@ -17,11 +17,11 @@ public interface DayReportService {
     /**
      * 统计某段时间预计积分
      *
-     * @param user
-     * @param beginLocalDateTime 统计起始日期
-     * @param endLocalDateTime   统计最后日期
+     * @param user 用户
+     * @param beginTime 统计起始日期
+     * @param endTime   统计最后日期
      */
-    int getEstimateScore(User user, LocalDateTime beginLocalDateTime, LocalDateTime endLocalDateTime);
+    int getEstimateScore(User user, LocalDateTime beginTime, LocalDateTime endTime);
 
     /**
      * 统计用户的累积积分

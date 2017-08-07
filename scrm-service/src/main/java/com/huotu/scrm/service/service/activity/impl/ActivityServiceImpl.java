@@ -50,6 +50,7 @@ public class ActivityServiceImpl implements ActivityService {
     public void updateActivity(Long actId) {
         Activity activity = activityRepository.findOne(actId);
         activity.setDelete(true);
+        activity.setOpenStatus(false);
         activityRepository.save(activity);
     }
 

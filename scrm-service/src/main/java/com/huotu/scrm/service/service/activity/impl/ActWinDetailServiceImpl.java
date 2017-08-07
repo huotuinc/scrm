@@ -9,6 +9,7 @@
 
 package com.huotu.scrm.service.service.activity.impl;
 
+import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.repository.activity.ActWinDetailRepository;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
@@ -50,8 +51,16 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     }
 
     @Override
-    public List<Map<String, Object>> createExcelRecord() {
-        List<ActWinDetail> actWinDetailList = actWinDetailRepository.findAll();
+    public List<Map<String, Object>> createExcelRecord(int startPage, int endPage) {
+        List<ActWinDetail> actWinDetailList = new ArrayList<>();
+        Sort sort = new Sort(Sort.Direction.DESC, "winTime");
+        for (int i = startPage; i <= endPage; i++) {
+            Pageable pageable = new PageRequest(startPage - 1, Constant.PAGE_SIZE, sort);
+            List<ActWinDetail> winDetailList = actWinDetailRepository.findAll(pageable).getContent();
+            winDetailList.forEach(actWinDetail -> {
+                actWinDetailList.add(actWinDetail);
+            });
+        }
         List<Map<String, Object>> listMap = new ArrayList<>();
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("sheetName", "sheet1");

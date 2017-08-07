@@ -51,7 +51,7 @@ public class ActController extends MallBaseController {
      */
     @RequestMapping("/act/list")
     public String actList(@RequestParam(required = false, defaultValue = "1") int pageIndex, @ModelAttribute("customerId") Long customerId, Model model) {
-        Page<Activity> allActivity = activityService.findAllActivity(customerId,pageIndex, Constant.PAGE_SIZE);
+        Page<Activity> allActivity = activityService.findAllActivity(customerId, pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("activities", allActivity.getContent());
         model.addAttribute("totalPages", allActivity.getTotalPages());
         model.addAttribute("totalRecords", allActivity.getTotalElements());
@@ -147,6 +147,7 @@ public class ActController extends MallBaseController {
         activityService.saveActivity(activity);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
+
     /**
      * 获取参与记录（中奖记录）
      *
@@ -163,6 +164,7 @@ public class ActController extends MallBaseController {
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
         return "activity/winPrize_list";
     }
+
     /**
      * 中奖记录导出Excel表格
      *
@@ -170,10 +172,10 @@ public class ActController extends MallBaseController {
      * @throws IOException
      */
     @RequestMapping("/downloadWinDetail")
-    public void downloadAllWinDetail(HttpServletResponse response) throws IOException {
+    public void downloadAllWinDetail(HttpServletResponse response, int startPage, int endPage) throws IOException {
         //完善配置信息
         String fileName = "活动中奖记录";
-        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord();
+        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(startPage, endPage);
         List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
         List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
         ByteArrayOutputStream os = new ByteArrayOutputStream();

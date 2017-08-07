@@ -81,10 +81,13 @@ public class ActPrizeController extends MallBaseController {
         Activity activity = activityService.findByActId(actId);
         if ((actPrize.getPrizeId() == null)) {
             actPrize.setPrizeCount(actPrize.getRemainCount());
+            actPrize.setActivity(activity);
+            activity.getActPrizes().add(actPrize);
+            actPrizeService.saveActPrize(activity);
+        } else {
+            actPrize.setActivity(activity);
+            actPrizeService.saveActPrice(actPrize);
         }
-        actPrize.setActivity(activity);
-        activity.getActPrizes().add(actPrize);
-        actPrizeService.saveActPrize(activity);
         return "redirect:/mall/prize/list?actId=" + actId;
     }
 

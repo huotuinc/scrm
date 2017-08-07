@@ -46,6 +46,6 @@ public interface ActWinDetailService {
      *
      * @return
      */
-    List<Map<String, Object>> createExcelRecord();
+    List<Map<String, Object>> createExcelRecord(int startPage,int endPage);
 
 }

@@ -46,6 +46,12 @@ public class ActPrizeServiceImpl implements ActPrizeService {
     }
 
     @Override
+    public void saveActPrice(ActPrize actPrize) {
+        actPrizeRepository.save(actPrize);
+    }
+
+
+    @Override
     public void deleteActPrize(Long prizeId) {
         ActPrize actPrize = actPrizeRepository.findOne(prizeId);
         Activity activity = actPrize.getActivity();

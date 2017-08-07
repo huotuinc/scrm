@@ -37,6 +37,9 @@ public interface ActPrizeService {
     @Transactional
     void saveActPrize(Activity activity);
 
+    @Transactional
+    void saveActPrice(ActPrize actPrize);
+
     /**
      * 删除奖品
      *

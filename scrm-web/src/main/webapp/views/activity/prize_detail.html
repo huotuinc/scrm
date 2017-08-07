@@ -18,14 +18,19 @@
 </head>
 
 <body class="gray-bg">
-<div class="wrapper wrapper-content">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>奖品编辑信息</h5>
+        </div>
         <div class="ibox-content">
             <form method="post" th:action="@{/mall/prize/save}" class="form-horizontal" id="editSavePrize">
                 <input type="hidden" th:value="${actPrize.activity.actId}" name="actId">
                 <input type="hidden" th:value="${actPrize.prizeCount}" name="prizeCount">
-                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeId)}" th:value="${actPrize.prizeId}" name="prizeId">
-                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeType)}" th:value="${actPrize.prizeType.code}" name="prizeType">
+                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeId)}" th:value="${actPrize.prizeId}"
+                       name="prizeId">
+                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeType)}"
+                       th:value="${actPrize.prizeType.code}" name="prizeType">
                 <input type="hidden" th:if="${#lists.isEmpty(actPrize.prizeType)}" value="0" name="prizeType">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品名称:</label>
@@ -61,21 +66,26 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品数量:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品数量" class="form-control" name="remainCount"
+                        <input type="text" placeholder="奖品数量" class="form-control" id="remainCount" name="remainCount"
                                th:value="${actPrize.remainCount}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">中奖概率:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="中奖概率" th:value="${actPrize.winRate}" name="winRate"
+                        <input type="hidden" id="winRate" th:if="${actPrize.activity.openStatus}" placeholder="中奖概率"
+                               th:value="${actPrize.winRate}" name="winRate"
+                               class="form-control">
+                        <span th:if="${actPrize.activity.openStatus}" th:text="${actPrize.winRate}+'%'"></span>
+                        <input th:unless="${actPrize.activity.openStatus}" type="text" placeholder="中奖概率"
+                               th:value="${actPrize.winRate}" name="winRate" id="winRate"
                                class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">排序字段:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="排序字段" class="form-control" th:value="${actPrize.sort}"
+                        <input type="text" placeholder="排序字段" id="sort" class="form-control" th:value="${actPrize.sort}"
                                name="sort">
                     </div>
                 </div>
@@ -108,10 +118,9 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
 <script type="text/javascript">
+    var isInteger = /^[0-9]*[1-9][0-9]*$/;
     var prizeType = $("input:hidden[name='prizeType']").val();
-    console.log(prizeType);
     $("#prizeType").val(prizeType);
-    console.log(prizeType)
     var prizeEditHandler = {
         uploadFile: function () {
             hot.loading.show();
@@ -143,6 +152,21 @@
                 $("input:hidden[name='prizeType']").val("PRIZE_TYPE_THANKS");
             } else {
                 $("input:hidden[name='prizeType']").val("PRIZE_TYPE_ENTITY_PRIZE");
+            }
+            var reminCount = $("#remainCount").val();
+            if (!isInteger.test(reminCount)) {
+                hot.tip.error("奖品数量格式有误(默认大于0)");
+                return;
+            }
+            var winRate = $("#winRate").val();
+            if (!isInteger.test(winRate)) {
+                hot.tip.error("中奖概率格式有误(默认大于0)");
+                return;
+            }
+            var sort = $("#sort").val();
+            if (!isInteger.test(sort)) {
+                hot.tip.error("排序字段有误（输入整数，默认大于0）");
+                return;
             }
             $("#editSavePrize").submit();
         }

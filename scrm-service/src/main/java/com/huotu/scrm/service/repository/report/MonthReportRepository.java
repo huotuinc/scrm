@@ -20,7 +20,7 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long>,
      * @param month  统计月份
      * @return
      */
-    List<MonthReport> findByUserIdAndReportMonth(long userId, LocalDate month);
+    MonthReport findByUserIdAndReportMonth(long userId, LocalDate month);
 
     /**
      * 查询用户最高月的访客量
