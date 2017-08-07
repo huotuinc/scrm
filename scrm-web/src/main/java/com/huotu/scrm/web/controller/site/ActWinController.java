@@ -116,12 +116,13 @@ public class ActWinController extends SiteBaseController {
             if (actWinDetail != null) {
                 ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
                 if (actPrize.getPrizeCount() <= 0) {
-                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER.toString());
+                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER);
                 }
                 Map<String, Object> data = new HashMap<>();
                 data.put("prizeId", prizeId);
                 data.put("prizeName", actPrize.getPrizeName());
                 data.put("prizeType",actPrize.getPrizeType());
+                data.put("prizeDetailId",actWinDetail.getWinDetailId());
                 try {
                     String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
                     data.put("prizeImageUrl", imageUrl);
@@ -153,6 +154,9 @@ public class ActWinController extends SiteBaseController {
         actWinDetail.setIpAddress(IpUtil.IpAddress(request));
         return actWinDetailService.saveActWinDetail(actWinDetail);
     }
+
+
+
 
 
     /**
