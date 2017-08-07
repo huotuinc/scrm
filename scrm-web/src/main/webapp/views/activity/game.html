@@ -111,7 +111,8 @@
     <div class="user-info-dialog">
         <div class="user-info-wrap">
             <i class="icon close"></i>
-            <form action="#" id="J_userInfo">
+            <form action="#" id="J_userInfo" th:action="@{/site/update/winRecord}">
+                <input type="hidden" value="1" th:value="-1" name="ActWinDetailId">
                 <div class="form-group form-user">
                     <label>
                         <input type="text" placeholder="请输入姓名" name="name">

@@ -78,4 +78,17 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
         });
         return listMap;
     }
+
+    @Override
+    public ActWinDetail updateActWinDetail(Long winDetailID, String name, String mobile) {
+
+        ActWinDetail actWinDetail = actWinDetailRepository.findOne(winDetailID);
+        if (actWinDetail != null){
+            actWinDetail.setWinnerName(name);
+            actWinDetail.setWinnerTel(mobile);
+            return  actWinDetailRepository.save(actWinDetail);
+
+        }
+        return null;
+    }
 }

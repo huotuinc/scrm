@@ -48,4 +48,9 @@ public interface ActWinDetailService {
      */
     List<Map<String, Object>> createExcelRecord(int startPage,int endPage);
 
+
+
+    @Transactional
+    ActWinDetail updateActWinDetail(Long winDetailID, String name, String mobile);
+
 }

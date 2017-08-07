@@ -112,7 +112,7 @@ public class ActWinController extends SiteBaseController {
             // TODO: 2017/8/3  调商城接口扣除积分
 
             //记入中奖激励
-            ActWinDetail actWinDetail = winPrizeRecord(request, prizeId, userId, activity);
+            ActWinDetail actWinDetail = winPrizeRecord(request.getRemoteAddr(), prizeId, userId, activity);
             if (actWinDetail != null) {
                 ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
                 if (actPrize.getPrizeCount() <= 0) {
@@ -137,27 +137,47 @@ public class ActWinController extends SiteBaseController {
     }
 
     /**
+     * 更新中奖记录
+     * @param userId
+     * @param ActWinDetailId
+     * @param name
+     * @param mobile
+     * @param authCode
+     * @return
+     */
+    @RequestMapping(value = "/update/winRecord")
+    @ResponseBody
+    private ApiResult winPrizeRecordUpdate(Long userId, Long ActWinDetailId, String name, String mobile,
+                                        String authCode){
+
+        // TODO: 2017/8/7  严重验证码是否正确
+
+
+        ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(ActWinDetailId,name,mobile);
+        if (actWinDetail!=null){
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        }
+        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+    }
+
+    /**
      * 记入中奖记入
      *
-     * @param request
+     * @param ipAddress
      * @param userId
      * @param activity
      * @return
      */
-    private ActWinDetail winPrizeRecord(HttpServletRequest request, Long prizeId, Long userId,
+    private ActWinDetail winPrizeRecord(String ipAddress, Long prizeId, Long userId,
                                         Activity activity) {
 
         ActWinDetail actWinDetail = new ActWinDetail();
         actWinDetail.setUserId(userId);
         actWinDetail.setWinTime(LocalDateTime.now());
         actWinDetail.setPrize(getPrizeByPrizeId(activity, prizeId));
-        actWinDetail.setIpAddress(IpUtil.IpAddress(request));
+        actWinDetail.setIpAddress(ipAddress);
         return actWinDetailService.saveActWinDetail(actWinDetail);
     }
-
-
-
-
 
     /**
      * 通过id查找对应奖品
