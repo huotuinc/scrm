@@ -34,21 +34,21 @@ $(function () {
                     game.toggleFilter();
                 }
             });
-
-
         },
         getOrder: function () {
-
-            var actId =  $("body").attr("activeId");
+            var actId = $("body").attr("activeId");
+            game.loadingModal();
             $.ajax({
                 type: 'POST',
                 url: '/site/join/act',
-                data: {actId:actId,
-                    customerId:4421
+                data: {
+                    actId: actId,
+                    customerId: 4421
                 },
                 dataType: 'json',
                 success: function (res) {
                     console.log(res);
+                    game.closeLoadModal();
                     if (res.code !== 200) {
                         game.errorModals(res.resultMsg);
                         return;
@@ -59,10 +59,10 @@ $(function () {
                     }
                     game.gameTimes--;
                     game.rotateFn(res.data);
+                    game.closeLoadModal();
                 },
                 error: function (xhr, type) {
                     game.errorModals('发生错误，请稍后重试');
-
                 }
             });
         },
@@ -146,10 +146,8 @@ $(function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
-                if($(this).attr("prizeType")==0){
-
+                if ($(this).attr("prizeType") == 0) {
                     game.showNameAndTel();
-                    console.log(111);
                 }
 
             });
@@ -166,7 +164,7 @@ $(function () {
         },
         renderElement: function () {
             if (game.gameTimes > 0) {
-                $(".game-time p").html("游戏次数： "+game.gameTimes+"次");
+                $(".game-time p").html("游戏次数： " + game.gameTimes + "次");
             } else {
                 $(".game-time p").html('抽奖机会已用完');
             }
@@ -183,7 +181,7 @@ $(function () {
                 '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="javascript:;" class="coupon-use" prizeType="'+data.prizeType.code+'">' + "确定" + '</a>' +
+                '<a href="javascript:;" class="coupon-use" prizeType="' + data.prizeType.code + '">' + "确定" + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +
@@ -199,7 +197,7 @@ $(function () {
             $('.prize-packet').click(function () {
                 var level = $(this).data('level');
                 $('.prize-detail-content.on').removeClass('on');
-                $('.prize-detail-content[data-level="'+level+'"]').addClass('on');
+                $('.prize-detail-content[data-level="' + level + '"]').addClass('on');
                 game.prizeModal.addClass('show');
                 game.toggleFilter();
             });

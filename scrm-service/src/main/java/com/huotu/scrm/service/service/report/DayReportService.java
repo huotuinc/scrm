@@ -1,5 +1,7 @@
 package com.huotu.scrm.service.service.report;
 
+import com.huotu.scrm.service.entity.mall.User;
+
 import java.time.LocalDateTime;
 
 /**
@@ -15,23 +17,57 @@ public interface DayReportService {
     /**
      * 统计某段时间预计积分
      *
-     * @param userId     用户ID
-     * @param customerId 商户ID
-     * @param beginLocalDateTime    统计起始日期
-     * @param endLocalDateTime    统计最后日期
+     * @param user
+     * @param beginLocalDateTime 统计起始日期
+     * @param endLocalDateTime   统计最后日期
      */
-    int getEstimateScore(Long userId, Long customerId, LocalDateTime beginLocalDateTime, LocalDateTime endLocalDateTime);
+    int getEstimateScore(User user, LocalDateTime beginLocalDateTime, LocalDateTime endLocalDateTime);
 
     /**
-     * 统计用户的累积积分（从注册以后开始计算，没有计算本月积分）
+     * 统计用户的累积积分
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    int getCumulativeScore(Long userId);
+    int getCumulativeScore(User user);
 
     /**
      * 定时保存每日统计信息
      */
     void saveDayReportScheduled();
+
+    /**
+     * 统计某用户某个时间段的转发咨询奖励积分
+     *
+     * @param user
+     * @param beginTime
+     * @param endTime
+     * @return
+     */
+    int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 统计某商户的浏览咨询奖励积分
+     *
+     * @param user
+     * @return
+     */
+    int getVisitorScore(User user, LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 统计本月的访客量（浏览量）
+     * @param user
+     * @return
+     */
+    int getMonthVisitorNum(User user);
+
+    /**
+     * 统计本月的转发量
+     * @param user
+     * @return
+     */
+    int getMonthForwardNum(User user);
+
+    int getMonthEstimateScore(User user);
+
 }

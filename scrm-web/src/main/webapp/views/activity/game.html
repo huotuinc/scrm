@@ -11,7 +11,7 @@
             a = n ? Math.min(i.devicePixelRatio, 3) : 1,
             m = "orientationchange" in window ? "orientationchange" : "resize";
         t.dataset.dpr = a;
-        for (var d, l, c = !1, o = e.getElementsByTagName("meta"), r = 0; r < o.length; r++)l = o[r], "viewport" == l.name && (c = !0, d = l);
+        for (var d, l, c = !1, o = e.getElementsByTagName("meta"), r = 0; r < o.length; r++) l = o[r], "viewport" == l.name && (c = !0, d = l);
         if (c) d.content = "width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no"; else {
             var o = e.createElement("meta");
             o.name = "viewport", o.content = "width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no", t.firstElementChild.appendChild(o)
@@ -285,7 +285,7 @@
 <script src="http://resali.huobanplus.com/cdn/game/fastclick.js"></script>
 <script src="http://resali.huobanplus.com/cdn/game/awardRotate.js"></script>
 <!--正式删除-->
-<script src="../../resources/js/mock/mock-min.js"></script>
+<script src="../../resources/js/mock/mock-min.js" th:remove="all"></script>
 <script src="../../resources/js/mock/api.js" th:remove="all"></script>
 <!--正式删除-->
 <script src="../../resources/js/game.js"></script>

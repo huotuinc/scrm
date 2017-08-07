@@ -4,6 +4,7 @@ import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
@@ -38,6 +39,8 @@ public class MonthReportServiceImpl implements MonthReportService {
     private UserLevelRepository userLevelRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BusinessCardRecordRepository businessCardRecordRepository;
     private int pageSize = 200;
 
     @Override
@@ -80,10 +83,10 @@ public class MonthReportServiceImpl implements MonthReportService {
             monthReport.setExtensionScore(extensionScore);
             //设置每月被关注量(销售员特有)
             if (monthReport.isSalesman()) {
-                int followNum = getFollowNum(userId, lastFirstDay, lastEndDay);
+                int followNum = businessCardRecordRepository.countByUserId(userId);
                 monthReport.setFollowNum(followNum);
             } else {
-                monthReport.setFollowNum(-1);
+                monthReport.setFollowNum(0);
             }
             //设置统计月份
             monthReport.setReportMonth(lastFirstDay);
@@ -124,7 +127,7 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @param maxDate 统计结束时间
      * @return
      */
-    public int getVisitorNum(Long userId, LocalDate minDate, LocalDate maxDate) {
+    private int getVisitorNum(Long userId, LocalDate minDate, LocalDate maxDate) {
         Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
         int num = 0;
@@ -135,44 +138,19 @@ public class MonthReportServiceImpl implements MonthReportService {
     }
 
     /**
-     * 统计每月推广积分(如果统计本月不含当天数据)
+     * 统计每月推广积分
      *
      * @param userId  用户ID
      * @param minDate 统计起始时间
      * @param maxDate 统计结束时间
      * @return
      */
-    public int getExtensionScore(Long userId, LocalDate minDate, LocalDate maxDate) {
+    private int getExtensionScore(Long userId, LocalDate minDate, LocalDate maxDate) {
         Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
         int num = 0;
         for (DayReport reportDay : sortAll) {
             num += reportDay.getExtensionScore();
-        }
-        return num;
-    }
-
-    /**
-     * 统计每月关注量（销售员特有，如果统计本月不含当天数据)
-     *
-     * @param userId  用户ID
-     * @param minDate 统计起始时间
-     * @param maxDate 统计起始时间
-     * @return
-     */
-    public int getFollowNum(Long userId, LocalDate minDate, LocalDate maxDate) {
-        Specification<DayReport> specification = ((root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("userId").as(Long.class), userId));
-            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(LocalDate.class), minDate));
-            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(LocalDate.class), maxDate));
-            predicates.add(cb.equal(root.get("isSalesman").as(boolean.class), true));
-            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
-        });
-        List<DayReport> sortAll = dayReportRepository.findAll(specification);
-        int num = 0;
-        for (DayReport reportDay : sortAll) {
-            num += reportDay.getFollowNum();
         }
         return num;
     }
