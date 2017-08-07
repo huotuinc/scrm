@@ -103,7 +103,7 @@
         prizeEdit: function (actId, prizeId) {
             if (prizeId == null) {
                 var status = $("#status").val();
-                if (status) {
+                if (status==true) {
                     hot.tip.error("该活动已启用，不能添加奖品")
                 } else {
                     window.location.href = ajaxUrl + "/prize/detail?actId=" + actId
