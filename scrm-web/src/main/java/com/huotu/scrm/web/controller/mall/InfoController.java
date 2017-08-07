@@ -70,7 +70,7 @@ public class InfoController extends MallBaseController {
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
-                info.setImageUrl(imgUri.toString());
+                info.setMallImageUrl(imgUri.toString());
             }
         }
         model.addAttribute("info",info);

@@ -19,3 +19,9 @@ Mock.mock("/site/join/act", "post", {
     }
 });
 
+Mock.mock(/\/api\/authCode/, "post", {
+    "resultCode": 200,
+    "resultMsg": "ok",
+    "data": null
+});
+

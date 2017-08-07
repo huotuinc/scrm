@@ -65,7 +65,7 @@ public class InfoServiceImpl implements InfoService {
         newInfo.setTitle(info.getTitle());
         newInfo.setIntroduce(info.getIntroduce());
         newInfo.setContent(info.getContent());
-        if(!StringUtils.isEmpty(info.getImageUrl()) && !StringUtils.containsWhitespace("http")){
+        if(!StringUtils.isEmpty(info.getImageUrl())){
             newInfo.setImageUrl(info.getImageUrl());
         }
         newInfo.setThumbnailImageUrl(info.getThumbnailImageUrl());
