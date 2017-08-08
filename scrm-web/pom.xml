@@ -9,13 +9,6 @@
     <artifactId>scrm-web</artifactId>
     <packaging>war</packaging>
     <name>scrm-web</name>
-    <repositories>
-        <repository>
-            <id>repo-huotu</id>
-            <name>Hot Repository</name>
-            <url>http://repo.51flashmall.com:8081/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -86,17 +79,6 @@
                     <!--<artifactId>commons-io</artifactId>-->
                 <!--</exclusion>-->
             <!--</exclusions>-->
-        </dependency>
-
-        <dependency>
-            <groupId>com.huotu.verification-code</groupId>
-            <artifactId>vc-service</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.huotu.verification-code</groupId>
-            <artifactId>vc-test</artifactId>
-            <version>1.0</version>
         </dependency>
 
 
