@@ -11,8 +11,11 @@ package com.huotu.scrm.web.service.impl;
 
 import com.huotu.scrm.web.service.VerifyService;
 import com.huotu.verification.VerificationType;
+import com.huotu.verification.repository.VerificationCodeRepository;
 import com.huotu.verification.service.VerificationCodeService;
+import com.huotu.verification.service.VerificationCodeServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,19 +26,34 @@ import java.util.Map;
  */
 @Service
 public class VerifyServiceImpl implements VerifyService {
-    @Autowired
+    private Environment env;
+    private VerificationCodeRepository verificationCodeRepository;
+    //这里初始化需要配置环境变量，否则会抛出异常，所以这里在用到的时候再初始化
     private VerificationCodeService verificationCodeService;
     private VerificationType register = new VerificationType() {
         @Override
         public int id() {
-            return 0;
+            return 1;
         }
 
         @Override
         public String message(String code) {
-            return "注册短信验证码为：" + code + "，如果没有提交请求请忽略";
+            return "中奖短信验证码为：" + code + "，如果没有提交请求请忽略";
         }
     };
+
+    @Autowired
+    public VerifyServiceImpl(Environment env, VerificationCodeRepository verificationCodeRepository) {
+        this.env = env;
+        this.verificationCodeRepository = verificationCodeRepository;
+    }
+
+    public void init(){
+        if(verificationCodeService == null){
+            verificationCodeService = new VerificationCodeServiceImpl(env,verificationCodeRepository);
+        }
+    }
+
     @Override
     public Boolean verifyCount(String str, Map<String, Integer> map) {
         if (map.containsKey(str)) {
@@ -54,11 +72,13 @@ public class VerifyServiceImpl implements VerifyService {
 
     @Override
     public void sendVerificationCode(String mobile) throws IOException {
+        init();
         verificationCodeService.sendCode(mobile, register);
     }
 
     @Override
     public void verifyVerificationCode(String mobile, String code) {
+        init();
         verificationCodeService.verify(mobile, code, register);
     }
 }

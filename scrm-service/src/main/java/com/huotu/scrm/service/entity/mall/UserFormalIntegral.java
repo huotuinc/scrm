@@ -9,6 +9,7 @@
 
 package com.huotu.scrm.service.entity.mall;
 
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,9 +38,6 @@ public class UserFormalIntegral {
     @Column(name = "UIH_ID")
     private Long id;
 
-    @Column(name = "UIH_Order_Id")
-    private String orderId;
-
     @Column(name = "UIH_CustomerID")
     private Long merchantId;
 
@@ -58,7 +56,7 @@ public class UserFormalIntegral {
      * 121:积分提现
      */
     @Column(name = "UIH_Type")
-    private Integer status;
+    private IntegralTypeEnum status;
 
     @Column(name = "UIH_NewType")
     private Integer newStatus;
