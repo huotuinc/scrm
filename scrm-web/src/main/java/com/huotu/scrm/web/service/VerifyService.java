@@ -10,7 +10,6 @@
 package com.huotu.scrm.web.service;
 
 import com.huotu.verification.VerificationType;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -20,7 +19,6 @@ import java.util.Map;
  * 验证码相关
  * Created by helloztt on 2017-08-08.
  */
-@Service
 public interface VerifyService {
     /**
      * 校验手机号码或ip发送短信的次数

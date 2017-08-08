@@ -13,6 +13,7 @@ import com.huotu.scrm.web.service.VerifyService;
 import com.huotu.verification.VerificationType;
 import com.huotu.verification.service.VerificationCodeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
 /**
  * Created by helloztt on 2017-08-08.
  */
+@Service
 public class VerifyServiceImpl implements VerifyService {
     @Autowired
     private VerificationCodeService verificationCodeService;
