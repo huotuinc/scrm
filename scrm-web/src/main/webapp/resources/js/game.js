@@ -97,6 +97,13 @@ $(function () {
             })
         },
         rotateFn: function (data) {
+
+            console.log(data.prizeDetailId);
+            // $('#J_userInfo').find('input:hidden[name="prizeDetail"]').val(data.prizeDetailId);
+            // $("input:hidden[name='prizeDetail']").val(data.prizeDetailId);
+            $("input[name='ActWinDetailId']").val(data.prizeDetailId);
+            // var search = $("input:text[name='prizeDetail']").val(data.prizeDetailId);
+
             var r;
             $("#J_circle").find('.prize').each(function () {
                 //匹配awardId
@@ -141,11 +148,12 @@ $(function () {
             game.toggleFilter();
         },
         hideModal: function () {
+            // 动态渲染
             $(document).on('click', '.coupon-use, .coupon-modal-close', function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
-                if ($(this).attr("data-type") == 0) {
+                if ($(this).attr("data-type") != 0) {
                     game.showUserInfo();
                 }
 

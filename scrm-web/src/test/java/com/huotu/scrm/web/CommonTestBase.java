@@ -45,15 +45,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public abstract class CommonTestBase extends SpringWebTest {
 
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected CustomerRepository customerRepository;
+
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected UserRepository userRepository;
+
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected UserLevelRepository userLevelRepository;
+
     @Autowired
-    protected InfoRepository infoRepository;
-    @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected BusinessCardRepository businessCardRepository;
+    @Autowired
+    private InfoRepository infoRepository;
     protected Random random = new Random();
 
     /**
@@ -127,10 +134,28 @@ public abstract class CommonTestBase extends SpringWebTest {
     }
 
     /**
-     * 模拟用户数据
+     * 模拟资讯信息
      *
      * @param customerId 商户ID
-     * @param userLevel  用户等级
+     * @return
+     */
+    protected Info mockInfo(Long customerId) {
+        Info infoE = new Info();
+        infoE.setCustomerId(customerId);
+        infoE.setTitle(UUID.randomUUID().toString());
+        infoE.setIntroduce(UUID.randomUUID().toString());
+        infoE.setContent(UUID.randomUUID().toString());
+        infoE.setCreateTime(LocalDateTime.now());
+        infoE.setDisable(false);
+        infoE.setStatus(true);
+        infoE.setExtend(true);
+        return infoRepository.saveAndFlush(infoE);
+    }
+
+    /**
+     * 模拟用户数据
+     * @param customerId
+     * @param userLevel
      * @return
      */
     protected User mockUser(Long customerId, UserLevel userLevel) {

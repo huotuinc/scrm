@@ -6,6 +6,7 @@ import com.huotu.scrm.service.config.ServiceConfig;
 import com.huotu.scrm.web.interceptor.CustomerInterceptor;
 import com.huotu.scrm.web.interceptor.HeaderInterceptor;
 import com.huotu.scrm.web.interceptor.UserInterceptor;
+import com.huotu.verification.VerificationCodeConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -37,7 +38,7 @@ import java.util.List;
         "com.huotu.scrm.web.interceptor",
         "com.huotu.scrm.web.service"
 })
-@Import({MVCConfig.ThymeleafConfig.class, ServiceConfig.class, SchedulingConfig.class})
+@Import({MVCConfig.ThymeleafConfig.class, ServiceConfig.class, SchedulingConfig.class,VerificationCodeConfig.class})
 public class MVCConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private HeaderInterceptor headerInterceptor;
