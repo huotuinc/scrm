@@ -86,14 +86,14 @@ public class Info {
      * 资讯推广状态  1、 已推广  0、未推广（判断小伙伴,1）
      */
     @Column(name = "Extend")
-    private boolean isExtend = false;
+    private boolean isExtend;
 
 
     /**
      * 资讯是否删除  1、已删除  0、正常
      */
     @Column(name = "Disable")
-    private boolean isDisable = false;
+    private boolean isDisable;
 
 
 //    /**

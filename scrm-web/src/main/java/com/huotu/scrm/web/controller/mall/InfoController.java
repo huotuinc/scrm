@@ -30,7 +30,6 @@ import java.net.URISyntaxException;
 @Controller
 public class InfoController extends MallBaseController {
 
-    private Log logger = LogFactory.getLog(InfoController.class);
     @Autowired
     InfoService infoService;
     @Autowired
@@ -43,14 +42,9 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping(value = "/info/infoList")
     public String infoHomeLists(InformationSearch informationSearch, @ModelAttribute("customerId") Long customerId , Model model){
-        logger.info(informationSearch);
         informationSearch.setCustomerId(customerId);
-        logger.info(informationSearch);
         Page<Info> page = infoService.infoList(informationSearch);
         model.addAttribute("infoListsPage",page);
-        long account = infoService.infoListsCount(false);
-        logger.info(account);
-        model.addAttribute("totalAccount",account);
         return "info/info_list";
     }
 
@@ -84,7 +78,6 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping("/info/saveInfo")
     public String saveInfo(@ModelAttribute("customerId") Long customerId, Info info){
-        logger.info(info);
         if (info.getCustomerId() == null || info.getCustomerId() == 0){
             info.setCustomerId(customerId);
         }

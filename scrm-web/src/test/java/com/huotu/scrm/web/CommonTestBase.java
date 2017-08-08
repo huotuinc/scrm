@@ -3,13 +3,16 @@ package com.huotu.scrm.web;
 import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.EncryptUtils;
+import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
+import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.web.config.MVCConfig;
 import com.huotu.scrm.web.controller.page.AbstractPage;
 import com.huotu.scrm.web.interceptor.UserInterceptor;
@@ -22,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -56,6 +60,8 @@ public abstract class CommonTestBase extends SpringWebTest {
     @Autowired
     @SuppressWarnings("SpringJavaAutowiringInspection")
     protected BusinessCardRepository businessCardRepository;
+    @Autowired
+    private InfoRepository infoRepository;
     protected Random random = new Random();
 
     /**
@@ -128,10 +134,28 @@ public abstract class CommonTestBase extends SpringWebTest {
     }
 
     /**
-     * 模拟用户数据
+     * 模拟资讯信息
      *
      * @param customerId 商户ID
-     * @param userLevel  用户等级
+     * @return
+     */
+    protected Info mockInfo(Long customerId) {
+        Info infoE = new Info();
+        infoE.setCustomerId(customerId);
+        infoE.setTitle(UUID.randomUUID().toString());
+        infoE.setIntroduce(UUID.randomUUID().toString());
+        infoE.setContent(UUID.randomUUID().toString());
+        infoE.setCreateTime(LocalDateTime.now());
+        infoE.setDisable(false);
+        infoE.setStatus(true);
+        infoE.setExtend(true);
+        return infoRepository.saveAndFlush(infoE);
+    }
+
+    /**
+     * 模拟用户数据
+     * @param customerId
+     * @param userLevel
      * @return
      */
     protected User mockUser(Long customerId, UserLevel userLevel) {
@@ -152,6 +176,8 @@ public abstract class CommonTestBase extends SpringWebTest {
         user.setRegTime(new Date());
         return userRepository.saveAndFlush(user);
     }
+
+
 
     @SuppressWarnings("Duplicates")
     protected UserLevel mockUserLevel(Long customerId, UserType userType, boolean isSalesman) {
