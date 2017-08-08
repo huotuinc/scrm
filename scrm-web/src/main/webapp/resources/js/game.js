@@ -153,7 +153,7 @@ $(function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
-                if ($(this).attr("data-type") == 0) {
+                if ($(this).attr("data-type") != 0) {
                     game.showUserInfo();
                 }
 
