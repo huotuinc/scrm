@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.report.impl;
 
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
@@ -210,8 +211,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
-        // TODO: 2017-08-04 status 待定
-        List<UserFormalIntegral> formalIntegralList = userFormalIntegralRepository.findByUserIdAndMerchantIdAndStatusAndTimeBetween(user.getId(), user.getCustomerId(), 1, beginTime, endTime);
+        List<UserFormalIntegral> formalIntegralList = userFormalIntegralRepository.findByUserIdAndMerchantIdAndStatusAndTimeBetween(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
         int forwardScore = 0;
         for (UserFormalIntegral u : formalIntegralList
                 ) {

@@ -9,6 +9,7 @@
 
 package com.huotu.scrm.service.repository.mall;
 
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.service.entity.mall.UserFormalIntegral;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -20,6 +21,6 @@ import java.util.List;
  */
 public interface UserFormalIntegralRepository extends JpaRepository<UserFormalIntegral, Long> {
 
-    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatusAndTimeBetween(Long userId, Long customerId, int status, LocalDateTime beginTime, LocalDateTime endTime);
-    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatus(Long userId,Long customerId,int status);
+    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatusAndTimeBetween(Long userId, Long customerId, IntegralTypeEnum status, LocalDateTime beginTime, LocalDateTime endTime);
+    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatus(Long userId,Long customerId,IntegralTypeEnum status);
 }

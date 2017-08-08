@@ -127,4 +127,31 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         Assert.assertEquals(1, Integer.parseInt(forwardNum));
         Assert.assertEquals(2, Integer.parseInt(uv));
     }
+
+    /**
+     * 测试今日预计积分
+     * 用户uv：2  积分配置：是否开启奖励，奖励比例，每日最高限额
+     */
+    // TODO: 2017-08-08
+    public void getScoreInfo() {
+        mockInfoBrowse(1L, userBuddy.getId(), customer.getId());
+        mockInfoBrowse(1L, userBuddy.getId(), customer.getId());
+
+    }
+
+    /**
+     * 测试历史累积积分
+     */
+    // TODO: 2017-08-08
+    public void getAccumulate() {
+
+    }
+
+    /**
+     * 测试关注人数（销售员）
+     */
+    // TODO: 2017-08-08
+    public void getFollowNum() {
+
+    }
 }

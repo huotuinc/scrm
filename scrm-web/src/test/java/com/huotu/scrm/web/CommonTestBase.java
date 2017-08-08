@@ -214,4 +214,5 @@ public abstract class CommonTestBase extends SpringWebTest {
         return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
 
+
 }
