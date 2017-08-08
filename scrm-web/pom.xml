@@ -9,13 +9,6 @@
     <artifactId>scrm-web</artifactId>
     <packaging>war</packaging>
     <name>scrm-web</name>
-    <repositories>
-        <repository>
-            <id>repo-huotu</id>
-            <name>Hot Repository</name>
-            <url>http://repo.51flashmall.com:8081/nexus/content/groups/public/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
