@@ -35,9 +35,9 @@ public class InfoControllerTest extends CommonTestBase {
     @Test
     public void infoHomeLists() throws Exception {
 
-        List<Info> mockInfo = new ArrayList();
-        mockInfo.add(mockInfo(customerId));
-        mockInfo.add(mockInfo(customerId));
+
+        Info mockInfo1 = mockInfo(customerId);
+        Info mockInfo2 = mockInfo(customerId);
 
 
         //1、case post
@@ -72,9 +72,22 @@ public class InfoControllerTest extends CommonTestBase {
                 .andExpect(view().name("info/info_list"))
                 .andReturn();
         List<Info> list = ((Page)result.getModelAndView().getModel().get("infoListsPage")).getContent();
-        Assert.assertEquals(mockInfo.size(),list.size());
-        Assert.assertEquals(mockInfo.get(mockInfo.size()-2).getTitle(),list.get(list.size()-2).getTitle());
-        Assert.assertEquals(mockInfo.get(mockInfo.size()-1).getTitle(),list.get(list.size()-1).getTitle());
+        Assert.assertEquals(2,list.size());
+        Assert.assertEquals(mockInfo1.getTitle(),list.get(list.size()-1).getTitle());
+        Assert.assertEquals(mockInfo2.getTitle(),list.get(list.size()-2).getTitle());
+
+
+        //6、case
+        //method: 测试搜索条件
+        MvcResult searchResult = mockMvc.perform(post("/mall/info/infoList")
+                .param("customerId",String.valueOf(customerId))
+                .param("searchCondition",mockInfo1.getTitle())
+        ).andExpect(model().attributeExists("infoListsPage"))
+                .andExpect(view().name("info/info_list"))
+                .andReturn();
+        List<Info> searchList = ((Page)searchResult.getModelAndView().getModel().get("infoListsPage")).getContent();
+        Assert.assertEquals(1,searchList.size());
+        Assert.assertEquals(mockInfo1.getTitle(),searchList.get(0).getTitle());
     }
 
     @Test
