@@ -84,8 +84,7 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
 
 
     /**
-     * 小伙伴请求判断是否为销售员，销售员有关注tag
-     * 普通会员请求重定向回资讯状态请求（理论上情况不存在）
+     * 若是小伙伴请求判断是否为销售员，销售员有关注tab
      *
      * @throws Exception
      */
@@ -93,45 +92,39 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
     public void getFollowTag() throws Exception {
         //小伙伴（不是销售员）请求
         mockUserLogin(userBuddy.getId(), customer.getId());
-        webDriver.get("http://localhost" + baseUrl + "/getScoreInfo?customerId=" + customer.getId());
-        List<WebElement> elementList = webDriver.findElements(By.tagName("li"));
-        Assert.assertEquals(5,elementList.size());
-        elementList.forEach(webElement -> {
-            System.out.println("============"+webElement.getText());
-        });
-        //小伙伴（销售员请求）
+        webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> elementList = webDriver.findElements(By.className("sj"));
+        Assert.assertEquals(4, elementList.size());
+        //小伙伴（销售员）请求，有官职tab
         mockUserLogin(userBuddyIsSales.getId(), customer.getId());
-        webDriver.get("http://localhost" + baseUrl + "/getScoreInfo?customerId=" + customer.getId());
-        List<WebElement> elementList1 = webDriver.findElements(By.tagName("li"));
-        Assert.assertEquals(6,elementList1.size());
-        elementList1.forEach(webElement -> {
-            System.out.println("============"+webElement.getText());
-        });
+        webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> elementList1 = webDriver.findElements(By.className("sj"));
+        Assert.assertEquals(5, elementList1.size());
     }
 
     /**
-     * 测试今日关注信息
-     *
-     * @throws Exception
-     */
-    @Test
-    public void getFollowInfo() throws Exception {
-        webDriver.get("http://localhost" + baseUrl + "/getFollowInfo");
-        WebElement data = webDriver.findElement(By.className("sj"));
-        //当前排名
-        Assert.assertNotNull(data.getText());
-    }
-
-    /**
-     * 测试今日访客量信息
+     * 测试今日访客量（uv）信息（顺便测试资讯的浏览和转发量）
+     * 用户uv：2  资讯转发：1  资讯uv：2
      *
      * @throws Exception
      */
     @Test
     public void getVisitorInfo() throws Exception {
-        webDriver.get("http://localhost" + baseUrl + "/getVisitorInfo");
-        WebElement data = webDriver.findElement(By.className("sj"));
-        //本月UV（人）
-        Assert.assertNotNull(data.getText());
+        mockInfo(customer.getId(), true, true);
+        mockInfoBrowse(1L, userBuddy.getId(), customer.getId());
+        mockInfoBrowse(1L, userBuddy.getId(), customer.getId());
+        mockUserLogin(userBuddy.getId(), customer.getId());
+        webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> elements = webDriver.findElements(By.className("sj"));
+        String visitorNum = elements.get(1).getText();
+        Assert.assertEquals(2, Integer.parseInt(visitorNum));
+        List<WebElement> elements1 = webDriver.findElements(By.className("weui_media_info"));
+        List<WebElement> infoMeta = elements1.get(0).findElements(By.className("weui_media_info_meta"));
+        //转发量
+        String forwardNum = infoMeta.get(0).getText();
+        //浏览量
+        String uv = infoMeta.get(1).getText();
+        Assert.assertEquals(1, Integer.parseInt(forwardNum));
+        Assert.assertEquals(2, Integer.parseInt(uv));
     }
 }

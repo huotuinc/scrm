@@ -4,10 +4,12 @@ import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.EncryptUtils;
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
@@ -45,22 +47,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public abstract class CommonTestBase extends SpringWebTest {
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected CustomerRepository customerRepository;
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected UserRepository userRepository;
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected UserLevelRepository userLevelRepository;
 
     @Autowired
-    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected BusinessCardRepository businessCardRepository;
     @Autowired
-    private InfoRepository infoRepository;
+    protected InfoRepository infoRepository;
+    @Autowired
+    protected InfoBrowseRepository infoBrowseRepository;
     protected Random random = new Random();
 
     /**
@@ -154,6 +154,7 @@ public abstract class CommonTestBase extends SpringWebTest {
 
     /**
      * 模拟用户数据
+     *
      * @param customerId
      * @param userLevel
      * @return
@@ -188,7 +189,7 @@ public abstract class CommonTestBase extends SpringWebTest {
         return userLevelRepository.saveAndFlush(userLevel);
     }
 
-    protected Info mockInfo(Long customerId,boolean isStatus,boolean isExtend) {
+    protected Info mockInfo(Long customerId, boolean isStatus, boolean isExtend) {
         Info info = new Info();
         info.setCustomerId(customerId);
         info.setExtend(isExtend);
@@ -201,6 +202,16 @@ public abstract class CommonTestBase extends SpringWebTest {
         info.setIntroduce(UUID.randomUUID().toString());
         info.setTitle(UUID.randomUUID().toString());
         return infoRepository.saveAndFlush(info);
+    }
+
+    protected InfoBrowse mockInfoBrowse(Long infoId, Long sourceUserId, Long customerId) {
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setInfoId(infoId);
+        infoBrowse.setSourceUserId(sourceUserId);
+        infoBrowse.setReadUserId(Long.valueOf(String.valueOf(random.nextInt())));
+        infoBrowse.setCustomerId(customerId);
+        infoBrowse.setBrowseTime(LocalDateTime.now());
+        return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
 
 }
