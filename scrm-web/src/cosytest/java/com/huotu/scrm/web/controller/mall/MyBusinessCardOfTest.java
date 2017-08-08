@@ -28,20 +28,20 @@ import java.util.List;
 
 
 @ActiveProfiles(value = {"development"})
-public class MyBusinessCardByCosy extends WebTestOfMock {
+public class MyBusinessCardOfTest extends WebTestOfMock {
     @Autowired
     BusinessCardService businessCardService;
 
     @Before
 
     public void first() throws Exception{
-        BusinessCard businessCard=createBusinessCardMock();
+       /* BusinessCard businessCard=createBusinessCardMock();
         createBusinessCardRecordMock();
-
-        String customerID = getCustomerMock().getId().toString();
+*/
+   /*     String customerID = getCustomerMock().getId().toString();
         String userID = getUserMock().getId().toString();
 
-        webDriver.get("http://localhost/site/businessCard/myBusinessCard?customerId="+customerID+"&userId="+userID);
+        webDriver.get("http://localhost/site/businessCard/myBusinessCard?customerId="+customerID+"&userId="+userID);*/
 
     }
 
