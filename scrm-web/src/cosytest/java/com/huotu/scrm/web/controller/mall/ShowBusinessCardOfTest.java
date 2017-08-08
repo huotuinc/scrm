@@ -1,7 +1,12 @@
 package com.huotu.scrm.web.controller.mall;
 
+import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.config.ServiceConfig;
 
+import com.huotu.scrm.service.entity.businesscard.BusinessCard;
+import com.huotu.scrm.service.entity.mall.Customer;
+import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.web.controller.WebTestOfMock;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,16 +34,26 @@ import org.junit.Assert;
  */
 
 @ActiveProfiles(value = {"development"})
-public class ShowBusinessCardByCosy extends WebTestOfMock {
+public class ShowBusinessCardOfTest extends WebTestOfMock {
+
+    public BusinessCard businessCard;
+    public WebDriverWait wait;
+    public  User user;
 
    @Before
    public void  first()throws Exception{
-       createBusinessCardMock();
-       createBusinessCardRecordMock();
+       //创建数据
+       Customer customer= mockCustomer();
+       UserLevel userLevel= mockUserLevel(customer.getId(), UserType.buddy,true);
+       user= mockUser(customer.getId(),userLevel);
 
-       String customerID = getCustomerMock().getId().toString();
-       String userID = getUserMock().getId().toString();
-       webDriver.get("http://localhost/site/businessCard/showBusinessCard?customerId="+customerID+"&salesmanId="+userID);
+       businessCard=createBusinessCardMock(customer,user);
+
+       wait = new WebDriverWait(webDriver, 10);
+
+       //用户登入
+       mockUserLogin(user.getId(),customer.getId());
+       webDriver.get("http://localhost/site/businessCard/showBusinessCard?customerId="+customer.getId()+"&salesmanId="+user.getId());
    }
 
 
@@ -61,14 +76,14 @@ public class ShowBusinessCardByCosy extends WebTestOfMock {
 
     @Test
     public void allMessage()throws Exception{
-        Assert.assertEquals("",webDriver.findElement(By.xpath("html/body/div[2]/a[1]/div/p/span")).getText());
+        Assert.assertEquals(user.getUserMobile(),webDriver.findElement(By.xpath("html/body/div[2]/a[1]/div/p/span")).getText());
         Assert.assertEquals("13600541783",webDriver.findElement(By.xpath("html/body/div[2]/a[2]/div/p/span")).getText());
         Assert.assertEquals("826449783",webDriver.findElement(By.xpath("html/body/div[2]/a[3]/div/p/span")).getText());
         Assert.assertEquals("826449783@qq.com",webDriver.findElement(By.xpath("html/body/div[2]/a[4]/div/p/span")).getText());
         Assert.assertEquals("杭州火图科技有限公司",webDriver.findElement(By.xpath("html/body/div[2]/a[5]/div/p/span")).getText());
         Assert.assertEquals("浙江省阡陌路智慧E谷",webDriver.findElement(By.xpath("html/body/div[2]/a[6]/div/p/span")).getText());
 
-        Assert.assertEquals(getUserMock().getLoginName(),webDriver.findElement(By.xpath("html/body/div[1]/div[2]/div/p[1]/i")).getText());
+        //Assert.assertEquals(user.getLoginName(),webDriver.findElement(By.xpath("html/body/div[1]/div[2]/div/p[1]/i")).getText());
         Assert.assertEquals("测试狗",webDriver.findElement(By.xpath("html/body/div[1]/div[2]/div/p[2]/b")).getText());
     }
 }

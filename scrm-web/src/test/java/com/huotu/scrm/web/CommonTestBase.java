@@ -46,12 +46,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public abstract class CommonTestBase extends SpringWebTest {
 
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected CustomerRepository customerRepository;
+
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected UserRepository userRepository;
+
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected UserLevelRepository userLevelRepository;
+
     @Autowired
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     protected BusinessCardRepository businessCardRepository;
     @Autowired
     private InfoRepository infoRepository;
