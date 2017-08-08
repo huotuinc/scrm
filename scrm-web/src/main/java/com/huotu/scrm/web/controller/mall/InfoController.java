@@ -30,7 +30,6 @@ import java.net.URISyntaxException;
 @Controller
 public class InfoController extends MallBaseController {
 
-    private Log logger = LogFactory.getLog(InfoController.class);
     @Autowired
     InfoService infoService;
     @Autowired
