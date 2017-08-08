@@ -26,7 +26,12 @@
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <property name="dataSource" ref="dataSource"></property>
         <property name="persistenceUnitName" value="entityManager"/>
-        <property name="packagesToScan" value="com.huotu.scrm.service.entity"/>
+        <property name="packagesToScan">
+            <array>
+                <value>com.huotu.scrm.service.entity</value>
+                <value>com.huotu.verification.entity</value>
+            </array>
+        </property>
         <property name="persistenceProvider">
             <bean class="org.eclipse.persistence.jpa.PersistenceProvider"/>
         </property>
