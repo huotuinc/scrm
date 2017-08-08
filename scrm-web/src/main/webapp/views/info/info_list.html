@@ -11,7 +11,8 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
     <!--checkbox-->
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
     <!--datetimepick-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
@@ -23,30 +24,31 @@
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <!--search-->
     <!--<form role="form" class="search-panel">-->
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="ibox float-e-margins">
-                    <div>
-                        <label class="">资讯筛选</label>
-                    </div>
-                    <form class="search-panel" method="get" action="#" th:action="@{/mall/info/infoList}" id="searchForm">
-                        <!--用来传递页码-->
-                        <input type="hidden" name="pageNo" value="1" th:value="${informationSearch.pageNo}" />
-                        <div class="ibox-content p-m no-borders">
-                            <div class="form-inline ">
-                                <div class="form-group m-r-sm">
-                                    <label class="control-label" for="searchCondition">标题关键字：</label>
-                                    <input type="text" class="form-control input-sm mb10" id="searchCondition" name="searchCondition"
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div>
+                    <label class="">资讯筛选</label>
+                </div>
+                <form class="search-panel" method="get" action="#" th:action="@{/mall/info/infoList}" id="searchForm">
+                    <!--用来传递页码-->
+                    <input type="hidden" name="pageNo" value="1" th:value="${informationSearch.pageNo}"/>
+                    <div class="ibox-content p-m no-borders">
+                        <div class="form-inline ">
+                            <div class="form-group m-r-sm">
+                                <label class="control-label" for="searchCondition">标题关键字：</label>
+                                <input type="text" class="form-control input-sm mb10" id="searchCondition"
+                                       name="searchCondition"
                                        th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>
-                                    <button type="button"  class="btn btn-sm btn-success js-search">筛选</button>
-                                    <button type="button"  class="btn btn-sm  btn-success js-searchAll">显示全部</button>
-                                </div>
+                                <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
+                                <button type="button" class="btn btn-sm  btn-success js-searchAll">显示全部</button>
                             </div>
                         </div>
-                     </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
     <!--</form>-->
     <!--search-->
     <!--list-->
@@ -59,7 +61,8 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-edit" type="button" th:attr="infoId=0">添加资讯
+                        <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-edit" type="button"
+                                th:attr="infoId=0">添加资讯
                         </button>
                     </div>
                     <div class="panel-body">
@@ -79,39 +82,56 @@
                             <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
                             <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
                             <tr th:each="info ,infoState: ${infoListsPage.content}">
-                                <td th:text="${infoState.index} + 1 + (${informationSearch.pageNo} - 1) * ${informationSearch.pageSize}">1</td>
+                                <td th:text="${infoState.index} + 1 + (${informationSearch.pageNo} - 1) * ${informationSearch.pageSize}">
+                                    1
+                                </td>
                                 <td style="width: 20%;">
                                     <p style="width: 100%;">
-                                        <span class="font-hidden" style="width: 95%;float: left;"
-                                              th:text="${info.title}" onclick="infoListHandler.detailInfo(this)"
-                                              th:attr="infoId=${info.id},customerId=${info.customerId}">
+                                        <a th:href="@{'/site/info/infoDetail?infoId=' + ${info.id} + '&customerId=' + ${info.customerId}}"
+                                            href="information_detail.html" target="_blank">
+                                            <span class="font-hidden" style="width: 95%;float: left;"
+                                                  th:text="${info.title}"
+                                                  th:attr="infoId=${info.id},customerId=${info.customerId}">
                                                 习近平对司法体制改革作出重要指示引起热烈反响
-                                        </span>
+                                            </span>
+                                        </a>
+                                        <!--<span class="font-hidden" style="width: 95%;float: left;"-->
+                                              <!--th:text="${info.title}" onclick="infoListHandler.detailInfo(this)"-->
+                                              <!--th:attr="infoId=${info.id},customerId=${info.customerId}">-->
+                                                <!--习近平对司法体制改革作出重要指示引起热烈反响-->
+                                        <!--</span>-->
                                     </p>
                                 </td>
                                 <td style="width: 20%;">
-                                    <span class="font-hidden" style="width: 95%;float: left;" th:text="${info.introduce}">
+                                    <span class="font-hidden" style="width: 95%;float: left;"
+                                          th:text="${info.introduce}">
                                                 连日来，习近平总书记的重要指示在广大法律工作者中引起热烈反响。大家表示，要认真领会
                                         总书记的重要指示，指导司法体制改革创新实践，不断完善和发展中国特色社会主义司法制度，为加快建设社会主义法治国家作出新贡献。
                                     </span>
                                 </td>
-                                <td th:text="${#temporals.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
-                                <td th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
-                                <td th:text="${info.isExtend()?'是':'否'}">是</td>
+                                <td th:text="${#temporals.format(info.createTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12
+                                    12:12:34
+                                </td>
+                                <td th:style="${info.isStatus()}?'color:green':'color:red;'" th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
+                                <td th:style="${info.isExtend()}?'color:green':'color:red;'" th:text="${info.isExtend()?'是':'否'}">是</td>
                                 <td>
-                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)" th:attr="infoId=${info.id}">
+                                    <span class="cursor-point" onclick="infoListHandler.editInfo(this)"
+                                          th:attr="infoId=${info.id}">
                                        <i class="fa tooltips" data-toggle="tooltip" data-original-title="编辑">编辑</i>
                                     </span>
                                     &nbsp;
-                                    <span class="cursor-point" onclick="infoListHandler.turnList(this)" th:attr="infoId=${info.id}">
-                                        <i class="fa tooltips"  data-toggle="tooltip" data-original-title="转发记录">转发记录</i>
+                                    <span class="cursor-point" onclick="infoListHandler.turnList(this)"
+                                          th:attr="infoId=${info.id}">
+                                        <i class="fa tooltips" data-toggle="tooltip" data-original-title="转发记录">转发记录</i>
                                     </span>
                                     &nbsp;
-                                    <span class="cursor-point" onclick="infoListHandler.browseList(this)" th:attr="infoId=${info.id}">
-                                        <i class="fa tooltips"  data-toggle="tooltip" data-original-title="浏览记录">浏览记录</i>
+                                    <span class="cursor-point" onclick="infoListHandler.browseList(this)"
+                                          th:attr="infoId=${info.id}">
+                                        <i class="fa tooltips" data-toggle="tooltip" data-original-title="浏览记录">浏览记录</i>
                                     </span>
                                     &nbsp;
-                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infoId=''+${info.id}" class="cursor-point">
+                                    <span onclick="infoListHandler.deleteInfo(this)" th:attr="infoId=''+${info.id}"
+                                          class="cursor-point">
                                         <i class="fa tooltips"
                                            data-placement="top" data-toggle="tooltip" data-original-title="删除">删除</i>
                                     </span>
@@ -123,7 +143,7 @@
                                 <td style="width: 20%;">
                                     <p style="width: 100%; height: 50px;">
                                         <!--资讯标题-->
-                                            <span class="font-hidden" style="width: 95%;float: left;">
+                                        <span class="font-hidden" style="width: 95%;float: left;">
                                                 习近平对司法体制改革作出重要指示引起热烈反响
                                             </span>
                                     </p>
@@ -139,15 +159,17 @@
                                 <td>是</td>
                                 <td>
                                     <span class="cursor-point">
-                                        <i class="fa  tooltips"  data-toggle="tooltip" data-original-title="编辑">编辑</i>
+                                        <i class="fa  tooltips" data-toggle="tooltip" data-original-title="编辑">编辑</i>
                                     </span>
                                     &nbsp;
                                     <span class="cursor-point">
-                                        <i class="fa  tooltips"  data-toggle="tooltip" data-original-title="转发记录">转发记录</i>
+                                        <i class="fa  tooltips" data-toggle="tooltip"
+                                           data-original-title="转发记录">转发记录</i>
                                     </span>
                                     &nbsp;
                                     <span class="cursor-point">
-                                        <i class="fa  tooltips"  data-toggle="tooltip" data-original-title="浏览记录">浏览记录</i>
+                                        <i class="fa  tooltips" data-toggle="tooltip"
+                                           data-original-title="浏览记录">浏览记录</i>
                                     </span>
                                     &nbsp;
                                     <span onclick="" class="cursor-point">
@@ -162,9 +184,9 @@
                         共
                         <th:block th:text="${infoListsPage.totalElements}">0</th:block>
                         条记录，当前第
-                        <th:block th:text="${informationSearch.pageNo}">0</th:block>
+                        <th:block th:text="${informationSearch.pageNo}">1</th:block>
                         /
-                        <th:block th:text="${infoListsPage.totalPages}">0</th:block>
+                        <th:block th:text="${infoListsPage.totalPages}">1</th:block>
                         ，每页
                         <th:block th:text="${informationSearch.pageSize}">0</th:block>
                         条记录
@@ -179,7 +201,8 @@
 
 <!--基础框架js-->
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
-<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js" th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js"
+        th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
@@ -203,45 +226,47 @@
 
     var infoListHandler = {
 
-        detailInfo:function (obj) {
+        detailInfo: function (obj) {
             var infoId = $(obj).attr("infoId");
             var customerId = $(obj).attr("customerId");
-            window.location.href = "/site/info/infoDetail?infoId="+infoId+"&customerId="+customerId;
+            window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
         },
 
-        search:function(pageNo) {
+        search: function (pageNo) {
             var search = $("input:text[name='infoName']").val(pageIndex);
             $('#searchForm').submit();
         },
 
-        searchAll:function(){
+        searchAll: function () {
             window.location.href = "/mall/info/infoList";
         },
 
-        search: function(pageNo){
+        search: function (pageNo) {
             $("input[name=pageNo]").val(pageNo);
             $('#searchForm').submit();
         },
 
-        editInfo:function(obj){
+        editInfo: function (obj) {
             var infoId = $(obj).attr("infoId");
-            window.location.href = "/mall/info/edit?id="+infoId;
+            window.location.href = "/mall/info/edit?id=" + infoId;
         },
 
-        turnList:function(obj){
+        turnList: function (obj) {
             var infoId = $(obj).attr("infoId");
-            window.location.href = "/mall//info/turnRecord?infoId="+infoId;
+            hot.iframeModal("/mall//info/turnRecord?infoId=" + infoId,"750px","700px");
         },
 
-        browseList:function(obj){
+        browseList: function (obj) {
             var infoId = $(obj).attr("infoId");
-            window.location.href = "/mall/info/browseRecord?infoId="+infoId;
+            hot.iframeModal("/mall/info/browseRecord?infoId=" + infoId,"750px","700px");
         },
 
-        deleteInfo:function(obj){
+        deleteInfo: function (obj) {
+
+
             var infoId = $(obj).attr("infoId");
             hot.ajax("/mall/info/deleteInfo", {
-                id:infoId
+                id: infoId
             }, function (result) {
                 if (result.code == 200) {
                     hot.tip.success("删除成功");
@@ -251,7 +276,8 @@
                 } else {
                     hot.tip.error(result.msg);
                 }
-            }, function () {
+            }, function (result) {
+                hot.confirm("删除异常,请稍后再试");
             }, 'post');
         }
     }
@@ -260,11 +286,11 @@
         infoListHandler.search(1);
     });
 
-    $('.js-searchAll').click(function(){
+    $('.js-searchAll').click(function () {
         infoListHandler.searchAll();
     });
 
-    $('.js-edit').click(function(){
+    $('.js-edit').click(function () {
         infoListHandler.editInfo(this);
     });
 </script>
