@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,8 +38,8 @@
                                     <label class="control-label" for="searchCondition">标题关键字：</label>
                                     <input type="text" class="form-control input-sm mb10" id="searchCondition" name="searchCondition"
                                        th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>
-                                    <button type="button"  class="btn btn-success js-search">筛选</button>
-                                    <button type="button"  class="btn btn-success js-searchAll">显示全部</button>
+                                    <button type="button"  class="btn btn-sm btn-success js-search">筛选</button>
+                                    <button type="button"  class="btn btn-sm  btn-success js-searchAll">显示全部</button>
                                 </div>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success js-edit" type="button" th:attr="infoId=0">添加资讯
+                        <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-edit" type="button" th:attr="infoId=0">添加资讯
                         </button>
                     </div>
                     <div class="panel-body">
@@ -81,7 +81,7 @@
                             <tr th:each="info ,infoState: ${infoListsPage.content}">
                                 <td th:text="${info.id}">1</td>
                                 <td style="width: 20%;">
-                                    <p style="width: 100%; height: 50px;">
+                                    <p style="width: 100%;">
                                         <span class="font-hidden" style="width: 95%;float: left;"
                                               th:text="${info.title}" onclick="infoListHandler.detailInfo(this)"
                                               th:attr="infoId=${info.id},customerId=${info.customerId}">
