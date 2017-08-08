@@ -280,21 +280,18 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         dayFollowNumInfo.setDayFollowNum(dayFollowNum);
         //当前排名
         int followRanking = 0;
-        if (mapDayFollowRanking.containsKey(user.getId())) {
-            followRanking = mapDayFollowRanking.get(user.getId());
-        } else {
-            List<Long> sourceUserIdList = businessCardRecordRepository.findByCustomerIdAndFollowDate(user.getCustomerId(), beginTime, endTime);
-            Map<Long, Integer> map = new TreeMap<>();
-            for (long sourceUserId : sourceUserIdList
-                    ) {
-                int followNum = businessCardRecordRepository.countByUserId(sourceUserId);
-                map.put(sourceUserId, followNum);
-            }
-            followRanking = getRanking(map, user.getId());
-        }
-        if (followRanking == 0) {
-            if (dayFollowNum > 0) {
-                dayFollowNum = 1;
+        if (dayFollowNum > 0) {
+            if (mapDayFollowRanking.containsKey(user.getId())) {
+                followRanking = mapDayFollowRanking.get(user.getId());
+            } else {
+                List<Long> sourceUserIdList = businessCardRecordRepository.findByCustomerIdAndFollowDate(user.getCustomerId(), beginTime, endTime);
+                Map<Long, Integer> map = new TreeMap<>();
+                for (long sourceUserId : sourceUserIdList
+                        ) {
+                    int followNum = businessCardRecordRepository.countByUserId(sourceUserId);
+                    map.put(sourceUserId, followNum);
+                }
+                followRanking = getRanking(map, user.getId());
             }
         }
         dayFollowNumInfo.setFollowRanking(followRanking);
@@ -304,9 +301,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
         monthInfo.setMonth("本月");
-        //本月关注量
-        int followNum = businessCardRecordRepository.countByUserId(user.getId());
-        monthInfo.setData(followNum + dayFollowNum);
+        //本月关注量排名
+        monthInfo.setData(followRanking);
         monthStatisticInfoList.add(monthInfo);
         monthStatisticInfoList = getMonthStatisticInfo(user.getId(), 3);
         dayFollowNumInfo.setMonthFollowRankingList(monthStatisticInfoList);
@@ -451,7 +447,6 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             });
             setRanking(map, 0);
         });
-
     }
 
     /**
@@ -502,8 +497,19 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      */
 
     @Scheduled(cron = "0 0/5 * * * *")
-    //TODO: 2017-08-05
     public void setMapFollowRanking() {
-
+        LocalDate today = LocalDate.now();
+        LocalDateTime todayBegin = today.atStartOfDay();
+        LocalDateTime now = LocalDateTime.now();
+        Map<Long, Integer> map = new TreeMap<>();
+        List<Long> customerIdList = infoBrowseRepository.findCustomerIdList(todayBegin, now);
+        customerIdList.forEach((Long customerId) -> {
+            List<Long> sourceIdList = infoBrowseRepository.findSourceIdByCustomerId(customerId, todayBegin, now);
+            sourceIdList.forEach((Long userId) -> {
+                int followNum = businessCardRecordRepository.countByUserId(userId);
+                map.put(userId, followNum);
+            });
+            setRanking(map, 3);
+        });
     }
 }

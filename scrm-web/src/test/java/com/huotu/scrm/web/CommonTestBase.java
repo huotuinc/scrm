@@ -3,10 +3,12 @@ package com.huotu.scrm.web;
 import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.EncryptUtils;
+import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
@@ -22,6 +24,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -48,6 +51,8 @@ public abstract class CommonTestBase extends SpringWebTest {
     @Autowired
     protected UserLevelRepository userLevelRepository;
     @Autowired
+    protected InfoRepository infoRepository;
+    @Autowired
     protected BusinessCardRepository businessCardRepository;
     protected Random random = new Random();
 
@@ -65,16 +70,17 @@ public abstract class CommonTestBase extends SpringWebTest {
 
     /**
      * 模拟用户登录添加cookie
+     *
      * @param userId
      * @param customerId
      * @throws Exception
      */
-    public void mockUserLogin(Long userId,Long customerId) throws Exception {
+    public void mockUserLogin(Long userId, Long customerId) throws Exception {
         String cookieName = UserInterceptor.USER_ID_PREFIX + customerId;
-        String cookieValue = EncryptUtils.aesEncrypt(String.valueOf(userId),UserInterceptor.USER_ID_SECRET_KEY);
+        String cookieValue = EncryptUtils.aesEncrypt(String.valueOf(userId), UserInterceptor.USER_ID_SECRET_KEY);
         webDriver.get("http://localhost");
         webDriver.manage().deleteAllCookies();
-        webDriver.manage().addCookie(new Cookie(cookieName,cookieValue));
+        webDriver.manage().addCookie(new Cookie(cookieName, cookieValue));
     }
 
 
@@ -155,6 +161,21 @@ public abstract class CommonTestBase extends SpringWebTest {
         userLevel.setType(userType);
         userLevel.setSalesman(isSalesman);
         return userLevelRepository.saveAndFlush(userLevel);
+    }
+
+    protected Info mockInfo(Long customerId,boolean isStatus,boolean isExtend) {
+        Info info = new Info();
+        info.setCustomerId(customerId);
+        info.setExtend(isExtend);
+        info.setStatus(isStatus);
+        info.setThumbnailImageUrl(UUID.randomUUID().toString());
+        info.setContent(UUID.randomUUID().toString());
+        info.setCreateTime(LocalDateTime.now());
+        info.setDisable(false);
+        info.setImageUrl(UUID.randomUUID().toString());
+        info.setIntroduce(UUID.randomUUID().toString());
+        info.setTitle(UUID.randomUUID().toString());
+        return infoRepository.saveAndFlush(info);
     }
 
 }

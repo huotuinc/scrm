@@ -39,7 +39,7 @@ public class InfoExtensionController extends SiteBaseController {
      * @return
      * @throws URISyntaxException
      */
-    @RequestMapping(value = "/extension/getInfoExtension")
+    @RequestMapping("/extension/getInfoExtension")
     public String getInfoExtension(@ModelAttribute("userId") Long userId, Model model) throws Exception {
         User user = userRepository.findOne(userId);
         if (user == null) {
@@ -81,7 +81,7 @@ public class InfoExtensionController extends SiteBaseController {
     @RequestMapping("/extension/getScoreRanking")
     public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) throws Exception {
         User user = userRepository.findOne(userId);
-        if(user == null){
+        if (user == null) {
             throw new ApiResultException("用户不存在");
         }
         //普通用户不限制排名信息
@@ -107,7 +107,7 @@ public class InfoExtensionController extends SiteBaseController {
     @RequestMapping("/extension/getScoreInfo")
     public String getScoreInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception {
         User user = userRepository.findOne(userId);
-        if(user == null){
+        if (user == null) {
             throw new ApiResultException("用户不存在");
         }
         if (user.getUserType() != UserType.buddy) {
@@ -131,12 +131,13 @@ public class InfoExtensionController extends SiteBaseController {
      * @return
      */
     @RequestMapping("/extension/getFollowInfo")
-    public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception{
+    public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception {
         User user = userRepository.findOne(userId);
-        if(user == null){
+        boolean isSalesman = infoExtensionService.checkIsSalesman(user);
+        if (user == null) {
             throw new ApiResultException("用户不存在");
         }
-        if (user.getUserType() != UserType.buddy) {
+        if (user.getUserType() != UserType.buddy || !isSalesman) {
             return "redirect:/site/extension/getInfoExtension";
         } else {
             //获取统计性能（积分，排名等）
@@ -156,7 +157,7 @@ public class InfoExtensionController extends SiteBaseController {
     @RequestMapping("/extension/getVisitorInfo")
     public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception {
         User user = userRepository.findOne(userId);
-        if(user == null){
+        if (user == null) {
             throw new ApiResultException("用户不存在");
         }
         if (user.getUserType() != UserType.buddy) {

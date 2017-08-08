@@ -36,9 +36,9 @@
     </a>
 </div>
 <div class="dailiren-s-ka duu">
-    <ul class="dailiren-float-ul ka  pjf_4ge ">
+    <ul class="dailiren-float-ul ka  pjf_4ge">
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:unless="${statisticalInformation.dayVisitorRanking}>0">--</p>
                 <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}>0"
                    th:text="${statisticalInformation.dayVisitorRanking}"></p>
@@ -46,25 +46,25 @@
             </a>
         </li>
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.dayVisitorNum}"></p>
                 <p>创造UV</p>
             </a>
         </li>
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.dayScore}"></p>
                 <p>今日预计积分</p>
             </a>
         </li>
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.accumulateScore}"></p>
                 <p>累计积分</p>
             </a>
         </li>
         <li th:if="${status}">
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.followNum}"
                 ></p>
                 <p>关注人数</p>

@@ -38,7 +38,7 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public Activity findByActId(Long actId) {
-        return activityRepository.findOne(actId);
+        return activityRepository.findByActIdAndIsDeleteFalse(actId);
     }
 
     @Override

@@ -155,13 +155,13 @@
             }
             var reminCount = $("#remainCount").val();
             if (!isInteger.test(reminCount)) {
-                hot.tip.error("奖品数量格式有误(默认大于0)");
+                hot.tip.error("奖品数量格式有误（默认大于0）");
                 return;
             }
             var winRate = $("#winRate").val();
-            if (!isInteger.test(winRate)) {
-                hot.tip.error("中奖概率格式有误(默认大于0)");
-                return;
+            if (!isInteger.test(winRate)||winRate>=100) {
+                    hot.tip.error("中奖概率格式有误（默认大于0且小于100）");
+                    return;
             }
             var sort = $("#sort").val();
             if (!isInteger.test(sort)) {
