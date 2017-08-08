@@ -1,6 +1,6 @@
 package com.huotu.scrm.web.controller;
 
-import com.huotu.scrm.common.ienum.UserType;
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.entity.info.Info;
@@ -9,8 +9,6 @@ import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserFormalIntegral;
-import com.huotu.scrm.service.entity.mall.UserLevel;
-import com.huotu.scrm.service.model.SalesmanBusinessCard;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
@@ -20,7 +18,6 @@ import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserFormalIntegralRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.web.CommonTestBase;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -198,7 +195,7 @@ WebTestOfMock extends CommonTestBase {
         userFormalIntegral.setMerchantId(customer.getId());
         userFormalIntegral.setUserId(user.getId());
         userFormalIntegral.setScore(score);
-        userFormalIntegral.setStatus(1);
+        userFormalIntegral.setStatus(IntegralTypeEnum.TURN_INFO);
         userFormalIntegral.setTime(LocalDateTime.now());
         userFormalIntegral.setUserLevelId(userLevelId);
         userFormalIntegral.setUserType(userType);

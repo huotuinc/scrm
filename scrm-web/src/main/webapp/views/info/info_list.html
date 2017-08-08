@@ -9,7 +9,7 @@
     <!-- Morris -->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
     <!--checkbox-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
           rel="stylesheet">
@@ -211,12 +211,14 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>-->
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js" th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
 
 <script type="text/javascript">
     var pageIndex = [[${informationSearch.pageNo}]];
     var totalPage = [[${infoListsPage.totalPages}]];
+    hot.tip.msg("111",null,10000000);
     //初始化分页
     var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 

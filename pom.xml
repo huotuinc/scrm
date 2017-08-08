@@ -30,8 +30,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
+    <repositories>
+        <repository>
+            <id>repo-huotu</id>
+            <name>Hot Repository</name>
+            <url>http://repo.51flashmall.com:8081/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
 
+    <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -154,6 +161,20 @@
             <version>${log4j2.version}</version>
         </dependency>
         <!--LOG END-->
+
+
+        <!--短信验证码-->
+        <dependency>
+            <groupId>com.huotu.verification-code</groupId>
+            <artifactId>vc-service</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.huotu.verification-code</groupId>
+            <artifactId>vc-test</artifactId>
+            <version>1.1</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
