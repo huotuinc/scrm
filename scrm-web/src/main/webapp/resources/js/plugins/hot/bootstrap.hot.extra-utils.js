@@ -155,7 +155,7 @@ var hot = $.extend({}, hot, {
                 $msg.remove();
                 if (typeof callback == 'function')
                     callback();
-            }, 3000);
+            }, time);
         },
         msg: function (content, callback, time) {
             if (time == 'undefined') {
@@ -169,7 +169,7 @@ var hot = $.extend({}, hot, {
                 $msg.remove();
                 if (typeof callback == 'function')
                     callback();
-            }, 3000);
+            }, time);
         }
     },
     loading: {
