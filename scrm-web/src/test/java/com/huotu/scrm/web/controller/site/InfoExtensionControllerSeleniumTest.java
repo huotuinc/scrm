@@ -223,9 +223,14 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
     /**
      * 测试今日uv排名
      * 若今日uv为0不参与排名，显示：--
-     * 若今日uv相同，不会出现两个相同的排名，排名的顺序随机
+     * 若今日uv相同，不会出现两个相同的排名，两者排名的顺序随机
      */
-    public void getVisitorRanking() {
-
+    public void getVisitorRanking() throws Exception {
+        //没有uv,显示：--
+        mockUserLogin(userBuddy.getId(), customer.getId());
+        webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> elements = webDriver.findElements(By.className("sj"));
+        String accumulateScore = elements.get(4).getText();
+        Assert.assertEquals(2, Integer.parseInt(accumulateScore));
     }
 }

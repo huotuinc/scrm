@@ -13,11 +13,11 @@ import org.junit.Test;
 import javax.servlet.http.Cookie;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 /**
+ * 测试资讯进入状态，具体页面数据测试在webDriver测试
  * Created by hxh on 2017-07-21.
  */
 public class InfoExtensionControllerTest extends CommonTestBase {
@@ -50,6 +50,8 @@ public class InfoExtensionControllerTest extends CommonTestBase {
 
     /**
      * 测试进入资讯状态
+     * 普通会员：infoextension/info_extension页面
+     * 小伙伴：infoextension/info_center页面
      * model中statisticalInformation标签存储统计信息
      * model中status标签存储销售员信息
      *
@@ -62,6 +64,7 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .param("customerId", String.valueOf(customer.getId()))
                 .cookie(cookieNormal))
                 .andExpect(status().isOk())
+                .andExpect(view().name("infoextension/info_extension"))
                 .andExpect(model().attributeExists("infoModes"))
                 .andExpect(model().attributeDoesNotExist("statisticalInformation"))
                 .andExpect(model().attributeDoesNotExist("status"));
@@ -70,6 +73,7 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .param("customerId", String.valueOf(customer.getId()))
                 .cookie(cookieBuddy))
                 .andExpect(status().isOk())
+                .andExpect(view().name("infoextension/info_center"))
                 .andExpect(model().attributeExists("infoModes"))
                 .andExpect(model().attributeExists("statisticalInformation"))
                 .andExpect(model().attribute("status", false));
@@ -78,6 +82,7 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .param("customerId", String.valueOf(customer.getId()))
                 .cookie(cookieBuddyIsSales))
                 .andExpect(status().isOk())
+                .andExpect(view().name("infoextension/info_center"))
                 .andExpect(model().attributeExists("infoModes"))
                 .andExpect(model().attributeExists("statisticalInformation"))
                 .andExpect(model().attribute("status", true));
