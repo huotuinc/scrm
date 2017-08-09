@@ -6,7 +6,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
@@ -88,6 +90,16 @@ public class InfoControllerTest extends CommonTestBase {
         List<Info> searchList = ((Page)searchResult.getModelAndView().getModel().get("infoListsPage")).getContent();
         Assert.assertEquals(1,searchList.size());
         Assert.assertEquals(mockInfo1.getTitle(),searchList.get(0).getTitle());
+
+
+        mockMvc.perform(post("/mall/info/deleteInfo")
+        .param("customerId",String.valueOf(customerId))
+                .param("id", String.valueOf(searchList.get(0).getId()))
+                .accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+
+
+
     }
 
     @Test
