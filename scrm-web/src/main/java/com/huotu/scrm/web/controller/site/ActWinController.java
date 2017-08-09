@@ -9,6 +9,7 @@
 
 package com.huotu.scrm.web.controller.site;
 
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.IpUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
@@ -20,6 +21,7 @@ import com.huotu.scrm.service.model.ActivityStatus;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import com.huotu.scrm.service.service.activity.ActivityService;
+import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,8 @@ public class ActWinController extends SiteBaseController {
     private UserService userService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private ApiService apiService;
 
     @RequestMapping("/activity/index")
     public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
@@ -105,33 +109,33 @@ public class ActWinController extends SiteBaseController {
         }
 
         if (activityUseTimes(activity, user) > 0) { //判读用户是否有抽奖机会
-
             //抽取中奖奖品
             Long prizeId = WinArithmetic(actId);
-
-            // TODO: 2017/8/3  调商城接口扣除积分
-
-            //记入中奖激励
-            ActWinDetail actWinDetail = winPrizeRecord(request.getRemoteAddr(), prizeId, userId, activity);
-            if (actWinDetail != null) {
-                ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
-                if (actPrize.getPrizeCount() <= 0) {
-                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER);
+            //调商城接口扣除积分
+            ApiResult apiResult = apiService.rechargePoint(customerId,userId,0L-activity.getGameCostlyScore(), IntegralTypeEnum.ACTIVE_SCRORE);
+            if(apiResult.getCode() == 200) {
+                //记入中奖激励
+                ActWinDetail actWinDetail = winPrizeRecord(request.getRemoteAddr(), prizeId, userId, activity);
+                if (actWinDetail != null) {
+                    ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
+                    if (actPrize.getPrizeCount() <= 0) {
+                        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER);
+                    }
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("prizeId", prizeId);
+                    data.put("prizeName", actPrize.getPrizeName());
+                    data.put("prizeType",actPrize.getPrizeType());
+                    data.put("prizeDetailId",actWinDetail.getWinDetailId());
+                    try {
+                        String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
+                        data.put("prizeImageUrl", imageUrl);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS, data);
                 }
-                Map<String, Object> data = new HashMap<>();
-                data.put("prizeId", prizeId);
-                data.put("prizeName", actPrize.getPrizeName());
-                data.put("prizeType",actPrize.getPrizeType());
-                data.put("prizeDetailId",actWinDetail.getWinDetailId());
-                try {
-                    String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
-                    data.put("prizeImageUrl", imageUrl);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-                return ApiResult.resultWith(ResultCodeEnum.SUCCESS, data);
             }
-            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+            return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL);
         }
         return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "没有抽奖机会");
     }
