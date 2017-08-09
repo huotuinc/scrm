@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URISyntaxException;
@@ -37,7 +38,7 @@ public class InfoDetailController extends SiteBaseController {
 
 
     @RequestMapping(value = "/info/infoDetail")
-    public String infoDetail(@ModelAttribute("userId") Long userId, Long infoId, Long customerId, Model model) throws URISyntaxException {
+    public String infoDetail(@ModelAttribute("userId") Long userId, @RequestParam(value = "sourceUserId",required = false) Long sourceUserId, Long infoId, Long customerId, Model model) throws URISyntaxException {
         //todo去记录浏览量
         Info info =  infoService.findOneByIdAndCustomerId(infoId,customerId);
         if(!StringUtils.isEmpty(info.getImageUrl())){
@@ -49,6 +50,8 @@ public class InfoDetailController extends SiteBaseController {
         int browse = infoBrowseService.countByBrowse(infoId);
         model.addAttribute("browseNum", new Integer(browse));
 
+        model.addAttribute("customerId",customerId);
+        model.addAttribute("sourceUserId",sourceUserId);
         model.addAttribute("info",info);
 
 
