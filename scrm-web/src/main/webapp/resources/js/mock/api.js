@@ -6,16 +6,22 @@ Mock.setup({
     timeout: '1000'
 });
 
-Mock.mock(/\/activity\/dojoin/, "post", {
-    "resultCode": 2000,
+Mock.mock("/site/join/act", "post", {
+    "code": 200,
     "resultMsg": "ok",
     "data": {
-        "awardtype": 4,
-        "orderId": "6546789400763",
-        "orderTitle": "超级超级超级便宜的东西",
-        "orderImg": "//yun.duiba.com.cn/tuia/img/mwd6ugaxbo.jpg",
-        "prizeId": "300",
-        "prizeType": "lucky"
+        "prizeType": {
+            "code": 0
+        },
+        "prizeId": 2,
+        "prizeName": "超级超级超级便宜的东西",
+        "prizeImageUrl": "//yun.duiba.com.cn/tuia/img/mwd6ugaxbo.jpg"
     }
+});
+
+Mock.mock(/\/api\/authCode/, "post", {
+    "resultCode": 200,
+    "resultMsg": "ok",
+    "data": null
 });
 

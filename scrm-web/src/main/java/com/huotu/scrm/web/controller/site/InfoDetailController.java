@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URISyntaxException;
 
@@ -28,11 +29,12 @@ public class InfoDetailController extends SiteBaseController {
 
     private Log logger = LogFactory.getLog(InfoDetailController.class);
     @Autowired
-    InfoService infoService;
+    private InfoService infoService;
     @Autowired
     StaticResourceService staticResourceService;
     @Autowired
-    InfoBrowseService infoBrowseService;
+    private InfoBrowseService infoBrowseService;
+
 
     @RequestMapping(value = "/info/infoDetail")
     public String infoDetail(@ModelAttribute("userId") Long userId, Long infoId, Long customerId, Model model) throws URISyntaxException {
@@ -74,5 +76,18 @@ public class InfoDetailController extends SiteBaseController {
         model.addAttribute("headImages",page.getContent());
         return "info/browse_log";
     }
+
+    /**
+     *
+     * @param infoBrowse
+     * @param customerId
+     * @return
+     */
+    @RequestMapping("/info/turnIn")
+    @ResponseBody
+    public void infoTurnInRecord(InfoBrowse infoBrowse, @ModelAttribute("customerId") Long customerId){
+        infoBrowseService.infoTurnInSave(infoBrowse,customerId);
+    }
+
 
 }

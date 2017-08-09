@@ -1,11 +1,8 @@
 package com.huotu.scrm.service.service.infoextension;
 
-import com.huotu.scrm.service.model.DayFollowNumInfo;
-import com.huotu.scrm.service.model.DayScoreInfo;
-import com.huotu.scrm.service.model.DayScoreRankingInfo;
-import com.huotu.scrm.service.model.DayVisitorNumInfo;
-import com.huotu.scrm.service.model.InfoModel;
-import com.huotu.scrm.service.model.StatisticalInformation;
+import com.huotu.scrm.common.ienum.UserType;
+import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.model.*;
 
 import java.util.List;
 
@@ -14,67 +11,67 @@ import java.util.List;
  */
 public interface InfoExtensionService {
     /**
-     * 查询用户类型 0：普通会员 1：小伙伴
+     * 查询用户类型
+     * 如果用户存在返回相应的用户类型；如果用户不存在返回为空
      *
      * @param userId 用户ID
      * @return
      */
-    int getUserType(Long userId);
+    UserType getUserType(Long userId);
 
     /**
      * 查询用户所有相关资讯
      *
-     * @param userId   用户ID
-     * @param userType 0：普通会员 1：小伙伴
+     * @param user 用户
      * @return
      */
-    List<InfoModel> findInfo(Long userId, int userType);
+    List<InfoModel> findInfo(User user);
 
     /**
      * 统计用户信息 （积分排名等）
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    StatisticalInformation getInformation(Long userId);
+    StatisticalInformation getInformation(User user);
 
     /**
      * 统计用户积分排名信息
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    DayScoreRankingInfo getScoreRankingInfo(Long userId);
+    DayScoreRankingInfo getScoreRankingInfo(User user);
 
     /**
      * 统计用户积分信息
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    DayScoreInfo getScoreInfo(Long userId);
+    DayScoreInfo getScoreInfo(User user);
 
     /**
      * 统计访问量信息
      *
-     * @param userId 用户ID
+     * @param user 用户ID
      * @return
      */
-    DayVisitorNumInfo getVisitorNumInfo(Long userId);
+    DayVisitorNumInfo getVisitorNumInfo(User user);
 
     /**
      * 统计关注量信息
      *
-     * @param userId 用户ID
+     * @param user 用户
      * @return
      */
-    DayFollowNumInfo getFollowNumInfo(Long userId);
+    DayFollowNumInfo getFollowNumInfo(User user);
 
     /**
      * 判断是否为销售 (在小伙伴的前提下)
      *
-     * @param userId 用户ID
+     * @param user
      * @return
      */
-    boolean checkIsSalesman(Long userId);
+    boolean checkIsSalesman(User user);
 }

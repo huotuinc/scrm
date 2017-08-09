@@ -2,8 +2,9 @@ package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.Constant;
-import com.huotu.scrm.common.utils.ExceUtil;
+import com.huotu.scrm.common.utils.ExcelUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
+import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
@@ -19,8 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.time.LocalDate;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +39,6 @@ import java.util.Map;
 public class ActController extends MallBaseController {
     @Autowired
     private ActivityService activityService;
-
     @Autowired
     private ActWinDetailService actWinDetailService;
 
@@ -46,8 +50,8 @@ public class ActController extends MallBaseController {
      * @return
      */
     @RequestMapping("/act/list")
-    public String actList(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
-        Page<Activity> allActivity = activityService.findAllActivity(pageIndex, Constant.PAGE_SIZE);
+    public String actList(@RequestParam(required = false, defaultValue = "1") int pageIndex, @ModelAttribute("customerId") Long customerId, Model model) {
+        Page<Activity> allActivity = activityService.findAllActivity(customerId, pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("activities", allActivity.getContent());
         model.addAttribute("totalPages", allActivity.getTotalPages());
         model.addAttribute("totalRecords", allActivity.getTotalElements());
@@ -81,12 +85,8 @@ public class ActController extends MallBaseController {
      */
     @RequestMapping("/act/save")
     public String saveAct(Activity activity, @ModelAttribute("customerId") Long customerId) {
-        if (activity != null) {
-            activity.setCustomerId(customerId);
-            activityService.saveActivity(activity);
-        } else {
-            return "error";
-        }
+        activity.setCustomerId(customerId);
+        activityService.saveActivity(activity);
         return "redirect:/mall/act/list";
     }
 
@@ -107,16 +107,57 @@ public class ActController extends MallBaseController {
     }
 
     /**
-     * 分页查询中奖记录
+     * 禁用活动
      *
-     * @param pageIndex 当前页数
+     * @param actId 活动编号
+     * @return
+     */
+    @RequestMapping("/act/disable")
+    @ResponseBody
+    public ApiResult checkDisable(Long actId) {
+        Activity activity = activityService.findByActId(actId);
+        if (activity == null) {
+            return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
+        }
+        activity.setOpenStatus(false);
+        activityService.saveActivity(activity);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 启用活动
+     *
+     * @param actId 活动编号
+     * @return
+     */
+    @RequestMapping("/act/enable")
+    @ResponseBody
+    public ApiResult checkEnable(Long actId) {
+        Activity activity = activityService.findByActId(actId);
+        List<ActPrize> prizeList = activity.getActPrizes();
+        int rate = 0;
+        for (ActPrize actPrize : prizeList
+                ) {
+            rate += actPrize.getWinRate();
+        }
+        if (rate != 100) {
+            return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
+        }
+        activity.setOpenStatus(true);
+        activityService.saveActivity(activity);
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+    }
+
+    /**
+     * 获取参与记录（中奖记录）
+     *
      * @param model
      * @return
      */
-    @RequestMapping("/win/list")
-    public String prizeDetailList(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
+    @RequestMapping("/join/record")
+    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
         Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(pageIndex, Constant.PAGE_SIZE);
-        model.addAttribute("prizeDetailList", pageActWinDetail.getContent());
+        model.addAttribute("joinRecord", pageActWinDetail);
         model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
         model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
         model.addAttribute("pageIndex", pageIndex);
@@ -130,15 +171,15 @@ public class ActController extends MallBaseController {
      * @param response
      * @throws IOException
      */
-    @RequestMapping("/downloadAllWinDetail")
-    public void downloadAllWinDetail(HttpServletResponse response) throws IOException {
+    @RequestMapping("/downloadWinDetail")
+    public void downloadAllWinDetail(HttpServletResponse response, int startPage, int endPage) throws IOException {
         //完善配置信息
-        String fileName = LocalDate.now().toString() + "活动中奖记录文件";
-        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord();
-        List<String> keys = Arrays.asList("winDetailId", "userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
-        List<String> columnNames = Arrays.asList("序号", "用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
+        String fileName = "活动中奖记录";
+        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(startPage, endPage);
+        List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
+        List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ExceUtil.createWorkBook(excelRecord, keys, columnNames).write(os);
+        ExcelUtil.createWorkBook(excelRecord, keys, columnNames).write(os);
         byte[] bytes = os.toByteArray();
         InputStream is = new ByteArrayInputStream(bytes);
         // 设置response参数，可以打开下载页面
@@ -151,7 +192,7 @@ public class ActController extends MallBaseController {
         //开流数据导出
         try {
             bis = new BufferedInputStream(is);
-            bos = new BufferedOutputStream(os);
+            bos = new BufferedOutputStream(out);
             byte[] buff = new byte[2048 * 10];
             int bytesRead;
             while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
@@ -166,5 +207,4 @@ public class ActController extends MallBaseController {
                 bos.close();
         }
     }
-
 }

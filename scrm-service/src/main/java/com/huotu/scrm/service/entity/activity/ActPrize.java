@@ -1,18 +1,21 @@
 package com.huotu.scrm.service.entity.activity;
 
+import com.huotu.scrm.service.model.prizeTypeEnum;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 /**
  * 活动奖品表
- *
+ * <p>
  * Created by montage on 2017/7/11.
  */
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "SCRM_ActPrize")
 public class ActPrize {
 
@@ -26,7 +29,7 @@ public class ActPrize {
 
 
     /**所属活动*/
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH},optional=false)
+    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH,CascadeType.PERSIST},optional=false)
     @JoinColumn(name="Act_Id")
     private Activity activity;
 
@@ -54,7 +57,7 @@ public class ActPrize {
      * 0:谢谢惠顾,1:奖品
      */
     @Column(name = "Prize_Type")
-    private boolean prizeType;
+    private prizeTypeEnum prizeType;
 
     /**
      * 奖品总数量

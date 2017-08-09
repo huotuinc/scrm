@@ -20,10 +20,10 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long>,
      * @param month  统计月份
      * @return
      */
-    List<MonthReport> findByUserIdAndReportMonth(long userId, LocalDate month);
+    MonthReport findByUserIdAndReportMonth(long userId, LocalDate month);
 
     /**
-     * 查询用户最高月的访客量排名
+     * 查询用户最高月的访客量
      *
      * @param userId 用户ID
      * @return
@@ -37,7 +37,7 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long>,
      * @param userId 用户ID
      * @return
      */
-    @Query("select min(t.followRanking) from MonthReport t where t.userId = ?1")
+    @Query("select min(t.followRanking) from MonthReport t where t.userId = ?1 and t.followRanking>0")
     int findMaxMonthFollowNumRanking(Long userId);
 
     /**
@@ -46,7 +46,7 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long>,
      * @param userId 用户ID
      * @return
      */
-    @Query("select min(t.scoreRanking) from MonthReport t where t.userId=?1")
+    @Query("select min(t.scoreRanking) from MonthReport t where t.userId=?1 and t.scoreRanking>0")
     int findMaxScoreRanking(Long userId);
 
     /**

@@ -10,14 +10,15 @@
 package com.huotu.scrm.service.service.activity.impl;
 
 import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.repository.activity.ActPrizeRepository;
+import com.huotu.scrm.service.repository.activity.ActivityRepository;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,11 +28,12 @@ import java.util.List;
  */
 
 @Service
-@Transactional
 public class ActPrizeServiceImpl implements ActPrizeService {
 
     @Autowired
     private ActPrizeRepository actPrizeRepository;
+    @Autowired
+    private ActivityRepository activityRepository;
 
     @Override
     public Page<ActPrize> getPageActPrize(int pageNo, int pageSize) {
@@ -39,22 +41,22 @@ public class ActPrizeServiceImpl implements ActPrizeService {
     }
 
     @Override
-    public ActPrize saveActPrize(ActPrize actPrize) {
-        ActPrize newActPrize;
-        if (actPrize.getPrizeId() != null && actPrize.getPrizeId() != 0) {
-            newActPrize = actPrizeRepository.findOne(actPrize.getPrizeId());
-        } else {
-            newActPrize = new ActPrize();
-        }
-        newActPrize.setPrizeName(actPrize.getPrizeName());
-        newActPrize.setPrizeImageUrl(actPrize.getPrizeImageUrl());
-        newActPrize.setWinRate(actPrize.getWinRate());
-        newActPrize.setSort(actPrize.getSort());
-        return actPrizeRepository.save(newActPrize);
+    public void saveActPrize(Activity activity) {
+        activityRepository.save(activity);
     }
 
     @Override
+    public void saveActPrice(ActPrize actPrize) {
+        actPrizeRepository.save(actPrize);
+    }
+
+
+    @Override
     public void deleteActPrize(Long prizeId) {
+        ActPrize actPrize = actPrizeRepository.findOne(prizeId);
+        Activity activity = actPrize.getActivity();
+        activity.getActPrizes().remove(actPrize);
+        activityRepository.save(activity);
         actPrizeRepository.delete(prizeId);
     }
 
@@ -72,4 +74,5 @@ public class ActPrizeServiceImpl implements ActPrizeService {
     public ActPrize findByPrizeType(boolean prizeType) {
         return actPrizeRepository.findByPrizeType(prizeType);
     }
+
 }

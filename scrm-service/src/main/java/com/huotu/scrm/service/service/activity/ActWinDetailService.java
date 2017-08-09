@@ -11,6 +11,7 @@ package com.huotu.scrm.service.service.activity;
 
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,8 @@ public interface ActWinDetailService {
     /**
      * 分页查询所有中奖记录
      *
+     * @param pageNo
+     * @param pageSize
      * @return
      */
     Page<ActWinDetail> getPageActWinDetail(int pageNo, int pageSize);
@@ -35,6 +38,7 @@ public interface ActWinDetailService {
      * @param actWinDetail 中奖记录实体
      * @return
      */
+    @Transactional
     ActWinDetail saveActWinDetail(ActWinDetail actWinDetail);
 
     /**
@@ -42,5 +46,11 @@ public interface ActWinDetailService {
      *
      * @return
      */
-    List<Map<String, Object>> createExcelRecord();
+    List<Map<String, Object>> createExcelRecord(int startPage,int endPage);
+
+
+
+    @Transactional
+    ActWinDetail updateActWinDetail(Long winDetailID, String name, String mobile);
+
 }

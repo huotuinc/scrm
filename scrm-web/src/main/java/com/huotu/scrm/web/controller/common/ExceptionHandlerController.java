@@ -8,6 +8,7 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /***
  * 异常页面统一处理
@@ -21,6 +22,13 @@ public class ExceptionHandlerController extends DefaultHandlerExceptionResolver{
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ModelAndView modelAndView =  super.doResolveException(request, response, handler, ex);
+        if(modelAndView == null){
+            modelAndView = new ModelAndView();
+            try {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            } catch (IOException ignored) {
+            }
+        }
         boolean isAjaxOrJson = isAjaxRequestOrBackJson( request);
         if(isAjaxOrJson){
             try {

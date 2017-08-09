@@ -10,7 +10,9 @@
 package com.huotu.scrm.service.service.activity;
 
 import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.entity.activity.Activity;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,15 +32,20 @@ public interface ActPrizeService {
     /**
      * 保存奖品
      *
-     * @param actPrize 奖品实体类
+     * @param activity
      */
-    ActPrize saveActPrize(ActPrize actPrize);
+    @Transactional
+    void saveActPrize(Activity activity);
+
+    @Transactional
+    void saveActPrice(ActPrize actPrize);
 
     /**
      * 删除奖品
      *
      * @param prizeId 奖品Id
      */
+    @Transactional
     void deleteActPrize(Long prizeId);
 
     /**
@@ -62,4 +69,5 @@ public interface ActPrizeService {
      * @return
      */
     ActPrize findByPrizeType(boolean prizeType);
+
 }

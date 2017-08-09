@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ComponentScan({
         "com.huotu.scrm.service",
-        "com.huotu.scrm.common"
+        "com.huotu.scrm.common",
 })
-@EnableJpaRepositories(basePackages = "com.huotu.scrm.service.repository")
+@EnableJpaRepositories(basePackages = {"com.huotu.scrm.service.repository","com.huotu.verification.repository"})
 @EnableTransactionManagement
 @ImportResource({"classpath:hbm_config_prod.xml", "classpath:hbm_config_development.xml","classpath:hbm_config_test.xml"})
 public class ServiceConfig {

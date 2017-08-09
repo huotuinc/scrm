@@ -13,6 +13,10 @@ public class SiteBaseController {
 
     @ModelAttribute("userId")
     public long getUserId(HttpServletRequest request) {
+
+
         return Long.parseLong(request.getAttribute("userId").toString());
+
+
     }
 }

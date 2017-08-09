@@ -1,16 +1,14 @@
 package com.huotu.scrm.service.entity.activity;
 
 import com.huotu.scrm.common.ienum.ActEnum;
+import com.huotu.scrm.service.model.ActivityStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 活动表
@@ -36,7 +34,7 @@ public class Activity {
     /**
      * 获取活动相关的奖品
      */
-    @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY,orphanRemoval = true)
     private List<ActPrize> actPrizes;
 
     /**
@@ -104,7 +102,6 @@ public class Activity {
     @Column(name = "Is_Delete")
     private boolean isDelete;
 
-
     @Override
     public String toString() {
         return "Activity{" +
@@ -123,11 +120,22 @@ public class Activity {
     }
 
     /**
-     * 活动本身可用情况
-     * @return true 表示活动本身可用  false 表示活动本身不可用
+     * 活动还未开始
+     * @return true 表示活动开启
      */
-    public boolean actItSelfStatus() {
+    public boolean activeBegin() {
         LocalDateTime now =  LocalDateTime.now();
-        return isDelete == false && openStatus && now.isAfter(startDate) && now.isBefore(endDate);
+        return  openStatus && now.isAfter(startDate);
     }
+
+    /**
+     * 活动结束了
+     * @return true 表示活动开启
+     */
+    public boolean activeEnd() {
+        LocalDateTime now =  LocalDateTime.now();
+        return now.isBefore(endDate);
+    }
+
+
 }

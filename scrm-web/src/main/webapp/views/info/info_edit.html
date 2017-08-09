@@ -92,7 +92,7 @@
 
                         <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
 
-                        <img id="imageShow" src="../../resources/images/infoBg.png" th:src="${info.imageUrl}"
+                        <img id="imageShow" src="../../resources/images/infoBg.png" th:src="${info.mallImageUrl}"
                              style="width:200px;height:200px;"/>
                     </div>
                 </div>
@@ -163,30 +163,41 @@
     });
 
     var infoSaveEditHandler = {
-        uploadFile: function () {
-            hot.loading.show();
-            $.ajaxFileUpload({
-                url: "/mall/common/upload",
-                secureuri: false,// 一般设置为false
-                fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
-                dataType: 'json',// 返回值类型 一般设置为json
-                type: "post",
-                success: function (data) // 服务器成功响应处理函数
-                {
-                    if (data.code == 200) {
-                        $('#imageShow').attr('src', data.fileUrl);
-                        $("input:hidden[name='imageUrl']").val(data.fileUri);
-                        hot.tip.success("图片上传成功");
-                    } else {
-                        hot.loading.hide();
+
+
+
+        uploadFile: function (obj) {
+
+
+
+            if($('#uploadFile').value == undefined ||  $('#uploadFile').value().length == 0 ) {
+                hot.tip.msg("图片不能为空");
+            }else {
+                hot.loading.show();
+                $.ajaxFileUpload({
+                    url: "/mall/common/upload",
+                    secureuri: false,// 一般设置为false
+                    fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                    dataType: 'json',// 返回值类型 一般设置为json
+                    type: "post",
+                    success: function (data) // 服务器成功响应处理函数
+                    {
+                        if (data.code == 200) {
+                            $('#imageShow').attr('src', data.fileUrl);
+                            $("input:hidden[name='imageUrl']").val(data.fileUri);
+                            hot.tip.success("图片上传成功");
+                        } else {
+                            hot.loading.hide();
+                        }
+                    },
+                    error: function (data)// 服务器响应失败处理函数
+                    {
+                        hot.tip.error("服务器异常,请稍后再试");
                     }
-                },
-                error: function (data)// 服务器响应失败处理函数
-                {
-                    hot.tip.error("服务器异常,请稍后再试");
-                }
-            })
+                })
+            }
         },
+
         uploadInfo: function () {
             var cd = "<p><br></p>";
             if ($('#summerNote').code() == cd) {

@@ -26,19 +26,8 @@ public class InfoBrowseController extends MallBaseController{
 
     private Log logger = LogFactory.getLog(InfoBrowseController.class);
     @Autowired
-    InfoBrowseService infoBrowseServer;
+    InfoBrowseService infoBrowseService;
 
-    /**
-     *
-     * @param infoBrowse
-     * @param customerId
-     * @return
-     */
-    @RequestMapping("/info/turnIn")
-    @ResponseBody
-    public void infoTurnInRecord(InfoBrowse infoBrowse, @ModelAttribute("customerId") Long customerId){
-        infoBrowseServer.infoTurnInSave(infoBrowse,customerId);
-    }
 
     /**
      * 查询转发记录
@@ -50,7 +39,7 @@ public class InfoBrowseController extends MallBaseController{
     @RequestMapping("/info/turnRecord")
     public String infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch, @ModelAttribute("customerId") Long customerId, Model model){
       infoBrowseAndTurnSearch.setCustomerId(customerId);
-      Page<InfoBrowse> page =  infoBrowseServer.infoTurnRecord(infoBrowseAndTurnSearch);
+      Page<InfoBrowse> page =  infoBrowseService.infoTurnRecord(infoBrowseAndTurnSearch);
       model.addAttribute("infoTurnListPage",page);
       return "info/info_turn";
     }
@@ -63,7 +52,7 @@ public class InfoBrowseController extends MallBaseController{
     @RequestMapping("/info/deleteTurn")
     @ResponseBody
     public ApiResult deleteTurn(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
-        int count = infoBrowseServer.updateInfoTurnRecord(infoBrowseAndTurnSearch);
+        int count = infoBrowseService.updateInfoTurnRecord(infoBrowseAndTurnSearch);
         logger.info(count);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
@@ -78,7 +67,7 @@ public class InfoBrowseController extends MallBaseController{
     @RequestMapping("/info/browseRecord")
     public String infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch, @ModelAttribute("customerId") Long customerId, Model model){
         infoBrowseAndTurnSearch.setCustomerId(customerId);
-        Page<InfoBrowse> page =  infoBrowseServer.infoBrowseRecord(infoBrowseAndTurnSearch);
+        Page<InfoBrowse> page =  infoBrowseService.infoBrowseRecord(infoBrowseAndTurnSearch);
         model.addAttribute("infoBrowseListPage",page);
         return "info/info_browse";
     }
@@ -91,7 +80,7 @@ public class InfoBrowseController extends MallBaseController{
     @RequestMapping("/info/deleteBrowse")
     @ResponseBody
     public ApiResult deleteBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
-        int count = infoBrowseServer.updateInfoBrowse(infoBrowseAndTurnSearch);
+        int count = infoBrowseService.updateInfoBrowse(infoBrowseAndTurnSearch);
         if(count > 0){
             return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
         }

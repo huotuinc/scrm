@@ -35,7 +35,7 @@ import java.util.List;
 @ComponentScan({
         "com.huotu.scrm.web.controller",
         "com.huotu.scrm.web.interceptor",
-        "com.huotu.scrm.web.service"
+        "com.huotu.scrm.web.service",
 })
 @Import({MVCConfig.ThymeleafConfig.class, ServiceConfig.class, SchedulingConfig.class})
 public class MVCConfig extends WebMvcConfigurerAdapter {

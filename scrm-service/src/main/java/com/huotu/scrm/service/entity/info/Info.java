@@ -2,6 +2,7 @@ package com.huotu.scrm.service.entity.info;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@ToString
 @Table(name = "SCRM_Info")
 @Cacheable(value = false)
 public class Info {
@@ -74,24 +76,24 @@ public class Info {
 
 
     /**
-     * 资讯状态     1、 已发布  0、未发布 (判断普通会员)
+     * 资讯状态     1、 已发布  0、未发布 (判断普通会员，1)
      */
     @Column(name = "Status")
     private boolean isStatus;
 
 
     /**
-     * 资讯推广状态  1、 已推广  0、未推广（判断小伙伴）
+     * 资讯推广状态  1、 已推广  0、未推广（判断小伙伴,1）
      */
     @Column(name = "Extend")
-    private boolean isExtend = false;
+    private boolean isExtend;
 
 
     /**
      * 资讯是否删除  1、已删除  0、正常
      */
     @Column(name = "Disable")
-    private boolean isDisable = false;
+    private boolean isDisable;
 
 
 //    /**

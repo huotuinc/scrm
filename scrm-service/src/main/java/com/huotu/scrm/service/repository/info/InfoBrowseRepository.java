@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,6 +32,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
 
     /**
      * 查找前端资讯头像和昵称
+     *
      * @param infoId
      * @param customerId
      * @param pageable
@@ -40,8 +40,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      */
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,u.weixinImageUrl," +
             "u.wxNickName,t.customerId) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 order by t.browseTime")
-    Page<InfoBrowse> findAllBrowseRecordByLimit(Long infoId,Long customerId,Pageable pageable);
-
+    Page<InfoBrowse> findAllBrowseRecordByLimit(Long infoId, Long customerId, Pageable pageable);
 
 
     //删除转发记录
@@ -66,32 +65,37 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      * 根据转发用户ID和转发日期查询转发咨询的访问量
      *
      * @param sourceUserId 转发来源用户ID
-     * @param minTime      起始时间
-     * @param maxTime      结束日时间
+     * @param beginTime    起始时间
+     * @param endTime      结束日时间
      * @return
      */
-    int countBySourceUserIdAndBrowseTimeBetween(Long sourceUserId, LocalDateTime minTime, LocalDateTime maxTime);
-//   List<InfoBrowse> findBySourceUserIdAndAndBrowseTimeBetween(Long sourceUserId, LocalDateTime minTime, LocalDateTime maxTime);
+    int countBySourceUserIdAndBrowseTimeBetween(Long sourceUserId, LocalDateTime beginTime, LocalDateTime endTime);
+
     /**
-     * 根据某一商户和时间获取所有的转发用户
+     * 根据某段时间获取所有的转发用户
      *
-     * @param minTime 起始时间
-     * @param maxTime 结束时间
+     * @param beginTime 起始时间
+     * @param endTime   结束时间
      * @return
      */
     @Query("select distinct (t.sourceUserId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2")
-    List<Long> findSourceUserIdList(LocalDateTime minTime, LocalDateTime maxTime);
+    List<Long> findSourceUserIdList(LocalDateTime beginTime, LocalDateTime endTime);
 
     /**
      * 根据转发用户ID和转发时间查询咨询转发量(去掉重复浏览)
      *
-     * @param minDate 起始日期
-     * @param maxDate 结束日期
-     * @param userId  用户ID
+     * @param beginTime 起始日期
+     * @param endTime   结束日期
+     * @param userId    用户ID
      * @return
      */
-    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  from InfoBrowse t group by t.infoId,t.sourceUserId having min (t.browseTime)>=?1 and min (t.browseTime)<?2 and t.sourceUserId=?3 ")
-    List<InfoBrowse> findForwardNumBySourceUserId(Date minDate, Date maxDate, Long userId);
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  " +
+            "from InfoBrowse t " +
+            "where t.sourceUserId = ?3 " +
+            "group by t.infoId,t.sourceUserId " +
+            "having min (t.browseTime)>=?1 and min (t.browseTime)<?2")
+    List<InfoBrowse> findForwardNumBySourceUserId(LocalDateTime beginTime, LocalDateTime endTime, Long userId);
+
 
     /**
      * 查询咨询的转发量
@@ -103,12 +107,22 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     List<InfoBrowse> findInfoForwardNum(Long infoId);
 
     /**
-     * 查询某个商户下的所有用户（去除重复）
+     * 查询某个商户某段时间下的所有用户（去除重复）
      *
      * @param customerId 商户ID
      * @return
      */
-    @Query("select distinct (t.sourceUserId) from InfoBrowse t where t.customerId=?1")
-    List<Long> findByCustomerId(Long customerId);
+    @Query("select distinct (t.sourceUserId) from InfoBrowse t where t.customerId=?1 and t.browseTime>=?2 and t.browseTime<?3")
+    List<Long> findSourceIdByCustomerId(Long customerId, LocalDateTime beginTime, LocalDateTime endTime);
+
+    /**
+     * 根据某段时间获取所有的转发用户
+     *
+     * @param beginTime 起始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    @Query("select distinct (t.customerId) from  InfoBrowse t where t.browseTime>=?1 and t.browseTime<?2")
+    List<Long> findCustomerIdList(LocalDateTime beginTime, LocalDateTime endTime);
 
 }

@@ -3,10 +3,16 @@ package com.huotu.scrm.web;
 import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.EncryptUtils;
+import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.entity.activity.Activity;
+import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
@@ -22,6 +28,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
@@ -43,12 +50,19 @@ public abstract class CommonTestBase extends SpringWebTest {
 
     @Autowired
     protected CustomerRepository customerRepository;
+
     @Autowired
     protected UserRepository userRepository;
+
     @Autowired
     protected UserLevelRepository userLevelRepository;
+
     @Autowired
     protected BusinessCardRepository businessCardRepository;
+    @Autowired
+    protected InfoRepository infoRepository;
+    @Autowired
+    protected InfoBrowseRepository infoBrowseRepository;
     protected Random random = new Random();
 
     /**
@@ -65,16 +79,17 @@ public abstract class CommonTestBase extends SpringWebTest {
 
     /**
      * 模拟用户登录添加cookie
+     *
      * @param userId
      * @param customerId
      * @throws Exception
      */
-    public void mockUserLogin(Long userId,Long customerId) throws Exception {
+    public void mockUserLogin(Long userId, Long customerId) throws Exception {
         String cookieName = UserInterceptor.USER_ID_PREFIX + customerId;
-        String cookieValue = EncryptUtils.aesEncrypt(String.valueOf(userId),UserInterceptor.USER_ID_SECRET_KEY);
+        String cookieValue = EncryptUtils.aesEncrypt(String.valueOf(userId), UserInterceptor.USER_ID_SECRET_KEY);
         webDriver.get("http://localhost");
         webDriver.manage().deleteAllCookies();
-        webDriver.manage().addCookie(new Cookie(cookieName,cookieValue));
+        webDriver.manage().addCookie(new Cookie(cookieName, cookieValue));
     }
 
     public javax.servlet.http.Cookie mockCookie(Long userId , Long customerId) throws Exception{
@@ -127,10 +142,47 @@ public abstract class CommonTestBase extends SpringWebTest {
     }
 
     /**
-     * 模拟用户数据
+     * 模拟资讯信息
      *
      * @param customerId 商户ID
-     * @param userLevel  用户等级
+     * @return
+     */
+    protected Info mockInfo(Long customerId) {
+        Info infoE = new Info();
+        infoE.setCustomerId(customerId);
+        infoE.setTitle(UUID.randomUUID().toString());
+        infoE.setIntroduce(UUID.randomUUID().toString());
+        infoE.setContent(UUID.randomUUID().toString());
+        infoE.setCreateTime(LocalDateTime.now());
+        infoE.setDisable(false);
+        infoE.setStatus(true);
+        infoE.setExtend(true);
+        return infoRepository.saveAndFlush(infoE);
+    }
+
+
+    /**
+     * 模拟活动
+     * @param customerId
+     * @return 商户ID
+     */
+    protected Activity mockActivity(Long customerId){
+
+
+        return null;
+    }
+
+    protected ActPrize mockActPrize(){
+
+        return null;
+    }
+
+
+    /**
+     * 模拟用户数据
+     *
+     * @param customerId
+     * @param userLevel
      * @return
      */
     protected User mockUser(Long customerId, UserLevel userLevel) {
@@ -152,6 +204,7 @@ public abstract class CommonTestBase extends SpringWebTest {
         return userRepository.saveAndFlush(user);
     }
 
+    @SuppressWarnings("Duplicates")
     protected UserLevel mockUserLevel(Long customerId, UserType userType, boolean isSalesman) {
         UserLevel userLevel = new UserLevel();
         userLevel.setCustomerId(customerId);
@@ -161,5 +214,31 @@ public abstract class CommonTestBase extends SpringWebTest {
         userLevel.setSalesman(isSalesman);
         return userLevelRepository.saveAndFlush(userLevel);
     }
+
+    protected Info mockInfo(Long customerId, boolean isStatus, boolean isExtend) {
+        Info info = new Info();
+        info.setCustomerId(customerId);
+        info.setExtend(isExtend);
+        info.setStatus(isStatus);
+        info.setThumbnailImageUrl(UUID.randomUUID().toString());
+        info.setContent(UUID.randomUUID().toString());
+        info.setCreateTime(LocalDateTime.now());
+        info.setDisable(false);
+        info.setImageUrl(UUID.randomUUID().toString());
+        info.setIntroduce(UUID.randomUUID().toString());
+        info.setTitle(UUID.randomUUID().toString());
+        return infoRepository.saveAndFlush(info);
+    }
+
+    protected InfoBrowse mockInfoBrowse(Long infoId, Long sourceUserId, Long customerId) {
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setInfoId(infoId);
+        infoBrowse.setSourceUserId(sourceUserId);
+        infoBrowse.setReadUserId(Long.valueOf(String.valueOf(random.nextInt())));
+        infoBrowse.setCustomerId(customerId);
+        infoBrowse.setBrowseTime(LocalDateTime.now());
+        return infoBrowseRepository.saveAndFlush(infoBrowse);
+    }
+
 
 }

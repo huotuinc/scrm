@@ -77,7 +77,7 @@ public class InfoConfigure {
 
 
     /**
-     * UV转换开关s
+     * UV转换开关
      */
     @Column(name = "Day_Exchange_Limit_Switch")
     private boolean isDayExchangeLimitSwitch;
@@ -95,7 +95,7 @@ public class InfoConfigure {
     private String infoIntroduceUrl;
 
     public boolean extensionIsBuddyAndIsReward() {
-        return isRewardLimitSwitch && rewardUserType == 1;
+        return isRewardSwitch && rewardUserType == 1;
     }
 
     public boolean uvIsBuddyAndIsReward() {

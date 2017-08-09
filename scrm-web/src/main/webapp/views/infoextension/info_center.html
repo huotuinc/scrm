@@ -28,7 +28,7 @@
 </div>
 <p style="height:30px"></p>
 <div class="weui_cells weui_cells_access">
-    <a class="weui_cell" href="/site/extension/getScoreRanking">
+    <a class="weui_cell" href="/site/extension/getScoreRanking" th:href="@{/site/extension/getScoreRanking}">
         <div class="weui_cell_bd weui_cell_primary">
             <p>点击查看明细</p>
         </div>
@@ -36,9 +36,9 @@
     </a>
 </div>
 <div class="dailiren-s-ka duu">
-    <ul class="dailiren-float-ul ka  pjf_4ge ">
+    <ul class="dailiren-float-ul ka  pjf_4ge">
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:unless="${statisticalInformation.dayVisitorRanking}>0">--</p>
                 <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}>0"
                    th:text="${statisticalInformation.dayVisitorRanking}"></p>
@@ -46,25 +46,25 @@
             </a>
         </li>
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.dayVisitorNum}"></p>
                 <p>创造UV</p>
             </a>
         </li>
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.dayScore}"></p>
                 <p>今日预计积分</p>
             </a>
         </li>
         <li>
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.accumulateScore}"></p>
                 <p>累计积分</p>
             </a>
         </li>
         <li th:if="${status}">
-            <a href="javascript:void(0);">
+            <a>
                 <p class="sj" th:text="${statisticalInformation.followNum}"
                 ></p>
                 <p>关注人数</p>
@@ -106,8 +106,6 @@
 </div>
 </body>
 </html>
-<script src="weui/js/jquery-2.1.4.js"></script>
-<script src="weui/js/jquery-weui.js"></script>
 <script type="text/javascript">
     function getInfoDetail(infoId, customerId) {
         window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;

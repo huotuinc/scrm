@@ -35,33 +35,39 @@ $(function () {
                 }
             });
         },
-        getOrder: function () {//NEW
+        getOrder: function () {
+            var actId = $("body").attr("activeId");
+            game.loadingModal();
             $.ajax({
                 type: 'POST',
-                url: '/activity/dojoin',
-                data: { actid: 1, cid: 2 },
+                url: '/site/join/act',
+                data: {
+                    actId: actId,
+                    customerId: 4421
+                },
                 dataType: 'json',
                 success: function (res) {
-                    if (res.resultCode !== 2000) {
+                    game.closeLoadModal();
+                    if (res.code !== 200) {
                         game.errorModals(res.resultMsg);
                         return;
                     }
-                    if (res.data.joinid <= 0) {
-                        game.errorModals(res.data.desc);
+                    if (res.data.code <= 0) {
+                        game.errorModals(res.data.value);
                         return;
                     }
                     game.gameTimes--;
                     game.rotateFn(res.data);
+                    game.closeLoadModal();
                 },
                 error: function (xhr, type) {
                     game.errorModals('发生错误，请稍后重试');
-
                 }
             });
         },
-        reset: function () {
+        reset: function () { // 2017.08.02
             game.toggleLight();
-            var i = $(".circle-box").find("[data-type='1']").data("index");
+            var i = $(".circle-box").find("[data-type='0']").data("index");
             game.thanksDeg = 60 * (5 - i) + 30;
             game.circleEle.rotate(game.thanksDeg);
             game.circleEle.rotate({
@@ -90,11 +96,18 @@ $(function () {
                 }
             })
         },
-        rotateFn: function (data) {//NEW
+        rotateFn: function (data) {
+
+            console.log(data.prizeDetailId);
+            // $('#J_userInfo').find('input:hidden[name="prizeDetail"]').val(data.prizeDetailId);
+            // $("input:hidden[name='prizeDetail']").val(data.prizeDetailId);
+            $("input[name='ActWinDetailId']").val(data.prizeDetailId);
+            // var search = $("input:text[name='prizeDetail']").val(data.prizeDetailId);
+
             var r;
             $("#J_circle").find('.prize').each(function () {
-                //匹配awardid
-                if ($(this).data("type") === +data.awardtype) {
+                //匹配awardId
+                if ($(this).data("id") === +data.prizeId) {
                     return void (r = 60 * (5 - $(this).data("index")) + 30)
                 }
             });
@@ -107,11 +120,6 @@ $(function () {
                         return -r * ((e = e / o - 1) * e * e * e - 1) + i
                     },
                     callback: function () {
-                        // if (data.lottery.beanid > 0) {
-                        //
-                        // } else {
-                        //     game.errorModals('继续加油哦');
-                        // }
                         game.showModal(data);
                         game.renderElement();
                         game.running = false;
@@ -140,10 +148,15 @@ $(function () {
             game.toggleFilter();
         },
         hideModal: function () {
-            $(document).on('click', '.coupon-modal-close', function () {
+            // 动态渲染
+            $(document).on('click', '.coupon-use, .coupon-modal-close', function () {
                 $('.J_modalShowPrize').remove();
                 game.reInit();
                 game.toggleFilter();
+                if ($(this).attr("data-type") != 0) {
+                    game.showUserInfo();
+                }
+
             });
         },
         reInit: function () {
@@ -158,24 +171,24 @@ $(function () {
         },
         renderElement: function () {
             if (game.gameTimes > 0) {
-                $(".game-time span").html(game.gameTimes);
+                $(".game-time p").html("游戏次数： " + game.gameTimes + "次");
             } else {
                 $(".game-time p").html('抽奖机会已用完');
             }
         },
-        createGoodsModal: function (data) {//NEW
+        createGoodsModal: function (data) {
             return '<div class="J_modalShowPrize coupon-modal-showPrize">' +
                 '<span class="close coupon-modal-close"></span>' +
                 '<div class="coupon-modal-showPrize-dialog">' +
                 '<div class="modal-header"></div>' +
                 '<div class="modal-body withoutCode">' +
-                '<p class="modal-title">' + data.orderTitle + '</p>' +
+                '<p class="modal-title">' + data.prizeName + '</p>' +
                 '<div class="coupon-imageBg">' +
                 '<div class="coupon-image">' +
-                '<a href="#"><img src="' + data.orderImg + '"></a>' +
+                '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
                 '</div>' +
                 '</div>' +
-                '<a href="#" class="coupon-use">' + data.orderTitle + '</a>' +
+                '<a href="javascript:;" class="coupon-use" data-type="' + data.prizeType.code + '">' + "确定" + '</a>' +
                 '</div>' +
                 '<i class="ribbon"></i>' +
                 '</div>' +
@@ -191,22 +204,32 @@ $(function () {
             $('.prize-packet').click(function () {
                 var level = $(this).data('level');
                 $('.prize-detail-content.on').removeClass('on');
-                $('.prize-detail-content[data-level="'+level+'"]').addClass('on');
+                $('.prize-detail-content[data-level="' + level + '"]').addClass('on');
                 game.prizeModal.addClass('show');
                 game.toggleFilter();
             });
         },
         closePrizeModal: function () {
-            $('#J_slideUp').click(function () {
+            $(document).on('click', '#J_slideUp', function () {
                 game.prizeModal.removeClass('show');
                 game.toggleFilter();
-            });
+            })
         },
         showRuleModal: function () {
             $('#J_ruleBtn').click(function () {
                 $('#J_ruleModal').show();
                 game.toggleFilter();
             });
+        },
+        showUserInfo: function () {
+            $('#J_addTel').show();
+            game.toggleFilter();
+        },
+        closeNameAndTel: function () {
+            $('#J_addTel').find('.close').click(function () {
+                $('#J_addTel').hide();
+                game.toggleFilter();
+            })
         },
         closeRuleModal: function () {
             $('#J_ruleModal').find('.close').click(function () {
@@ -248,6 +271,7 @@ $(function () {
             this.showRuleModal();
             this.closeRuleModal();
             this.closeErrorModal();
+            this.closeNameAndTel();
         }
     };
     game.init();
@@ -255,4 +279,92 @@ $(function () {
     imagesLoaded(document.querySelector('body'), function () {
         $('.pre-loader').hide();
     });
+
+    $('#J_userFormBtn').click(function (e) {
+        e.preventDefault();
+        if(verifyForm()) {
+            $('#J_userInfo').submit();
+        }
+    });
+
+    //短信接口，下面为mock，请用实际
+    var sendAuthCodeUrl = '/api/authCode';
+
+    $('#J_sendAuth').click(function () {
+        var self = $(this);
+        var mobile = $('#J_userInfo').find('input[name="mobile"]').val();
+        if (!/^1([34578])\d{9}$/.test(mobile)) {
+            showMsg('请输入正确的手机号');
+            return;
+        }
+        sendSMS(self);
+        $.ajax(sendAuthCodeUrl, {
+            method: 'POST',
+            data: {
+                mobile: mobile
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.resultCode === 400) {
+                    showMsg(data.resultMsg);
+                    return false;
+                }
+                if (data.resultCode !== 200) {
+                    showMsg("发送失败，请重试");
+                    return false;
+                }
+            },
+            error: function () {
+                showMsg("系统错误");
+            }
+        })
+    });
+
+    function verifyForm() {
+        var form = $('#J_userInfo');
+        var name = form.find('input[name="name"]').val();
+        var mobile = form.find('input[name="mobile"]').val();
+        var authCode = form.find('input[name="authCode"]').val();
+        if(!name) {
+            showMsg('姓名不能为空');
+            return false;
+        }
+        if(!(/^1([34578])\d{9}$/.test(mobile))) {
+            showMsg('请填写正确的手机号');
+            return false;
+        }
+        if(!authCode) {
+            showMsg('验证码不能为空');
+            return false;
+        }
+        return true;
+    }
+    var time;
+
+    function showMsg(t) {
+        clearTimeout(time);
+        var modal = $('#J_msgModal');
+        var p = modal.find('p');
+        p.text(t);
+        modal.addClass('show');
+        time = setTimeout(function () {
+            modal.removeClass('show');
+        }, 2000);
+    }
+
+    function sendSMS(ele) {
+        ele.prop('disabled', true)
+            .addClass('disabled');
+        var s = 60;
+        var t = setInterval(function () {
+            ele.text('重新发送'+ s-- + '秒');
+            if (s === -1) {
+                clearInterval(t);
+                ele.text('获取验证码')
+                    .prop('disabled', false)
+                    .removeClass('disabled');
+            }
+        }, 1000);
+    }
+
 });

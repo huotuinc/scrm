@@ -21,14 +21,14 @@ public class InfoBrowse {
      */
     @Id
     @Column(name = "Info_Id")
-    private Long infoId=0L;
+    private Long infoId;
 
     /**
      * 资讯转发来源用户
      */
     @Id
     @Column(name = "Info_Source_UserId")
-    private Long sourceUserId=0L;
+    private Long sourceUserId;
 
 
     /**
@@ -36,7 +36,7 @@ public class InfoBrowse {
      */
     @Id
     @Column(name = "Info_Read_UserId")
-    private Long readUserId=0L;
+    private Long readUserId;
 
 
     /**
@@ -63,14 +63,14 @@ public class InfoBrowse {
      * 转发记录是否删除   0 未  1 删除
      */
     @Column(name = "Turn_Disable")
-    private boolean turnDisable=false;
+    private boolean turnDisable;
 
 
     /**
      * 转发记录是否删除   0 未  1 删除
      */
     @Column(name = "Browse_Disable")
-    private boolean browseDisable=false;
+    private boolean browseDisable;
 
 
     /**
