@@ -46,7 +46,15 @@ $(function () {
         $btnFile.click();
     }
 
+    function supportFormData() {
+        return !! window.FormData;
+    }
+
     function uploadAvatar() {
+
+        var suppFormData = supportFormData();
+        console.log("support FormData=" + suppFormData);
+
         //var $uploadimage = $("#btnInput");
         if( !$btnFile.val()  ) return false;
 
@@ -64,9 +72,10 @@ $(function () {
         var data = new FormData( $avatarForm[0] );
 
         console.log(data);
+        console.log( JSON.stringify( data));
 
         $.ajax(url,{
-            method:"post",
+            type:'post',
             data:data,
             dataType:'json',
             processData: false,
@@ -89,7 +98,7 @@ $(function () {
                 }
             },
             error:function (error) {
-                console.log("error="+error);
+                console.log("error="+ JSON.stringify(error) );
                 layer.msg(error.responseText);
             }
         });

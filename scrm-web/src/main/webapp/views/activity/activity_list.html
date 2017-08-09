@@ -25,7 +25,7 @@
                 <div class="ibox-content p-xxs no-top-border">
                     <div style="text-align:right;">
                         <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
-                                onclick="articleHelper.edit(0)">新增
+                                onclick="actInfoHandler.editAct()">新增
                         </button>
                     </div>
                     <div class="panel-body">
@@ -47,9 +47,18 @@
                                     <span id="customerId" th:text="${activity.customerId}" th:type="hidden"></span>
                                 </td>
                                 <td th:text="${activity.actTitle}"></td>
-                                <td th:text="${activity.actType}"></td>
-                                <td th:text="${activity.startDate}"></td>
-                                <td th:text="${activity.endDate}"></td>
+                                <td>
+                                    <p th:if="${not #lists.isEmpty(activity.actType)}"
+                                       th:text="${activity.actType.getValue()}"></p>
+                                </td>
+                                <td>
+                                    <p th:if="${not #lists.isEmpty(activity.startDate)}"
+                                       th:text="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}"></p>
+                                </td>
+                                <td>
+                                    <p th:if="${not #lists.isEmpty(activity.endDate)}"
+                                       th:text="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"></p>
+                                </td>
                                 <td th:text="${activity.openStatus}"></td>
                                 <td>
                                     <span class="cursor-point"><i class="fa fa-link tooltips" data-placement="top"
@@ -63,11 +72,13 @@
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
-                                                                  data-original-title="编辑" th:onclick="'javascript:editAct('+${activity.actId}+')'"></i></span>
+                                                                  data-original-title="编辑"
+                                                                  th:onclick="'javascript:actInfoHandler.editAct('+${activity.actId}+')'"></i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
-                                                                  data-original-title="删除" th:onclick="'javascript:deleteAct('+${activity.actId}+')'"></i></span>
+                                                                  data-original-title="删除"
+                                                                  th:onclick="'javascript:actInfoHandler.deleteAct('+${activity.actId}+')'"></i></span>
                                 </td>
                             </tr>
                             </tbody>
@@ -107,13 +118,33 @@
 <script type="text/javascript">
     var pageIndex = [[${pageIndex}]];
     var totalPage = [[${totalPages}]];
+    var ajaxUrl = "[[@{/mall}]]";
+    var requestDate = {};
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
     paging.init(function () {
         console.log(1);
     });
     var actInfoHandler = {
-        deleteAct:function (actId) {
-        hot.tip.confirm()
+        deleteAct: function (actId) {
+            hot.confirm("确定要删除么？", function () {
+                requestDate = {actId: actId};
+                hot.ajax(ajaxUrl + "/act/delete", requestDate, function (res) {
+                    if (res.code == 200) {
+                        hot.tip.success("删除成功", function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        hot.tip.error(res.msg);
+                    }
+                })
+            })
+        },
+        editAct: function (actId) {
+            if (actId != null) {
+                window.location.href = ajaxUrl + "/act/detail?actId=" + actId;
+            } else {
+                window.location.href = ajaxUrl + "/act/detail";
+            }
         }
     }
 </script>

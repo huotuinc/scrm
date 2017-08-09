@@ -7,187 +7,273 @@ import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
-import com.huotu.scrm.service.repository.mall.CustomerRepository;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import com.huotu.scrm.service.service.mall.UserLevelService;
-import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.CommonTestBase;
 import com.huotu.scrm.web.controller.page.site.ShowBusinessCardPage;
 import com.huotu.scrm.web.controller.page.site.TestEditBusinessCardPage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mock.web.MockServletContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.mock.web.MockMultipartHttpServletRequest;
+import org.springframework.test.web.client.match.MockRestRequestMatchers;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletException;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.servlet.http.Cookie;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import java.util.List;
+
 
 /**
  * Created by Administrator on 2017/7/17.
  */
-@ActiveProfiles(value = {"development"})
 public class BusinessCardControllerTest extends CommonTestBase {
-    String editUrl = "http://localhost/site/businessCard/editBusinessCard";
+    private String editUrl = "http://localhost/site/businessCard/editBusinessCard";
     @Autowired
-    BusinessCardService businessCardService;
+    private BusinessCardService businessCardService;
     @Autowired
-    UserLevelService userLevelService;
+    private UserLevelService userLevelService;
     @Autowired
-    UserService userService;
+    private BusinessCardRepository businessCardRepository;
     @Autowired
-    CustomerRepository customerRepository;
+    private BusinessCardRecordRepository businessCardRecordRepository;
 
-
-    private Long customerId =0L;
+    private Long customerId = 0L;
+    private UserLevel userLevel;
+    private User user, followerUser;
 
 
     @Before
     public void init() {
-        customerId = Long.valueOf(random.nextInt(10000));
+        Customer customer = mockCustomer();
+        customerId = customer.getId();
+        //名片只有销售员才有
+        userLevel = mockUserLevel(customerId, UserType.buddy, true);
+        List<UserLevel> userLevelList = userLevelService.findByCustomerIdAndIsSalesman(customerId, true);
+        Assert.assertEquals(1, userLevelList.size());
+        user = mockUser(customerId, userLevel);
+        followerUser = mockUser(customerId, userLevel);
     }
 
     @Test
     public void updateBusinessCardInfo() throws Exception {
 
+        Customer customer = mockCustomer();
+        UserLevel userLevel = mockUserLevel(customer.getId(), UserType.buddy, true);
+        User user = mockUser(customer.getId(), userLevel);
+
         String updateBusinessCardUrl = "http://localhost/site/businessCard/updateBusinessCardInfo";
+        String temp = UUID.randomUUID().toString();
 
-        
+        //mockUserLogin( user.getId() , user.getCustomerId() );
 
-         mockMvc.perform( post(updateBusinessCardUrl)
-                 .param("customerId" , "4421")
-                 .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB.getCode()) )
-                 .param("typeValue" ,"job")
-         ).andExpect( jsonPath("$.code").value(200) );
+        ResultActions resultActions = mockMvc.perform(post(updateBusinessCardUrl)
+                .param("customerId", String.valueOf(customer.getId()))
+                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB.getCode()))
+                .param("typeValue", temp)
+                .cookie( mockCookie( user.getId() , customer.getId() ))
+        );
+
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(jsonPath("$.code").value(200));
+
+        temp = UUID.randomUUID().toString();
+        mockMvc.perform(post(updateBusinessCardUrl)
+                .param("customerId", String.valueOf(customer.getId()))
+                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYADDRESS.getCode()))
+                .param("typeValue", temp)
+                .cookie( mockCookie( user.getId() , customer.getId() ))
+        ).andExpect(jsonPath("$.code").value(200));
+
+        temp = UUID.randomUUID().toString();
+        mockMvc.perform(post(updateBusinessCardUrl)
+                .param("customerId", String.valueOf(customer.getId()))
+                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_QQ.getCode()))
+                .param("typeValue", temp)
+                .cookie( mockCookie( user.getId() , customer.getId() ))
+        ).andExpect(jsonPath("$.code").value(200));
+
+        temp = UUID.randomUUID().toString();
+        mockMvc.perform( post(updateBusinessCardUrl)
+                .param("customerId" , String.valueOf(customer.getId()) )
+                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYNAME.getCode()) )
+                .param("typeValue" ,temp )
+                .cookie( mockCookie( user.getId() , customer.getId() ))
+        ).andExpect( jsonPath("$.code").value(200) );
+
+        temp = UUID.randomUUID().toString();
+        mockMvc.perform( post(updateBusinessCardUrl)
+                .param("customerId" , String.valueOf(customer.getId()) )
+                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_TEL.getCode()) )
+                .param("typeValue" ,temp )
+                .cookie( mockCookie( user.getId() , customer.getId() ))
+        ).andExpect( jsonPath("$.code").value(200) );
 
     }
 
 
     @Test
-    public void editBusinessCard(){
-        Random random = new Random();
-        Customer customer = new Customer();
-        customer.setLoginName(UUID.randomUUID().toString().replace("-", ""));
-        customer.setEnabled(true);
-        customer.setLoginPassword(UUID.randomUUID().toString().replace("-", ""));
-        customer.setNickName(UUID.randomUUID().toString().replace("-", ""));
-        customer.setMobile(String.valueOf(random.nextInt()));
-        customer.setNickName(UUID.randomUUID().toString().replace("-", ""));
-        customer.setSubDomain(UUID.randomUUID().toString().replace("-", ""));
-        customer.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        customer = customerRepository.save(customer);
+    public void uploadAvatar() throws Exception {
+        String url = "http://localhost/site/businessCard/uploadAvatar";
 
-        Long customerId = customer.getId();
+        Cookie cookie = mockCookie( user.getId() , customerId );
 
-        UserLevel userLevel = new UserLevel();
-        userLevel.setCustomerId(customerId);
-        userLevel.setLevel(0);
-        userLevel.setLevelName(UUID.randomUUID().toString());
-        userLevel.setSalesman(true);
-        userLevel.setType(UserType.buddy);
-        userLevelService.save(userLevel);
-
-        List<UserLevel> userLevelList = userLevelService.findByCustomerIdAndIsSalesman(customer.getId(), true);
-        Assert.assertTrue( userLevelList.size() == 1 );
-
-        User user = new User();
-        user.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        user.setCustomerId(customerId);
-        user.setLoginName(UUID.randomUUID().toString());
-        user.setUserGender("男");
-        user.setNickName(UUID.randomUUID().toString());
-        user.setLevelId( userLevelList.get(0).getId() );
-        user.setLockedBalance(random.nextDouble());
-        user.setLockedIntegral(random.nextDouble());
-        user.setRegTime(new Date());
-        user.setUserMobile(String.valueOf(random.nextInt()));
-        user.setUserBalance(random.nextDouble());
-        user.setUserType(UserType.buddy);
-        user.setUserTempIntegral(random.nextInt());
-        user.setWeixinImageUrl(UUID.randomUUID().toString());
-        user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
-        user = userService.save(user);
+        //1.检测get请求url
+        mockMvc.perform( MockMvcRequestBuilders.get(url).cookie(cookie).param("customerId", String.valueOf(customerId)) )
+                .andExpect(status().isMethodNotAllowed());
 
 
-        customerId=4421L;
-        Long userId= 1058510L;//user.getId();
-        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, "a.jpg");
+        //2.检测不是图片的 post请求
+        String filename=UUID.randomUUID().toString();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        BufferedImage image = new BufferedImage(250,250, BufferedImage.TYPE_INT_RGB);
+        Graphics graphics = image.getGraphics();
+        graphics.drawString("金向东", 20,20);
+        ImageIO.write( image , "png" , outputStream );
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("btnFile", filename , "text/*" , outputStream.toByteArray() );
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.fileUpload(url);
+        builder.file(mockMultipartFile).param("customerId", String.valueOf( customerId )).cookie(cookie);
+
+        mockMvc.perform( builder )
+                .andExpect( status().is(200) )
+                .andExpect(jsonPath("$.code").value(500))
+                .andExpect(jsonPath("$.data").value("不支持的文件类型，仅支持图片！"));
+
+        //3.检测大文件的post请求
+
+
+
+        //4.检测未登录的post请求,怎么？？
+        builder = MockMvcRequestBuilders.fileUpload(url);
+        builder.file(mockMultipartFile).param("customerId", String.valueOf(customerId));
+        ResultActions resultActions = mockMvc.perform(builder);
+        MvcResult mvcResult = resultActions.andReturn();
+        MockHttpServletResponse response = mvcResult.getResponse();
+        int status = response.getStatus();
+        OutputStream outputStream1 =  mvcResult.getResponse().getOutputStream();
+        int length = resultActions.andReturn().getResponse().getContentLength();
+        byte[] buffer = new byte[length];
+        outputStream1.write(buffer);
+        //String c = new String(buffer);
+                //.andExpect(status().is(302));
+        //String mv = resultActions.andReturn().getModelAndView().getViewName();
+
+        //5.检测非法用户的post请求
+
+
+
+
+        //6.检测非销售员的post请求
+
+        UserLevel userLevel = mockUserLevel(customerId, UserType.normal , false);
+        User user = mockUser(customerId,userLevel);
+        cookie = mockCookie(user.getId(),customerId);
+        mockMultipartFile = new MockMultipartFile("btnFile", filename , "image/*" , outputStream.toByteArray() );
+        builder = MockMvcRequestBuilders.fileUpload(url);
+        builder.file(mockMultipartFile).param("customerId", String.valueOf( customerId )).cookie(cookie);
+        mockMvc.perform( builder.cookie(cookie) )
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$.code").value(500))
+                .andExpect(jsonPath("$.msg").value("该用户不是销售员，无权编辑名片信息"));
+
+        //7.检测正确的post请求
+
+        userLevel = mockUserLevel(customerId, UserType.buddy , true);
+        user = mockUser(customerId,userLevel);
+        cookie = mockCookie(user.getId(),customerId);
+        builder = MockMvcRequestBuilders.fileUpload(url);
+        builder.file(mockMultipartFile).param("customerId", String.valueOf( customerId )).cookie(cookie);
+        mockMvc.perform( builder )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code"  ).value( 200 ));
+
+    }
+
+    @Test
+    public void editBusinessCard() throws Exception {
+
+        user = mockUser(customerId , userLevel);
+
+        Long userId = user.getId();
+        // TODO: 2017-08-01 修改图片后验证？其他字段为什么不验证？？单元测试需要包含所有case
+        //设置名片图片
+        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, "a.jpg");
         //BusinessCard businessCard = businessCardService.getBusinessCard( customerId , userId );
 
-        editUrl +="?customerId="+customerId;//+"&userId="+userId;
+        editUrl += "?customerId=" + customerId + "&userId=" + userId;
+        System.out.println("customerId:" + customerId + ";userId=" + userId);
+        //以 userId 登录
+        mockUserLogin(userId,customerId);
+
         webDriver.get(editUrl);
         TestEditBusinessCardPage editBusinessCardPage = this.initPage(TestEditBusinessCardPage.class);
         editBusinessCardPage.setBusinessCard(businessCard);
+        editBusinessCardPage.setUserRepository(userRepository);
         //WebElement ele = webDriver.findElement(By.id("div_job"));
         editBusinessCardPage.validate();
 
     }
 
     @Test
-    public void showBusinessCard(){
+    public void showBusinessCard() throws Exception {
 
-        UserLevel userLevel = new UserLevel();
-        userLevel.setType(UserType.buddy);
-        userLevel.setSalesman(true);
-        userLevel.setLevelName(UUID.randomUUID().toString());
-        userLevel.setLevel(1);
-        userLevel.setCustomerId(customerId);
-        userLevel = userLevelService.save(userLevel);
+        UserLevel userLevel = mockUserLevel(customerId,UserType.buddy,true);
+        User salesman = mockUser(customerId,userLevel);
+        User user = mockUser(customerId,userLevel);
+        Cookie cookie = mockCookie(user.getId() , customerId);
 
-        User user = new User();
-        user.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        user.setCustomerId(customerId);
-        user.setLoginName(UUID.randomUUID().toString());
-        user.setUserGender("男");
-        user.setNickName(UUID.randomUUID().toString());
-        user.setLevelId( userLevel.getId() );
-        user.setLockedBalance(random.nextDouble());
-        user.setLockedIntegral(random.nextDouble());
-        user.setRegTime(new Date());
-        user.setUserMobile(String.valueOf(random.nextInt()));
-        user.setUserBalance(random.nextDouble());
-        user.setUserType(userLevel.getType());
-        user.setUserTempIntegral(random.nextInt());
-        user.setWeixinImageUrl(UUID.randomUUID().toString());
-        user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
-       user = userService.save(user);
+        BusinessCard businessCard = new BusinessCard();
+        businessCard.setJob(UUID.randomUUID().toString());
+        businessCard.setUserId(salesman.getId());
+        businessCard.setCompanyAddress(UUID.randomUUID().toString());
+        businessCard.setAvatar(UUID.randomUUID().toString());
+        businessCard.setCustomerId(customerId);
+        businessCard.setCompanyName(UUID.randomUUID().toString());
+        businessCard.setEmail(UUID.randomUUID().toString().substring(0,10));
+        businessCard.setQq(UUID.randomUUID().toString().substring(0,10));
+        businessCard.setTel(UUID.randomUUID().toString().substring(0,10));
+        businessCard = businessCardRepository.saveAndFlush(businessCard);
 
-        businessCardService.updateBusinessCard( customerId , user.getId() , BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB , "job" );
-
-        User follower =  new User();
-        user.setId(Long.valueOf(String.valueOf(random.nextInt())));
-        user.setCustomerId(customerId);
-        user.setLoginName(UUID.randomUUID().toString());
-        user.setUserGender("男");
-        user.setNickName(UUID.randomUUID().toString());
-        user.setLevelId( userLevel.getId() );
-        user.setLockedBalance(random.nextDouble());
-        user.setLockedIntegral(random.nextDouble());
-        user.setRegTime(new Date());
-        user.setUserMobile(String.valueOf(random.nextInt()));
-        user.setUserBalance(random.nextDouble());
-        user.setUserType(userLevel.getType());
-        user.setUserTempIntegral(random.nextInt());
-        user.setWeixinImageUrl(UUID.randomUUID().toString());
-        user.setWxNickName(UUID.randomUUID().toString().replace("-", ""));
-        user = userService.save(user);
+        SalesmanBusinessCard salesmanBusinessCard = new SalesmanBusinessCard();
+        salesmanBusinessCard.setBusinessCard(businessCard);
+        salesmanBusinessCard.setFollowerId(user.getId());
+        salesmanBusinessCard.setIsFollowed(true);
+        salesmanBusinessCard.setSalesman(salesman);
+        salesmanBusinessCard.setNumberOfFollowers(1);
 
 
-        SalesmanBusinessCard salesmanBusinessCard= businessCardService.getSalesmanBusinessCard(customerId , user.getId() , follower.getId() );
-
-        String url="http://localhost/site/businessCard/seeBusinessCard?customerId="+customerId+"&salesmanId="+ user.getId()+"&userId="+follower.getId();
+        String url = "http://localhost/site/businessCard/showBusinessCard?customerId=" + customerId + "&salesmanId=" + salesman.getId();
         webDriver.get(url);
         ShowBusinessCardPage page = this.initPage(ShowBusinessCardPage.class);
         page.setSalesmanBusinessCard(salesmanBusinessCard);
         page.validate();
+
+    }
+
+    @Test
+    public void cancelFollow() throws Exception {
 
     }
 }

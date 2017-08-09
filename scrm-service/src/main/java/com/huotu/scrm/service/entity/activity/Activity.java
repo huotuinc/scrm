@@ -3,18 +3,18 @@ package com.huotu.scrm.service.entity.activity;
 import com.huotu.scrm.common.ienum.ActEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 活动表
- *
+ * <p>
  * Created by montage on 2017/7/11.
  */
 
@@ -31,6 +31,13 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id")
     private Long actId;
+
+
+    /**
+     * 获取活动相关的奖品
+     */
+    @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private List<ActPrize> actPrizes;
 
     /**
      * 商户Id
@@ -54,14 +61,16 @@ public class Activity {
     /**
      * 开始时间
      */
-    @Column(name = "Start_Date")
-    private Date startDate;
+    @Column(name = "Start_Date", columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startDate;
 
     /**
      * 结束时间
      */
-    @Column(name = "End_Date")
-    private Date endDate;
+    @Column(name = "End_Date", columnDefinition = "datetime")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endDate;
 
     /**
      * 开启状态
@@ -88,12 +97,12 @@ public class Activity {
     @Column(name = "Rate_Desc")
     private String rateDesc;
 
-   /**
+    /**
      * 是否删除
      * 0:未删除,1:已删除，默认是0
      */
     @Column(name = "Is_Delete")
-    private boolean isDelete ;
+    private boolean isDelete;
 
 
     @Override
@@ -111,5 +120,14 @@ public class Activity {
                 ", rateDesc='" + rateDesc + '\'' +
                 ", isDelete=" + isDelete +
                 '}';
+    }
+
+    /**
+     * 活动本身可用情况
+     * @return true 表示活动本身可用  false 表示活动本身不可用
+     */
+    public boolean actItSelfStatus() {
+        LocalDateTime now =  LocalDateTime.now();
+        return isDelete == false && openStatus && now.isAfter(startDate) && now.isBefore(endDate);
     }
 }

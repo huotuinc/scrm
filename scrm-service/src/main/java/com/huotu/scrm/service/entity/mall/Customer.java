@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Description;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * 商户
@@ -47,7 +46,7 @@ public class Customer implements Serializable{
      * 密码
      * 保存的是一次md5以后的小写hex
      */
-    @Column(name = "SC_UserLoginPassword", length = 32)
+    @Column(name = "SC_UserLoginPassword", length = 50)
     @JsonIgnore
     private String loginPassword;
 

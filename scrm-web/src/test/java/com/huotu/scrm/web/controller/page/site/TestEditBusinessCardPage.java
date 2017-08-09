@@ -1,16 +1,20 @@
 package com.huotu.scrm.web.controller.page.site;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
+import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.web.controller.page.AbstractPage;
 import org.apache.xpath.operations.Bool;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.util.StringUtils;
+
+import java.util.UUID;
 
 /**
  * Created by Jinxiangdong on 2017/7/18.
@@ -43,6 +47,7 @@ public class TestEditBusinessCardPage extends AbstractPage {
 
 
     BusinessCard businessCard;
+    UserRepository userRepository;
 
     public BusinessCard getBusinessCard() {
         return businessCard;
@@ -50,6 +55,14 @@ public class TestEditBusinessCardPage extends AbstractPage {
 
     public void setBusinessCard(BusinessCard businessCard) {
         this.businessCard = businessCard;
+    }
+
+    public UserRepository getUserRepository() {
+        return userRepository;
+    }
+
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     public TestEditBusinessCardPage(WebDriver webDriver) {
@@ -91,8 +104,10 @@ public class TestEditBusinessCardPage extends AbstractPage {
 
         //String url= img_avatar.getAttribute("src");
 
+        //修改QQ字段
         weuishow_qq.click();
         WebElement ele = webDriver.findElement(By.id("weui-prompt-input"));
+
         ele.clear();
         WebDriverWait webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(new ExpectedCondition<Boolean>() {
@@ -106,7 +121,8 @@ public class TestEditBusinessCardPage extends AbstractPage {
             }
         });
 
-        ele.sendKeys("51818549");
+        String qq = UUID.randomUUID().toString().substring(0 ,20);
+        ele.sendKeys(qq );
 
         webDriverWait = new WebDriverWait(webDriver, 10);
         webDriverWait.until(new ExpectedCondition<Boolean>() {
@@ -121,9 +137,7 @@ public class TestEditBusinessCardPage extends AbstractPage {
             }
         });
 
-        Assert.assertEquals(ele.getAttribute("value"), "51818549");
-
-        String cid = customerId.getText();
+        Assert.assertEquals(ele.getAttribute("value"), qq );
 
 
         WebElement ele2 = webDriver.findElement(By.linkText("确定"));
@@ -151,33 +165,59 @@ public class TestEditBusinessCardPage extends AbstractPage {
             @Override
             public Boolean apply(WebDriver webDriver) {
                 WebElement temp = webDriver.findElement(By.id("div_qq"));
-                if (temp != null && !temp.getText().isEmpty() && temp.getText().equals("51818549")) {
+                if (temp != null && !temp.getText().isEmpty() && temp.getText().equals(qq)) {
                     return true;
                 }
                 return false;
             }
         });
 
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        Assert.assertEquals("51818549", div_qq.getText());
+        Assert.assertEquals(qq , div_qq.getText());
 
+        // TODO: 2017-08-01 这里报错，还需要再调试
+       WebElement inputFileEle = webDriver.findElement(By.id("btnInput"));
+       String js = "arguments[0].style.height='auto'; arguments[0].style.visibility='visible';arguments[0].style.display='block';";
+        JavascriptExecutor javascriptExecutor = (JavascriptExecutor)webDriver;
+        javascriptExecutor.executeScript(js , inputFileEle);
 
-        btnFile.sendKeys("e:\\淡淡的222.jpg");
-
-        webDriverWait = new WebDriverWait(webDriver, 30);
+        webDriverWait = new WebDriverWait(webDriver,10);
         webDriverWait.until(new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
-                if (img_avatar != null && !img_avatar.getAttribute("src").isEmpty()) {
+                WebElement inputFileEle = webDriver.findElement(By.id("btnInput"));
+                return  inputFileEle.isDisplayed();
+            }
+        });
+
+        inputFileEle.sendKeys("e:\\1.png");
+
+        webDriverWait = new WebDriverWait(webDriver, 10);
+        webDriverWait.until(new ExpectedCondition<Boolean>() {
+            @Override
+            public Boolean apply(WebDriver webDriver) {
+                WebElement temp  = webDriver.findElement(By.id("img_avatar"));
+                if (temp != null && !temp.getAttribute("src").isEmpty()) {
                     return true;
                 }
                 return false;
             }
         });
 
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        String url = img_avatar.getAttribute("src");
-        Assert.assertFalse(url.isEmpty());
+        WebElement temp  = webDriver.findElement(By.id("img_avatar"));
+        String url = temp.getAttribute("src");
 
+        Assert.assertFalse( url.isEmpty() );
     }
 }

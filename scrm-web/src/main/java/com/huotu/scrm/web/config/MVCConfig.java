@@ -1,9 +1,10 @@
 package com.huotu.scrm.web.config;
 
+import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.service.config.SchedulingConfig;
 import com.huotu.scrm.service.config.ServiceConfig;
-import com.huotu.scrm.web.interceptor.HeaderInterceptor;
 import com.huotu.scrm.web.interceptor.CustomerInterceptor;
+import com.huotu.scrm.web.interceptor.HeaderInterceptor;
 import com.huotu.scrm.web.interceptor.UserInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -46,6 +47,11 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
     private UserInterceptor userInterceptor;
     @Autowired
     private ThymeleafViewResolver thymeleafViewResolver;
+    @Autowired
+    private ThymeleafViewResolver jsViewResolver;
+    //只是为了初始化
+    @Autowired
+    private SysConstant sysConstant;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -71,6 +77,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
+        registry.viewResolver(jsViewResolver);
         registry.viewResolver(thymeleafViewResolver);
     }
 
@@ -112,14 +119,41 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
             return templateEngine;
         }
 
-        @Bean
+        @Bean(name = "thymeleafViewResolver")
         public ThymeleafViewResolver viewResolver() {
             ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
             viewResolver.setTemplateEngine(templateEngine());
             // NOTE 'order' and 'viewNames' are optional
-            viewResolver.setOrder(1);
+            viewResolver.setOrder(2);
             viewResolver.setCharacterEncoding("UTF-8");
             viewResolver.setContentType("text/html;charset=utf-8");
+            return viewResolver;
+        }
+
+        @Bean(name = "jsViewResolver")
+        public ThymeleafViewResolver jsViewResolver(){
+            SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
+            templateResolver.setApplicationContext(this.applicationContext);
+            templateResolver.setPrefix("/views/");
+            templateResolver.setTemplateMode(TemplateMode.JAVASCRIPT);
+            templateResolver.setCharacterEncoding("UTF-8");
+            if (env.acceptsProfiles("!container")) {
+                templateResolver.setCacheable(false);
+            } else {
+                templateResolver.setCacheable(true);
+            }
+
+            SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+            templateEngine.setTemplateResolver(templateResolver);
+            templateEngine.addDialect(new Java8TimeDialect());
+
+            ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
+            viewResolver.setTemplateEngine(templateEngine);
+            viewResolver.setOrder(1);
+            viewResolver.setViewNames(new String[]{"*.js", "*.JS"});
+            viewResolver.setCharacterEncoding("UTF-8");
+            viewResolver.setContentType("application/javascript;charset=utf-8" +
+                    "");
             return viewResolver;
         }
     }
