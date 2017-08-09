@@ -25,17 +25,17 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
 
     @Override
     public void infoTurnInSave(InfoBrowse infoBrowse,Long customerId) {
-        InfoBrowse infoBrowseDate =  infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
+        InfoBrowse infoBrowseData =  infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
                 infoBrowse.getSourceUserId(),infoBrowse.getReadUserId());
-        if(infoBrowseDate==null){
-            infoBrowseDate = new InfoBrowse();
-            infoBrowseDate.setTurnTime(LocalDateTime.now());
-            infoBrowseDate.setCustomerId(customerId);
-            infoBrowseDate.setInfoId(infoBrowse.getInfoId());
-            infoBrowseDate.setReadUserId(infoBrowse.getReadUserId());
-            infoBrowseDate.setSourceUserId(infoBrowse.getSourceUserId());
-            infoBrowseDate.setBrowseTime(LocalDateTime.now());
-            infoBrowseRepository.save(infoBrowseDate);
+        if(infoBrowseData==null){
+            infoBrowseData = new InfoBrowse();
+            infoBrowseData.setTurnTime(LocalDateTime.now());
+            infoBrowseData.setCustomerId(customerId);
+            infoBrowseData.setInfoId(infoBrowse.getInfoId());
+            infoBrowseData.setReadUserId(infoBrowse.getReadUserId());
+            infoBrowseData.setSourceUserId(infoBrowse.getSourceUserId());
+            infoBrowseData.setBrowseTime(LocalDateTime.now());
+            infoBrowseRepository.save(infoBrowseData);
         }
     }
 
