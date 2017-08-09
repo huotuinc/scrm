@@ -46,7 +46,7 @@ public class ActWinController extends SiteBaseController {
 
 
     @Autowired
-    StaticResourceService staticResourceService;
+    private StaticResourceService staticResourceService;
     @Autowired
     private ActPrizeService actPrizeService;
     @Autowired
@@ -54,7 +54,7 @@ public class ActWinController extends SiteBaseController {
     @Autowired
     private UserService userService;
     @Autowired
-    ActivityService activityService;
+    private ActivityService activityService;
 
     @RequestMapping("/activity/index")
     public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {

@@ -3,6 +3,8 @@ package com.huotu.scrm.web;
 import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.EncryptUtils;
+import com.huotu.scrm.service.entity.activity.ActPrize;
+import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.mall.Customer;
@@ -151,6 +153,24 @@ public abstract class CommonTestBase extends SpringWebTest {
         infoE.setExtend(true);
         return infoRepository.saveAndFlush(infoE);
     }
+
+
+    /**
+     * 模拟活动
+     * @param customerId
+     * @return 商户ID
+     */
+    protected Activity mockActivity(Long customerId){
+
+
+        return null;
+    }
+
+    protected ActPrize mockActPrize(){
+
+        return null;
+    }
+
 
     /**
      * 模拟用户数据

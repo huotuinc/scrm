@@ -22,7 +22,6 @@ import static org.junit.Assert.*;
  */
 public class ActWinControllerTest extends CommonTestBase{
 
-    private Log logger = LogFactory.getLog(ActWinControllerTest.class);
     @Autowired
     StaticResourceService staticResourceService;
     @Autowired
