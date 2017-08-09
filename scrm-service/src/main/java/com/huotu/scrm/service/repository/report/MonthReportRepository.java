@@ -50,15 +50,6 @@ public interface MonthReportRepository extends JpaRepository<MonthReport, Long>,
     int findMaxScoreRanking(Long userId);
 
     /**
-     * 查询用户某个月份之前的所有数据
-     *
-     * @param userId 用户ID
-     * @param month  统计月份
-     * @return
-     */
-    List<MonthReport> findByUserIdAndReportMonthGreaterThanEqual(Long userId, LocalDate month);
-
-    /**
      * 查询某个月份下的所有商户
      *
      * @param month 统计月份

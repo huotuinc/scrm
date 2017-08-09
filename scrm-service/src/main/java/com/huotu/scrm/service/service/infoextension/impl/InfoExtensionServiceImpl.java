@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.infoextension.impl;
 
+import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.common.utils.DateUtil;
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -51,10 +53,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     private MonthReportRepository monthReportRepository;
     @Autowired
     private BusinessCardRecordRepository businessCardRecordRepository;
-    Map<Long, Integer> mapRankingVisitor = new TreeMap<>();
-    Map<Long, Integer> mapDayScoreRanking = new TreeMap<>();
-    Map<Long, Integer> mapMonthScoreRanking = new TreeMap<>();
-    Map<Long, Integer> mapDayFollowRanking = new TreeMap<>();
+    Map<Long, Integer> mapRankingVisitor = new HashMap<>();
+    Map<Long, Integer> mapDayScoreRanking = new HashMap<>();
+    Map<Long, Integer> mapMonthScoreRanking = new HashMap<>();
+    Map<Long, Integer> mapDayFollowRanking = new HashMap<>();
 
     @Override
     public UserType getUserType(Long userId) {
@@ -99,39 +101,26 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int dayScore = dayReportService.getEstimateScore(user, beginTime, now);
         //获取累积积分
         int accumulateScore = dayReportService.getCumulativeScore(user);
-        statisticalInformation.setDayVisitorNum(visitorNum);
-        statisticalInformation.setDayScore(dayScore);
-        statisticalInformation.setAccumulateScore(accumulateScore);
         //获取关注人数（销售员特有）
         UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
         int followNum = 0;
-        if (userLevel != null) {
-            if (userLevel.isSalesman()) {
-                followNum = businessCardRecordRepository.countByUserId(user.getId());
-            }
+        if (userLevel != null && userLevel.isSalesman()) {
+            followNum = businessCardRecordRepository.countByUserId(user.getId());
         }
-        statisticalInformation.setFollowNum(followNum);
         //从map中获取对应信息
         //获取访客量排名
         int visitorRanking = 0;
         if (mapRankingVisitor.containsKey(user.getId())) {
             visitorRanking = mapRankingVisitor.get(user.getId());
-        } else {
-            //若map中没有信息，实时统计排名
-            Map<Long, Integer> map = new TreeMap<>();
-            List<Long> sourceUserIdList = infoBrowseRepository.findSourceIdByCustomerId(user.getCustomerId(), beginTime, now);
-            sourceUserIdList.forEach(id -> {
-                int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(id, beginTime, now);
-                map.put(id, dayVisitorNum);
-            });
-            visitorRanking = getRanking(map, user.getId());
         }
-        //判断用户是否有访客量（浏览量）
-        if (visitorRanking == 0) {
-            if (visitorNum > 0) {
-                visitorRanking = 1;
-            }
+        if (visitorRanking == 0 && visitorNum > 0) {
+            //表示200名以外
+            visitorRanking = -1;
         }
+        statisticalInformation.setFollowNum(followNum);
+        statisticalInformation.setDayVisitorNum(visitorNum);
+        statisticalInformation.setDayScore(dayScore);
+        statisticalInformation.setAccumulateScore(accumulateScore);
         statisticalInformation.setDayVisitorRanking(visitorRanking);
         return statisticalInformation;
     }
@@ -144,40 +133,31 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      */
     @Override
     public DayScoreRankingInfo getScoreRankingInfo(User user) {
-        DayScoreRankingInfo dayScoreRankingInfo = new DayScoreRankingInfo();
         //获取当前时间
         LocalDateTime now = LocalDateTime.now();
         LocalDate localDate = LocalDate.now();
         LocalDateTime beginTime = localDate.atStartOfDay();
         LocalDateTime firstDay = localDate.withDayOfMonth(1).atStartOfDay();
+        DayScoreRankingInfo dayScoreRankingInfo = new DayScoreRankingInfo();
         int dayScoreRanking = 0;
         int monthRanking = 0;
         if (mapDayScoreRanking.containsKey(user.getId())) {
             dayScoreRanking = mapDayScoreRanking.get(user.getId());
-        } else {
-            List<Long> sourceUserIdList = infoBrowseRepository.findSourceIdByCustomerId(user.getCustomerId(), beginTime, now);
-            List<Map<Long, Integer>> mapList = getMapList(sourceUserIdList);
-            dayScoreRanking = getRanking(mapList.get(0), user.getId());
-            monthRanking = getRanking(mapList.get(1), user.getId());
+        }
+        if (mapMonthScoreRanking.containsKey(user.getId())) {
+            monthRanking = mapMonthScoreRanking.get(user.getId());
         }
         //判断用户是否有预计积分
-        if (dayScoreRanking == 0) {
-            int dayScore = dayReportService.getEstimateScore(user, beginTime, now);
-            if (dayScore > 0) {
-                dayScoreRanking = 1;
-            }
+        if (dayScoreRanking == 0 && dayReportService.getEstimateScore(user, beginTime, now) > 0) {
+            //表示200名以外
+            dayScoreRanking = -1;
         }
-        dayScoreRankingInfo.setDayScoreRanking(dayScoreRanking);
-        if (monthRanking == 0) {
-            int monthScore = dayReportService.getEstimateScore(user, firstDay, now);
-            if (monthScore > 0) {
-                monthRanking = 1;
-            }
+        if (monthRanking == 0 && dayReportService.getEstimateScore(user, firstDay, now) > 0) {
+            //表示200名以外
+            monthRanking = -1;
         }
-        dayScoreRankingInfo.setMonthScoreRanking(monthRanking);
         //设置最高月积分排名
         int highestMonthScoreRanking = monthReportRepository.findMaxScoreRanking(user.getId());
-        dayScoreRankingInfo.setHighestMonthScoreRanking(highestMonthScoreRanking);
         //近几个月积分排名
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
@@ -185,7 +165,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthInfo.setData(dayScoreRankingInfo.getMonthScoreRanking());
         monthStatisticInfoList.add(monthInfo);
         monthStatisticInfoList = getMonthStatisticInfo(user.getId(), 0);
+        dayScoreRankingInfo.setHighestMonthScoreRanking(highestMonthScoreRanking);
         dayScoreRankingInfo.setMonthScoreRankingList(monthStatisticInfoList);
+        dayScoreRankingInfo.setDayScoreRanking(dayScoreRanking);
+        dayScoreRankingInfo.setMonthScoreRanking(monthRanking);
         return dayScoreRankingInfo;
     }
 
@@ -203,19 +186,14 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         int extensionScore = dayReportService.getEstimateScore(user, todayBegin, now);
-        dayScoreInfo.setDayScore(extensionScore);
         //设置昨日积分
         DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(user.getId(), today.minusDays(1));
-        if (dayReport == null) {
-            dayScoreInfo.setLastDayScore(0);
-        } else {
-            dayScoreInfo.setLastDayScore(dayReport.getExtensionScore());
-        }
+        int lastScore = (dayReport == null) ? 0 : dayReport.getExtensionScore();
+        dayScoreInfo.setLastDayScore(lastScore);
         //设置历史累积积分
         int cumulativeScore = dayReportService.getCumulativeScore(user);
         //获取本月预计积分
         int monthScore = dayReportService.getMonthEstimateScore(user);
-        dayScoreInfo.setAccumulateScore(cumulativeScore);
         //设置近几个月积分信息
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
         MonthStatisticInfo monInfo = new MonthStatisticInfo();
@@ -224,6 +202,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthStatisticInfoList.add(monInfo);
         monthStatisticInfoList = getMonthStatisticInfo(user.getId(), 1);
         dayScoreInfo.setMonthScoreList(monthStatisticInfoList);
+        dayScoreInfo.setDayScore(extensionScore);
+        dayScoreInfo.setAccumulateScore(cumulativeScore);
         return dayScoreInfo;
     }
 
@@ -240,12 +220,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         LocalDate today = LocalDate.now();
         LocalDateTime beginTime = today.atStartOfDay();
         int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now);
-        dayVisitorNumInfo.setDayVisitorBum(dayVisitorNum);
         int monthVisitorNum = dayReportService.getMonthVisitorNum(user);
         dayVisitorNumInfo.setMonthVisitorNum(monthVisitorNum + dayVisitorNum);
         //设置历史最高月访问量
         int highestMonthVisitorNum = monthReportRepository.findMaxMonthVisitorNum(user.getId());
-        dayVisitorNumInfo.setHighestMonthVisitorNum(highestMonthVisitorNum);
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
         monthInfo.setMonth("本月");
@@ -253,6 +231,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthStatisticInfoList.add(monthInfo);
         monthStatisticInfoList = getMonthStatisticInfo(user.getId(), 2);
         dayVisitorNumInfo.setMonthVisitorNumList(monthStatisticInfoList);
+        dayVisitorNumInfo.setDayVisitorBum(dayVisitorNum);
+        dayVisitorNumInfo.setHighestMonthVisitorNum(highestMonthVisitorNum);
         return dayVisitorNumInfo;
     }
 
@@ -265,33 +245,23 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     @Override
     public DayFollowNumInfo getFollowNumInfo(User user) {
         DayFollowNumInfo dayFollowNumInfo = new DayFollowNumInfo();
-        //获取昨天时间（时分秒默认为零）
-        LocalDate localDate = LocalDate.now();
-        LocalDateTime beginTime = localDate.atStartOfDay();
-        LocalDateTime endTime = LocalDateTime.now();
         //今日关注人数
         int dayFollowNum = businessCardRecordRepository.countByUserId(user.getId());
         dayFollowNumInfo.setDayFollowNum(dayFollowNum);
         //当前排名
         int followRanking = 0;
-        if (dayFollowNum > 0) {
-            if (mapDayFollowRanking.containsKey(user.getId())) {
-                followRanking = mapDayFollowRanking.get(user.getId());
-            } else {
-                List<Long> sourceUserIdList = businessCardRecordRepository.findByCustomerIdAndFollowDate(user.getCustomerId(), beginTime, endTime);
-                Map<Long, Integer> map = new TreeMap<>();
-                for (long sourceUserId : sourceUserIdList
-                        ) {
-                    int followNum = businessCardRecordRepository.countByUserId(sourceUserId);
-                    map.put(sourceUserId, followNum);
-                }
-                followRanking = getRanking(map, user.getId());
-            }
+        if (mapDayFollowRanking.containsKey(user.getId())) {
+            followRanking = mapDayFollowRanking.get(user.getId());
         }
-        dayFollowNumInfo.setFollowRanking(followRanking);
+        if (followRanking == 0 && dayFollowNum > 0) {
+            //表示200名以外
+            followRanking = -1;
+        }
         //最高月排名
         int highestFollowRanking = monthReportRepository.findMaxMonthFollowNumRanking(user.getId());
-        dayFollowNumInfo.setHighestFollowRanking(highestFollowRanking);
+        if (highestFollowRanking == 0 && monthReportRepository.findByUserId(user.getId()).size() > 0) {
+            highestFollowRanking = -1;
+        }
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
         monthInfo.setMonth("本月");
@@ -300,6 +270,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         monthStatisticInfoList.add(monthInfo);
         monthStatisticInfoList = getMonthStatisticInfo(user.getId(), 3);
         dayFollowNumInfo.setMonthFollowRankingList(monthStatisticInfoList);
+        dayFollowNumInfo.setFollowRanking(followRanking);
+        dayFollowNumInfo.setHighestFollowRanking(highestFollowRanking);
         return dayFollowNumInfo;
     }
 
@@ -330,30 +302,6 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     }
 
     /**
-     * 获取排名
-     *
-     * @param map    所有用户
-     * @param userId 用户ID
-     * @return
-     */
-    private int getRanking(Map<Long, Integer> map, Long userId) {
-        if (!map.containsKey(userId)) {
-            return 0;
-        }
-        List<Map.Entry<Long, Integer>> list = new ArrayList<>(map.entrySet());
-        //然后通过比较器来实现排序
-        list.sort((o1, o2) -> o2.getValue().compareTo(o1.getValue()));
-        int ranking = 0;
-        for (Map.Entry<Long, Integer> mapping : list) {
-            ranking++;
-            if (userId.equals(mapping.getKey())) {
-                break;
-            }
-        }
-        return ranking;
-    }
-
-    /**
      * 获取月统计信息
      *
      * @param userId 用户ID
@@ -377,7 +325,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             } else {
                 switch (type) {
                     case 0:
-                        monthStatisticInfo.setData(monthReport.getScoreRanking());
+                        if (monthReport.getScoreRanking() == 0 && monthReportRepository.findByUserId(userId).size() > 0) {
+                            monthStatisticInfo.setData(-1);
+                        } else {
+                            monthStatisticInfo.setData(monthReport.getScoreRanking());
+                        }
                         break;
                     case 1:
                         monthStatisticInfo.setData(monthReport.getExtensionScore());
@@ -386,7 +338,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
                         monthStatisticInfo.setData(monthReport.getVisitorNum());
                         break;
                     default:
-                        monthStatisticInfo.setData(monthReport.getFollowRanking());
+                        if (monthReport.getFollowRanking() == 0 && monthReportRepository.findByUserId(userId).size() > 0) {
+                            monthStatisticInfo.setData(-1);
+                        } else {
+                            monthStatisticInfo.setData(monthReport.getFollowRanking());
+                        }
                 }
 
             }
@@ -396,7 +352,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     }
 
     /**
-     * 设置排名
+     * 设置排名（默认只排前20名）
      *
      * @param map  统计数据
      * @param type 统计类型 0：访客量（浏览量） 1：今日积分 2：本月积分 3：关注量排名
@@ -408,6 +364,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int ranking = 0;
         for (Map.Entry<Long, Integer> mapping : list) {
             ranking++;
+            if (ranking > Integer.parseInt(SysConstant.DAY_SORT_NUM)) {
+                break;
+            }
             switch (type) {
                 case 0:
                     mapRankingVisitor.put(mapping.getKey(), ranking);

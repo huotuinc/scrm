@@ -17,14 +17,6 @@ public interface UserLevelService {
     List<UserLevel> findByCustomerIdAndIsSalesman(Long customerId , boolean isSalesman);
 
     /**
-     * 根据商户id和Id获得用户等级信息
-     * @param customerId
-     * @param id
-     * @return
-     */
-    UserLevel findByCustomerIdAndId(Long customerId , Long id);
-
-    /**
      *
      * @param userLevel
      * @return
