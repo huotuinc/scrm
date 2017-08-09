@@ -31,8 +31,10 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         if (environment.acceptsProfiles("development")) {
             //小伙伴，非销售员
             request.setAttribute("userId", 1058823);
+            //小伙伴且是销售员
+//            request.setAttribute("userId", 1058510);
             //普通会员
-            //request.setAttribute("userId",1043094);
+            request.setAttribute("userId",1043079);
 
             return true;
         }
