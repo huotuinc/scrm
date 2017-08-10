@@ -8,6 +8,7 @@ import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
+import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.info.InfoBrowseService;
 import com.huotu.scrm.service.service.mall.UserLevelService;
@@ -34,7 +35,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Autowired
     private InfoConfigureRepository infoConfigureRepository;
     @Autowired
-    private UserLevelService userLevelService;
+    private UserLevelRepository userLevelRepository;
     @Autowired
     private ApiService apiService;
 
@@ -83,7 +84,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
      */
     private void addMallScore(Long customerId, InfoBrowse infoBrowse, InfoConfigure infoConfigure, int score) {
         //没开启
-        UserLevel userLevel = userLevelService.findByCustomerIdAndId(customerId, infoBrowse.getSourceUserId());
+        UserLevel userLevel = userLevelRepository.findByCustomerIdAndId(customerId, infoBrowse.getSourceUserId());
         //转发奖励获取对象 0 会员
         if (infoConfigure.getRewardUserType() == userLevel.getType().ordinal()) {
             //调商城接口扣除积分

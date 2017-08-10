@@ -288,7 +288,7 @@ $(function () {
     });
 
     //短信接口，下面为mock，请用实际
-    var sendAuthCodeUrl = '/api/authCode';
+    var sendAuthCodeUrl = '/sendAuthCode';
 
     $('#J_sendAuth').click(function () {
         var self = $(this);
