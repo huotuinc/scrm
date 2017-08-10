@@ -20,7 +20,7 @@ public class SysConstant {
     public SysConstant(Environment env){
         COOKIE_DOMAIN = env.getProperty("cookie.domain", ".pdmall.com");
         HUOBANMALL_RESOURCE_HOST = env.getProperty("huobanmall.resourceUrl", "http://res.pdmall.com");
-        HUOBANMALL_PUSH_URL = env.getProperty("huobanmall.pushUrl", "http://mallapi.xiangzhang.com");
-        DAY_SORT_NUM = env.getProperty("huobanmall.daySortNum","200");
+        HUOBANMALL_PUSH_URL = env.getProperty("huobanmall.pushUrl", "http://mallapi.pdmall.com");
+        DAY_SORT_NUM = env.getProperty("com.scrm.daySortNum","200");
     }
 }

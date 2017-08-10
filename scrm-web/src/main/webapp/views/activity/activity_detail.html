@@ -42,7 +42,7 @@
                     <label class="col-sm-3 control-label">活动标题:</label>
                     <div class="col-sm-3">
                         <input type="text" placeholder="活动标题" class="form-control" th:value="${activity.actTitle}"
-                               maxlength="30"
+                               maxlength="20"
                                name="actTitle" required>
                     </div>
                 </div>
@@ -53,22 +53,22 @@
                                placeholder="开始时间-结束时间" required/>
                         <input type="hidden" id="startDate" name="startDate"
                                th:if="${not #lists.isEmpty(activity.startDate)}"
-                               th:value="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}" required
+                               th:value="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}"
                         /> <input type="hidden" id="startDate" name="startDate"
-                                  th:if="${ #lists.isEmpty(activity.startDate)}" required
+                                  th:if="${ #lists.isEmpty(activity.startDate)}"
                     />
                         <input type="hidden" id="endDate" name="endDate"
                                th:if="${not #lists.isEmpty(activity.endDate)}"
-                               th:value="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}" required
+                               th:value="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"
                         /><input type="hidden" id="endDate" name="endDate"
-                                 th:if="${#lists.isEmpty(activity.endDate)}" required
+                                 th:if="${#lists.isEmpty(activity.endDate)}"
                     />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">游戏消耗积分:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="游戏消耗积分" class="form-control" maxlength="10" id="gameCostlyScore"
+                        <input type="number" placeholder="游戏消耗积分" class="form-control" maxlength="10" id="gameCostlyScore"
                                th:value="${activity.gameCostlyScore}" name="gameCostlyScore" required>
                     </div>
                 </div>
@@ -77,8 +77,8 @@
                     <label class="col-sm-2 control-label">规则简介:</label>
                     <div class="col-sm-8">
                         <div class="ibox-content no-padding">
-                            <input type="hidden"  name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}"
-                                   >
+                            <input type="hidden" name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}"
+                            >
                             <div style="display: none;" class="js_summerNote" id="ruleDesc"
                                  th:utext="${activity.ruleDesc}">
                             </div>
@@ -125,11 +125,14 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script type="text/javascript">
-    var isInteger = /^[0-9]*[1-9][0-9]*$/;
+    $("#actTime").on('cancel.daterangepicker', function () {
+        $("#actTime").val("");
+        $("#startDate").val("");
+        $("#endDate").val("");
+    });
     //初始化时间控件
     $('#actTime').daterangepicker(
         {
-            maxDate: moment(), //最大时间
             dateLimit: {
                 days: 30
             }, //起止时间的最大间隔
@@ -182,15 +185,17 @@
             rules: {
                 ruleDesc: "required",
                 rateDesc: "required",
-                gameCostlyScore: {"digits": true, min: 1}
+                startDate: "required",
+                endDate: "required",
+                gameCostlyScore: { min: 1}
 
             },
             messages: {
-                startDate:"开始时间不能为空",
-                endDate:"结束时间不能为空",
+                startDate: "开始时间不能为空",
+                endDate: "结束时间不能为空",
                 ruleDesc: "请填写规则简介",
                 rateDesc: "请填写概率简介",
-                gameCostlyScore: "消耗积分必须大于0且为整数",
+                gameCostlyScore: "消耗积分必须大于0",
                 actTitle: "活动标题不能为空"
             }
         });
@@ -215,7 +220,7 @@
                 $("input:hidden[name='actType']").val("ACT_TURNTABLE");
             }
             $("#actDetail").valid();
-         $("#actDetail").submit();
+            $("#actDetail").submit();
         }
     }
 </script>

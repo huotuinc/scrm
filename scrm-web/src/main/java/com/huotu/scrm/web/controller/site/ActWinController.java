@@ -10,7 +10,6 @@
 package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.IpUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
@@ -176,6 +175,7 @@ public class ActWinController extends SiteBaseController {
         actWinDetail.setWinTime(LocalDateTime.now());
         actWinDetail.setPrize(getPrizeByPrizeId(activity, prizeId));
         actWinDetail.setIpAddress(ipAddress);
+        actWinDetail.setActId(activity.getActId());
         return actWinDetailService.saveActWinDetail(actWinDetail);
     }
 

@@ -30,9 +30,6 @@
                         <button id="btnAddArticle" class="btn btn-success btn-sm" type="button"
                                 onclick="actListHandler.editAct()">新增
                         </button>
-                        <button class="btn btn-sm btn-success" type="button"
-                                onclick="actListHandler.joinRecord()">中奖记录
-                        </button>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -72,7 +69,8 @@
                                 <td>
                                     <span class="cursor-point"><i class="fa tooltips"
                                                                   data-toggle="modal"
-                                                                  data-original-title="活动链接"   data-target="#actLink">活动链接</i></span>
+                                                                  data-original-title="活动链接" data-target="#actLink"
+                                                                  th:onclick="'javascript:actListHandler.actLink('+${activity.actId}+','+${activity.customerId}+')'">活动链接</i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip" data-original-title="奖品设置"
@@ -137,8 +135,7 @@
                     活动链接
                 </h4>
             </div>
-            <div class="modal-body">
-                http://act.caijigaoshou.cn/activity/index?actid=1
+            <div class="modal-body" id="actLinkStr">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭
@@ -166,6 +163,8 @@
     var totalPage = [[${totalPages}]];
     var ajaxUrl = "[[@{/mall}]]";
     var requestDate = {};
+    var actNum = null;
+    var customerNum = null;
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
     paging.init(function (p) {
         window.location.href = ajaxUrl + '/act/list?pageIndex=' + p;
@@ -173,7 +172,6 @@
     var actListHandler = {
         deleteAct: function (actId, status, name) {
             var actStatus = (status == true ? "启用" : "禁用");
-            console.log($(this))
             hot.confirm(name + "活动已" + actStatus + "，确定要删除么？", function () {
                 requestDate = {actId: actId};
                 hot.ajax(ajaxUrl + "/act/delete", requestDate, function (res) {
@@ -196,7 +194,7 @@
             window.location.href = ajaxUrl + "/prize/list?actId=" + actId;
         },
         joinRecord: function (actId) {
-            window.location.href = ajaxUrl + "/join/record?actId="+actId;
+            window.location.href = ajaxUrl + "/join/record?actId=" + actId;
         },
         actDisable: function (actId) {
             hot.ajax(ajaxUrl + "/act/disable", {actId: actId}, function (res) {
@@ -213,6 +211,12 @@
                     hot.tip.error("启用失败（中奖概率合计有误）")
                 }
             })
+        },
+        actLink: function (actId, customerId) {
+            actNum = actId;
+            customerNum = customerId;
+            var str = "http://act.caijigaoshou.cn/activity/index?actId=" + actId + "&customerId=" + customerId;
+            $("#actLinkStr").html(str);
         }
     }
 </script>

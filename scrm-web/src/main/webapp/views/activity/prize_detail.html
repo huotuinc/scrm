@@ -56,8 +56,8 @@
                                 onclick="prizeEditHandler.uploadFile()">上传图片
                         </button>
                         <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
-                        <img class="imageShow" src="../../resources/images/infoBg.png"
-                             th:src="${actPrize.prizeImageUrl}" style="width:200px;height:200px;"/>
+                        <img id="imageShow" src="../../resources/images/infoBg.png" th:src="${actPrize.prizeImageUrl}"
+                              style="width:200px;height:200px;"/>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
@@ -117,26 +117,30 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
 <script type="text/javascript">
+    var customerId = [[${customerId}]];
     var prizeEditHandler = {
         uploadFile: function () {
             hot.loading.show();
             if($('#uploadFile').val() == undefined ||  $('#uploadFile').val().length == 0 ) {
-                hot.tip.msg("图片不能为空");
+                hot.tip.error("图片不能为空");
             }else{
                 $.ajaxFileUpload({
                     url: "/common/upload",
+                    data:{
+                        customerId:customerId
+                    },
                     secureuri: false,// 一般设置为false
                     fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
                     dataType: 'json',// 返回值类型 一般设置为json
                     type: "post",
                     success: function (data) // 服务器成功响应处理函数
                     {
-                        if (data.code == 200) {
+                        if (data.result == 1) {
+                            console.log(data.fileUri);
+                            console.log(data.fileUrl);
                             $('#imageShow').attr('src', data.fileUrl);
                             $("input:hidden[name='prizeImageUrl']").val(data.fileUri);
-                            hot.tip.success(data.msg);
-                        } else {
-                            hot.loading.hide();
+                            hot.tip.success("上传成功");
                         }
                     },
                     error: function ()// 服务器响应失败处理函数

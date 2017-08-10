@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import java.time.LocalDateTime;
 
 /**
@@ -74,8 +73,8 @@ public class ActWinDetail {
     private ActPrize prize;
 
     /**
-     * 活动名称
+     * 活动Id
      */
-    @Transient
-    private String actName;
+    @Column(name = "Act_Id")
+    private Long actId;
 }

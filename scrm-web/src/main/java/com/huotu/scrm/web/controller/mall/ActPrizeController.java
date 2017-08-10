@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -75,7 +76,7 @@ public class ActPrizeController extends MallBaseController {
      * @return
      */
     @RequestMapping("/prize/detail")
-    public String getPrizeEdit(Long actId, @RequestParam(required = false, defaultValue = "0") Long prizeId, Model model) {
+    public String getPrizeEdit(Long actId, @ModelAttribute("customerId") Long customerId, @RequestParam(required = false, defaultValue = "0") Long prizeId, Model model) {
         ActPrize actPrize = new ActPrize();
         if (prizeId != 0) {
             actPrize = actPrizeService.findByPrizeId(prizeId);
@@ -90,6 +91,7 @@ public class ActPrizeController extends MallBaseController {
                 e.printStackTrace();
             }
         }
+        model.addAttribute("customer", customerId);
         model.addAttribute("actPrize", actPrize);
         return "activity/prize_detail";
     }
