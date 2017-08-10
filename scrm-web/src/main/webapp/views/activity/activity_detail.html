@@ -77,8 +77,8 @@
                     <label class="col-sm-2 control-label">规则简介:</label>
                     <div class="col-sm-8">
                         <div class="ibox-content no-padding">
-                            <input type="hidden" name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}"
-                                   required><span id="ruleDesc_msg" style="color: red"></span>
+                            <input type="hidden"  name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}"
+                                   >
                             <div style="display: none;" class="js_summerNote" id="ruleDesc"
                                  th:utext="${activity.ruleDesc}">
                             </div>
@@ -177,37 +177,45 @@
             focus: true,
             lang: 'zh-CN'
         });
+        $("#actDetail").validate({
+            ignore: [],
+            rules: {
+                ruleDesc: "required",
+                rateDesc: "required",
+                gameCostlyScore: {"digits": true, min: 1}
+
+            },
+            messages: {
+                startDate:"开始时间不能为空",
+                endDate:"结束时间不能为空",
+                ruleDesc: "请填写规则简介",
+                rateDesc: "请填写概率简介",
+                gameCostlyScore: "消耗积分必须大于0且为整数",
+                actTitle: "活动标题不能为空"
+            }
+        });
     });
     var actDetailHandler = {
         screen: function () {
-            var gameCostlyScore = $("#gameCostlyScore").val();
-            if (!isInteger.test(gameCostlyScore)) {
-                hot.tip.error("消耗积分必须大于0",2000);
-                return;
-            }
             var str = "<p><br></p>"
             var rateDesc = $("#rateDesc").code()
             var ruleDesc = $("#ruleDesc").code();
             if (ruleDesc == str) {
-                $("input:hidden[name='ruleDesc']").val('');
-                hot.tip.error("规则简介不能为空");
-                return;
+                $("#ruleDescContent").val("");
             } else {
-                $("input:hidden[name='ruleDesc']").val(ruleDesc);
+                $("#ruleDescContent").val(ruleDesc);
             }
             if (rateDesc == str) {
-                $("input:hidden[name='rateDesc']").val('');
-                hot.tip.error("概率简介不能为空");
-                return;
+                $("#rateDescContent").val("");
             } else {
-                $("input:hidden[name='rateDesc']").val(rateDesc);
+                $("#rateDescContent").val(rateDesc);
             }
             var actType = $("#actType").val();
             if (actType == 0) {
                 $("input:hidden[name='actType']").val("ACT_TURNTABLE");
             }
             $("#actDetail").valid();
-            $("#actDetail").submit();
+         $("#actDetail").submit();
         }
     }
 </script>

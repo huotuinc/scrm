@@ -62,7 +62,7 @@
                                     <p style="width: 100%; height: 50px;">
                                     </p>
                                 </td>
-                                <td th:text="${prize.prizeType}"></td>
+                                <td th:text="${prize.prizeType.value}"></td>
                                 <td th:text="${prize.prizeCount}"></td>
                                 <td th:text="${prize.remainCount}"></td>
                                 <td>
@@ -96,6 +96,7 @@
         th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
 <!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
@@ -105,21 +106,21 @@
     var ajaxUrl = "[[@{/mall}]]";
     var prizeListHandler = {
         prizeEdit: function (actId, prizeId) {
-            if (prizeId == null) {
-                var status = $("#status").val();
-                if (status==true) {
-                    hot.tip.error("该活动已启用，不能添加奖品")
-                } else {
-                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId
-                }
+            var status = $("#status").val();
+            if (status=="true") {
+                layer.msg("该活动已启用，不能添加奖品",{icon: 2})
             } else {
-                window.location.href = ajaxUrl + "/prize/detail?actId=" + actId + "&prizeId=" + prizeId;
+                if(prizeId == null){
+                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId;
+                }else{
+                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId + "&prizeId=" + prizeId;
+                }
             }
         },
         prizeDelete: function (prizeId) {
             var status = $("#status").val();
-            if(status==true){
-                hot.tip.error("该活动已启用，不能删除奖品")
+            if(status=="true"){
+                layer.msg("该活动已启用，不能删除奖品",{icon: 2})
             }else{
                 hot.confirm("确定要删除么？", function () {
                     var requestData = {

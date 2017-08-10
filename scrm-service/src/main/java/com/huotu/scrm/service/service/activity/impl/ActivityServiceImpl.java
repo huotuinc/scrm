@@ -9,7 +9,9 @@
 
 package com.huotu.scrm.service.service.activity.impl;
 
+import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
+import com.huotu.scrm.service.model.prizeTypeEnum;
 import com.huotu.scrm.service.repository.activity.ActivityRepository;
 import com.huotu.scrm.service.service.activity.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 活动Service层实现类
@@ -43,9 +48,17 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void saveActivity(Activity activity) {
-        if(activity.getActId()!=null){
+        if (activity.getActId() != null) {
             Activity one = activityRepository.findOne(activity.getActId());
             activity.setActPrizes(one.getActPrizes());
+        } else {
+            ActPrize actPrize = new ActPrize();
+            actPrize.setPrizeType(prizeTypeEnum.PRIZE_TYPE_THANKS);
+            actPrize.setActivity(activity);
+            actPrize.setPrizeName("谢谢惠顾");
+            List<ActPrize> actPrizeList = new ArrayList<>();
+            actPrizeList.add(actPrize);
+            activity.setActPrizes(actPrizeList);
         }
         activityRepository.save(activity);
     }

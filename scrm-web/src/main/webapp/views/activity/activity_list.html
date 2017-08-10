@@ -71,8 +71,8 @@
                                 </td>
                                 <td>
                                     <span class="cursor-point"><i class="fa tooltips"
-                                                                  data-toggle="tooltip"
-                                                                  data-original-title="活动链接">活动链接</i></span>
+                                                                  data-toggle="modal"
+                                                                  data-original-title="活动链接"   data-target="#actLink">活动链接</i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip" data-original-title="奖品设置"
@@ -126,6 +126,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="actLink" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    活动链接
+                </h4>
+            </div>
+            <div class="modal-body">
+                http://act.caijigaoshou.cn/activity/index?actid=1
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 <!--基础框架js-->
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
 <script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js"
@@ -153,7 +174,7 @@
         deleteAct: function (actId, status, name) {
             var actStatus = (status == true ? "启用" : "禁用");
             console.log($(this))
-            hot.confirm(name + "已" + actStatus + "，确定要删除么？", function () {
+            hot.confirm(name + "活动已" + actStatus + "，确定要删除么？", function () {
                 requestDate = {actId: actId};
                 hot.ajax(ajaxUrl + "/act/delete", requestDate, function (res) {
                     if (res.code == 200) {
