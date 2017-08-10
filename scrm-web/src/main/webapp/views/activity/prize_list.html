@@ -31,7 +31,7 @@
                 <div class="ibox-content p-xxs no-top-border">
                     <div style="text-align:right;">
                         <button class="btn btn-sm btn-success" type="button"
-                                th:onclick="'javascript:prizeListHandler.prizeEdit('+${actId}+')'">新增奖品
+                                th:onclick="'javascript:prizeListHandler.prizeAdd('+${actId}+')'">新增奖品
                         </button>
                     </div>
                     <div class="panel-body">
@@ -106,22 +106,20 @@
     var ajaxUrl = "[[@{/mall}]]";
     var prizeListHandler = {
         prizeEdit: function (actId, prizeId) {
-            var status = $("#status").val();
-            if (status=="true") {
-                layer.msg("该活动已启用，不能添加奖品",{icon: 2})
+
+            if (prizeId == null) {
+                window.location.href = ajaxUrl + "/prize/detail?actId=" + actId;
             } else {
-                if(prizeId == null){
-                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId;
-                }else{
-                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId + "&prizeId=" + prizeId;
-                }
+                window.location.href = ajaxUrl + "/prize/detail?actId=" + actId + "&prizeId=" + prizeId;
             }
+
+
         },
         prizeDelete: function (prizeId) {
             var status = $("#status").val();
-            if(status=="true"){
-                layer.msg("该活动已启用，不能删除奖品",{icon: 2})
-            }else{
+            if (status == "true") {
+                layer.msg("该活动已启用，不能删除奖品", {icon: 2})
+            } else {
                 hot.confirm("确定要删除么？", function () {
                     var requestData = {
                         prizeId: prizeId
@@ -134,6 +132,14 @@
                         }
                     })
                 })
+            }
+        },
+        prizeAdd: function (actId) {
+            var status = $("#status").val();
+            if (status == "true") {
+                layer.msg("该活动已启用，不能添加奖品", {icon: 2});
+            } else {
+                window.location.href = ajaxUrl + "/prize/detail?actId=" + actId;
             }
         }
     }

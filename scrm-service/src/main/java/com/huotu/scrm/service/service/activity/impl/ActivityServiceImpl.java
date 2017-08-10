@@ -50,7 +50,9 @@ public class ActivityServiceImpl implements ActivityService {
     public void saveActivity(Activity activity) {
         if (activity.getActId() != null) {
             Activity one = activityRepository.findOne(activity.getActId());
-            activity.setActPrizes(one.getActPrizes());
+            if (one != null) {
+                activity.setActPrizes(one.getActPrizes());
+            }
         } else {
             ActPrize actPrize = new ActPrize();
             actPrize.setPrizeType(prizeTypeEnum.PRIZE_TYPE_THANKS);
