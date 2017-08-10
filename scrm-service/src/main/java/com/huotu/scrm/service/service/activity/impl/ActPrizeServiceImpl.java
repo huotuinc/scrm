@@ -57,7 +57,6 @@ public class ActPrizeServiceImpl implements ActPrizeService {
         Activity activity = actPrize.getActivity();
         activity.getActPrizes().remove(actPrize);
         activityRepository.save(activity);
-        actPrizeRepository.delete(prizeId);
     }
 
     @Override

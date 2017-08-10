@@ -155,8 +155,8 @@ public class ActController extends MallBaseController {
      * @return
      */
     @RequestMapping("/join/record")
-    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(pageIndex, Constant.PAGE_SIZE);
+    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex,Long actId, Model model) {
+        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(actId,pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("joinRecord", pageActWinDetail);
         model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
         model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());

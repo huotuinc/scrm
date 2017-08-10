@@ -22,5 +22,4 @@ import java.util.List;
 public interface UserFormalIntegralRepository extends JpaRepository<UserFormalIntegral, Long> {
 
     List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatusAndTimeBetween(Long userId, Long customerId, IntegralTypeEnum status, LocalDateTime beginTime, LocalDateTime endTime);
-    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatus(Long userId,Long customerId,IntegralTypeEnum status);
 }

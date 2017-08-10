@@ -128,9 +128,7 @@ public class DayReportServiceImpl implements DayReportService {
 
     @Override
     public int getCumulativeScore(User user) {
-        LocalDateTime now = LocalDateTime.now();
         LocalDate today = LocalDate.now();
-        LocalDateTime monthBegin = today.withDayOfMonth(1).atStartOfDay();
         int historyScore = 0;
         //获取本月之前的用户的积分
         List<MonthReport> monthReportList = monthReportRepository.findByUserId(user.getId());
@@ -138,7 +136,7 @@ public class DayReportServiceImpl implements DayReportService {
                 ) {
             historyScore += monthReport.getExtensionScore();
         }
-        int monthScore = getEstimateScore(user, monthBegin, now);
+        int monthScore = getMonthEstimateScore(user);
         return historyScore + monthScore;
     }
 
@@ -267,7 +265,7 @@ public class DayReportServiceImpl implements DayReportService {
 
     @Override
     public int getMonthForwardNum(User user) {
-        int MonthForwardNum = 0;
+        int monthForwardNum = 0;
         LocalDateTime now = LocalDateTime.now();
         LocalDate today = LocalDate.now();
         LocalDateTime beginTime = today.atStartOfDay();
@@ -275,27 +273,23 @@ public class DayReportServiceImpl implements DayReportService {
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayGreaterThanEqual(user.getId(), monthBegin);
         for (DayReport dayReport :
                 dayReportList) {
-            MonthForwardNum += dayReport.getForwardNum();
+            monthForwardNum += dayReport.getForwardNum();
         }
         //获取今日转发量
         int dayForwardNum = infoBrowseRepository.findForwardNumBySourceUserId(beginTime, now, user.getId()).size();
-        return MonthForwardNum + dayForwardNum;
+        return monthForwardNum + dayForwardNum;
     }
 
     @Override
     public int getMonthEstimateScore(User user) {
-        int MonthEstimateScore = 0;
-        LocalDateTime now = LocalDateTime.now();
+        int monthEstimateScore = 0;
         LocalDate today = LocalDate.now();
-        LocalDateTime beginTime = today.atStartOfDay();
         LocalDate monthBegin = today.withDayOfMonth(1);
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayGreaterThanEqual(user.getId(), monthBegin);
         for (DayReport dayReport :
                 dayReportList) {
-            MonthEstimateScore += dayReport.getExtensionScore();
+            monthEstimateScore += dayReport.getExtensionScore();
         }
-        //获取今日预计积分
-        int dayEstimateScore = getEstimateScore(user, beginTime, now);
-        return MonthEstimateScore + dayEstimateScore;
+        return monthEstimateScore;
     }
 }

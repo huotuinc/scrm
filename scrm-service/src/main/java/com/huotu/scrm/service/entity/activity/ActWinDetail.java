@@ -14,11 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * 活动中奖记录
- *
+ * <p>
  * Created by montage on 2017/7/11.
  */
 
@@ -71,7 +70,7 @@ public class ActWinDetail {
      * 奖品Id
      */
     @ManyToOne
-    @JoinColumn(name = "Prize_Id",referencedColumnName = "Prize_Id")
+    @JoinColumn(name = "Prize_Id", referencedColumnName = "Prize_Id")
     private ActPrize prize;
 
     /**
