@@ -40,8 +40,9 @@ public class InfoDetailController extends SiteBaseController {
 
     @RequestMapping(value = "/info/infoDetail")
     public String infoDetail(@ModelAttribute("userId") Long userId,
-                             @RequestParam(value = "sourceUserId",required = false) Long sourceUserId,
-                             Long infoId, Long customerId, Model model) throws URISyntaxException {
+                             Long infoId, Long customerId, @RequestParam(value = "sourceUserId",required = false) Long sourceUserId,
+                             Model model) throws URISyntaxException {
+        infoTurnInRecord(infoId,userId,sourceUserId,customerId);
         //todo去记录浏览量
         Info info =  infoService.findOneByIdAndCustomerId(infoId,customerId);
         if(!StringUtils.isEmpty(info.getImageUrl())){
@@ -80,16 +81,15 @@ public class InfoDetailController extends SiteBaseController {
     }
 
     /**
-     *
-     * @param
+     * 添加浏览记录
+     * @param infoId
+     * @param userId
+     * @param sourceUserId
      * @param customerId
-     * @return
      */
-    @RequestMapping("/info/turnIn")
-    @ResponseBody
-    public void infoTurnInRecord(@RequestParam(value = "infoId") Long infoId,@ModelAttribute("userId") Long userId ,
-                                 @RequestParam(value = "sourceUserId",required = false) Long sourceUserId
-                                 , @ModelAttribute("customerId") Long customerId){
+    private void infoTurnInRecord(Long infoId, Long userId ,
+                                  Long sourceUserId
+                                 ,  Long customerId){
         InfoBrowse infoBrowse = new InfoBrowse();
         infoBrowse.setSourceUserId(sourceUserId);
         infoBrowse.setReadUserId(userId);
