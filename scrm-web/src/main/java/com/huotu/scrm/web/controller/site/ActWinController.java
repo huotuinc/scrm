@@ -24,6 +24,7 @@ import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
+import com.huotu.scrm.web.service.VerifyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,6 +65,8 @@ public class ActWinController extends SiteBaseController {
     private ActivityService activityService;
     @Autowired
     private ApiService apiService;
+    @Autowired
+    private VerifyService verifyService;
 
     @RequestMapping("/activity/index")
     public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
@@ -164,15 +167,14 @@ public class ActWinController extends SiteBaseController {
     @ResponseBody
     private ApiResult winPrizeRecordUpdate(Long userId, Long ActWinDetailId, String name, String mobile,
                                         String authCode){
-
-        // TODO: 2017/8/7  严重验证码是否正确
-
-
-        ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(ActWinDetailId,name,mobile);
-        if (actWinDetail!=null){
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        if (verifyService.verifyVerificationCode(mobile,authCode)){
+            ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(ActWinDetailId,name,mobile);
+            if (actWinDetail!=null){
+                return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+            }
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+         return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,null,"手机验证码错误");
     }
 
     /**

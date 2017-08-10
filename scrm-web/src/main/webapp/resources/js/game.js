@@ -283,7 +283,10 @@ $(function () {
     $('#J_userFormBtn').click(function (e) {
         e.preventDefault();
         if(verifyForm()) {
-            $('#J_userInfo').submit();
+
+
+
+
         }
     });
 
@@ -298,10 +301,11 @@ $(function () {
             return;
         }
         sendSMS(self);
-        $.ajax(sendAuthCodeUrl, {
-            method: 'POST',
+        $.ajax({
+            url:sendAuthCodeUrl,
+            type: 'POST',
             data: {
-                mobile: mobile
+                loginName: mobile
             },
             dataType: 'json',
             success: function (data) {
@@ -325,6 +329,7 @@ $(function () {
         var name = form.find('input[name="name"]').val();
         var mobile = form.find('input[name="mobile"]').val();
         var authCode = form.find('input[name="authCode"]').val();
+        var deId  =  form.find('input[name="ActWinDetailId"]').val();
         if(!name) {
             showMsg('姓名不能为空');
             return false;
@@ -337,7 +342,30 @@ $(function () {
             showMsg('验证码不能为空');
             return false;
         }
-        return true;
+        $.ajax({
+            url:"/site/update/winRecord",
+            type: 'POST',
+            data: {
+                mobile: mobile,
+                name: name,
+                authCode:authCode,
+                ActWinDetailId:deId
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.code != 200) {
+                    showMsg(data.data);
+                    return false;
+                }
+                showMsg(data.msg);
+                return true;
+            },
+            error: function () {
+                showMsg("系统错误");
+                return false;
+            }
+        })
+
     }
     var time;
 
