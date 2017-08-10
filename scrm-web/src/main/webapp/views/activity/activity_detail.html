@@ -68,7 +68,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">游戏消耗积分:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="游戏消耗积分" class="form-control" maxlength="10" min="1"
+                        <input type="text" placeholder="游戏消耗积分" class="form-control" maxlength="10" id="gameCostlyScore"
                                th:value="${activity.gameCostlyScore}" name="gameCostlyScore" required>
                     </div>
                 </div>
@@ -77,7 +77,8 @@
                     <label class="col-sm-2 control-label">规则简介:</label>
                     <div class="col-sm-8">
                         <div class="ibox-content no-padding">
-                            <input type="hidden" name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}" required>
+                            <input type="hidden" name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}"
+                                   required><span id="ruleDesc_msg" style="color: red"></span>
                             <div style="display: none;" class="js_summerNote" id="ruleDesc"
                                  th:utext="${activity.ruleDesc}">
                             </div>
@@ -88,7 +89,8 @@
                     <label class="col-sm-2 control-label">概率简介:</label>
                     <div class="col-sm-8">
                         <div class="ibox-content no-padding">
-                            <input type="hidden" name="rateDesc" id="rateDescContent" th:value="${activity.rateDesc}" required>
+                            <input type="hidden" name="rateDesc" id="rateDescContent" th:value="${activity.rateDesc}"
+                                   required>
                             <div style="display: none;" class="js_summerNote" id="rateDesc"
                                  th:utext="${activity.rateDesc}">
                             </div>
@@ -97,7 +99,7 @@
                 </div>
                 <div>
                     <div class="col-sm-4 col-sm-offset-2">
-                        <button class="btn btn-sm btn-success" type="submit" onclick="actDetailHandler.screen()">保存
+                        <button class="btn btn-sm btn-success" type="button" onclick="actDetailHandler.screen()">保存
                         </button>
                     </div>
                 </div>
@@ -123,6 +125,7 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script type="text/javascript">
+    var isInteger = /^[0-9]*[1-9][0-9]*$/;
     //初始化时间控件
     $('#actTime').daterangepicker(
         {
@@ -174,32 +177,28 @@
             focus: true,
             lang: 'zh-CN'
         });
-        $("#editSaveInfo").validate({
-
-            ignore: [],  //this is importent
-            rules: {
-                imageUrl: "required",
-                ruleDesc: "required",
-                rateDesc: "required"
-            },
-            messages: {
-                ruleDesc: "请填写内容",
-                rateDesc: "请填写内容"
-            }
-        });
     });
     var actDetailHandler = {
         screen: function () {
+            var gameCostlyScore = $("#gameCostlyScore").val();
+            if (!isInteger.test(gameCostlyScore)) {
+                hot.tip.error("消耗积分必须大于0",2000);
+                return;
+            }
             var str = "<p><br></p>"
             var rateDesc = $("#rateDesc").code()
             var ruleDesc = $("#ruleDesc").code();
             if (ruleDesc == str) {
                 $("input:hidden[name='ruleDesc']").val('');
+                hot.tip.error("规则简介不能为空");
+                return;
             } else {
                 $("input:hidden[name='ruleDesc']").val(ruleDesc);
             }
             if (rateDesc == str) {
                 $("input:hidden[name='rateDesc']").val('');
+                hot.tip.error("概率简介不能为空");
+                return;
             } else {
                 $("input:hidden[name='rateDesc']").val(rateDesc);
             }
