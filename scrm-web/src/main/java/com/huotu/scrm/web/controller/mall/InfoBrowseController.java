@@ -23,11 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class InfoBrowseController extends MallBaseController{
 
-
-    private Log logger = LogFactory.getLog(InfoBrowseController.class);
     @Autowired
     InfoBrowseService infoBrowseService;
-
 
     /**
      * 查询转发记录
@@ -53,7 +50,6 @@ public class InfoBrowseController extends MallBaseController{
     @ResponseBody
     public ApiResult deleteTurn(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
         int count = infoBrowseService.updateInfoTurnRecord(infoBrowseAndTurnSearch);
-        logger.info(count);
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
     }
 

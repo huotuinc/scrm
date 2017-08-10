@@ -38,7 +38,9 @@ public class InfoDetailController extends SiteBaseController {
 
 
     @RequestMapping(value = "/info/infoDetail")
-    public String infoDetail(@ModelAttribute("userId") Long userId, @RequestParam(value = "sourceUserId",required = false) Long sourceUserId, Long infoId, Long customerId, Model model) throws URISyntaxException {
+    public String infoDetail(@ModelAttribute("userId") Long userId,
+                             @RequestParam(value = "sourceUserId",required = false) Long sourceUserId,
+                             Long infoId, Long customerId, Model model) throws URISyntaxException {
         //todo去记录浏览量
         Info info =  infoService.findOneByIdAndCustomerId(infoId,customerId);
         if(!StringUtils.isEmpty(info.getImageUrl())){
@@ -46,15 +48,11 @@ public class InfoDetailController extends SiteBaseController {
         }
         int turnNum = infoBrowseService.countByTurn(infoId);
         model.addAttribute("infoTurnNum", new Integer(turnNum));
-
         int browse = infoBrowseService.countByBrowse(infoId);
         model.addAttribute("browseNum", new Integer(browse));
-
         model.addAttribute("customerId",customerId);
         model.addAttribute("sourceUserId",sourceUserId);
         model.addAttribute("info",info);
-
-
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
@@ -88,7 +86,13 @@ public class InfoDetailController extends SiteBaseController {
      */
     @RequestMapping("/info/turnIn")
     @ResponseBody
-    public void infoTurnInRecord(InfoBrowse infoBrowse, @ModelAttribute("customerId") Long customerId){
+    public void infoTurnInRecord(@RequestParam(value = "infoId") Long infoId,@ModelAttribute("userId") Long userId ,
+                                 @RequestParam(value = "sourceUserId",required = false) Long sourceUserId
+                                 , @ModelAttribute("customerId") Long customerId){
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setSourceUserId(sourceUserId);
+        infoBrowse.setReadUserId(userId);
+        infoBrowse.setInfoId(infoId);
         infoBrowseService.infoTurnInSave(infoBrowse,customerId);
     }
 
