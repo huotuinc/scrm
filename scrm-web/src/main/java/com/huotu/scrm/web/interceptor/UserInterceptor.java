@@ -34,7 +34,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
             //小伙伴且是销售员
 //            request.setAttribute("userId", 1058510);
             //普通会员
-            request.setAttribute("userId",1043079);
+//            request.setAttribute("userId",1043079);
 
             return true;
         }

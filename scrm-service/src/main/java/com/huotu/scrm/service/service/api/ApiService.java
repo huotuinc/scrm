@@ -3,6 +3,8 @@ package com.huotu.scrm.service.service.api;
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Created by helloztt on 2017-07-12.
  */
@@ -24,5 +26,5 @@ public interface ApiService {
      * @param integralType 积分类型
      * @return
      */
-    ApiResult rechargePoint(Long customerId, Long userId, Long integral, IntegralTypeEnum integralType);
+    ApiResult rechargePoint(Long customerId, Long userId, Long integral, IntegralTypeEnum integralType) throws UnsupportedEncodingException;
 }
