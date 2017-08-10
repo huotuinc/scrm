@@ -17,7 +17,7 @@ public interface DayReportService {
     /**
      * 统计某段时间预计积分
      *
-     * @param user 用户
+     * @param user      用户
      * @param beginTime 统计起始日期
      * @param endTime   统计最后日期
      */
@@ -56,6 +56,7 @@ public interface DayReportService {
 
     /**
      * 统计本月的访客量（浏览量）
+     *
      * @param user
      * @return
      */
@@ -63,11 +64,18 @@ public interface DayReportService {
 
     /**
      * 统计本月的转发量
+     *
      * @param user
      * @return
      */
     int getMonthForwardNum(User user);
 
+    /**
+     * 获取本月的预计积分
+     *
+     * @param user
+     * @return
+     */
     int getMonthEstimateScore(User user);
 
 }

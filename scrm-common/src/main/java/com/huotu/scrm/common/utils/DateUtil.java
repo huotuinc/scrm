@@ -54,9 +54,11 @@ public class DateUtil {
             isDay = true;
         }
         if (totalHours > 0) {
+            totalHours = totalHours - totalDays * 24;
             sb.append(totalHours).append("时");
         }
-        if(totalMin > 0 && !isDay){
+        if (totalMin > 0 && !isDay) {
+            totalMin = totalMin - totalHours * 60;
             sb.append(totalMin).append("分");
         }
         sb.append("前");

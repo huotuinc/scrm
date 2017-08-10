@@ -98,7 +98,7 @@ public class BusinessCardController extends SiteBaseController {
         if (user == null) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST , "不存在的用户",null);
         }
-        UserLevel userLevel = userLevelService.findByCustomerIdAndId( user.getCustomerId() , user.getLevelId() );
+        UserLevel userLevel = userLevelService.findByLevelAndCustomerId(user.getLevelId(),user.getCustomerId() );
         if( userLevel ==null || !userLevel.isSalesman()){
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息",null);
         }
@@ -136,7 +136,7 @@ public class BusinessCardController extends SiteBaseController {
         if (user == null) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST , "不存在的用户",null);
         }
-        UserLevel userLevel = userLevelService.findByCustomerIdAndId( user.getCustomerId() , user.getLevelId() );
+        UserLevel userLevel = userLevelService.findByLevelAndCustomerId(user.getLevelId(),user.getCustomerId() );
         if( userLevel ==null || !userLevel.isSalesman()){
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息",null);
         }

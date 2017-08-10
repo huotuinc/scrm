@@ -28,7 +28,7 @@
 </div>
 <p style="height:30px"></p>
 <div class="weui_cells weui_cells_access">
-    <a class="weui_cell" href="/site/extension/getScoreRanking" th:href="@{/site/extension/getScoreRanking}">
+    <a class="weui_cell" href="/site/extension/getScoreRanking" th:href="@{/site/extension/getInfoDetail}">
         <div class="weui_cell_bd weui_cell_primary">
             <p>点击查看明细</p>
         </div>
@@ -39,7 +39,8 @@
     <ul class="dailiren-float-ul ka  pjf_4ge">
         <li>
             <a>
-                <p class="sj" th:unless="${statisticalInformation.dayVisitorRanking}>0">--</p>
+                <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}<0">200名以外</p>
+                <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}==0">--</p>
                 <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}>0"
                    th:text="${statisticalInformation.dayVisitorRanking}"></p>
                 <p>今日UV排名</p>
@@ -92,7 +93,7 @@
                         </li>
                         <li class="weui_media_info_meta weui_media_info_meta_extra"><img
                                 src="../../resources/images/three.png" width="100%"
-                                th:text="${infoModel.releaseTime}+小时前">
+                                th:text="${infoModel.releaseTime}">
                         </li>
                     </ul>
                     <button type="button" class="tuiguang"
