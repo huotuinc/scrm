@@ -26,7 +26,7 @@ public class ActWinServiceTest extends CommonTestBase {
 
     @Test
     public void testActWinDetailService() {
-        Page<ActWinDetail> winDetailList = actWinDetailService.getPageActWinDetail(1, 20);
+        Page<ActWinDetail> winDetailList = actWinDetailService.getPageActWinDetail(1L,1, 20);
         List<ActWinDetail> content = winDetailList.getContent();
         Assert.assertNotNull(content);
     }

@@ -18,16 +18,19 @@
 </head>
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <div class="ibox-title">
+        <h5>活动列表信息</h5>
+    </div>
     <!--list-->
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
                 <div class="ibox-content p-xxs no-top-border">
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-w-m btn-success" type="button"
+                        <button id="btnAddArticle" class="btn btn-success btn-sm" type="button"
                                 onclick="actListHandler.editAct()">新增
                         </button>
-                        <button class="btn btn-w-m btn-success" type="button"
+                        <button class="btn btn-sm btn-success" type="button"
                                 onclick="actListHandler.joinRecord()">中奖记录
                         </button>
                     </div>
@@ -63,37 +66,44 @@
                                        th:text="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"></p>
                                 </td>
                                 <td>
-                                    <span th:if="${activity.openStatus}" style="color: green">启用</span>
+                                    <span th:if="${activity.openStatus}" style="color: green">已启用</span>
                                     <span th:unless="${activity.openStatus}" style="color: red">禁用</span>
                                 </td>
                                 <td>
-                                    <span class="cursor-point"><i class="fa fa-link tooltips" data-placement="top"
-                                                                  data-toggle="tooltip" data-original-title="活动链接"></i></span>
+                                    <span class="cursor-point"><i class="fa tooltips"
+                                                                  data-toggle="tooltip"
+                                                                  data-original-title="活动链接">活动链接</i></span>
                                     &nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-cog tooltips" data-placement="top"
+                                    <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip" data-original-title="奖品设置"
-                                                                  th:onclick="'javascript:actListHandler.setPrize('+${activity.actId}+')'"></i></span>
+                                                                  th:onclick="'javascript:actListHandler.setPrize('+${activity.actId}+')'">奖品设置</i></span>
                                     &nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top"
+                                    <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="编辑"
-                                                                  th:onclick="'javascript:actListHandler.editAct('+${activity.actId}+')'"></i></span>
+                                                                  th:onclick="'javascript:actListHandler.editAct('+${activity.actId}+')'">编辑</i></span>
                                     &nbsp;&nbsp;
                                     <span th:unless="${activity.openStatus}" class="cursor-point"><i
-                                            class="fa fa-edit tooltips" data-placement="top"
+                                            class="fa  tooltips" data-placement="top"
                                             data-toggle="tooltip"
                                             data-original-title="启用"
-                                            th:onclick="'javascript:actListHandler.actEnable('+${activity.actId}+')'"></i></span>
+                                            th:onclick="'javascript:actListHandler.actEnable('+${activity.actId}+')'">启用</i></span>
                                     <span th:if="${activity.openStatus}" class="cursor-point"><i
-                                            class="fa fa-edit tooltips" data-placement="top"
+                                            class="fa  tooltips" data-placement="top"
                                             data-toggle="tooltip"
                                             data-original-title="禁用"
-                                            th:onclick="'javascript:actListHandler.actDisable('+${activity.actId}+')'"></i></span>
+                                            th:onclick="'javascript:actListHandler.actDisable('+${activity.actId}+')'">禁用</i></span>
                                     &nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top"
+                                    <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="删除"
-                                                                  th:onclick="'javascript:actListHandler.deleteAct('+${activity.actId}+','+${activity.openStatus}+',\''+${activity.actTitle}+'\')'"></i></span>
+                                                                  th:onclick="'javascript:actListHandler.deleteAct('+${activity.actId}+','+${activity.openStatus}+',\''+${activity.actTitle}+'\')'">删除</i></span>
+                                    &nbsp;&nbsp;
+                                    <span class="cursor-point"><i
+                                            class="fa  tooltips" data-placement="top"
+                                            data-toggle="tooltip"
+                                            data-original-title="中奖记录"
+                                            th:onclick="'javascript:actListHandler.joinRecord('+${activity.actId}+')'">中奖记录</i></span>
                                 </td>
                             </tr>
                             </tbody>
@@ -164,8 +174,8 @@
         setPrize: function (actId) {
             window.location.href = ajaxUrl + "/prize/list?actId=" + actId;
         },
-        joinRecord: function () {
-            window.location.href = ajaxUrl + "/join/record"
+        joinRecord: function (actId) {
+            window.location.href = ajaxUrl + "/join/record?actId="+actId;
         },
         actDisable: function (actId) {
             hot.ajax(ajaxUrl + "/act/disable", {actId: actId}, function (res) {

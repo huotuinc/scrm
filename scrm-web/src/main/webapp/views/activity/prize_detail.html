@@ -54,7 +54,7 @@
                     <div class="col-sm-3">
                         <input type="hidden" name="prizeImageUrl" th:value="${actPrize.prizeImageUrl}"/>
                         <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
-                        <button class="btn btn-success" id="uploadImage" type="button"
+                        <button class="btn btn-sm btn-success" id="uploadImage"
                                 onclick="prizeEditHandler.uploadFile()">上传图片
                         </button>
                         <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
@@ -91,7 +91,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-5">
-                        <button class="btn btn-primary btn-success" type="button" onclick="prizeEditHandler.screen()">
+                        <button class="btn btn-sm btn-success" type="button" onclick="prizeEditHandler.screen()">
                             保存
                         </button>
                     </div>

@@ -21,12 +21,16 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-title">
+                    <h5>奖品列表信息</h5>
+                </div>
                 <div class="ibox-content p-xxs no-top-border">
                     <div style="text-align:right;">
-                        <button class="btn btn-w-m btn-success" type="button"
+                        <button class="btn btn-sm btn-success" type="button"
                                 th:onclick="'javascript:prizeListHandler.prizeEdit('+${actId}+')'">新增奖品
                         </button>
                     </div>
@@ -67,15 +71,15 @@
                                 </td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top"
+                                    <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="编辑"
-                                                                  th:onclick="'javascript:prizeListHandler.prizeEdit('+${actId}+','+${prize.prizeId}+')'"></i></span>
+                                                                  th:onclick="'javascript:prizeListHandler.prizeEdit('+${actId}+','+${prize.prizeId}+')'">编辑</i></span>
                                     &nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top"
+                                    <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="删除"
-                                                                  th:onclick="'javascript:prizeListHandler.prizeDelete('+${prize.prizeId}+')'"></i></span>
+                                                                  th:onclick="'javascript:prizeListHandler.prizeDelete('+${prize.prizeId}+')'">删除</i></span>
                                 </td>
                             </tr>
                             </tbody>

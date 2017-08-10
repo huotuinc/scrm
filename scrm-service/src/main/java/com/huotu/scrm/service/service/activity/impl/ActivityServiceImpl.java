@@ -43,6 +43,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public void saveActivity(Activity activity) {
+        if(activity.getActId()!=null){
+            Activity one = activityRepository.findOne(activity.getActId());
+            activity.setActPrizes(one.getActPrizes());
+        }
         activityRepository.save(activity);
     }
 
@@ -53,6 +57,4 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setOpenStatus(false);
         activityRepository.save(activity);
     }
-
-
 }
