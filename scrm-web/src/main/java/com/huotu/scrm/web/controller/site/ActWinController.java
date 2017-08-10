@@ -9,6 +9,7 @@
 
 package com.huotu.scrm.web.controller.site;
 
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.activity.ActPrize;
@@ -19,8 +20,12 @@ import com.huotu.scrm.service.model.ActivityStatus;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import com.huotu.scrm.service.service.activity.ActivityService;
+import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
+import com.huotu.scrm.web.service.VerifyService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,12 +34,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Created by montage on 2017/7/17.
@@ -44,6 +51,7 @@ import java.util.Set;
 public class ActWinController extends SiteBaseController {
 
 
+    private Log logger = LogFactory.getLog(ActWinController.class);
     @Autowired
     private StaticResourceService staticResourceService;
     @Autowired
@@ -54,6 +62,10 @@ public class ActWinController extends SiteBaseController {
     private UserService userService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private ApiService apiService;
+    @Autowired
+    private VerifyService verifyService;
 
     @RequestMapping("/activity/index")
     public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
@@ -104,35 +116,41 @@ public class ActWinController extends SiteBaseController {
         }
 
         if (activityUseTimes(activity, user) > 0) { //判读用户是否有抽奖机会
-
             //抽取中奖奖品
             Long prizeId = WinArithmetic(actId);
-
-            // TODO: 2017/8/3  调商城接口扣除积分
-
-            //记入中奖激励
-            ActWinDetail actWinDetail = winPrizeRecord(request.getRemoteAddr(), prizeId, userId, activity);
-            if (actWinDetail != null) {
-                ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
-                if (actPrize.getPrizeCount() <= 0) {
-                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER);
-                }
-                Map<String, Object> data = new HashMap<>();
-                data.put("prizeId", prizeId);
-                data.put("prizeName", actPrize.getPrizeName());
-                data.put("prizeType",actPrize.getPrizeType());
-                data.put("prizeDetailId",actWinDetail.getWinDetailId());
-                try {
-                    String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
-                    data.put("prizeImageUrl", imageUrl);
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-                return ApiResult.resultWith(ResultCodeEnum.SUCCESS, data);
+            //调商城接口扣除积分
+            ApiResult apiResult = null;
+            try {
+                apiResult = apiService.rechargePoint(customerId,userId,0L-activity.getGameCostlyScore(), IntegralTypeEnum.ACTIVE_SCRORE);
+            } catch (UnsupportedEncodingException e) {
+                logger.error("积分扣取失败",e);
+                return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL,"积分扣取失败,请稍后再试",null);
             }
-            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+            if(apiResult.getCode() == 200) {
+                //记入中奖激励
+                ActWinDetail actWinDetail = winPrizeRecord(request.getRemoteAddr(), prizeId, userId, activity);
+                if (actWinDetail != null) {
+                    ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
+                    if (actPrize.getPrizeCount() <= 0) {
+                        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER);
+                    }
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("prizeId", prizeId);
+                    data.put("prizeName", actPrize.getPrizeName());
+                    data.put("prizeType",actPrize.getPrizeType());
+                    data.put("prizeDetailId",actWinDetail.getWinDetailId());
+                    try {
+                        String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
+                        data.put("prizeImageUrl", imageUrl);
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS, data);
+                }
+            }
+            return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL,"积分扣取失败,请稍后再试",null);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "没有抽奖机会");
+        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "您当前抽奖机会已用完",null);
     }
 
     /**
@@ -148,15 +166,14 @@ public class ActWinController extends SiteBaseController {
     @ResponseBody
     private ApiResult winPrizeRecordUpdate(Long userId, Long ActWinDetailId, String name, String mobile,
                                         String authCode){
-
-        // TODO: 2017/8/7  严重验证码是否正确
-
-
-        ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(ActWinDetailId,name,mobile);
-        if (actWinDetail!=null){
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        if (verifyService.verifyVerificationCode(mobile,authCode)){
+            ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(ActWinDetailId,name,mobile);
+            if (actWinDetail!=null){
+                return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+            }
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+         return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,null,"手机验证码错误");
     }
 
     /**

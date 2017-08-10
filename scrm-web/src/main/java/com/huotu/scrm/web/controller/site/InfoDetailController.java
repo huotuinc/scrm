@@ -15,8 +15,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
 
@@ -37,7 +39,10 @@ public class InfoDetailController extends SiteBaseController {
 
 
     @RequestMapping(value = "/info/infoDetail")
-    public String infoDetail(@ModelAttribute("userId") Long userId, Long infoId, Long customerId, Model model) throws URISyntaxException {
+    public String infoDetail(@ModelAttribute("userId") Long userId,
+                             Long infoId, Long customerId, @RequestParam(value = "sourceUserId",required = false) Long sourceUserId,
+                             Model model) throws URISyntaxException {
+        infoTurnInRecord(infoId,userId,sourceUserId,customerId);
         //todo去记录浏览量
         Info info =  infoService.findOneByIdAndCustomerId(infoId,customerId);
         if(!StringUtils.isEmpty(info.getImageUrl())){
@@ -45,13 +50,11 @@ public class InfoDetailController extends SiteBaseController {
         }
         int turnNum = infoBrowseService.countByTurn(infoId);
         model.addAttribute("infoTurnNum", new Integer(turnNum));
-
         int browse = infoBrowseService.countByBrowse(infoId);
         model.addAttribute("browseNum", new Integer(browse));
-
+        model.addAttribute("customerId",customerId);
+        model.addAttribute("sourceUserId",sourceUserId);
         model.addAttribute("info",info);
-
-
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
@@ -78,15 +81,25 @@ public class InfoDetailController extends SiteBaseController {
     }
 
     /**
-     *
-     * @param infoBrowse
+     * 添加浏览记录
+     * @param infoId
+     * @param userId
+     * @param sourceUserId
      * @param customerId
-     * @return
      */
-    @RequestMapping("/info/turnIn")
-    @ResponseBody
-    public void infoTurnInRecord(InfoBrowse infoBrowse, @ModelAttribute("customerId") Long customerId){
-        infoBrowseService.infoTurnInSave(infoBrowse,customerId);
+    private void infoTurnInRecord(Long infoId, Long userId ,
+                                  Long sourceUserId
+                                 ,  Long customerId){
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setSourceUserId(sourceUserId);
+        infoBrowse.setReadUserId(userId);
+        infoBrowse.setInfoId(infoId);
+        try {
+            infoBrowseService.infoTurnInSave(infoBrowse,customerId);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            logger.error("添加积分失败",e);
+        }
     }
 
 

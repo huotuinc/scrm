@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public interface InfoBrowseService {
 
 
     @Transactional
-    void infoTurnInSave(InfoBrowse infoBrowse,Long customerId);
+    void infoTurnInSave(InfoBrowse infoBrowse,Long customerId) throws UnsupportedEncodingException;
 
     /**
      * 查询资讯的转发记入

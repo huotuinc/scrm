@@ -45,5 +45,5 @@ public interface VerifyService {
      * @see com.huotu.verification.service.VerificationCodeService#verify(String, String, VerificationType)
      */
     @Transactional(readOnly = true)
-    void verifyVerificationCode(String mobile, String code);
+    boolean verifyVerificationCode(String mobile, String code);
 }
