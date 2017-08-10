@@ -24,6 +24,8 @@ import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,12 +34,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Created by montage on 2017/7/17.
@@ -47,6 +51,7 @@ import java.util.Set;
 public class ActWinController extends SiteBaseController {
 
 
+    private Log logger = LogFactory.getLog(ActWinController.class);
     @Autowired
     private StaticResourceService staticResourceService;
     @Autowired
@@ -112,7 +117,13 @@ public class ActWinController extends SiteBaseController {
             //抽取中奖奖品
             Long prizeId = WinArithmetic(actId);
             //调商城接口扣除积分
-            ApiResult apiResult = apiService.rechargePoint(customerId,userId,0L-activity.getGameCostlyScore(), IntegralTypeEnum.ACTIVE_SCRORE);
+            ApiResult apiResult = null;
+            try {
+                apiResult = apiService.rechargePoint(customerId,userId,0L-activity.getGameCostlyScore(), IntegralTypeEnum.ACTIVE_SCRORE);
+            } catch (UnsupportedEncodingException e) {
+                logger.error("积分扣取失败",e);
+                return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL,"积分扣取失败,请稍后再试",null);
+            }
             if(apiResult.getCode() == 200) {
                 //记入中奖激励
                 ActWinDetail actWinDetail = winPrizeRecord(request.getRemoteAddr(), prizeId, userId, activity);

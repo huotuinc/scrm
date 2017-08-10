@@ -17,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -40,7 +42,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     private ApiService apiService;
 
     @Override
-    public void infoTurnInSave(InfoBrowse infoBrowse, Long customerId) {
+    public void infoTurnInSave(InfoBrowse infoBrowse, Long customerId) throws UnsupportedEncodingException {
         InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
                 infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());
         if (infoBrowseData == null) {
@@ -82,9 +84,9 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
      * @param infoConfigure
      * @param score
      */
-    private void addMallScore(Long customerId, InfoBrowse infoBrowse, InfoConfigure infoConfigure, int score) {
+    private void addMallScore(Long customerId, InfoBrowse infoBrowse, InfoConfigure infoConfigure, int score) throws UnsupportedEncodingException {
         //没开启
-        UserLevel userLevel = userLevelRepository.findByCustomerIdAndId(customerId, infoBrowse.getSourceUserId());
+        UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(infoBrowse.getSourceUserId(),customerId);
         //转发奖励获取对象 0 会员
         if (infoConfigure.getRewardUserType() == userLevel.getType().ordinal()) {
             //调商城接口扣除积分

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
 
@@ -80,7 +81,7 @@ public class InfoDetailController extends SiteBaseController {
 
     /**
      *
-     * @param infoBrowse
+     * @param
      * @param customerId
      * @return
      */
@@ -93,7 +94,12 @@ public class InfoDetailController extends SiteBaseController {
         infoBrowse.setSourceUserId(sourceUserId);
         infoBrowse.setReadUserId(userId);
         infoBrowse.setInfoId(infoId);
-        infoBrowseService.infoTurnInSave(infoBrowse,customerId);
+        try {
+            infoBrowseService.infoTurnInSave(infoBrowse,customerId);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            logger.error("添加积分失败",e);
+        }
     }
 
 
