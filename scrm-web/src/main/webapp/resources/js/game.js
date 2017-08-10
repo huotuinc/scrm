@@ -49,7 +49,7 @@ $(function () {
                 success: function (res) {
                     game.closeLoadModal();
                     if (res.code !== 200) {
-                        game.errorModals(res.resultMsg);
+                        game.errorModals(res.msg);
                         return;
                     }
                     if (res.data.code <= 0) {

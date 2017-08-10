@@ -135,9 +135,9 @@ public class ActWinController extends SiteBaseController {
                     return ApiResult.resultWith(ResultCodeEnum.SUCCESS, data);
                 }
             }
-            return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL);
+            return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL,"积分扣取失败,请稍后再试",null);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "没有抽奖机会");
+        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "您当前抽奖机会已用完",null);
     }
 
     /**
