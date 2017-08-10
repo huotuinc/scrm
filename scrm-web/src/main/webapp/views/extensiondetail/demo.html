@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/weui.min.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"/>
+    <style>
+        .weui_navbar_hot:after {
+            border: none;
+        }
+        .weui_navbar_hot .weui_navbar_item:after {
+            border: none;
+        }
+        .weui_navbar_hot .weui_navbar_item {
+             border-bottom: 1px solid transparent;
+         }
+        .weui_navbar_hot .weui_navbar_item.weui_bar_item_on {
+            border-bottom: 1px solid red;
+            background-color: transparent;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="weui_tab">
+    <div class="weui_navbar weui_navbar_hot">
+        <a class="weui_navbar_item weui_bar_item_on" href="#tab1">
+            选项一
+        </a>
+        <a class="weui_navbar_item" href="#tab2">
+            选项二
+        </a>
+        <a class="weui_navbar_item" href="#tab3">
+            选项三
+        </a>
+    </div>
+    <div class="weui_tab_bd">
+        <div id="tab1" class="weui_tab_bd_item weui_tab_bd_item_active">
+            <h1>页面一</h1>
+        </div>
+        <div id="tab2" class="weui_tab_bd_item">
+            <h1>页面二</h1>
+        </div>
+        <div id="tab3" class="weui_tab_bd_item">
+            <h1>页面三</h1>
+        </div>
+    </div>
+</div>
+</body>
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.js"></script>
+</html>
