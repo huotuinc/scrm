@@ -21,12 +21,16 @@
 
 <body class="gray-bg">
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-title">
+                    <h5>奖品列表信息</h5>
+                </div>
                 <div class="ibox-content p-xxs no-top-border">
                     <div style="text-align:right;">
-                        <button class="btn btn-w-m btn-success" type="button"
+                        <button class="btn btn-sm btn-success" type="button"
                                 th:onclick="'javascript:prizeListHandler.prizeEdit('+${actId}+')'">新增奖品
                         </button>
                     </div>
@@ -58,7 +62,7 @@
                                     <p style="width: 100%; height: 50px;">
                                     </p>
                                 </td>
-                                <td th:text="${prize.prizeType}"></td>
+                                <td th:text="${prize.prizeType.value}"></td>
                                 <td th:text="${prize.prizeCount}"></td>
                                 <td th:text="${prize.remainCount}"></td>
                                 <td>
@@ -67,15 +71,15 @@
                                 </td>
                                 <td>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-edit tooltips" data-placement="top"
+                                    <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="编辑"
-                                                                  th:onclick="'javascript:prizeListHandler.prizeEdit('+${actId}+','+${prize.prizeId}+')'"></i></span>
+                                                                  th:onclick="'javascript:prizeListHandler.prizeEdit('+${actId}+','+${prize.prizeId}+')'">编辑</i></span>
                                     &nbsp;&nbsp;
-                                    <span class="cursor-point"><i class="fa fa-remove tooltips" data-placement="top"
+                                    <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="删除"
-                                                                  th:onclick="'javascript:prizeListHandler.prizeDelete('+${prize.prizeId}+')'"></i></span>
+                                                                  th:onclick="'javascript:prizeListHandler.prizeDelete('+${prize.prizeId}+')'">删除</i></span>
                                 </td>
                             </tr>
                             </tbody>
@@ -92,6 +96,7 @@
         th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
 <!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
@@ -101,21 +106,21 @@
     var ajaxUrl = "[[@{/mall}]]";
     var prizeListHandler = {
         prizeEdit: function (actId, prizeId) {
-            if (prizeId == null) {
-                var status = $("#status").val();
-                if (status==true) {
-                    hot.tip.error("该活动已启用，不能添加奖品")
-                } else {
-                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId
-                }
+            var status = $("#status").val();
+            if (status=="true") {
+                layer.msg("该活动已启用，不能添加奖品",{icon: 2})
             } else {
-                window.location.href = ajaxUrl + "/prize/detail?actId=" + actId + "&prizeId=" + prizeId;
+                if(prizeId == null){
+                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId;
+                }else{
+                    window.location.href = ajaxUrl + "/prize/detail?actId=" + actId + "&prizeId=" + prizeId;
+                }
             }
         },
         prizeDelete: function (prizeId) {
             var status = $("#status").val();
-            if(status==true){
-                hot.tip.error("该活动已启用，不能删除奖品")
+            if(status=="true"){
+                layer.msg("该活动已启用，不能删除奖品",{icon: 2})
             }else{
                 hot.confirm("确定要删除么？", function () {
                     var requestData = {

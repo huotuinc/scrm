@@ -36,41 +36,40 @@
                         </select>
                     </div>
                 </div>
-                <input th:type="hidden" th:value="${activity.actId}" name="actId"/>
-                <input name="rateDesc" type="hidden">
-                <input name="ruleDesc" type="hidden">
+                <input type="hidden" th:value="${activity.actId}" name="actId"/>
                 <input name="actType" type="hidden">
                 <div class="form-group">
                     <label class="col-sm-3 control-label">活动标题:</label>
                     <div class="col-sm-3">
                         <input type="text" placeholder="活动标题" class="form-control" th:value="${activity.actTitle}"
-                               name="actTitle">
+                               maxlength="30"
+                               name="actTitle" required>
                     </div>
                 </div>
                 <div class="form-group m-r-sm">
                     <label class="col-sm-3 control-label" for="actTime">活动时间:</label>
                     <div class="col-sm-3">
                         <input type="text" id="actTime" class="form-control"
-                               placeholder="开始时间-结束时间" />
+                               placeholder="开始时间-结束时间" required/>
                         <input type="hidden" id="startDate" name="startDate"
                                th:if="${not #lists.isEmpty(activity.startDate)}"
-                               th:value="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}"
+                               th:value="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}" required
                         /> <input type="hidden" id="startDate" name="startDate"
-                                  th:if="${ #lists.isEmpty(activity.startDate)}"
+                                  th:if="${ #lists.isEmpty(activity.startDate)}" required
                     />
                         <input type="hidden" id="endDate" name="endDate"
                                th:if="${not #lists.isEmpty(activity.endDate)}"
-                               th:value="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"
+                               th:value="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}" required
                         /><input type="hidden" id="endDate" name="endDate"
-                                 th:if="${#lists.isEmpty(activity.endDate)}"
+                                 th:if="${#lists.isEmpty(activity.endDate)}" required
                     />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">游戏消耗积分:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="游戏消耗积分" class="form-control"
-                               th:value="${activity.gameCostlyScore}" name="gameCostlyScore">
+                        <input type="text" placeholder="游戏消耗积分" class="form-control" maxlength="10" id="gameCostlyScore"
+                               th:value="${activity.gameCostlyScore}" name="gameCostlyScore" required>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
@@ -78,9 +77,10 @@
                     <label class="col-sm-2 control-label">规则简介:</label>
                     <div class="col-sm-8">
                         <div class="ibox-content no-padding">
+                            <input type="hidden"  name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}"
+                                   >
                             <div style="display: none;" class="js_summerNote" id="ruleDesc"
                                  th:utext="${activity.ruleDesc}">
-
                             </div>
                         </div>
                     </div>
@@ -89,16 +89,17 @@
                     <label class="col-sm-2 control-label">概率简介:</label>
                     <div class="col-sm-8">
                         <div class="ibox-content no-padding">
+                            <input type="hidden" name="rateDesc" id="rateDescContent" th:value="${activity.rateDesc}"
+                                   required>
                             <div style="display: none;" class="js_summerNote" id="rateDesc"
                                  th:utext="${activity.rateDesc}">
-
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
                     <div class="col-sm-4 col-sm-offset-2">
-                        <button class="btn btn-primary btn-success" type="submit" onclick="actDetailHandler.screen()">保存
+                        <button class="btn btn-sm btn-success" type="button" onclick="actDetailHandler.screen()">保存
                         </button>
                     </div>
                 </div>
@@ -124,6 +125,7 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script type="text/javascript">
+    var isInteger = /^[0-9]*[1-9][0-9]*$/;
     //初始化时间控件
     $('#actTime').daterangepicker(
         {
@@ -175,18 +177,45 @@
             focus: true,
             lang: 'zh-CN'
         });
+        $("#actDetail").validate({
+            ignore: [],
+            rules: {
+                ruleDesc: "required",
+                rateDesc: "required",
+                gameCostlyScore: {"digits": true, min: 1}
+
+            },
+            messages: {
+                startDate:"开始时间不能为空",
+                endDate:"结束时间不能为空",
+                ruleDesc: "请填写规则简介",
+                rateDesc: "请填写概率简介",
+                gameCostlyScore: "消耗积分必须大于0且为整数",
+                actTitle: "活动标题不能为空"
+            }
+        });
     });
     var actDetailHandler = {
         screen: function () {
+            var str = "<p><br></p>"
             var rateDesc = $("#rateDesc").code()
             var ruleDesc = $("#ruleDesc").code();
+            if (ruleDesc == str) {
+                $("#ruleDescContent").val("");
+            } else {
+                $("#ruleDescContent").val(ruleDesc);
+            }
+            if (rateDesc == str) {
+                $("#rateDescContent").val("");
+            } else {
+                $("#rateDescContent").val(rateDesc);
+            }
             var actType = $("#actType").val();
             if (actType == 0) {
                 $("input:hidden[name='actType']").val("ACT_TURNTABLE");
             }
-            $("input:hidden[name='rateDesc']").val(rateDesc);
-            $("input:hidden[name='ruleDesc']").val(ruleDesc);
-            $("#actDetail").submit();
+            $("#actDetail").valid();
+         $("#actDetail").submit();
         }
     }
 </script>

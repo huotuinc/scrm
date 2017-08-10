@@ -24,4 +24,8 @@ import java.util.List;
 @Repository
 public interface ActWinDetailRepository extends JpaRepository<ActWinDetail, Long>, JpaSpecificationExecutor<ActWinDetail> {
     List<ActWinDetail> findByUserId(Long userId);
+
+//    @Query("select t from ActWinDetail t where t.prize.")
+//    Page<ActWinDetail> findByAct();
+
 }

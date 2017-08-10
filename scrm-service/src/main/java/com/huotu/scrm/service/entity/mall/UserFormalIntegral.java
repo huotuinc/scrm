@@ -51,7 +51,6 @@ public class UserFormalIntegral {
     private Integer score;
 
     /**
-     * todo 需要确认枚举
      * 状态(1.购买商品获得，还有其他的)
      * 121:积分提现
      */
