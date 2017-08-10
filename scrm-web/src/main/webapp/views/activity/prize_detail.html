@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品名称:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品名称" class="form-control" name="prizeName"
+                        <input type="text" placeholder="奖品名称" class="form-control" name="prizeName" maxlength="30"
                                th:value="${actPrize.prizeName}" required>
                     </div>
                 </div>
@@ -64,26 +64,26 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品数量:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品数量" class="form-control" id="remainCount" name="remainCount" required
+                        <input type="text" placeholder="奖品数量" class="form-control" id="remainCount" name="remainCount" required maxlength="10"
                                th:value="${actPrize.remainCount}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">中奖概率:</label>
                     <div class="col-sm-3">
-                        <input type="hidden" id="winRate" th:if="${actPrize.activity.openStatus}" placeholder="中奖概率"
+                        <input type="hidden" id="winRate" th:if="${actPrize.activity.openStatus}" placeholder="中奖概率" maxlength="10"
                                th:value="${actPrize.winRate}" name="winRate" required
                                class="form-control">
                         <span th:if="${actPrize.activity.openStatus}" th:text="${actPrize.winRate}+'%'"></span>
                         <input th:unless="${actPrize.activity.openStatus}" type="text" placeholder="中奖概率"
-                               th:value="${actPrize.winRate}" name="winRate" id="winRate" required
+                               th:value="${actPrize.winRate}" name="winRate" id="winRate" required maxlength="10"
                                class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">排序字段:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="排序字段" id="sort" class="form-control" th:value="${actPrize.sort}" required
+                        <input type="text" placeholder="排序字段" id="sort" class="form-control" th:value="${actPrize.sort}" required maxlength="10"
                                name="sort">
                     </div>
                 </div>
