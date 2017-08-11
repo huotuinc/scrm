@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,20 +15,6 @@ import java.util.List;
  * Created by luohaibo on 2017/7/11.
  */
 public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, JpaSpecificationExecutor<InfoBrowse> {
-
-
-    /**
-     * 返回今日转发数量
-     *
-     * @param sourceId
-     * @param browseTime
-     * @return
-     */
-    @Query("select t.infoId from InfoBrowse t where t.sourceUserId=?1 " +
-            "GROUP BY t.sourceUserId,t.infoId HAVING MIN(t.browseTime)>=?2 " +
-            "AND MIN(t.browseTime)<?3")
-    List<InfoBrowse> countByInfoIdAndSourceUserId(Long sourceId, LocalDate browseTime, LocalDate bigTime);
-
 
     //查找资讯
     InfoBrowse findOneByInfoIdAndSourceUserIdAndReadUserId(Long infoId, Long sourceId, Long readId);
