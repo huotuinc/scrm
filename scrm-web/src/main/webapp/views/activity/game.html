@@ -28,7 +28,7 @@
 <body th:attr="activeId=${active.actId}" activeId="2">
 <section id="app">
 
-    <a class="record" href="recordList.html"></a>
+    <a class="record" href="site_prize_list.html" th:href="@{/site/act/prizeList(actId=${active.actId})}"></a>
 
     <div class="banner">
         <img src="../../resources/images/theme.png" th:src="@{../../resources/images/theme.png}">
@@ -111,7 +111,7 @@
     <div class="user-info-dialog">
         <div class="user-info-wrap">
             <i class="icon close"></i>
-            <form action="#" id="J_userInfo" th:action="@{/site/update/winRecord}">
+            <form action="#" id="J_userInfo">
                 <input type="hidden" value="1" th:value="-1" name="ActWinDetailId">
                 <div class="form-group form-user">
                     <label>

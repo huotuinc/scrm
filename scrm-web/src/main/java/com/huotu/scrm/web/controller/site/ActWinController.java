@@ -8,7 +8,6 @@
  */
 
 package com.huotu.scrm.web.controller.site;
-
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
@@ -17,7 +16,6 @@ import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.ActivityStatus;
-import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.api.ApiService;
@@ -33,16 +31,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.logging.Logger;
+import java.util.*;
+
 
 /**
  * Created by montage on 2017/7/17.
@@ -55,8 +49,6 @@ public class ActWinController extends SiteBaseController {
     private Log logger = LogFactory.getLog(ActWinController.class);
     @Autowired
     private StaticResourceService staticResourceService;
-    @Autowired
-    private ActPrizeService actPrizeService;
     @Autowired
     private ActWinDetailService actWinDetailService;
     @Autowired
@@ -73,7 +65,6 @@ public class ActWinController extends SiteBaseController {
 
         //查询用户积分
         User user = userService.getByIdAndCustomerId(userId, customerId);
-        double score = user.getUserIntegral() - user.getLockedIntegral();
         //获取奖品
         Activity activity = activityService.findByActId(actId);
         activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
@@ -94,7 +85,10 @@ public class ActWinController extends SiteBaseController {
 
     /**
      * 参加抽奖活动
-     *
+     * @param request
+     * @param userId
+     * @param actId
+     * @param customerId
      * @return
      */
     @RequestMapping(value = "/join/act")
@@ -120,7 +114,7 @@ public class ActWinController extends SiteBaseController {
             //抽取中奖奖品
             Long prizeId = WinArithmetic(actId);
             //调商城接口扣除积分
-            ApiResult apiResult = null;
+            ApiResult apiResult;
             try {
                 apiResult = apiService.rechargePoint(customerId,userId,0L-activity.getGameCostlyScore(), IntegralTypeEnum.ACTIVE_SCRORE);
             } catch (UnsupportedEncodingException e) {
@@ -184,10 +178,23 @@ public class ActWinController extends SiteBaseController {
      * @param actId
      * @return
      */
-    private String priezeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId){
+    @RequestMapping(value = "/act/prizeList")
+    public String prizeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId,Model model){
 
+        List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId,userId);
+        List<ActPrize> actPrizes = new ArrayList<>();
 
-        return null;
+        list.stream().forEach(p->{
+            ActPrize actPrize = p.getPrize();
+            try {
+                actPrize.setPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+            actPrizes.add(actPrize);
+        });
+        model.addAttribute("winRecord",actPrizes);
+        return "activity/site_prize_list";
     }
 
 

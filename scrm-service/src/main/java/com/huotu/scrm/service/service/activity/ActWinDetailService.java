@@ -53,4 +53,13 @@ public interface ActWinDetailService {
     @Transactional
     ActWinDetail updateActWinDetail(Long winDetailID, String name, String mobile);
 
+
+    /**
+     * 获取某人某个活动的中奖记录
+     * @param actId
+     * @param userId
+     * @return
+     */
+    List<ActWinDetail> getActWinDetailRecordByActIdAndUserId(Long actId, Long userId);
+
 }

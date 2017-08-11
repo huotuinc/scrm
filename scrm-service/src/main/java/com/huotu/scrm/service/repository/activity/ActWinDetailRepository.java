@@ -10,8 +10,10 @@
 package com.huotu.scrm.service.repository.activity;
 
 import com.huotu.scrm.service.entity.activity.ActWinDetail;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -25,7 +27,13 @@ import java.util.List;
 public interface ActWinDetailRepository extends JpaRepository<ActWinDetail, Long>, JpaSpecificationExecutor<ActWinDetail> {
     List<ActWinDetail> findByUserId(Long userId);
 
-//    @Query("select t from ActWinDetail t where t.prize.")
-//    Page<ActWinDetail> findByAct();
+
+    /**
+     * 获取某个人某个活动的所以中奖记录
+     * @return
+     */
+    List<ActWinDetail> findAllByActIdAndUserId(Long actId,Long userId);
+
+
 
 }
