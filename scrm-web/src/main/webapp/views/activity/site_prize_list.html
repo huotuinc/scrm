@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en" class="yellow-bg">
 <head>
     <meta name="viewport"
           content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
@@ -41,27 +41,46 @@
     }
 </style>
 <body>
-<div>
+<div th:remove="all-but-first">
+    <div class="weui_cells weui_cells_access " th:each="actPrize ,infoState: ${winRecords}">
+
+        <a class="weui_cell" href="javascript:void(0);">
+            <div class="weui_cell_bd weui_cell_primary">
+                <img th:src="${actPrize.prizeImageUrl}" src="../../resources/images/nr.jpg"  class="imgbox">
+                <div class="title">
+                <p class="titlename" th:text="${actPrize.prizeName}">标题标题标题标题标题标题标题标题</p>
+                <p class="time">2017.01.01</p>
+                </div>
+            </div>
+            <div class="weui_cell_ft" style="display:none"> </div>
+        </a>
+    </div>
     <div class="weui_cells weui_cells_access ">
 
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <img src="../../resources/images/nr.jpg"  class="imgbox">
                 <div class="title">
-                <p class="titlename">标题标题标题标题标题标题标题标题</p>
-                <p class="time">2017.01.01</p>
+                    <p class="titlename">标题标题标题标题标题标题标题标题</p>
+                    <p class="time">2017.01.01</p>
                 </div>
             </div>
             <div class="weui_cell_ft" style="display:none"> </div>
         </a>
-
     </div>
+    <div class="weui_cells weui_cells_access ">
 
-
-
-
-
-
+        <a class="weui_cell" href="javascript:void(0);">
+            <div class="weui_cell_bd weui_cell_primary">
+                <img src="../../resources/images/nr.jpg"  class="imgbox">
+                <div class="title">
+                    <p class="titlename">标题标题标题标题标题标题标题标题</p>
+                    <p class="time">2017.01.01</p>
+                </div>
+            </div>
+            <div class="weui_cell_ft" style="display:none"> </div>
+        </a>
+    </div>
 
 </div>
 

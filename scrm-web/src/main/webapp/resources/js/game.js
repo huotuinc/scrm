@@ -342,6 +342,7 @@ $(function () {
             showMsg('验证码不能为空');
             return false;
         }
+
         $.ajax({
             url:"/site/update/winRecord",
             type: 'POST',
@@ -358,7 +359,10 @@ $(function () {
                     return false;
                 }
                 showMsg(data.msg);
-                return true;
+                setTimeout(function () {
+                    $('#J_addTel').hide();
+                    game.toggleFilter();
+                },3000);
             },
             error: function () {
                 showMsg("系统错误");

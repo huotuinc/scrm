@@ -42,14 +42,14 @@ public class ActPrize {
     private String prizeName;
 
     /**
-     * 奖品图片
+     * 奖品图片相对地址
      */
     @Column(name = "Prize_Image_Url")
     private String prizeImageUrl;
 
 
     /**
-     * 奖品详细图片
+     * 奖品图片详细地址
      */
     @Transient
     private String mallPrizeImageUrl;

@@ -16,6 +16,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 /**
  * Created by montage on 2017/7/12.
@@ -24,6 +26,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ActWinDetailRepository extends JpaRepository<ActWinDetail, Long>, JpaSpecificationExecutor<ActWinDetail> {
 
+
+    /**
+     * 获取某个人某个活动的所以中奖记录
+     * @return
+     */
+    List<ActWinDetail> findAllByActIdAndUserId(Long actId, Long userId);
+
     Page<ActWinDetail> findAllByActId(Long actId, Pageable pageable);
+
+
 
 }

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -89,5 +90,12 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
 
         }
         return null;
+    }
+
+    @Override
+    public List<ActWinDetail> getActWinDetailRecordByActIdAndUserId(Long actId, Long userId) {
+
+
+        return actWinDetailRepository.findAllByActIdAndUserId(actId,userId);
     }
 }
