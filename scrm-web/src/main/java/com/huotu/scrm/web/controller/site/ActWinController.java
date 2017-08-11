@@ -193,7 +193,7 @@ public class ActWinController extends SiteBaseController {
             }
             actPrizes.add(actPrize);
         });
-        model.addAttribute("winRecord",actPrizes);
+        model.addAttribute("winRecords",actPrizes);
         return "activity/site_prize_list";
     }
 
