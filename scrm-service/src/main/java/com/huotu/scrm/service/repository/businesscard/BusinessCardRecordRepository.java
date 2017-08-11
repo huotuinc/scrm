@@ -2,10 +2,8 @@ package com.huotu.scrm.service.repository.businesscard;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.time.LocalDateTime;
 
 /**
  * 名片关注记录表
@@ -62,15 +60,5 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      */
     List<BusinessCardRecord> findByCustomerIdAndFollowId(Long customerId, Long followId);
 
-    /**
-     * 根据商户查询某段时间内的所有被关注用户
-     *
-     * @param customerId
-     * @param beginTime
-     * @param endTime
-     * @return
-     */
-    @Query("select distinct (t.userId) from BusinessCardRecord t where t.customerId=?1 and t.followDate>=?2 and t.followDate<?3")
-    List<Long> findByCustomerIdAndFollowDate(Long customerId, LocalDateTime beginTime, LocalDateTime endTime);
 
 }

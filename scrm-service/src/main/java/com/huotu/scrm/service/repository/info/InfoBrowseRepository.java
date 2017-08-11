@@ -20,6 +20,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
 
     /**
      * 返回今日转发数量
+     *
      * @param sourceId
      * @param browseTime
      * @return
@@ -108,6 +109,15 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
             "group by t.infoId,t.sourceUserId " +
             "having min (t.browseTime)>=?1 and min (t.browseTime)<?2")
     List<InfoBrowse> findForwardNumBySourceUserId(LocalDateTime beginTime, LocalDateTime endTime, Long userId);
+
+    /**
+     * 查询某个用户转发的咨询
+     *
+     * @param userId
+     * @return
+     */
+    @Query("select distinct t.infoId from InfoBrowse t where t.sourceUserId =?1")
+    List<Long> findUserForwardInfo(Long userId);
 
 
     /**

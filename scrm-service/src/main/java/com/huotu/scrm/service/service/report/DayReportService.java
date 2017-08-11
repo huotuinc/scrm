@@ -32,11 +32,6 @@ public interface DayReportService {
     int getCumulativeScore(User user);
 
     /**
-     * 定时保存每日统计信息
-     */
-    void saveDayReportScheduled();
-
-    /**
      * 统计某用户某个时间段的转发咨询奖励积分
      *
      * @param user
@@ -77,5 +72,7 @@ public interface DayReportService {
      * @return
      */
     int getMonthEstimateScore(User user);
+
+    void saveDayVisitorScore();
 
 }

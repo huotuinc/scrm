@@ -1,13 +1,15 @@
 package com.huotu.scrm.service.service;
 
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
+import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.service.CommonTestBase;
-import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
+import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.report.DayReportService;
+import org.apache.http.HttpStatus;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * Created by hxh on 2017-07-14.
@@ -18,16 +20,19 @@ public class DayReportServiceTest extends CommonTestBase {
     private DayReportService dayReportService;
     @Autowired
     private DayReportRepository dayReportRepository;
+    @Autowired
+    private ApiService apiService;
 
     /**
-     * 测试保存每日统计信息
+     * 测试保存每日资讯浏览奖励积分测试
      */
     @Test
-    public void testDayReportService() {
-        dayReportService.saveDayReport();
-        List<DayReport> all = dayReportRepository.findAll();
-        all.forEach(p -> {
-            System.out.println(p.toString());
-        });
+    public void testDaySaveVisitorScore() throws Exception {
+        Long customerId = 4421L;
+        Long userId = 1058823L;
+        Long integral = 100L;
+        ApiResult result = apiService.rechargePoint(customerId, userId, integral, IntegralTypeEnum.BROWSE_INFO);
+        Assert.assertNotNull(result);
+        Assert.assertEquals(HttpStatus.SC_OK, result.getCode());
     }
 }

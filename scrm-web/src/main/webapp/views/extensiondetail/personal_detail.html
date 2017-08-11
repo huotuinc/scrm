@@ -1,262 +1,257 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="description" content=""/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
-    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
-
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/weui.min.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.css">
     <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"/>
-    <title>推广明细</title>
+    <style>
+        .weui_navbar_hot:after {
+            border: none;
+        }
+
+        .weui_navbar_hot .weui_navbar_item:after {
+            border: none;
+        }
+
+        .weui_navbar_hot .weui_navbar_item {
+            border-bottom: 1px solid transparent;
+        }
+
+        .weui_navbar_hot .weui_navbar_item.weui_bar_item_on {
+            border-bottom: 1px solid red;
+            background-color: transparent;
+            color: red;
+        }
+    </style>
 </head>
-<body class="grbg">
-<div class="bd">
-    <ul id="myTab" class="nav nav-tabs sl-float-ul ka  pjf_5ge custom-paixu">
-        <li class="on">
-            <a href="#ranking" data-toggle="tab">
-                排名
-            </a>
-        </li>
-        <li>
-            <a href="#uv" data-toggle="tab">
-                UV
-            </a>
-        </li>
-        <li>
-            <a href="#score" data-toggle="tab">
-                积分
-            </a>
-        </li>
-        <li th:if="${status}">
-            <a href="#follow" data-toggle="tab">
-                关注
-            </a>
-        </li>
-    </ul>
-</div>
-<div id="myTabContent" class="tab-content">
-    <div class="tab-pane fade in active" id="ranking">
-        <div class="f-bigbox">
-            <div class="fa-bigbox">
-                <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                    <p class="phone">今日积分排名（位）</p>
-                    <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}<0">200名以外</p>
-                    <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}==0">--</p>
-                    <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}>0"
-                       th:text="${dayScoreRankingInfo.dayScoreRanking}"></p>
-                </div>
-                <p class="f-rgo" style="display:none">
-                    <a href="">
-                        <img style="width:30px;" src="../../resources/images/szsz.png">
-                    </a>
-                </p>
-                <p style="clear:both"></p>
-            </div>
-        </div>
-        <div class="dlrzx">
-            <div class=" blue">
-                <div class="dailiren-s-ka">
-                    <ul class="dailiren-float-ul ka  pjf_3ge ">
-                        <li>
-                            <a>
-                                <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}>0"
-                                   th:text="${dayScoreRankingInfo.monthScoreRanking}"></p>
-                                <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}==0">--</p>
-                                <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}<0">--</p>
-                                <p>本月积分排名（位）</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a style="border-left: 1px solid #57acf0;">
-                                <p class="sj" th:if="${dayScoreRankingInfo.highestMonthScoreRanking}>0"
-                                   th:text="${dayScoreRankingInfo.highestMonthScoreRanking}"></p>
-                                <p class="sj" th:if="${dayScoreRankingInfo.highestMonthScoreRanking}==0">--</p>
-                                <p class="sj" th:if="${dayScoreRankingInfo.highestMonthScoreRanking}<0">200名以外</p>
-                                <p>最高月积分排名（位）</p>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="weui_cells weui_cells_access"
-                 th:each="monthRanking:${dayScoreRankingInfo.monthScoreRankingList}">
-                <a class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p th:text="${monthRanking.month}+'排名'"></p>
-                    </div>
-                    <div class="weui_cell_ft" th:text="${monthRanking.data}+'位'" th:if="${monthRanking.data}>0"></div>
-                    <div class="weui_cell_ft" th:if="${monthRanking.data}==0">--</div>
-                    <div class="weui_cell_ft" th:if="${monthRanking.data}<0">200名以外</div>
-                </a>
-            </div>
-        </div>
+<body>
+<div class="weui_tab">
+    <div class="weui_navbar weui_navbar_hot">
+        <a class="weui_navbar_item weui_bar_item_on" href="#ranking">
+            排名
+        </a>
+        <a class="weui_navbar_item" href="#uv">
+            UV
+        </a>
+        <a class="weui_navbar_item" href="#score">
+            积分
+        </a>
+        <a th:if="${status}" class="weui_navbar_item" href="#follow">
+            关注
+        </a>
     </div>
-    <div class="tab-pane fade" id="uv">
-        <div class="f-bigbox">
-            <div class="fa-bigbox">
-                <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                    <p class="phone">今日UV（位）</p>
-                    <p style="color: #fff; font-size: 30px;" th:text="${dayVisitorNumInfo.dayVisitorBum}">10</p>
+    <div class="weui_tab_bd">
+        <div id="ranking" class="weui_tab_bd_item weui_tab_bd_item_active">
+            <div class="f-bigbox">
+                <div class="fa-bigbox">
+                    <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
+                        <p class="phone">今日积分排名（位）</p>
+                        <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}<0">
+                            200名以外</p>
+                        <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}==0">
+                            --</p>
+                        <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}>0"
+                           th:text="${dayScoreRankingInfo.dayScoreRanking}"></p>
+                    </div>
+                    <p class="f-rgo" style="display:none">
+                        <a href="">
+                            <img style="width:30px;" src="../../resources/images/szsz.png">
+                        </a>
+                    </p>
+                    <p style="clear:both"></p>
                 </div>
-                <p class="f-rgo" style="display:none">
-                    <a href="">
-                        <img style="width:30px;" src="../../resources/images/szsz.png">
+            </div>
+            <div class="dlrzx">
+                <div class=" blue">
+                    <div class="dailiren-s-ka">
+                        <ul class="dailiren-float-ul ka  pjf_3ge ">
+                            <li>
+                                <a>
+                                    <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}>0"
+                                       th:text="${dayScoreRankingInfo.monthScoreRanking}"></p>
+                                    <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}==0">--</p>
+                                    <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}<0">--</p>
+                                    <p>本月积分排名（位）</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a style="border-left: 1px solid #57acf0;">
+                                    <p class="sj" th:if="${dayScoreRankingInfo.highestMonthScoreRanking}>0"
+                                       th:text="${dayScoreRankingInfo.highestMonthScoreRanking}"></p>
+                                    <p class="sj" th:if="${dayScoreRankingInfo.highestMonthScoreRanking}==0">--</p>
+                                    <p class="sj" th:if="${dayScoreRankingInfo.highestMonthScoreRanking}<0">200名以外</p>
+                                    <p>最高月积分排名（位）</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="weui_cells weui_cells_access"
+                     th:each="monthRanking:${dayScoreRankingInfo.monthScoreRankingList}">
+                    <a class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p th:text="${monthRanking.month}+'排名'"></p>
+                        </div>
+                        <div class="weui_cell_ft" th:text="${monthRanking.data}+'位'"
+                             th:if="${monthRanking.data}>0"></div>
+                        <div class="weui_cell_ft" th:if="${monthRanking.data}==0">--</div>
+                        <div class="weui_cell_ft" th:if="${monthRanking.data}<0">200名以外</div>
                     </a>
-                </p>
-                <p style="clear:both"></p>
+                </div>
             </div>
         </div>
-        <div class="dlrzx">
-            <div class=" blue">
-                <div class="dailiren-s-ka">
-                    <ul class="dailiren-float-ul ka  pjf_3ge ">
-                        <li>
-                            <a>
-                                <p class="sj" th:text="${dayVisitorNumInfo.monthVisitorNum}"></p>
-                                <p>本月UV（位）</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a style="border-left: 1px solid #57acf0;">
-                                <p class="sj" th:text="${dayVisitorNumInfo.highestMonthVisitorNum}"></p>
-                                <p>历史最最高月UV（位）</p>
-                            </a>
-                        </li>
+        <div id="uv" class="weui_tab_bd_item">
+            <div class="f-bigbox">
+                <div class="fa-bigbox">
+                    <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
+                        <p class="phone">今日UV（位）</p>
+                        <p style="color: #fff; font-size: 30px;" th:text="${dayVisitorNumInfo.dayVisitorBum}">10</p>
+                    </div>
+                    <p class="f-rgo" style="display:none">
+                        <a href="">
+                            <img style="width:30px;" src="../../resources/images/szsz.png">
+                        </a>
+                    </p>
+                    <p style="clear:both"></p>
+                </div>
+            </div>
+            <div class="dlrzx">
+                <div class=" blue">
+                    <div class="dailiren-s-ka">
+                        <ul class="dailiren-float-ul ka  pjf_3ge ">
+                            <li>
+                                <a>
+                                    <p class="sj" th:text="${dayVisitorNumInfo.monthVisitorNum}"></p>
+                                    <p>本月UV（位）</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a style="border-left: 1px solid #57acf0;">
+                                    <p class="sj" th:text="${dayVisitorNumInfo.highestMonthVisitorNum}"></p>
+                                    <p>历史最最高月UV（位）</p>
+                                </a>
+                            </li>
 
-                    </ul>
-                </div>
-            </div>
-            <div class="weui_cells weui_cells_access"
-                 th:each="monthVisitorInfo:${dayVisitorNumInfo.monthVisitorNumList}">
-                <a class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p th:text="${monthVisitorInfo.month}"></p>
+                        </ul>
                     </div>
-                    <div class="weui_cell_ft" th:text="${monthVisitorInfo.data}+'位'"></div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="tab-pane fade" id="score">
-        <div class="f-bigbox">
-            <div class="fa-bigbox">
-                <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                    <p class="phone">今日预计积分（分）</p>
-                    <p style="color: #fff; font-size: 30px;" th:text="${dayScoreInfo.dayScore}">10</p>
                 </div>
-                <p class="f-rgo" style="display:none">
-                    <a href="">
-                        <img style="width:30px;" src="../../resources/images/szsz.png">
+                <div class="weui_cells weui_cells_access"
+                     th:each="monthVisitorInfo:${dayVisitorNumInfo.monthVisitorNumList}">
+                    <a class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p th:text="${monthVisitorInfo.month}"></p>
+                        </div>
+                        <div class="weui_cell_ft" th:text="${monthVisitorInfo.data}+'位'"></div>
                     </a>
-                </p>
-                <p style="clear:both"></p>
+                </div>
             </div>
         </div>
-        <div class="dlrzx">
-            <div class=" blue">
-                <div class="dailiren-s-ka">
-                    <ul class="dailiren-float-ul ka  pjf_3ge ">
-                        <li>
-                            <a>
-                                <p class="sj" th:text="${dayScoreInfo.lastDayScore}"></p>
-                                <p>昨日积分（分）</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a style="border-left: 1px solid #57acf0;">
-                                <p class="sj" th:text="${dayScoreInfo.accumulateScore}">5</p>
-                                <p>历史累计（分）</p>
-                            </a>
-                        </li>
+        <div id="score" class="weui_tab_bd_item">
+            <div class="f-bigbox">
+                <div class="fa-bigbox">
+                    <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
+                        <p class="phone">今日预计积分（分）</p>
+                        <p style="color: #fff; font-size: 30px;" th:text="${dayScoreInfo.dayScore}">10</p>
+                    </div>
+                    <p class="f-rgo" style="display:none">
+                        <a href="">
+                            <img style="width:30px;" src="../../resources/images/szsz.png">
+                        </a>
+                    </p>
+                    <p style="clear:both"></p>
+                </div>
+            </div>
+            <div class="dlrzx">
+                <div class=" blue">
+                    <div class="dailiren-s-ka">
+                        <ul class="dailiren-float-ul ka  pjf_3ge ">
+                            <li>
+                                <a>
+                                    <p class="sj" th:text="${dayScoreInfo.lastDayScore}"></p>
+                                    <p>昨日积分（分）</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a style="border-left: 1px solid #57acf0;">
+                                    <p class="sj" th:text="${dayScoreInfo.accumulateScore}">5</p>
+                                    <p>历史累计（分）</p>
+                                </a>
+                            </li>
 
-                    </ul>
-                </div>
-            </div>
-            <div class="weui_cells weui_cells_access" th:each="monthScoreInfo:${dayScoreInfo.monthScoreList}">
-                <a class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p th:text="${monthScoreInfo.month}"></p>
+                        </ul>
                     </div>
-                    <div class="weui_cell_ft" th:text="${monthScoreInfo.data}+'分'"></div>
-                </a>
-            </div>
-        </div>
-    </div>
-    <div th:if="${status}" class="tab-pane fade" id="follow">
-        <div class="f-bigbox">
-            <div class="fa-bigbox">
-                <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                    <p class="phone">今日关注人数（位）</p>
-                    <p style="color: #fff; font-size: 30px;" th:text="${dayFollowNumInfo.dayFollowNum}"></p>
                 </div>
-                <p class="f-rgo" style="display:none">
-                    <a href="">
-                        <img style="width:30px;" src="../../resources/images/szsz.png">
+                <div class="weui_cells weui_cells_access" th:each="monthScoreInfo:${dayScoreInfo.monthScoreList}">
+                    <a class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p th:text="${monthScoreInfo.month}"></p>
+                        </div>
+                        <div class="weui_cell_ft" th:text="${monthScoreInfo.data}+'分'"></div>
                     </a>
-                </p>
-                <p style="clear:both"></p>
-            </div>
-        </div>
-        <div class="dlrzx">
-            <div class=" blue">
-                <div class="dailiren-s-ka">
-                    <ul class="dailiren-float-ul ka  pjf_3ge ">
-                        <li>
-                            <a>
-                                <p class="sj" th:text="${dayFollowNumInfo.followRanking}"
-                                   th:if="${dayFollowNumInfo.followRanking}>0"></p>
-                                <p class="sj" th:if="${dayFollowNumInfo.followRanking}==0">--</p>
-                                <p class="sj" th:if="${dayFollowNumInfo.followRanking}<0">200名以外</p>
-                                <p>当前排名</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a style="border-left: 1px solid #57acf0;">
-                                <p class="sj" th:text="${dayFollowNumInfo.highestFollowRanking}"
-                                   th:if="${dayFollowNumInfo.highestFollowRanking}>0"></p>
-                                <p class="sj" th:unless="${dayFollowNumInfo.highestFollowRanking}>0">--</p>
-                                <p>最高月排名</p>
-                            </a>
-                        </li>
-                    </ul>
                 </div>
             </div>
-            <div class="weui_cells weui_cells_access"
-                 th:each="monthFollowInfo:${dayFollowNumInfo.monthFollowRankingList}">
-                <a class="weui_cell">
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <p th:text="${monthFollowInfo.month}+'排名'"></p>
+        </div>
+        <div th:if="${status}" id="follow" class="weui_tab_bd_item">
+            <div class="f-bigbox">
+                <div class="fa-bigbox">
+                    <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
+                        <p class="phone">今日关注人数（位）</p>
+                        <p style="color: #fff; font-size: 30px;" th:text="${dayFollowNumInfo.dayFollowNum}"></p>
                     </div>
-                    <div class="weui_cell_ft" th:text="${monthFollowInfo.data}+'位'"
-                         th:if="${monthFollowInfo.data}>0"></div>
-                    <div class="weui_cell_ft" th:if="${monthFollowInfo.data}==0">--</div>
-                    <div class="weui_cell_ft" th:if="${monthFollowInfo.data}<0">200名以外</div>
-                </a>
+                    <p class="f-rgo" style="display:none">
+                        <a href="">
+                            <img style="width:30px;" src="../../resources/images/szsz.png">
+                        </a>
+                    </p>
+                    <p style="clear:both"></p>
+                </div>
+            </div>
+            <div class="dlrzx">
+                <div class=" blue">
+                    <div class="dailiren-s-ka">
+                        <ul class="dailiren-float-ul ka  pjf_3ge ">
+                            <li>
+                                <a>
+                                    <p class="sj" th:text="${dayFollowNumInfo.followRanking}"
+                                       th:if="${dayFollowNumInfo.followRanking}>0"></p>
+                                    <p class="sj" th:if="${dayFollowNumInfo.followRanking}==0">--</p>
+                                    <p class="sj" th:if="${dayFollowNumInfo.followRanking}<0">200名以外</p>
+                                    <p>当前排名</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a style="border-left: 1px solid #57acf0;">
+                                    <p class="sj" th:text="${dayFollowNumInfo.highestFollowRanking}"
+                                       th:if="${dayFollowNumInfo.highestFollowRanking}>0"></p>
+                                    <p class="sj" th:unless="${dayFollowNumInfo.highestFollowRanking}>0">--</p>
+                                    <p>最高月排名</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="weui_cells weui_cells_access"
+                     th:each="monthFollowInfo:${dayFollowNumInfo.monthFollowRankingList}">
+                    <a class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <p th:text="${monthFollowInfo.month}+'排名'"></p>
+                        </div>
+                        <div class="weui_cell_ft" th:text="${monthFollowInfo.data}+'位'"
+                             th:if="${monthFollowInfo.data}>0"></div>
+                        <div class="weui_cell_ft" th:if="${monthFollowInfo.data}==0">--</div>
+                        <div class="weui_cell_ft" th:if="${monthFollowInfo.data}<0">200名以外</div>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
 </body>
-</html>
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
-<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-<script type="text/javascript">
-
-</script>
+<script src="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.js"></script>
+</html>

@@ -58,34 +58,26 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     Map<Long, Integer> mapMonthScoreRanking = new HashMap<>();
     Map<Long, Integer> mapDayFollowRanking = new HashMap<>();
 
-    @Override
-    public UserType getUserType(Long userId) {
-        return userRepository.findUserTypeById(userId);
-    }
 
     @Override
     public List<InfoModel> findInfo(User user) {
-        List<InfoModel> infoModels = new ArrayList<>();
         List<Info> infoList;
         if (user.getUserType() == UserType.normal) {//普通会员
-            infoList = infoRepository.findByCustomerIdAndIsStatusTrueAndIsDisableFalse(user.getCustomerId());
+            infoList = infoRepository.findByCustomerIdAndIsStatusTrueAndIsDisableFalseOrderByCreateTimeDesc(user.getCustomerId());
         } else {//小伙伴
-            infoList = infoRepository.findByCustomerIdAndIsExtendTrueAndIsDisableFalse(user.getCustomerId());
+            infoList = infoRepository.findByCustomerIdAndIsExtendTrueAndIsDisableFalseOrderByCreateTimeDesc(user.getCustomerId());
         }
-        LocalDateTime now = LocalDateTime.now();
-        for (Info info : infoList) {
-            InfoModel infoModel = new InfoModel();
-            infoModel.setInfoId(info.getId());
-            infoModel.setCustomerId(info.getCustomerId());
-            infoModel.setTitle(info.getTitle());
-            infoModel.setIntroduce(info.getIntroduce());
-            infoModel.setThumbnailImageUrl(info.getImageUrl());
-            infoModel.setForwardNum(getInfoForwardNum(info.getId()));
-            infoModel.setVisitorNum(getVisitorNum(info.getId()));
-            infoModel.setReleaseTime(DateUtil.compareLocalDateTime(info.getCreateTime(), now));
-            infoModels.add(infoModel);
+        return getInfoModes(infoList);
+    }
+
+    @Override
+    public List<InfoModel> findForwardInfo(User user) {
+        List<Long> infoIdList = infoBrowseRepository.findUserForwardInfo(user.getId());
+        if (infoIdList != null && infoIdList.size() > 0) {
+            List<Info> infoList = infoRepository.findInfoList(infoIdList);
+            return getInfoModes(infoList);
         }
-        return infoModels;
+        return new ArrayList<>();
     }
 
     @Override
@@ -380,6 +372,30 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
                     mapDayFollowRanking.put(mapping.getKey(), ranking);
             }
         }
+    }
+
+    /**
+     * 获取资讯model
+     *
+     * @param infoList 资讯列表
+     * @return
+     */
+    private List<InfoModel> getInfoModes(List<Info> infoList) {
+        List<InfoModel> infoModels = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+        infoList.forEach(info -> {
+            InfoModel infoModel = new InfoModel();
+            infoModel.setInfoId(info.getId());
+            infoModel.setCustomerId(info.getCustomerId());
+            infoModel.setTitle(info.getTitle());
+            infoModel.setIntroduce(info.getIntroduce());
+            infoModel.setThumbnailImageUrl(info.getImageUrl());
+            infoModel.setForwardNum(getInfoForwardNum(info.getId()));
+            infoModel.setVisitorNum(getVisitorNum(info.getId()));
+            infoModel.setReleaseTime(DateUtil.compareLocalDateTime(info.getCreateTime(), now));
+            infoModels.add(infoModel);
+        });
+        return infoModels;
     }
 
     /**

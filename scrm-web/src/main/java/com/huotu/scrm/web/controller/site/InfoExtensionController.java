@@ -69,9 +69,11 @@ public class InfoExtensionController extends SiteBaseController {
             return "infoextension/info_extension";
         } else {//小伙伴
             StatisticalInformation statisticalInformation = infoExtensionService.getInformation(user);
+            List<InfoModel> forwardInfoList = infoExtensionService.findForwardInfo(user);
             //判断是否为销售员
             boolean status = infoExtensionService.checkIsSalesman(user);
             model.addAttribute("statisticalInformation", statisticalInformation);
+            model.addAttribute("forwardInfoList", forwardInfoList);
             model.addAttribute("status", status);
             return "infoextension/info_center";
         }

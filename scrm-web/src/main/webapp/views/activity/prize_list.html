@@ -33,6 +33,10 @@
                         <button class="btn btn-sm btn-success" type="button"
                                 th:onclick="'javascript:prizeListHandler.prizeAdd('+${actId}+')'">新增奖品
                         </button>
+                        <button class="btn btn-sm btn-success" type="button" onclick="prizeListHandler.goBack()"
+                        >返回
+                        </button>
+
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -58,7 +62,7 @@
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
                                     </div>
                                 </td>
-                                <td  style="width: 5%;">
+                                <td style="width: 5%;">
                                     <img th:src="${prize.prizeImageUrl}" style="width:100px;height:100px;">
                                     </img>
                                 </td>
@@ -141,6 +145,9 @@
             } else {
                 window.location.href = ajaxUrl + "/prize/detail?actId=" + actId;
             }
+        },
+        goBack: function () {
+            window.location.href = ajaxUrl + "/act/list";
         }
     }
     $(function () {
