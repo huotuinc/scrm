@@ -1,5 +1,7 @@
 package com.huotu.scrm.web.controller.common;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,7 +10,6 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /***
  * 异常页面统一处理
@@ -16,18 +17,18 @@ import java.io.IOException;
  */
 @ControllerAdvice
 public class ExceptionHandlerController extends DefaultHandlerExceptionResolver{
+    private Log logger = LogFactory.getLog(ExceptionHandlerController.class);
 
 
     @ExceptionHandler(Exception.class)
     @Override
     protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+        logger.error("data error",ex);
+        // TODO: 2017-08-11
         ModelAndView modelAndView =  super.doResolveException(request, response, handler, ex);
         if(modelAndView == null){
             modelAndView = new ModelAndView();
-            try {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            } catch (IOException ignored) {
-            }
+            modelAndView.addObject("errorState",HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         }
         boolean isAjaxOrJson = isAjaxRequestOrBackJson( request);
         if(isAjaxOrJson){

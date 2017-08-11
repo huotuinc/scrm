@@ -3,7 +3,11 @@ package com.huotu.scrm.service.entity.info;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.time.LocalDateTime;
 
 /**
@@ -112,7 +116,7 @@ public class InfoBrowse {
         this.nickName = nickName;
     }
 
-    public InfoBrowse(Long infoId, Long sourceUserId,Long readUserId, LocalDateTime browseTime, String imgUrl, String nickName,Long customerId) {
+    public InfoBrowse(Long infoId, Long sourceUserId, Long readUserId, LocalDateTime browseTime, String imgUrl, String nickName, Long customerId) {
         this.infoId = infoId;
         this.sourceUserId = sourceUserId;
         this.readUserId = readUserId;
@@ -122,11 +126,11 @@ public class InfoBrowse {
         this.customerId = customerId;
     }
 
-    public InfoBrowse(){
+    public InfoBrowse() {
 
     }
 
-    public InfoBrowse(Long infoId,String imgUrl,String nickName,Long customerId){
+    public InfoBrowse(Long infoId, String imgUrl, String nickName, Long customerId) {
         this.imgUrl = imgUrl;
         this.nickName = nickName;
         this.infoId = infoId;

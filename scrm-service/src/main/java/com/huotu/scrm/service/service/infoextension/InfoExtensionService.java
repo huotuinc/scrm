@@ -1,8 +1,12 @@
 package com.huotu.scrm.service.service.infoextension;
 
-import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.mall.User;
-import com.huotu.scrm.service.model.*;
+import com.huotu.scrm.service.model.DayFollowNumInfo;
+import com.huotu.scrm.service.model.DayScoreInfo;
+import com.huotu.scrm.service.model.DayScoreRankingInfo;
+import com.huotu.scrm.service.model.DayVisitorNumInfo;
+import com.huotu.scrm.service.model.InfoModel;
+import com.huotu.scrm.service.model.StatisticalInformation;
 
 import java.util.List;
 
@@ -10,14 +14,6 @@ import java.util.List;
  * Created by hxh on 2017-07-17.
  */
 public interface InfoExtensionService {
-    /**
-     * 查询用户类型
-     * 如果用户存在返回相应的用户类型；如果用户不存在返回为空
-     *
-     * @param userId 用户ID
-     * @return
-     */
-    UserType getUserType(Long userId);
 
     /**
      * 查询用户所有相关资讯
@@ -26,6 +22,14 @@ public interface InfoExtensionService {
      * @return
      */
     List<InfoModel> findInfo(User user);
+
+    /**
+     * 查询用户转发过的资讯
+     *
+     * @param
+     * @return
+     */
+    List<InfoModel> findForwardInfo(User user);
 
     /**
      * 统计用户信息 （积分排名等）

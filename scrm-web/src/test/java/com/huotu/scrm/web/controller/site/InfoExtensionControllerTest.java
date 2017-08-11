@@ -59,15 +59,7 @@ public class InfoExtensionControllerTest extends CommonTestBase {
      */
     @Test
     public void getInfoExtension() throws Exception {
-        //普通会员登录，没有排名积分等信息（model中没有statisticalInformation标签，没有status标签：判断是否为销售员）
-        mockMvc.perform(get(baseUrl + "/getInfoExtension")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieNormal))
-                .andExpect(status().isOk())
-                .andExpect(view().name("infoextension/info_extension"))
-                .andExpect(model().attributeExists("infoModes"))
-                .andExpect(model().attributeDoesNotExist("statisticalInformation"))
-                .andExpect(model().attributeDoesNotExist("status"));
+
         //小伙伴登录，有排名积分等信息（model中有statisticalInformation标签,status标签为false，不是销售员）
         mockMvc.perform(get(baseUrl + "/getInfoExtension")
                 .param("customerId", String.valueOf(customer.getId()))
@@ -85,120 +77,6 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(view().name("infoextension/info_center"))
                 .andExpect(model().attributeExists("infoModes"))
                 .andExpect(model().attributeExists("statisticalInformation"))
-                .andExpect(model().attribute("status", true));
-    }
-
-    /**
-     * 测试今日排名信息
-     * model中dayScoreRankingInfo标签存储排名信息
-     * model中status标签存储销售员信息
-     *
-     * @throws Exception
-     */
-    @Test
-    public void getScoreRanking() throws Exception {
-        //如果普通会员请求，会重定向到进入资讯状态请求,状态为302
-        mockMvc.perform(get(baseUrl + "/getScoreRanking")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieNormal))
-                .andExpect(status().is(302));
-        //小伙伴发送请求，有积分排名信息（model中有dayScoreRankingInfo标签,status标签为false，不是销售员）
-        mockMvc.perform(get(baseUrl + "/getScoreRanking")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddy))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("dayScoreRankingInfo"))
-                .andExpect(model().attribute("status", false));
-        //小伙伴发送请求，有积分排名信息（model中有dayScoreRankingInfo标签,status标签为true，是销售员）
-        mockMvc.perform(get(baseUrl + "/getScoreRanking")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddyIsSales))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("dayScoreRankingInfo"))
-                .andExpect(model().attribute("status", true));
-    }
-
-    /**
-     * 测试今日积分信息
-     * model中dayScoreInfo标签存储排名信息
-     * model中status标签存储销售员信息
-     *
-     * @throws Exception
-     */
-    @Test
-    public void getScoreInfo() throws Exception {
-        //如果普通会员请求，会重定向到进入资讯状态请求，状态为302
-        mockMvc.perform(get(baseUrl + "/getScoreInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieNormal))
-                .andExpect(status().is(302));
-        //小伙伴发送请求，有今日积分信息（model中有dayScoreInfo标签,status标签为false，不是销售员）
-        mockMvc.perform(get(baseUrl + "/getScoreInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddy))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("dayScoreInfo"))
-                .andExpect(model().attribute("status", false));
-        //小伙伴发送请求，有今日积分信息（model中有dayScoreInfo标签,status标签为true，是销售员）
-        mockMvc.perform(get(baseUrl + "/getScoreInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddyIsSales))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("dayScoreInfo"))
-                .andExpect(model().attribute("status", true));
-    }
-
-    /**
-     * 测试今日关注信息（销售员特有）
-     * model中dayFollowNumInfo标签存储排名信息
-     *
-     * @throws Exception
-     */
-    @Test
-    public void getFollowInfo() throws Exception {
-        //如果普通会员请求，会重定向到进入资讯状态请求，状态为302
-        mockMvc.perform(get(baseUrl + "/getScoreInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieNormal))
-                .andExpect(status().is(302));
-        //小伙伴但不是销售员发送请求，也会重定向到资讯状态请求，状态为302
-        mockMvc.perform(get(baseUrl + "/getFollowInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddy))
-                .andExpect(status().is(302));
-        //小伙伴发送请求，有今日关注信息（model中有dayFollowNumInfo标签,是销售员）
-        mockMvc.perform(get(baseUrl + "/getFollowInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddyIsSales))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("dayFollowNumInfo"));
-    }
-
-    /**
-     * 测试今日访问量信息
-     *
-     * @throws Exception
-     */
-    @Test
-    public void getVisitorInfo() throws Exception {
-        //如果普通会员请求，会重定向到进入资讯状态请求，状态为302
-        mockMvc.perform(get(baseUrl + "/getVisitorInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieNormal))
-                .andExpect(status().is(302));
-        //小伙伴发送请求，有今日uv信息（model中有dayVisitorNumInfo标签,status标签为false，不是销售员）
-        mockMvc.perform(get(baseUrl + "/getVisitorInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddy))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("dayVisitorNumInfo"))
-                .andExpect(model().attribute("status", false));
-        //小伙伴发送请求，有今日uv信息（model中有dayVisitorNumInfo标签,status标签为true，是销售员）
-        mockMvc.perform(get(baseUrl + "/getVisitorInfo")
-                .param("customerId", String.valueOf(customer.getId()))
-                .cookie(cookieBuddyIsSales))
-                .andExpect(status().isOk())
-                .andExpect(model().attributeExists("dayVisitorNumInfo"))
                 .andExpect(model().attribute("status", true));
     }
 }

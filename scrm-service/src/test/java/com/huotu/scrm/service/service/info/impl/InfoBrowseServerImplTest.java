@@ -3,15 +3,12 @@ package com.huotu.scrm.service.service.info.impl;
 import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoRepository;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.annotation.Rollback;
-
-import static java.awt.SystemColor.info;
-import static org.junit.Assert.*;
 
 /**
  * Created by luohaibo on 2017/7/25.
@@ -19,6 +16,8 @@ import static org.junit.Assert.*;
 public class InfoBrowseServerImplTest extends CommonTestBase{
     @Autowired
     private InfoBrowseRepository infoBrowseRepository;
+    @Autowired
+    private InfoRepository infoRepository;
 
     @Test
     public void deleteInfoTurnRecord() throws Exception {

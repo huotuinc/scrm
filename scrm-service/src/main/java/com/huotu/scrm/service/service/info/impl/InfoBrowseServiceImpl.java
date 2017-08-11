@@ -1,17 +1,15 @@
 package com.huotu.scrm.service.service.info.impl;
 
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
-import com.huotu.scrm.common.utils.ApiResult;
+import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
-import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
-import com.huotu.scrm.service.repository.mall.UserLevelRepository;
+import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.info.InfoBrowseService;
-import com.huotu.scrm.service.service.mall.UserLevelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 
@@ -37,7 +34,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Autowired
     private InfoConfigureRepository infoConfigureRepository;
     @Autowired
-    private UserLevelRepository userLevelRepository;
+    private UserRepository userRepository;
     @Autowired
     private ApiService apiService;
 
@@ -53,8 +50,8 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
                 int score = infoConfigure.getRewardScore();
                 //转发奖励限制开启
                 if (infoConfigure.isRewardLimitSwitch()) {
-                    LocalDate localDate = LocalDate.now();
-                    List<InfoBrowse> list = infoBrowseRepository.countByInfoIdAndSourceUserId(infoBrowse.getSourceUserId(), localDate, localDate.plus(1, ChronoUnit.DAYS));
+                    LocalDateTime today = LocalDate.now().atStartOfDay();
+                    List list = infoBrowseRepository.findForwardNumBySourceUserId(today, today.plusDays(1), infoBrowse.getSourceUserId());
                     if (list.size() < infoConfigure.getRewardLimitNum()) {
                         addMallScore(customerId, infoBrowse, infoConfigure, score);
                     }
@@ -62,7 +59,6 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
                     addMallScore(customerId, infoBrowse, infoConfigure, score);
                 }
             }
-
             infoBrowseData = new InfoBrowse();
             infoBrowseData.setTurnTime(LocalDateTime.now());
             infoBrowseData.setCustomerId(customerId);
@@ -71,8 +67,6 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
             infoBrowseData.setSourceUserId(infoBrowse.getSourceUserId());
             infoBrowseData.setBrowseTime(LocalDateTime.now());
             infoBrowseRepository.save(infoBrowseData);
-
-
         }
     }
 
@@ -86,9 +80,9 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
      */
     private void addMallScore(Long customerId, InfoBrowse infoBrowse, InfoConfigure infoConfigure, int score) throws UnsupportedEncodingException {
         //没开启
-        UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(infoBrowse.getSourceUserId(),customerId);
+        UserType userType = userRepository.findUserTypeById(infoBrowse.getSourceUserId());
         //转发奖励获取对象 0 会员
-        if (infoConfigure.getRewardUserType() == userLevel.getType().ordinal()) {
+        if (infoConfigure.getRewardUserType() == userType.ordinal()) {
             //调商城接口扣除积分
             apiService.rechargePoint(customerId, infoBrowse.getSourceUserId(), 0L + score, IntegralTypeEnum.TURN_INFO);
         }

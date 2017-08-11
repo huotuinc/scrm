@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>奖品列表</title>
-    <link rel="shortcut icon" href="favicon.ico">
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
     <!-- Morris -->
@@ -33,6 +32,10 @@
                         <button class="btn btn-sm btn-success" type="button"
                                 th:onclick="'javascript:prizeListHandler.prizeAdd('+${actId}+')'">新增奖品
                         </button>
+                        <button class="btn btn-sm btn-success" type="button" onclick="prizeListHandler.goBack()"
+                        >返回
+                        </button>
+
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -58,7 +61,7 @@
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
                                     </div>
                                 </td>
-                                <td  style="width: 5%;">
+                                <td style="width: 5%;">
                                     <img th:src="${prize.prizeImageUrl}" style="width:100px;height:100px;">
                                     </img>
                                 </td>
@@ -141,6 +144,9 @@
             } else {
                 window.location.href = ajaxUrl + "/prize/detail?actId=" + actId;
             }
+        },
+        goBack: function () {
+            window.location.href = ajaxUrl + "/act/list";
         }
     }
     $(function () {

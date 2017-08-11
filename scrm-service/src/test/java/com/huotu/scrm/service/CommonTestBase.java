@@ -15,6 +15,7 @@ import com.huotu.scrm.service.config.ServiceConfig;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
+import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
@@ -22,6 +23,7 @@ import com.huotu.scrm.service.model.prizeTypeEnum;
 import com.huotu.scrm.service.repository.activity.ActPrizeRepository;
 import com.huotu.scrm.service.repository.activity.ActivityRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
@@ -59,6 +61,8 @@ public class CommonTestBase {
     protected ActPrizeRepository actPrizeRepository;
     @Autowired
     protected ActivityRepository activityRepository;
+    @Autowired
+    protected InfoConfigureRepository infoConfigureRepository;
 
     protected Random random = new Random();
 
@@ -167,5 +171,24 @@ public class CommonTestBase {
         activity.setStartDate(LocalDateTime.now().minusDays(3));
         activity.setEndDate(LocalDateTime.now().plusDays(3));
         return activity;
+    }
+    protected InfoBrowse mockInfoBrowseLastDay(Long infoId, Long sourceUserId, Long readUserId, Long customerId) {
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setInfoId(infoId);
+        infoBrowse.setSourceUserId(sourceUserId);
+        infoBrowse.setReadUserId(readUserId);
+        infoBrowse.setCustomerId(customerId);
+        infoBrowse.setBrowseTime(LocalDateTime.now().minusDays(1));
+        return infoBrowseRepository.saveAndFlush(infoBrowse);
+    }
+    protected InfoConfigure mockInfoConfigure(Long customerId, boolean exchangeSwitch, int type, int rate, boolean exchangeLimitSwitch, int dayExchangeLimit) {
+        InfoConfigure infoConfigure = new InfoConfigure();
+        infoConfigure.setCustomerId(customerId);
+        infoConfigure.setExchangeSwitch(exchangeSwitch);
+        infoConfigure.setExchangeUserType(type);
+        infoConfigure.setDayExchangeLimit(dayExchangeLimit);
+        infoConfigure.setExchangeRate(rate);
+        infoConfigure.setDayExchangeLimitSwitch(exchangeLimitSwitch);
+        return infoConfigureRepository.saveAndFlush(infoConfigure);
     }
 }
