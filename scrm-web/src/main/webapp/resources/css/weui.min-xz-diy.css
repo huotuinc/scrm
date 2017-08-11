@@ -1819,18 +1819,6 @@ a.zuijia {
     background-color: #FFFFFF;
 }
 
-.weui_navbar {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    position: relative;
-    z-index: 1;
-    top: 0;
-    width: 100%;
-    background-color: #fafafa;
-}
-
 .sf .weui_cell_primary {
     color: #787878;
 }
