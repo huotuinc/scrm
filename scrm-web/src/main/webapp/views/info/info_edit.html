@@ -165,14 +165,12 @@
     var infoSaveEditHandler = {
 
 
-
         uploadFile: function (obj) {
 
 
-
-            if($('#uploadFile').val() == undefined ||  $('#uploadFile').val().length == 0 ) {
+            if ($('#uploadFile').val() == undefined || $('#uploadFile').val().length == 0) {
                 hot.tip.msg("图片不能为空");
-            }else {
+            } else {
                 hot.loading.show();
                 $.ajaxFileUpload({
                     url: "/mall/common/upload",

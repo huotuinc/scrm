@@ -92,7 +92,8 @@
                             <input type="hidden" name="rateDesc" id="rateDescContent" th:value="${activity.rateDesc}"
                                    required>
                             <div style="display: none;" class="js_summerNote" id="rateDesc"
-                                 th:utext="${activity.rateDesc}">
+                                 th:utext="${activity.rateDesc}"
+                            >
                             </div>
                         </div>
                     </div>
@@ -115,20 +116,24 @@
         th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+
 <!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script type="text/javascript">
     $("#actTime").on('cancel.daterangepicker', function () {
         $("#actTime").val("");
         $("#startDate").val("");
         $("#endDate").val("");
+    });
+    $('#actTime').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+        $('#startDate').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+        $("#endDate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
     });
     //初始化时间控件
     $('#actTime').daterangepicker(
@@ -145,6 +150,7 @@
             buttonClasses: ['btn btn-default'],
             applyClass: 'btn-small btn-primary blue',
             cancelClass: 'btn-small',
+            autoUpdateInput: false,
             format: 'YYYY-MM-DD HH:mm:ss', //控件中from和to 显示的日期格式
             separator: ' to ',
             locale: {
@@ -172,33 +178,31 @@
         endDate = "";
     }
     $("#actTime").val(startDate + " " + endDate);
-    $(function () {
-        $('.js_summerNote').summernote({
-            height: 300,
-            minHeight: 200,
-            maxHeight: 400,
-            focus: true,
-            lang: 'zh-CN'
-        });
-        $("#actDetail").validate({
-            ignore: [],
-            rules: {
-                ruleDesc: "required",
-                rateDesc: "required",
-                startDate: "required",
-                endDate: "required",
-                gameCostlyScore: { min: 1}
+    $('.js_summerNote').summernote({
+        height: 300,
+        minHeight: 200,
+        maxHeight: 400,
+        focus: true,
+        lang: 'zh-CN'
+    });
+    $("#actDetail").validate({
+        ignore: [],
+        rules: {
+            ruleDesc: "required",
+            rateDesc: "required",
+            startDate: "required",
+            endDate: "required",
+            gameCostlyScore: { min: 1}
 
-            },
-            messages: {
-                startDate: "开始时间不能为空",
-                endDate: "结束时间不能为空",
-                ruleDesc: "请填写规则简介",
-                rateDesc: "请填写概率简介",
-                gameCostlyScore: "消耗积分必须大于0",
-                actTitle: "活动标题不能为空"
-            }
-        });
+        },
+        messages: {
+            startDate: "开始时间不能为空",
+            endDate: "结束时间不能为空",
+            ruleDesc: "请填写规则简介",
+            rateDesc: "请填写概率简介",
+            gameCostlyScore: "消耗积分必须大于0",
+            actTitle: "活动标题不能为空"
+        }
     });
     var actDetailHandler = {
         screen: function () {
