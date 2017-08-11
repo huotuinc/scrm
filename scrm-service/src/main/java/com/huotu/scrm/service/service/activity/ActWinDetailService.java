@@ -47,7 +47,7 @@ public interface ActWinDetailService {
      *
      * @return
      */
-    List<Map<String, Object>> createExcelRecord(int startPage, int endPage);
+    List<Map<String, Object>> createExcelRecord(Long actId,int startPage, int endPage);
 
 
     @Transactional

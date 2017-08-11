@@ -50,12 +50,12 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     }
 
     @Override
-    public List<Map<String, Object>> createExcelRecord(int startPage, int endPage) {
+    public List<Map<String, Object>> createExcelRecord(Long actId,int startPage, int endPage) {
         List<ActWinDetail> actWinDetailList = new ArrayList<>();
         Sort sort = new Sort(Sort.Direction.DESC, "winTime");
         for (int i = startPage; i <= endPage; i++) {
             Pageable pageable = new PageRequest(startPage - 1, Constant.PAGE_SIZE, sort);
-            List<ActWinDetail> winDetailList = actWinDetailRepository.findAll(pageable).getContent();
+            List<ActWinDetail> winDetailList = actWinDetailRepository.findAllByActId(actId,pageable).getContent();
             winDetailList.forEach(actWinDetail -> {
                 actWinDetailList.add(actWinDetail);
             });
