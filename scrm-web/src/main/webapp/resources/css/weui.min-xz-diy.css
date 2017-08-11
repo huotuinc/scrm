@@ -1792,6 +1792,16 @@ a.zuijia {
     color: #333;
 }
 
+.weui_media_info_meta {
+    color: #999;
+    font-size: 14px;
+    float: left;
+    margin-right: 8px;
+}
+.weui_media_info_meta img,
+.weui_media_info_meta span {
+    vertical-align: middle;
+}
 .newsixo .weui_media_box.weui_media_appmsg .weui_media_hd {
     margin-right: .8em;
     width: 60px;
@@ -1817,18 +1827,6 @@ a.zuijia {
 
 .sf .weui_navbar_item.weui_bar_item_on {
     background-color: #FFFFFF;
-}
-
-.weui_navbar {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    position: relative;
-    z-index: 1;
-    top: 0;
-    width: 100%;
-    background-color: #fafafa;
 }
 
 .sf .weui_cell_primary {
@@ -2510,10 +2508,10 @@ a.zuijia {
     width: 80px;
 }
 
-.xzdd-list .left-font {
-    float: left;
-    width: 77%;
-}
+/*.xzdd-list .left-font {*/
+    /*float: left;*/
+    /*width: 77%;*/
+/*}*/
 
 .xzdd-list .weui_media_box.weui_media_text .weui_media_title {
     margin-bottom: 2px;
