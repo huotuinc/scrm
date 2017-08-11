@@ -3,15 +3,13 @@ package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
+import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.model.info.InformationSearch;
-import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.service.info.InfoBrowseService;
 import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.web.service.StaticResourceService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -64,15 +62,14 @@ public class InfoController extends MallBaseController {
     public String infoDetail(
                              Long infoId, Long customerId,
                              Model model) throws URISyntaxException {
-        //todo去记录浏览量
         Info info =  infoService.findOneByIdAndCustomerId(infoId,customerId);
         if(!StringUtils.isEmpty(info.getImageUrl())){
             info.setImageUrl(staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl()).toString());
         }
         int turnNum = infoBrowseService.countByTurn(infoId);
-        model.addAttribute("infoTurnNum", new Integer(turnNum));
         int browse = infoBrowseService.countByBrowse(infoId);
-        model.addAttribute("browseNum", new Integer(browse));
+        model.addAttribute("infoTurnNum", turnNum);
+        model.addAttribute("browseNum", browse);
         model.addAttribute("customerId",customerId);
 //        model.addAttribute("sourceUserId",sourceUserId);
         model.addAttribute("info",info);

@@ -31,6 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -164,7 +165,7 @@ public class ActWinController extends SiteBaseController {
      */
     @RequestMapping(value = "/update/winRecord")
     @ResponseBody
-    private ApiResult winPrizeRecordUpdate(Long userId, Long ActWinDetailId, String name, String mobile,
+    public ApiResult winPrizeRecordUpdate(@ModelAttribute("userId") Long userId, Long ActWinDetailId, String name, String mobile,
                                         String authCode){
         if (verifyService.verifyVerificationCode(mobile,authCode)){
             ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(ActWinDetailId,name,mobile);
@@ -175,6 +176,21 @@ public class ActWinController extends SiteBaseController {
         }
          return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,null,"手机验证码错误");
     }
+
+
+    /**
+     * 获取用户某个活动的中奖记录
+     * @param userId
+     * @param actId
+     * @return
+     */
+    private String priezeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId){
+
+
+        return null;
+    }
+
+
 
     /**
      * 记入中奖记入

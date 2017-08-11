@@ -112,7 +112,7 @@ public class InfoBrowse {
         this.nickName = nickName;
     }
 
-    public InfoBrowse(Long infoId, Long sourceUserId,Long readUserId, LocalDateTime browseTime, String imgUrl, String nickName,Long customerId) {
+    public InfoBrowse(Long infoId, Long sourceUserId, Long readUserId, LocalDateTime browseTime, String imgUrl, String nickName, Long customerId) {
         this.infoId = infoId;
         this.sourceUserId = sourceUserId;
         this.readUserId = readUserId;
@@ -122,11 +122,11 @@ public class InfoBrowse {
         this.customerId = customerId;
     }
 
-    public InfoBrowse(){
+    public InfoBrowse() {
 
     }
 
-    public InfoBrowse(Long infoId,String imgUrl,String nickName,Long customerId){
+    public InfoBrowse(Long infoId, String imgUrl, String nickName, Long customerId) {
         this.imgUrl = imgUrl;
         this.nickName = nickName;
         this.infoId = infoId;
