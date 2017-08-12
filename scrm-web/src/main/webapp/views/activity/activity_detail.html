@@ -16,6 +16,7 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
     <link href="../../resources/css/daterangepicker.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.6/summernote.css" rel="stylesheet">
     <!--<base target="_blank">-->
 </head>
 
@@ -120,8 +121,9 @@
 <!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>-->
+<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>-->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.6/summernote.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 <script type="text/javascript">
@@ -175,13 +177,7 @@
         endDate = "";
     }
     $("#actTime").val(startDate + " " + endDate);
-    $('.js_summerNote').summernote({
-        height: 300,
-        minHeight: 200,
-        maxHeight: 400,
-        focus: true,
-        lang: 'zh-CN'
-    });
+
     $("#actDetail").validate({
         ignore: [],
         rules: {
@@ -203,9 +199,9 @@
     });
     var actDetailHandler = {
         screen: function () {
-            var str = "<p><br></p>"
-            var rateDesc = $("#rateDesc").code()
-            var ruleDesc = $("#ruleDesc").code();
+            var str = "<p><br></p>";
+            var rateDesc = $("#rateDesc").summernote('code')
+            var ruleDesc = $("#ruleDesc").summernote('code');
             if (ruleDesc == str) {
                 $("#ruleDescContent").val("");
             } else {
@@ -224,6 +220,22 @@
             $("#actDetail").submit();
         }
     }
+        $('.js_summerNote').summernote({
+            height: 300,
+            minHeight: 200,
+            maxHeight: 400,
+            focus:true,
+            lang: 'zh-CN',
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']]
+            ]
+        });
 </script>
 </body>
 </html>
