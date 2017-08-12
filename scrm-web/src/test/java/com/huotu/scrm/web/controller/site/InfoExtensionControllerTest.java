@@ -52,14 +52,22 @@ public class InfoExtensionControllerTest extends CommonTestBase {
      * 测试进入资讯状态
      * 普通会员：infoextension/info_extension页面
      * 小伙伴：infoextension/info_center页面
-     * model中statisticalInformation标签存储统计信息
+     * model中statisticalInformation标签存储统计信息,forwardInfoList存储转发的资讯
      * model中status标签存储销售员信息
      *
      * @throws Exception
      */
     @Test
     public void getInfoExtension() throws Exception {
-
+        //普通会员登录，没有排名积分等信息（model中没有statisticalInformation标签，没有status标签）
+        mockMvc.perform(get(baseUrl + "/getInfoExtension")
+                .param("customerId", String.valueOf(customer.getId()))
+                .cookie(cookieNormal))
+                .andExpect(status().isOk())
+                .andExpect(view().name("infoextension/info_extension"))
+                .andExpect(model().attributeExists("infoModes"))
+                .andExpect(model().attributeDoesNotExist("statisticalInformation"))
+                .andExpect(model().attributeDoesNotExist("status"));
         //小伙伴登录，有排名积分等信息（model中有statisticalInformation标签,status标签为false，不是销售员）
         mockMvc.perform(get(baseUrl + "/getInfoExtension")
                 .param("customerId", String.valueOf(customer.getId()))
@@ -68,6 +76,7 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(view().name("infoextension/info_center"))
                 .andExpect(model().attributeExists("infoModes"))
                 .andExpect(model().attributeExists("statisticalInformation"))
+                .andExpect(model().attributeExists("forwardInfoList"))
                 .andExpect(model().attribute("status", false));
         //小伙伴且是销售员登录，有排名积分等信息（model中有statisticalInformation标签,status标签为true，是销售员）
         mockMvc.perform(get(baseUrl + "/getInfoExtension")
@@ -76,6 +85,7 @@ public class InfoExtensionControllerTest extends CommonTestBase {
                 .andExpect(status().isOk())
                 .andExpect(view().name("infoextension/info_center"))
                 .andExpect(model().attributeExists("infoModes"))
+                .andExpect(model().attributeExists("forwardInfoList"))
                 .andExpect(model().attributeExists("statisticalInformation"))
                 .andExpect(model().attribute("status", true));
     }

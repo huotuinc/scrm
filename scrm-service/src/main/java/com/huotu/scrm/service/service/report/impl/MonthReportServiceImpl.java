@@ -45,6 +45,7 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Override
     @Transactional
+    @Scheduled(cron = "0 45 0 1 * *")
     public void saveMonthReport() {
         LocalDate today = LocalDate.now();
         //获取本月第一天
@@ -190,15 +191,6 @@ public class MonthReportServiceImpl implements MonthReportService {
                 monthReportRepository.save(monthReport);
             }
         });
-    }
-
-    /**
-     * 定时统计每月信息
-     */
-    @Override
-    @Scheduled(cron = "0 45 0 1 * *")
-    public void saveMonthReportScheduled() {
-        saveMonthReport();
     }
 
     private Specification<DayReport> getSpecification(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {

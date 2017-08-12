@@ -12,8 +12,4 @@ public interface MonthReportService {
      */
     void saveMonthReport();
 
-    /**
-     * 定时保存每月统计信息
-     */
-    void saveMonthReportScheduled();
 }

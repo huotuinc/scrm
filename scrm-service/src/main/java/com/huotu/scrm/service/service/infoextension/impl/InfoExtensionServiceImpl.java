@@ -401,8 +401,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     /**
      * 定时统计当日每个用户的访客量（浏览量）排名
      */
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/3 * * * *")
     public void setMapVisitorNumRanking() {
+        mapRankingVisitor = new HashMap<>();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();
@@ -421,8 +422,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     /**
      * 统计每日和每月积分排名
      */
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/3 * * * *")
     public void setMapDayScoreRanking() {
+        mapDayScoreRanking = new HashMap<>();
+        mapMonthScoreRanking = new HashMap<>();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();
@@ -431,7 +434,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             List<Long> sourceIdList = infoBrowseRepository.findSourceIdByCustomerId(customerId, todayBegin, now);
             List<Map<Long, Integer>> mapList = getMapList(sourceIdList);
             setRanking(mapList.get(0), 1);
-            setRanking(mapList.get(0), 2);
+            setRanking(mapList.get(1), 2);
         });
     }
 
@@ -465,8 +468,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * 统计关注排名
      */
 
-    @Scheduled(cron = "0 0/5 * * * *")
+    @Scheduled(cron = "0 0/3 * * * *")
     public void setMapFollowRanking() {
+        mapDayFollowRanking = new HashMap<>();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();

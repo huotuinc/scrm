@@ -290,6 +290,7 @@ public class DayReportServiceImpl implements DayReportService {
     }
 
     @Override
+    @Scheduled(cron = "0 5 0 * * *")
     public void saveDayVisitorScore() {
         LocalDate today = LocalDate.now();
         LocalDateTime todayBeginTime = today.atStartOfDay();

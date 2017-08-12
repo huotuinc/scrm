@@ -7,7 +7,6 @@ import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.web.CommonTestBase;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -18,8 +17,6 @@ import java.util.List;
 /**
  * Created by hxh on 2017-07-21.
  */
-@Ignore
-// TODO: 2017-08-11 页面改动需要重写
 public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
     private String baseUrl = "/site/extension";
     private Customer customer;
@@ -104,7 +101,7 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
         List<WebElement> elementList = webDriver.findElements(By.className("sj"));
         Assert.assertEquals(4, elementList.size());
-        //小伙伴（销售员）请求，有官职tab
+        //小伙伴（销售员）请求，有关注tab
         mockUserLogin(userBuddyIsSales.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
         List<WebElement> elementList1 = webDriver.findElements(By.className("sj"));
@@ -126,18 +123,20 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         mockInfoBrowse(1L, userBuddy.getId(), customer.getId());
         mockUserLogin(userBuddy.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
-        List<WebElement> elements = webDriver.findElements(By.className("sj"));
-        String visitorNum = elements.get(1).getText();
-        //uv
-        Assert.assertEquals(2, Integer.parseInt(visitorNum));
-        List<WebElement> elements1 = webDriver.findElements(By.className("weui_media_info"));
-        List<WebElement> infoMeta = elements1.get(0).findElements(By.className("weui_media_info_meta"));
-        //资讯的转发量
-        String forwardNum = infoMeta.get(0).getText();
-        //咨询的浏览量
-        String uv = infoMeta.get(1).getText();
-        Assert.assertEquals(1, Integer.parseInt(forwardNum));
-        Assert.assertEquals(2, Integer.parseInt(uv));
+        List<WebElement> weui_media_title = webDriver.findElements(By.className("weui_media_title"));
+        //我的推广默认也还有一条
+        Assert.assertEquals(2, weui_media_title.size());
+        List<WebElement> elements = webDriver.findElements(By.className("weui_media_info_meta"));
+        //资讯转发量
+        Assert.assertEquals(1, Integer.parseInt(elements.get(0).getText()));
+        //资讯浏览量
+        Assert.assertEquals(2, Integer.parseInt(elements.get(1).getText()));
+        List<WebElement> weui_navbar_item = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item.get(1).click();
+        //用户uv
+        List<WebElement> sj = webDriver.findElements(By.className("sj"));
+        Assert.assertEquals(2, Integer.parseInt(sj.get(1).getText()));
+        // TODO: 2017-08-12 我的推广页面资讯的转发和浏览
     }
 
     /**
@@ -156,30 +155,40 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         mockInfoConfigure(customer.getId(), false);
         mockUserLogin(userBuddy.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item.get(1).click();
         List<WebElement> elements = webDriver.findElements(By.className("sj"));
         String dayScore = elements.get(2).getText();
         Assert.assertEquals(0, Integer.parseInt(dayScore));
         //开启浏览积分奖励,奖励对象为普通会员
         mockInfoConfigure(customer.getId(), true, 0, 2, false, 1);
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item2 = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item2.get(1).click();
         List<WebElement> elements1 = webDriver.findElements(By.className("sj"));
         String dayScore1 = elements1.get(2).getText();
         Assert.assertEquals(0, Integer.parseInt(dayScore1));
         //开启浏览积分奖励,奖励对象为小伙伴，比例：2,没有每日最高限额，奖励积分2（直接取整）
         mockInfoConfigure(customer.getId(), true, 1, 2, false, 1);
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item3 = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item3.get(1).click();
         List<WebElement> elements2 = webDriver.findElements(By.className("sj"));
         String dayScore2 = elements2.get(2).getText();
         Assert.assertEquals(2, Integer.parseInt(dayScore2));
         //开启浏览积分奖励,奖励对象为小伙伴，比例：2,有每日最高限额：1  奖励积分1
         mockInfoConfigure(customer.getId(), true, 1, 2, true, 1);
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item4 = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item4.get(1).click();
         List<WebElement> elements3 = webDriver.findElements(By.className("sj"));
         String dayScore3 = elements3.get(2).getText();
         Assert.assertEquals(1, Integer.parseInt(dayScore3));
         //开启浏览积分奖励,奖励对象为小伙伴，比例：2,有每日最高限额：3  奖励积分2
         mockInfoConfigure(customer.getId(), true, 1, 2, true, 3);
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item5 = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item5.get(1).click();
         List<WebElement> elements4 = webDriver.findElements(By.className("sj"));
         String dayScore4 = elements4.get(2).getText();
         Assert.assertEquals(2, Integer.parseInt(dayScore4));
@@ -203,6 +212,8 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         mockDayReport(userBuddyIsSales.getId(), customer.getId(), 10, 20, lastDay.minusDays(1));
         mockUserLogin(userBuddyIsSales.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item.get(1).click();
         List<WebElement> elements = webDriver.findElements(By.className("sj"));
         String accumulateScore = elements.get(3).getText();
         Assert.assertEquals(100, Integer.parseInt(accumulateScore));
@@ -218,6 +229,8 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         mockBusinessCardRecord(userBuddyIsSales.getId(), customer.getId());
         mockUserLogin(userBuddyIsSales.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item.get(1).click();
         List<WebElement> elements = webDriver.findElements(By.className("sj"));
         String accumulateScore = elements.get(4).getText();
         Assert.assertEquals(2, Integer.parseInt(accumulateScore));
@@ -228,12 +241,16 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
      * 若今日uv为0不参与排名，显示：--
      * 若今日uv相同，不会出现两个相同的排名，两者排名的顺序随机
      */
+    @Test
     public void getVisitorRanking() throws Exception {
         //没有uv,显示：--
         mockUserLogin(userBuddy.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item.get(1).click();
         List<WebElement> elements = webDriver.findElements(By.className("sj"));
-        String accumulateScore = elements.get(4).getText();
-        Assert.assertEquals(2, Integer.parseInt(accumulateScore));
+        String accumulateScore = elements.get(0).getText();
+        Assert.assertEquals("--", accumulateScore);
+        // TODO: 2017-08-12 有uv,排名显示 
     }
 }

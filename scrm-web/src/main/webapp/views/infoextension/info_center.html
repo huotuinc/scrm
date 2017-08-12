@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>推广中心</title>
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/weui.min.css">
     <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.css">
     <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"/>
@@ -49,23 +49,23 @@
                 <div class="weui_panel_bd">
                     <div class="weui_media_box weui_media_appmsg">
                         <div class="weui_media_hd">
-                            <img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}" src="../../resources/images/mrtx.jpg" alt="">
+                            <img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}">
                         </div>
                         <div class="weui_media_bd">
-                            <h4 class="weui_media_title" th:text="${infoModel.title}">哈哈粉红色发生的发生大发生的发生</h4>
-                            <p class="weui_media_desc" th:text="${infoModel.introduce}">哈哈粉红色发生的发生大发生的发生的发生的发生的发生的发大水发大水富士达发生饭随爱豆范德萨哈哈粉红色发生的发生大发生的发生的发生的发生的发生的发大水发大水富士达发生饭随爱豆范德萨</p>
+                            <h4 class="weui_media_title" th:text="${infoModel.title}"></h4>
+                            <p class="weui_media_desc" th:text="${infoModel.introduce}"></p>
                             <ul class="weui_media_info">
                                 <li class="weui_media_info_meta">
                                     <img src="../../resources/images/zf.png" style="width: 15px;" >
-                                    <span th:text="${infoModel.forwardNum}">800</span>
+                                    <span th:text="${infoModel.forwardNum}"></span>
                                 </li>
                                 <li class="weui_media_info_meta">
                                     <img src="../../resources/images/ydll@3x.png" style="width: 18px;" >
-                                    <span th:text="${infoModel.visitorNum}">9000</span>
+                                    <span th:text="${infoModel.visitorNum}"></span>
                                 </li>
                                 <li class="weui_media_info_meta weui_media_info_meta_extra">
                                     <img src="../../resources/images/three.png" style="width: 15px;"  >
-                                    <span th:text="${infoModel.releaseTime}">8500</span>
+                                    <span th:text="${infoModel.releaseTime}"></span>
                                 </li>
                             </ul>
                         </div>
@@ -158,40 +158,7 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="weui_panel weui_panel_access" th:each="infoModel:${forwardInfoList}"-->
-                     <!--th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">-->
-                    <!--<div class="weui_panel_bd">-->
-                        <!--<div class="weui_media_box weui_media_appmsg">-->
-                            <!--<div class="weui_media_hd">-->
-                                <!--<img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}" src="../../resources/images/mrtx.jpg" alt="">-->
-                            <!--</div>-->
-                            <!--<div class="weui_media_bd">-->
-                                <!--<h4 class="weui_media_title" th:text="${infoModel.title}"></h4>-->
-                                <!--<p class="weui_media_desc" th:text="${infoModel.introduce}"></p>-->
-                                <!--<ul class="weui_media_info">-->
-                                    <!--<li class="weui_media_info_meta">-->
-                                        <!--<img src="../../resources/images/zf.png" style="width: 15px;" >-->
-                                        <!--<span th:text="${infoModel.forwardNum}"></span>-->
-                                    <!--</li>-->
-                                    <!--<li class="weui_media_info_meta">-->
-                                        <!--<img src="../../resources/images/ydll@3x.png" style="width: 18px;" >-->
-                                        <!--<span th:text="${infoModel.visitorNum}"></span>-->
-                                    <!--</li>-->
-                                    <!--<li class="weui_media_info_meta weui_media_info_meta_extra">-->
-                                        <!--<img src="../../resources/images/three.png" style="width: 15px;"  >-->
-                                        <!--<span th:text="${infoModel.releaseTime}"></span>-->
-                                    <!--</li>-->
-                                <!--</ul>-->
-                            <!--</div>-->
-                            <!--<div class="left-font">-->
-                                <!--<button type="button" class="tuiguang"-->
-                                        <!--th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">-->
-                                    <!--推广-->
-                                <!--</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
+
             </div>
         </div>
     </div>
