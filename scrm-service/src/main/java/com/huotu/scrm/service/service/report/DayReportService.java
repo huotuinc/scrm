@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
  */
 public interface DayReportService {
 
+    void saveDayReport();
+
     /**
      * 统计某段时间预计积分
      *

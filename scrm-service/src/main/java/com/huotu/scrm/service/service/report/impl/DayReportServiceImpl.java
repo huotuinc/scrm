@@ -65,6 +65,7 @@ public class DayReportServiceImpl implements DayReportService {
      * 定时统计昨日信息
      * 每日12:15分统计
      */
+    @Override
     @Transactional
     @Scheduled(cron = "0 15 0 * * *")
     public void saveDayReport() {
