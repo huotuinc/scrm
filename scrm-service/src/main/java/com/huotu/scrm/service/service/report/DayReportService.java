@@ -10,11 +10,6 @@ import java.time.LocalDateTime;
 public interface DayReportService {
 
     /**
-     * 保存今日统计信息
-     */
-    void saveDayReport();
-
-    /**
      * 统计某段时间预计积分
      *
      * @param user      用户

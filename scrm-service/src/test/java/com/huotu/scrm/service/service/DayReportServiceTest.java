@@ -3,9 +3,7 @@ package com.huotu.scrm.service.service;
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.service.CommonTestBase;
-import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.service.api.ApiService;
-import com.huotu.scrm.service.service.report.DayReportService;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,10 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class DayReportServiceTest extends CommonTestBase {
 
-    @Autowired
-    private DayReportService dayReportService;
-    @Autowired
-    private DayReportRepository dayReportRepository;
     @Autowired
     private ApiService apiService;
 

@@ -92,7 +92,7 @@ public class InfoExtensionController extends SiteBaseController {
         if (user == null) {
             throw new ApiResultException("用户不存在");
         }
-        //普通用户不限制排名信息
+        //普通会员不进行排名信息
         if (user.getUserType() != UserType.buddy) {
             return "redirect:/site/extension/getInfoExtension";
         }

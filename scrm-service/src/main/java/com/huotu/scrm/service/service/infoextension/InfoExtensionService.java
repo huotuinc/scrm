@@ -16,7 +16,7 @@ import java.util.List;
 public interface InfoExtensionService {
 
     /**
-     * 查询用户所有相关资讯
+     * 查询用户所有相关资讯（用户所在商户下的所有资讯）
      *
      * @param user 用户
      * @return
@@ -24,7 +24,7 @@ public interface InfoExtensionService {
     List<InfoModel> findInfo(User user);
 
     /**
-     * 查询用户转发过的资讯
+     * 查询用户转发过的资讯（我的推广）
      *
      * @param
      * @return
@@ -56,7 +56,7 @@ public interface InfoExtensionService {
     DayScoreInfo getScoreInfo(User user);
 
     /**
-     * 统计访问量信息
+     * 统计访问量（uv）信息
      *
      * @param user 用户ID
      * @return

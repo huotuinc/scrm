@@ -61,8 +61,10 @@ public class DayReportServiceImpl implements DayReportService {
     @Autowired
     private ApiService apiService;
 
-
-    @Override
+    /**
+     * 定时统计昨日信息
+     * 每日12:15分统计
+     */
     @Transactional
     @Scheduled(cron = "0 15 0 * * *")
     public void saveDayReport() {
@@ -77,30 +79,31 @@ public class DayReportServiceImpl implements DayReportService {
             if (user == null) {
                 continue;
             }
-            DayReport dayReport = new DayReport();
-            dayReport.setUserId(sourceUserId);
-            dayReport.setCustomerId(user.getCustomerId());
-            dayReport.setLevelId(user.getLevelId());
             UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
             if (userLevel == null) {
                 continue;
             }
-            dayReport.setSalesman(userLevel.isSalesman());
-            //设置每日咨询转发量
+            //昨日咨询转发量
             int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTime, todayBeginTime, sourceUserId).size();
-            dayReport.setForwardNum(forwardNum);
-            //设置每日访客量
+            //昨日访客量（uv）
             int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(sourceUserId, lastBeginTime, todayBeginTime);
-            dayReport.setVisitorNum(visitorNum);
+            //昨日积分
             int dayScore = getEstimateScore(user, lastBeginTime, todayBeginTime);
-            dayReport.setExtensionScore(dayScore);
-            //设置每日被关注量(销售员特有,即总的关注量)
+            DayReport dayReport = new DayReport();
+            dayReport.setSalesman(userLevel.isSalesman());
+            //昨日被关注量(销售员特有,即总的关注量)
             if (dayReport.isSalesman()) {
                 int followNum = businessCardRecordRepository.countByUserId(sourceUserId);
                 dayReport.setFollowNum(followNum);
             } else {
                 dayReport.setFollowNum(0);
             }
+            dayReport.setUserId(sourceUserId);
+            dayReport.setCustomerId(user.getCustomerId());
+            dayReport.setLevelId(user.getLevelId());
+            dayReport.setForwardNum(forwardNum);
+            dayReport.setVisitorNum(visitorNum);
+            dayReport.setExtensionScore(dayScore);
             //设置统计日期
             dayReport.setReportDay(lastDay);
             //保存数据
