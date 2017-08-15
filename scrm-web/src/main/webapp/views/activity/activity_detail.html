@@ -114,9 +114,7 @@
 <!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
-<!--<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>-->
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
-<!--<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.6/summernote.js"></script>-->
 <script src="../../resources/js/summernote/summernote.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
@@ -194,7 +192,7 @@
     var actDetailHandler = {
         screen: function () {
             var str = "<p><br></p>";
-            var rateDesc = $("#rateDesc").summernote('code')
+            var rateDesc = $("#rateDesc").summernote('code');
             var ruleDesc = $("#ruleDesc").summernote('code');
             if (ruleDesc == str) {
                 $("#ruleDescContent").val("");
