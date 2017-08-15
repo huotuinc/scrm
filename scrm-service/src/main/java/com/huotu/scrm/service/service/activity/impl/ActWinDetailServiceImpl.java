@@ -20,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -34,15 +35,14 @@ import java.util.Map;
 @Service
 @Transactional
 public class ActWinDetailServiceImpl implements ActWinDetailService {
-
     @Autowired
     private ActWinDetailRepository actWinDetailRepository;
 
     @Override
-    public Page<ActWinDetail> getPageActWinDetail(int pageNo, int pageSize) {
+    public Page<ActWinDetail> getPageActWinDetail(Long actId, int pageNo, int pageSize) {
         Sort sort = new Sort(Sort.Direction.DESC, "winTime");
         Pageable pageable = new PageRequest(pageNo - 1, pageSize, sort);
-        return actWinDetailRepository.findAll(pageable);
+        return actWinDetailRepository.findAllByActId(actId, pageable);
     }
 
     @Override
@@ -51,12 +51,12 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     }
 
     @Override
-    public List<Map<String, Object>> createExcelRecord(int startPage, int endPage) {
+    public List<Map<String, Object>> createExcelRecord(Long actId,int startPage, int endPage) {
         List<ActWinDetail> actWinDetailList = new ArrayList<>();
         Sort sort = new Sort(Sort.Direction.DESC, "winTime");
         for (int i = startPage; i <= endPage; i++) {
             Pageable pageable = new PageRequest(startPage - 1, Constant.PAGE_SIZE, sort);
-            List<ActWinDetail> winDetailList = actWinDetailRepository.findAll(pageable).getContent();
+            List<ActWinDetail> winDetailList = actWinDetailRepository.findAllByActId(actId,pageable).getContent();
             winDetailList.forEach(actWinDetail -> {
                 actWinDetailList.add(actWinDetail);
             });
@@ -83,12 +83,19 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     public ActWinDetail updateActWinDetail(Long winDetailID, String name, String mobile) {
 
         ActWinDetail actWinDetail = actWinDetailRepository.findOne(winDetailID);
-        if (actWinDetail != null){
+        if (actWinDetail != null) {
             actWinDetail.setWinnerName(name);
             actWinDetail.setWinnerTel(mobile);
-            return  actWinDetailRepository.save(actWinDetail);
+            return actWinDetailRepository.save(actWinDetail);
 
         }
         return null;
+    }
+
+    @Override
+    public List<ActWinDetail> getActWinDetailRecordByActIdAndUserId(Long actId, Long userId) {
+
+
+        return actWinDetailRepository.findAllByActIdAndUserId(actId,userId);
     }
 }

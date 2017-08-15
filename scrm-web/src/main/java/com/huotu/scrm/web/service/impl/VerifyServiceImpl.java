@@ -77,8 +77,14 @@ public class VerifyServiceImpl implements VerifyService {
     }
 
     @Override
-    public void verifyVerificationCode(String mobile, String code) {
+    public boolean verifyVerificationCode(String mobile, String code) {
         init();
-        verificationCodeService.verify(mobile, code, register);
+        try {
+            verificationCodeService.verify(mobile, code, register);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+
     }
 }

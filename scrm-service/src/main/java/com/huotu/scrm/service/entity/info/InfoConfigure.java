@@ -94,10 +94,6 @@ public class InfoConfigure {
     @Column(name = "Info_IntroduceUrl")
     private String infoIntroduceUrl;
 
-    public boolean extensionIsBuddyAndIsReward() {
-        return isRewardSwitch && rewardUserType == 1;
-    }
-
     public boolean uvIsBuddyAndIsReward() {
         return isExchangeSwitch && exchangeUserType == 1;
     }

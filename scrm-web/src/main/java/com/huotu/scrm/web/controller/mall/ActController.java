@@ -155,13 +155,14 @@ public class ActController extends MallBaseController {
      * @return
      */
     @RequestMapping("/join/record")
-    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(pageIndex, Constant.PAGE_SIZE);
+    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex,Long actId, Model model) {
+        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(actId,pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("joinRecord", pageActWinDetail);
         model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
         model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
         model.addAttribute("pageIndex", pageIndex);
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
+        model.addAttribute("actId",actId);
         return "activity/winPrize_list";
     }
 
@@ -172,10 +173,10 @@ public class ActController extends MallBaseController {
      * @throws IOException
      */
     @RequestMapping("/downloadWinDetail")
-    public void downloadAllWinDetail(HttpServletResponse response, int startPage, int endPage) throws IOException {
+    public void downloadAllWinDetail(HttpServletResponse response,Long actId, int startPage, int endPage) throws IOException {
         //完善配置信息
         String fileName = "活动中奖记录";
-        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(startPage, endPage);
+        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(actId,startPage, endPage);
         List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
         List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
         ByteArrayOutputStream os = new ByteArrayOutputStream();

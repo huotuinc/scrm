@@ -9,15 +9,12 @@ import java.time.LocalDateTime;
  */
 public interface DayReportService {
 
-    /**
-     * 保存今日统计信息
-     */
     void saveDayReport();
 
     /**
      * 统计某段时间预计积分
      *
-     * @param user 用户
+     * @param user      用户
      * @param beginTime 统计起始日期
      * @param endTime   统计最后日期
      */
@@ -30,11 +27,6 @@ public interface DayReportService {
      * @return
      */
     int getCumulativeScore(User user);
-
-    /**
-     * 定时保存每日统计信息
-     */
-    void saveDayReportScheduled();
 
     /**
      * 统计某用户某个时间段的转发咨询奖励积分
@@ -56,6 +48,7 @@ public interface DayReportService {
 
     /**
      * 统计本月的访客量（浏览量）
+     *
      * @param user
      * @return
      */
@@ -63,11 +56,20 @@ public interface DayReportService {
 
     /**
      * 统计本月的转发量
+     *
      * @param user
      * @return
      */
     int getMonthForwardNum(User user);
 
+    /**
+     * 获取本月的预计积分
+     *
+     * @param user
+     * @return
+     */
     int getMonthEstimateScore(User user);
+
+    void saveDayVisitorScore();
 
 }

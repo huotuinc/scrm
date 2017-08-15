@@ -5,10 +5,7 @@ import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.httputil.HttpClientUtil;
 import com.huotu.scrm.common.httputil.HttpResult;
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
-import com.huotu.scrm.common.utils.ApiResult;
-import com.huotu.scrm.common.utils.Constant;
-import com.huotu.scrm.common.utils.ResultCodeEnum;
-import com.huotu.scrm.common.utils.SerialNo;
+import com.huotu.scrm.common.utils.*;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.service.api.ApiService;
@@ -22,6 +19,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by helloztt on 2017-07-12.
@@ -50,15 +48,18 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
-    public ApiResult rechargePoint(Long customerId, Long userId, Long integral, IntegralTypeEnum integralType) {
-        Map<String,Object> requestMap = new HashMap<>();
+    public ApiResult rechargePoint(Long customerId, Long userId, Long integral, IntegralTypeEnum integralType) throws UnsupportedEncodingException {
+        Map<String,Object> requestMap = new TreeMap<>();
         requestMap.put("customerid", customerId);
         requestMap.put("userid", userId);
         requestMap.put("trandno", SerialNo.create());
         requestMap.put("integral", integral);
-        requestMap.put("IntegralType", integralType.getCode());
-        HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/Account/rechargePoints",requestMap);
+        requestMap.put("integraltype", integralType.getCode());
+        requestMap.put("appid",SysConstant.HUOBANMALL_PUSH_APPID);
+        String sign = SignBuilder.buildSignIgnoreEmpty(requestMap, null, SysConstant.HUOBANMALL_PUSH_APP_SECRET);
+        requestMap.put("sign",sign);
         ApiResult apiResult;
+        HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/Account/rechargePoints",requestMap);
         if (httpResult.getHttpStatus() == HttpStatus.SC_OK) {
             apiResult = JSON.parseObject(httpResult.getHttpContent(), ApiResult.class);
         }else{

@@ -1,9 +1,11 @@
 package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.common.ienum.UserType;
+import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.exception.ApiResultException;
 import com.huotu.scrm.service.model.*;
+import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
 import com.huotu.scrm.web.service.StaticResourceService;
@@ -30,6 +32,8 @@ public class InfoExtensionController extends SiteBaseController {
     private StaticResourceService staticResourceService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private InfoConfigureRepository infoConfigureRepository;
 
     /**
      * 进入资讯状态（普通会员：进入资讯推广 小伙伴：进入推广中心）
@@ -60,116 +64,55 @@ public class InfoExtensionController extends SiteBaseController {
         }
         model.addAttribute("infoModes", infoModels);
         if (user.getUserType() == UserType.normal) {//普通会员
+            InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
+            model.addAttribute("infoConfigure", infoConfigure);
             return "infoextension/info_extension";
         } else {//小伙伴
             StatisticalInformation statisticalInformation = infoExtensionService.getInformation(user);
+            List<InfoModel> forwardInfoList = infoExtensionService.findForwardInfo(user);
             //判断是否为销售员
             boolean status = infoExtensionService.checkIsSalesman(user);
             model.addAttribute("statisticalInformation", statisticalInformation);
+            model.addAttribute("forwardInfoList", forwardInfoList);
             model.addAttribute("status", status);
             return "infoextension/info_center";
         }
     }
 
     /**
-     * 转到今日积分排名页面
+     * 获取推广明细（统计明细）
      *
-     * @param userId 用户ID
-     * @param model  model
+     * @param userId
+     * @param model
      * @return
      */
-    @RequestMapping("/extension/getScoreRanking")
-    public String getScoreRanking(@ModelAttribute("userId") Long userId, Model model) throws Exception {
+    @RequestMapping("extension/getInfoDetail")
+    public String getInfoDetail(@ModelAttribute("userId") Long userId, Model model) throws Exception {
         User user = userRepository.findOne(userId);
         if (user == null) {
             throw new ApiResultException("用户不存在");
         }
-        //普通用户不限制排名信息
+        //普通会员不进行排名信息
         if (user.getUserType() != UserType.buddy) {
             return "redirect:/site/extension/getInfoExtension";
-        } else {
-            //获取统计性能（积分，排名等）
-            DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(user);
-            //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(user);
-            model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
-            model.addAttribute("status", status);
-            return "extensiondetail/personal_ranking";
         }
-    }
-
-    /**
-     * 转到今日积分统计页面
-     *
-     * @param userId 用户ID
-     * @return
-     */
-    @RequestMapping("/extension/getScoreInfo")
-    public String getScoreInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception {
-        User user = userRepository.findOne(userId);
-        if (user == null) {
-            throw new ApiResultException("用户不存在");
-        }
-        if (user.getUserType() != UserType.buddy) {
-            return "redirect:/site/extension/getInfoExtension";
-        } else {
-            //获取统计性能（积分，排名等）
-            DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(user);
-            //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(user);
-            model.addAttribute("dayScoreInfo", dayScoreInfo);
-            model.addAttribute("status", status);
-            return "extensiondetail/personal_score";
-        }
-    }
-
-    /**
-     * 转到今日关注统计页面
-     *
-     * @param userId 用户ID
-     * @param model  model
-     * @return
-     */
-    @RequestMapping("/extension/getFollowInfo")
-    public String getFollowInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception {
-        User user = userRepository.findOne(userId);
-        boolean isSalesman = infoExtensionService.checkIsSalesman(user);
-        if (user == null) {
-            throw new ApiResultException("用户不存在");
-        }
-        if (user.getUserType() != UserType.buddy || !isSalesman) {
-            return "redirect:/site/extension/getInfoExtension";
-        } else {
-            //获取统计性能（积分，排名等）
+        //获取积分排名信息
+        DayScoreRankingInfo dayScoreRankingInfo = infoExtensionService.getScoreRankingInfo(user);
+        //获取积分信息
+        DayScoreInfo dayScoreInfo = infoExtensionService.getScoreInfo(user);
+        //获取uv信息
+        DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(user);
+        //判断是否为销售员
+        boolean status = infoExtensionService.checkIsSalesman(user);
+        if (status) {
+            //获取关注信息
             DayFollowNumInfo dayFollowNumInfo = infoExtensionService.getFollowNumInfo(user);
             model.addAttribute("dayFollowNumInfo", dayFollowNumInfo);
-            return "extensiondetail/personal_follow";
         }
-    }
-
-    /**
-     * 转到今日访问量页面
-     *
-     * @param userId 用户ID
-     * @param model  model
-     * @return
-     */
-    @RequestMapping("/extension/getVisitorInfo")
-    public String getVisitorInfo(@ModelAttribute("userId") Long userId, Model model) throws Exception {
-        User user = userRepository.findOne(userId);
-        if (user == null) {
-            throw new ApiResultException("用户不存在");
-        }
-        if (user.getUserType() != UserType.buddy) {
-            return "redirect:/site/extension/getInfoExtension";
-        } else {
-            //获取统计性能（积分，排名等）
-            DayVisitorNumInfo dayVisitorNumInfo = infoExtensionService.getVisitorNumInfo(user);
-            //判断是否为销售员
-            boolean status = infoExtensionService.checkIsSalesman(user);
-            model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
-            model.addAttribute("status", status);
-            return "extensiondetail/personal_uv";
-        }
+        model.addAttribute("dayScoreRankingInfo", dayScoreRankingInfo);
+        model.addAttribute("dayScoreInfo", dayScoreInfo);
+        model.addAttribute("dayVisitorNumInfo", dayVisitorNumInfo);
+        model.addAttribute("status", status);
+        return "extensiondetail/personal_detail";
     }
 }

@@ -1,16 +1,25 @@
 package com.huotu.scrm.service.service.info.impl;
+
+import com.huotu.scrm.common.ienum.IntegralTypeEnum;
+import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
+import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
+import com.huotu.scrm.service.repository.mall.UserRepository;
+import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.info.InfoBrowseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -21,13 +30,35 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
 
 
     @Autowired
-    InfoBrowseRepository infoBrowseRepository;
+    private InfoBrowseRepository infoBrowseRepository;
+    @Autowired
+    private InfoConfigureRepository infoConfigureRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ApiService apiService;
 
     @Override
-    public void infoTurnInSave(InfoBrowse infoBrowse,Long customerId) {
-        InfoBrowse infoBrowseData =  infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
-                infoBrowse.getSourceUserId(),infoBrowse.getReadUserId());
-        if(infoBrowseData==null){
+    public void infoTurnInSave(InfoBrowse infoBrowse, Long customerId) throws UnsupportedEncodingException {
+        InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
+                infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());
+        if (infoBrowseData == null) {
+            InfoConfigure infoConfigure = infoConfigureRepository.findOne(customerId);
+            //转发开关
+            if (infoConfigure.isRewardSwitch()) {
+                //转发能获取的积分
+                int score = infoConfigure.getRewardScore();
+                //转发奖励限制开启
+                if (infoConfigure.isRewardLimitSwitch()) {
+                    LocalDateTime today = LocalDate.now().atStartOfDay();
+                    List list = infoBrowseRepository.findForwardNumBySourceUserId(today, today.plusDays(1), infoBrowse.getSourceUserId());
+                    if (list.size() < infoConfigure.getRewardLimitNum()) {
+                        addMallScore(customerId, infoBrowse, infoConfigure, score);
+                    }
+                } else {
+                    addMallScore(customerId, infoBrowse, infoConfigure, score);
+                }
+            }
             infoBrowseData = new InfoBrowse();
             infoBrowseData.setTurnTime(LocalDateTime.now());
             infoBrowseData.setCustomerId(customerId);
@@ -39,28 +70,47 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         }
     }
 
+    /**
+     * 转发添加积分
+     *
+     * @param customerId
+     * @param infoBrowse
+     * @param infoConfigure
+     * @param score
+     */
+    private void addMallScore(Long customerId, InfoBrowse infoBrowse, InfoConfigure infoConfigure, int score) throws UnsupportedEncodingException {
+        //没开启
+        UserType userType = userRepository.findUserTypeById(infoBrowse.getSourceUserId());
+        //转发奖励获取对象 0 会员
+        if (infoConfigure.getRewardUserType() == userType.ordinal()) {
+            //调商城接口扣除积分
+            apiService.rechargePoint(customerId, infoBrowse.getSourceUserId(), 0L + score, IntegralTypeEnum.TURN_INFO);
+        }
+    }
+
+
     @Override
     public Page<InfoBrowse> infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
-        Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
-       return infoBrowseRepository.findAllTurnRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+        Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, infoBrowseAndTurnSearch.getPageSize());
+        return infoBrowseRepository.findAllTurnRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), false, pageable);
     }
 
     @Override
     public int updateInfoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
-        infoBrowseRepository.updateInfoTurn(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getSourceUserId(),true);
+        infoBrowseRepository.updateInfoTurn(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getSourceUserId(), true);
         return 0;
     }
 
     @Override
     public Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
-        Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, infoBrowseAndTurnSearch.getPageSize());
-        return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),false,pageable);
+        Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, infoBrowseAndTurnSearch.getPageSize());
+        return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), false, pageable);
     }
 
     @Override
-    public int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch){
+    public int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
 
-        return infoBrowseRepository.updateBrowseInfo(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getReadUserId(),infoBrowseAndTurnSearch.getSourceUserId(),true);
+        return infoBrowseRepository.updateBrowseInfo(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getReadUserId(), infoBrowseAndTurnSearch.getSourceUserId(), true);
 
     }
 
@@ -77,12 +127,12 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Override
     public Page<InfoBrowse> infoSiteBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable;
-        if(infoBrowseAndTurnSearch.getSourceType() == 0){
-            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, 6);
-        }else {
-            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo()-1, 12);
+        if (infoBrowseAndTurnSearch.getSourceType() == 0) {
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 6);
+        } else {
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 12);
         }
-        return infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(),infoBrowseAndTurnSearch.getCustomerId(),pageable);
+        return infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), pageable);
 
     }
 

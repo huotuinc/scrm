@@ -11,10 +11,7 @@ package com.huotu.scrm.service.service.activity;
 
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
-import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * 奖品Service层接口
@@ -22,12 +19,6 @@ import java.util.List;
  * Created by montage on 2017/7/13.
  */
 public interface ActPrizeService {
-    /**
-     * 分页查询所有奖品
-     *
-     * @return
-     */
-    Page<ActPrize> getPageActPrize(int pageNo, int pageSize);
 
     /**
      * 保存奖品
@@ -55,19 +46,5 @@ public interface ActPrizeService {
      * @return
      */
     ActPrize findByPrizeId(Long prizeId);
-
-    /**
-     * 查询所有奖品
-     *
-     * @return
-     */
-    List<ActPrize> findAll();
-
-    /**
-     * 根据奖品类型查询奖品
-     *
-     * @return
-     */
-    ActPrize findByPrizeType(boolean prizeType);
 
 }

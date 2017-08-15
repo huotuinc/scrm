@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en" class="yellow-bg">
+<head>
+    <meta name="viewport"
+          content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" content=""/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="../../resources/css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
+    <title></title>
+</head>
+<style>
+    .weui_cells {
+        margin-top:2px;
+        background-color: #fff;
+        line-height: 1.41176471;
+        font-size: 17px;
+        overflow: hidden;
+        position: relative;
+    }
+.imgbox{
+    width:55px;vertical-align: middle; float: left; margin-left: 10px
+}
+    .title{
+        float: left;margin-top: 5px; margin-left: 10px
+    }
+    .title .time{
+        font-size: 12px;
+        color: #969696;
+    }
+    .titlename{
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        display: inline-block;
+        width: 95%;
+    }
+</style>
+<body>
+<div th:remove="all-but-first">
+    <div class="weui_cells weui_cells_access " th:each="actPrize ,infoState: ${winRecords}">
+
+        <a class="weui_cell" href="javascript:void(0);">
+            <div class="weui_cell_bd weui_cell_primary">
+                <img th:src="${actPrize.prizeImageUrl}" src="../../resources/images/nr.jpg"  class="imgbox">
+                <div class="title">
+                <p class="titlename" th:text="${actPrize.prizeName}">标题标题标题标题标题标题标题标题</p>
+                <p class="time">2017.01.01</p>
+                </div>
+            </div>
+            <div class="weui_cell_ft" style="display:none"> </div>
+        </a>
+    </div>
+    <div class="weui_cells weui_cells_access ">
+
+        <a class="weui_cell" href="javascript:void(0);">
+            <div class="weui_cell_bd weui_cell_primary">
+                <img src="../../resources/images/nr.jpg"  class="imgbox">
+                <div class="title">
+                    <p class="titlename">标题标题标题标题标题标题标题标题</p>
+                    <p class="time">2017.01.01</p>
+                </div>
+            </div>
+            <div class="weui_cell_ft" style="display:none"> </div>
+        </a>
+    </div>
+    <div class="weui_cells weui_cells_access ">
+
+        <a class="weui_cell" href="javascript:void(0);">
+            <div class="weui_cell_bd weui_cell_primary">
+                <img src="../../resources/images/nr.jpg"  class="imgbox">
+                <div class="title">
+                    <p class="titlename">标题标题标题标题标题标题标题标题</p>
+                    <p class="time">2017.01.01</p>
+                </div>
+            </div>
+            <div class="weui_cell_ft" style="display:none"> </div>
+        </a>
+    </div>
+
+</div>
+
+
+</body>
+</html>

@@ -23,18 +23,6 @@ public class UserLevelServiceImpl implements UserLevelService {
         return userLevelRepository.findByCustomerIdAndIsSalesman(customerId,isSalesman);
     }
 
-    /**
-     * 根据商户id和Id获得用户等级信息
-     * @param customerId
-     * @param id
-     * @return
-     */
-    @Override
-    public UserLevel findByCustomerIdAndId(Long customerId , Long id)
-    {
-        return userLevelRepository.findByCustomerIdAndId(customerId,id);
-    }
-
     @Override
     public UserLevel save(UserLevel userLevel) {
         return userLevelRepository.save(userLevel);

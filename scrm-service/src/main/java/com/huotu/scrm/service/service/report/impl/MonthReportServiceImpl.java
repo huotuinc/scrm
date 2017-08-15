@@ -45,6 +45,7 @@ public class MonthReportServiceImpl implements MonthReportService {
 
     @Override
     @Transactional
+    @Scheduled(cron = "0 45 0 1 * *")
     public void saveMonthReport() {
         LocalDate today = LocalDate.now();
         //获取本月第一天
@@ -82,12 +83,8 @@ public class MonthReportServiceImpl implements MonthReportService {
             int extensionScore = getExtensionScore(userId, lastFirstDay, lastEndDay);
             monthReport.setExtensionScore(extensionScore);
             //设置每月被关注量(销售员特有)
-            if (monthReport.isSalesman()) {
-                int followNum = businessCardRecordRepository.countByUserId(userId);
-                monthReport.setFollowNum(followNum);
-            } else {
-                monthReport.setFollowNum(0);
-            }
+            int followNum = monthReport.isSalesman() ? businessCardRecordRepository.countByUserId(userId) : 0;
+            monthReport.setFollowNum(followNum);
             //设置统计月份
             monthReport.setReportMonth(lastFirstDay);
             //保存数据
@@ -194,15 +191,6 @@ public class MonthReportServiceImpl implements MonthReportService {
                 monthReportRepository.save(monthReport);
             }
         });
-    }
-
-    /**
-     * 定时统计每月信息
-     */
-    @Override
-    @Scheduled(cron = "0 45 0 1 * *")
-    public void saveMonthReportScheduled() {
-        saveMonthReport();
     }
 
     private Specification<DayReport> getSpecification(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {

@@ -35,17 +35,15 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品名称:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品名称" class="form-control" name="prizeName"
-                               th:value="${actPrize.prizeName}">
+                        <input type="text" placeholder="奖品名称" class="form-control" name="prizeName" maxlength="30"
+                               th:value="${actPrize.prizeName}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品类型:</label>
                     <div class="col-sm-2">
-                        <select class="form-control input" id="prizeType">
-                            <option selected="selected" value="0">谢谢惠顾</option>
-                            <option selected="selected" value="1">奖品</option>
-                        </select>
+                        <span th:if="${actPrize.prizeType.code>0}" id="prizeType">奖品</span>
+                        <span th:if="${actPrize.prizeType.code==0}" id="prizeType">谢谢惠顾</span>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
@@ -54,44 +52,44 @@
                     <div class="col-sm-3">
                         <input type="hidden" name="prizeImageUrl" th:value="${actPrize.prizeImageUrl}"/>
                         <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
-                        <button class="btn btn-success" id="uploadImage" type="button"
+                        <button class="btn btn-sm btn-success" id="uploadImage" type="button"
                                 onclick="prizeEditHandler.uploadFile()">上传图片
                         </button>
                         <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
-                        <img class="imageShow" src="../../resources/images/infoBg.png"
-                             th:src="${actPrize.prizeImageUrl}" style="width:200px;height:200px;"/>
+                        <img id="imageShow" src="../../resources/images/infoBg.png" th:src="${actPrize.prizeImageUrl}"
+                              style="width:200px;height:200px;"/>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品数量:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品数量" class="form-control" id="remainCount" name="remainCount"
+                        <input type="text" placeholder="奖品数量" class="form-control" id="remainCount" name="remainCount" required maxlength="10"
                                th:value="${actPrize.remainCount}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">中奖概率:</label>
                     <div class="col-sm-3">
-                        <input type="hidden" id="winRate" th:if="${actPrize.activity.openStatus}" placeholder="中奖概率"
-                               th:value="${actPrize.winRate}" name="winRate"
+                        <input type="hidden" id="winRate" th:if="${actPrize.activity.openStatus}" placeholder="中奖概率" maxlength="10"
+                               th:value="${actPrize.winRate}" name="winRate" required
                                class="form-control">
                         <span th:if="${actPrize.activity.openStatus}" th:text="${actPrize.winRate}+'%'"></span>
                         <input th:unless="${actPrize.activity.openStatus}" type="text" placeholder="中奖概率"
-                               th:value="${actPrize.winRate}" name="winRate" id="winRate"
+                               th:value="${actPrize.winRate}" name="winRate" id="winRate" required maxlength="10"
                                class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">排序字段:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="排序字段" id="sort" class="form-control" th:value="${actPrize.sort}"
+                        <input type="text" placeholder="排序字段" id="sort" class="form-control" th:value="${actPrize.sort}" required maxlength="10"
                                name="sort">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-5">
-                        <button class="btn btn-primary btn-success" type="button" onclick="prizeEditHandler.screen()">
+                        <button class="btn btn-sm btn-success" type="button" onclick="prizeEditHandler.screen()">
                             保存
                         </button>
                     </div>
@@ -102,75 +100,84 @@
 </div>
 
 <!--基础框架js-->
-<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery/3.2.1/jquery.min.js"></script>
 <script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js"
         th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
-<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/bootstrap.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
+<script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/sweetalert/sweetalert.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
 <script type="text/javascript">
-    var isInteger = /^[0-9]*[1-9][0-9]*$/;
-    var prizeType = $("input:hidden[name='prizeType']").val();
-    $("#prizeType").val(prizeType);
+    var customerId = [[${customerId}]];
     var prizeEditHandler = {
         uploadFile: function () {
             hot.loading.show();
-            $.ajaxFileUpload({
-                url: "/mall/common/upload",
-                secureuri: false,// 一般设置为false
-                fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
-                dataType: 'json',// 返回值类型 一般设置为json
-                type: "post",
-                success: function (data) // 服务器成功响应处理函数
-                {
-                    if (data.code == 200) {
-                        $('#imageShow').attr('src', data.fileUrl);
-                        $("input:hidden[name='prizeImageUrl']").val(data.fileUri);
-                        hot.tip.success(data.msg);
-                    } else {
-                        hot.loading.hide();
+            if($('#uploadFile').val() == undefined ||  $('#uploadFile').val().length == 0 ) {
+                hot.tip.error("图片不能为空");
+            }else{
+                $.ajaxFileUpload({
+                    url: "/common/upload",
+                    data:{
+                        customerId:customerId
+                    },
+                    secureuri: false,// 一般设置为false
+                    fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                    dataType: 'json',// 返回值类型 一般设置为json
+                    type: "post",
+                    success: function (data) // 服务器成功响应处理函数
+                    {
+                        if (data.result == 1) {
+                            console.log(data.fileUri);
+                            console.log(data.fileUrl);
+                            $('#imageShow').attr('src', data.fileUrl);
+                            $("input:hidden[name='prizeImageUrl']").val(data.fileUri);
+                            hot.tip.success("上传成功");
+                        }
+                    },
+                    error: function ()// 服务器响应失败处理函数
+                    {
+                        hot.tip.error("服务器异常,请稍后再试");
                     }
-                },
-                error: function ()// 服务器响应失败处理函数
-                {
-                    hot.tip.error("服务器异常,请稍后再试");
-                }
-            })
+                })
+            }
         },
         screen: function () {
-            var type = $("#prizeType").val();
+            var type = $("#prizeType").html();
             if (type == 0) {
                 $("input:hidden[name='prizeType']").val("PRIZE_TYPE_THANKS");
             } else {
                 $("input:hidden[name='prizeType']").val("PRIZE_TYPE_ENTITY_PRIZE");
             }
-            var reminCount = $("#remainCount").val();
-            if (!isInteger.test(reminCount)) {
-                hot.tip.error("奖品数量格式有误（默认大于0）");
-                return;
-            }
-            var winRate = $("#winRate").val();
-            if (!isInteger.test(winRate)||winRate>=100) {
-                    hot.tip.error("中奖概率格式有误（默认大于0且小于100）");
-                    return;
-            }
-            var sort = $("#sort").val();
-            if (!isInteger.test(sort)) {
-                hot.tip.error("排序字段有误（输入整数，默认大于0）");
-                return;
-            }
-            $("#editSavePrize").submit();
+            $("#editSavePrize").valid();
+           $("#editSavePrize").submit();
         }
     }
+    $(function () {
+        $("#editSavePrize").validate({
+            ignore: [],
+            rules: {
+                remainCount: {"digits": true, min: 1},
+                winRate: {"digits": true, min: 1, max: 100},
+                sort: {"digits": true, min: 1}
+            },
+            messages: {
+                prizeName:"奖品名称不能为空",
+                remainCount: "奖品数量大于0",
+                winRate: "中奖概率大于0小于100",
+                sort: "排序字段整数大于0",
+
+            }
+        });
+    });
 </script>
 </body>
 

@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.service.report.impl;
 
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
+import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
@@ -16,6 +17,7 @@ import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
+import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -55,10 +58,16 @@ public class DayReportServiceImpl implements DayReportService {
     private UserFormalIntegralRepository userFormalIntegralRepository;
     @Autowired
     private MonthReportRepository monthReportRepository;
+    @Autowired
+    private ApiService apiService;
 
-
+    /**
+     * 定时统计昨日信息
+     * 每日12:15分统计
+     */
     @Override
     @Transactional
+    @Scheduled(cron = "0 15 0 * * *")
     public void saveDayReport() {
         LocalDate today = LocalDate.now();
         LocalDate lastDay = today.minusDays(1);
@@ -71,30 +80,31 @@ public class DayReportServiceImpl implements DayReportService {
             if (user == null) {
                 continue;
             }
-            DayReport dayReport = new DayReport();
-            dayReport.setUserId(sourceUserId);
-            dayReport.setCustomerId(user.getCustomerId());
-            dayReport.setLevelId(user.getLevelId());
             UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
             if (userLevel == null) {
                 continue;
             }
-            dayReport.setSalesman(userLevel.isSalesman());
-            //设置每日咨询转发量
+            //昨日咨询转发量
             int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTime, todayBeginTime, sourceUserId).size();
-            dayReport.setForwardNum(forwardNum);
-            //设置每日访客量
+            //昨日访客量（uv）
             int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(sourceUserId, lastBeginTime, todayBeginTime);
-            dayReport.setVisitorNum(visitorNum);
+            //昨日积分
             int dayScore = getEstimateScore(user, lastBeginTime, todayBeginTime);
-            dayReport.setExtensionScore(dayScore);
-            //设置每日被关注量(销售员特有,即总的关注量)
+            DayReport dayReport = new DayReport();
+            dayReport.setSalesman(userLevel.isSalesman());
+            //昨日被关注量(销售员特有,即总的关注量)
             if (dayReport.isSalesman()) {
                 int followNum = businessCardRecordRepository.countByUserId(sourceUserId);
                 dayReport.setFollowNum(followNum);
             } else {
                 dayReport.setFollowNum(0);
             }
+            dayReport.setUserId(sourceUserId);
+            dayReport.setCustomerId(user.getCustomerId());
+            dayReport.setLevelId(user.getLevelId());
+            dayReport.setForwardNum(forwardNum);
+            dayReport.setVisitorNum(visitorNum);
+            dayReport.setExtensionScore(dayScore);
             //设置统计日期
             dayReport.setReportDay(lastDay);
             //保存数据
@@ -128,9 +138,6 @@ public class DayReportServiceImpl implements DayReportService {
 
     @Override
     public int getCumulativeScore(User user) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDate today = LocalDate.now();
-        LocalDateTime monthBegin = today.withDayOfMonth(1).atStartOfDay();
         int historyScore = 0;
         //获取本月之前的用户的积分
         List<MonthReport> monthReportList = monthReportRepository.findByUserId(user.getId());
@@ -138,17 +145,8 @@ public class DayReportServiceImpl implements DayReportService {
                 ) {
             historyScore += monthReport.getExtensionScore();
         }
-        int monthScore = getEstimateScore(user, monthBegin, now);
+        int monthScore = getMonthEstimateScore(user);
         return historyScore + monthScore;
-    }
-
-    /**
-     * 定时统计每日信息
-     */
-    @Override
-    @Scheduled(cron = "0 15 0 * * *")
-    public void saveDayReportScheduled() {
-        saveDayReport();
     }
 
     /**
@@ -221,7 +219,7 @@ public class DayReportServiceImpl implements DayReportService {
     }
 
     /**
-     * 计算用户的浏览咨询转发积分
+     * 计算用户的浏览咨询奖励积分
      *
      * @param user
      * @param beginTime
@@ -267,7 +265,7 @@ public class DayReportServiceImpl implements DayReportService {
 
     @Override
     public int getMonthForwardNum(User user) {
-        int MonthForwardNum = 0;
+        int monthForwardNum = 0;
         LocalDateTime now = LocalDateTime.now();
         LocalDate today = LocalDate.now();
         LocalDateTime beginTime = today.atStartOfDay();
@@ -275,27 +273,44 @@ public class DayReportServiceImpl implements DayReportService {
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayGreaterThanEqual(user.getId(), monthBegin);
         for (DayReport dayReport :
                 dayReportList) {
-            MonthForwardNum += dayReport.getForwardNum();
+            monthForwardNum += dayReport.getForwardNum();
         }
         //获取今日转发量
         int dayForwardNum = infoBrowseRepository.findForwardNumBySourceUserId(beginTime, now, user.getId()).size();
-        return MonthForwardNum + dayForwardNum;
+        return monthForwardNum + dayForwardNum;
     }
 
     @Override
     public int getMonthEstimateScore(User user) {
-        int MonthEstimateScore = 0;
-        LocalDateTime now = LocalDateTime.now();
+        int monthEstimateScore = 0;
         LocalDate today = LocalDate.now();
-        LocalDateTime beginTime = today.atStartOfDay();
         LocalDate monthBegin = today.withDayOfMonth(1);
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayGreaterThanEqual(user.getId(), monthBegin);
         for (DayReport dayReport :
                 dayReportList) {
-            MonthEstimateScore += dayReport.getExtensionScore();
+            monthEstimateScore += dayReport.getExtensionScore();
         }
-        //获取今日预计积分
-        int dayEstimateScore = getEstimateScore(user, beginTime, now);
-        return MonthEstimateScore + dayEstimateScore;
+        return monthEstimateScore;
+    }
+
+    @Override
+    @Scheduled(cron = "0 5 0 * * *")
+    public void saveDayVisitorScore() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime todayBeginTime = today.atStartOfDay();
+        LocalDateTime lastBeginTime = todayBeginTime.minusDays(1);
+        List<Long> userIdList = infoBrowseRepository.findSourceUserIdList(lastBeginTime, todayBeginTime);
+        userIdList.forEach((Long userId) -> {
+            User user = userRepository.findOne(userId);
+            int visitorScore = getVisitorScore(user, lastBeginTime, todayBeginTime);
+            try {
+                if (visitorScore > 0) {
+                    ApiResult apiResult = apiService.rechargePoint(user.getCustomerId(), user.getId(), Long.valueOf(visitorScore), IntegralTypeEnum.BROWSE_INFO);
+                    System.out.println(apiResult.getCode());
+                }
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

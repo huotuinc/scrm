@@ -1,12 +1,11 @@
 ﻿<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--360浏览器优先以webkit内核解析-->
 
     <title></title>
-    <link rel="shortcut icon" href="favicon.ico">
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
@@ -16,7 +15,7 @@
           rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.3.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
     <!--<base target="_blank">-->
 </head>
 <body class="gray-bg">
@@ -165,14 +164,12 @@
     var infoSaveEditHandler = {
 
 
-
         uploadFile: function (obj) {
 
 
-
-            if($('#uploadFile').value == undefined ||  $('#uploadFile').value().length == 0 ) {
+            if ($('#uploadFile').val() == undefined || $('#uploadFile').val().length == 0) {
                 hot.tip.msg("图片不能为空");
-            }else {
+            } else {
                 hot.loading.show();
                 $.ajaxFileUpload({
                     url: "/mall/common/upload",
@@ -197,7 +194,6 @@
                 })
             }
         },
-
         uploadInfo: function () {
             var cd = "<p><br></p>";
             if ($('#summerNote').code() == cd) {

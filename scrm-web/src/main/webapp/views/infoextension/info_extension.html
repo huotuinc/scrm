@@ -16,7 +16,7 @@
 </head>
 <body class="grbg">
 <div>
-    <p class="joinus">亲，赶紧加入小伙伴计划赚取积分吧！<a href="#">点击查看</a></p>
+    <p class="joinus">亲，赶紧加入小伙伴计划赚取积分吧！<a th:if="${not #lists.isEmpty(infoConfigure)}" th:href="@{${infoConfigure.infoIntroduceUrl}}">点击查看</a></p>
 </div>
 <div class="xzdd-list">
     <div class="weui_panel" th:each="infoModel:${infoModes}"
@@ -41,7 +41,7 @@
                         </li>
                         <li class="weui_media_info_meta weui_media_info_meta_extra">
                             <img src="../../resources/images/three.png" width="100%"
-                                 th:text="${infoModel.releaseTime}+小时前">
+                                 th:text="${infoModel.releaseTime}">
                         </li>
                     </ul>
                 </div>

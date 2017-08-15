@@ -11,10 +11,7 @@ import com.huotu.scrm.common.ienum.ICommonEnum;
 public enum prizeTypeEnum implements ICommonEnum {
 
     PRIZE_TYPE_THANKS(0, "谢谢参与"),
-    PRIZE_TYPE_ENTITY_PRIZE(1, "实物"),
-    PRIZE_TYPE_CASH_VOUCHER(2, "消费券"),
-    PRIZE_TYPE_CASH(3, "现金"),
-    PRIZE_TYPE_MALl_SCORE(4,"商城积分");
+    PRIZE_TYPE_ENTITY_PRIZE(1, "实物");
 
     private int code;
     private String value;

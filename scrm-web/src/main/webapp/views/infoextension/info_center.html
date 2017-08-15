@@ -1,113 +1,174 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
-    <meta name="apple-mobile-web-app-capable" content="yes"/>
-    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
-    <meta name="format-detection" content="telephone=no"/>
-    <meta name="description" content=""/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css"
-          href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
-    <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"/>
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>推广中心</title>
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/weui.min.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.css">
+    <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"/>
+    <style>
+        .weui_navbar_hot:after {
+            border: none;
+        }
+
+        .weui_navbar_hot .weui_navbar_item:after {
+            border: none;
+        }
+
+        .weui_navbar_hot .weui_navbar_item {
+            border-bottom: 1px solid transparent;
+        }
+
+        .weui_navbar_hot .weui_navbar_item.weui_bar_item_on {
+            border-bottom: 1px solid red;
+            background-color: transparent;
+            color: red;
+        }
+    </style>
 </head>
 <body class="grbg">
-<div style="position: fixed;top:0px;left:0px;right:0px; z-index:99999">
-    <div class="sl-ka superli" style="font-size:12px">
-        <ul class="sl-float-ul ka  pjf_5ge custom-paixu">
-            <li class="on">
-                <a href="#">
-                    推广中心
-                </a>
-            </li>
-        </ul>
+<div class="weui_tab">
+    <div class="weui_navbar weui_navbar_hot">
+        <a class="weui_navbar_item weui_bar_item_on" href="#extensionCenter">
+            推广中心
+        </a>
+        <a class="weui_navbar_item" href="#myExtension">
+            我的推广
+        </a>
     </div>
-</div>
-<p style="height:30px"></p>
-<div class="weui_cells weui_cells_access">
-    <a class="weui_cell" href="/site/extension/getScoreRanking" th:href="@{/site/extension/getScoreRanking}">
-        <div class="weui_cell_bd weui_cell_primary">
-            <p>点击查看明细</p>
+    <div class="weui_tab_bd">
+        <div id="extensionCenter" class="weui_tab_bd_item weui_tab_bd_item_active ">
+            <div>
+                <p class="joinus">伙伴们,分享下列资讯可以可以赚取积分哦！积分可以抵现购买。</p>
+            </div>
+            <div class="weui_panel weui_panel_access" th:each="infoModel:${infoModes}"
+                 th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+                <div class="weui_panel_bd">
+                    <div class="weui_media_box weui_media_appmsg">
+                        <div class="weui_media_hd">
+                            <img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}">
+                        </div>
+                        <div class="weui_media_bd">
+                            <h4 class="weui_media_title" th:text="${infoModel.title}"></h4>
+                            <p class="weui_media_desc" th:text="${infoModel.introduce}"></p>
+                            <ul class="weui_media_info">
+                                <li class="weui_media_info_meta">
+                                    <img src="../../resources/images/zf.png" style="width: 15px;" >
+                                    <span th:text="${infoModel.forwardNum}"></span>
+                                </li>
+                                <li class="weui_media_info_meta">
+                                    <img src="../../resources/images/ydll@3x.png" style="width: 18px;" >
+                                    <span th:text="${infoModel.visitorNum}"></span>
+                                </li>
+                                <li class="weui_media_info_meta weui_media_info_meta_extra">
+                                    <img src="../../resources/images/three.png" style="width: 15px;"  >
+                                    <span th:text="${infoModel.releaseTime}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="left-font">
+                            <button type="button" class="tuiguang"
+                                    th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+                                推广
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="weui_cell_ft" style="font-size:12px"></div>
-    </a>
-</div>
-<div class="dailiren-s-ka duu">
-    <ul class="dailiren-float-ul ka  pjf_4ge">
-        <li>
-            <a>
-                <p class="sj" th:unless="${statisticalInformation.dayVisitorRanking}>0">--</p>
-                <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}>0"
-                   th:text="${statisticalInformation.dayVisitorRanking}"></p>
-                <p>今日UV排名</p>
-            </a>
-        </li>
-        <li>
-            <a>
-                <p class="sj" th:text="${statisticalInformation.dayVisitorNum}"></p>
-                <p>创造UV</p>
-            </a>
-        </li>
-        <li>
-            <a>
-                <p class="sj" th:text="${statisticalInformation.dayScore}"></p>
-                <p>今日预计积分</p>
-            </a>
-        </li>
-        <li>
-            <a>
-                <p class="sj" th:text="${statisticalInformation.accumulateScore}"></p>
-                <p>累计积分</p>
-            </a>
-        </li>
-        <li th:if="${status}">
-            <a>
-                <p class="sj" th:text="${statisticalInformation.followNum}"
-                ></p>
-                <p>关注人数</p>
-            </a>
-        </li>
-    </ul>
-</div>
-<p style="height: 10px"></p>
-<div class="xzdd-list">
-    <div class="weui_panel" th:each="infoModel:${infoModes}"
-         th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
-        <div class="weui_panel_bd">
-            <div class="weui_media_box weui_media_text">
-                <div class="weui_media_hd">
-                    <img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}" alt="">
+
+        <div id="myExtension" class="weui_tab_bd_item">
+            <div class="weui_cells weui_cells_access">
+                <a class="weui_cell" th:href="@{/site/extension/getInfoDetail}">
+                    <div class="weui_cell_bd weui_cell_primary">
+                        <p>点击查看明细</p>
+                    </div>
+                    <div class="weui_cell_ft" style="font-size:12px"></div>
+                </a>
+            </div>
+            <div class="dailiren-s-ka duu">
+                <ul class="dailiren-float-ul ka  pjf_4ge">
+                    <li>
+                        <a>
+                            <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}<0">200名以外</p>
+                            <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}==0">--</p>
+                            <p class="sj" th:if="${statisticalInformation.dayVisitorRanking}>0"
+                               th:text="${statisticalInformation.dayVisitorRanking}"></p>
+                            <p>今日UV排名</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <p class="sj" th:text="${statisticalInformation.dayVisitorNum}"></p>
+                            <p>创造UV</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <p class="sj" th:text="${statisticalInformation.dayScore}"></p>
+                            <p>今日预计积分</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <p class="sj" th:text="${statisticalInformation.accumulateScore}"></p>
+                            <p>累计积分</p>
+                        </a>
+                    </li>
+                    <li th:if="${status}">
+                        <a>
+                            <p class="sj" th:text="${statisticalInformation.followNum}"
+                            ></p>
+                            <p>关注人数</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <p style="height: 10px"></p>
+            <div class="xzdd-list">
+                <div class="weui_panel" th:each="infoModel:${forwardInfoList}"
+                     th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+                    <div class="weui_panel_bd">
+                        <div class="weui_media_box weui_media_text">
+                            <div class="weui_media_hd">
+                                <img class="weui_media_appmsg_thumb"
+                                     th:src="${infoModel.thumbnailImageUrl}"
+                                     alt="">
+                            </div>
+                            <div class="left-font">
+                                <h4 class="weui_media_title" th:text="${infoModel.title}"></h4>
+                                <p class="weui_media_desc" th:text="${infoModel.introduce}"></p>
+                                <ul class="weui_media_info">
+                                    <li class="weui_media_info_meta"><img src="../../resources/images/zf.png" width="100%"
+                                                                          th:text="${infoModel.forwardNum}">
+                                    </li>
+                                    <li class="weui_media_info_meta"><img src="../../resources/images/ydll@3x.png"
+                                                                          style="width: 18px;"
+                                                                          th:text="${infoModel.visitorNum}">
+                                    </li>
+                                    <li class="weui_media_info_meta weui_media_info_meta_extra">
+                                        <img src="../../resources/images/three.png" style="width: 15px;"
+                                             th:text="${infoModel.releaseTime}">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="left-font">
-                    <h4 class="weui_media_title" th:text="${infoModel.title}"></h4>
-                    <p class="weui_media_desc" th:text="${infoModel.introduce}"></p>
-                    <ul class="weui_media_info" style="float: left">
-                        <li class="weui_media_info_meta"><img src="../../resources/images/zf.png" width="100%"
-                                                              th:text="${infoModel.forwardNum}"></li>
-                        <li class="weui_media_info_meta"><img src="../../resources/images/ydll@3x.png"
-                                                              style="width: 18px;" th:text="${infoModel.visitorNum}">
-                        </li>
-                        <li class="weui_media_info_meta weui_media_info_meta_extra"><img
-                                src="../../resources/images/three.png" width="100%"
-                                th:text="${infoModel.releaseTime}+小时前">
-                        </li>
-                    </ul>
-                    <button type="button" class="tuiguang"
-                            th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
-                        推广
-                    </button>
-                </div>
+
             </div>
         </div>
     </div>
 </div>
 </body>
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.js"></script>
 </html>
 <script type="text/javascript">
     function getInfoDetail(infoId, customerId) {
-        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
+        window.location.href = "/mall/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
     }
 </script>

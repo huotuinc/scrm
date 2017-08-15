@@ -5,17 +5,24 @@ import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.EncryptUtils;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
+import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
-import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
+import com.huotu.scrm.service.entity.report.DayReport;
+import com.huotu.scrm.service.entity.report.MonthReport;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
+import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
+import com.huotu.scrm.service.repository.report.DayReportRepository;
+import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.web.config.MVCConfig;
 import com.huotu.scrm.web.controller.page.AbstractPage;
 import com.huotu.scrm.web.interceptor.UserInterceptor;
@@ -28,6 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Random;
@@ -56,13 +64,18 @@ public abstract class CommonTestBase extends SpringWebTest {
 
     @Autowired
     protected UserLevelRepository userLevelRepository;
-
     @Autowired
-    protected BusinessCardRepository businessCardRepository;
+    protected BusinessCardRecordRepository businessCardRecordRepository;
     @Autowired
     protected InfoRepository infoRepository;
     @Autowired
     protected InfoBrowseRepository infoBrowseRepository;
+    @Autowired
+    protected InfoConfigureRepository infoConfigureRepository;
+    @Autowired
+    protected MonthReportRepository monthReportRepository;
+    @Autowired
+    protected DayReportRepository dayReportRepository;
     protected Random random = new Random();
 
     /**
@@ -240,5 +253,53 @@ public abstract class CommonTestBase extends SpringWebTest {
         return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
 
+    protected InfoConfigure mockInfoConfigure(Long customerId, boolean exchangeSwitch, int type,int rate, boolean exchangeLimitSwitch, int dayExchangeLimit) {
+        InfoConfigure infoConfigure = new InfoConfigure();
+        infoConfigure.setCustomerId(customerId);
+        infoConfigure.setExchangeSwitch(exchangeSwitch);
+        infoConfigure.setExchangeUserType(type);
+        infoConfigure.setDayExchangeLimit(dayExchangeLimit);
+        infoConfigure.setExchangeRate(rate);
+        infoConfigure.setDayExchangeLimitSwitch(exchangeLimitSwitch);
+        return infoConfigureRepository.saveAndFlush(infoConfigure);
+    }
 
+    protected InfoConfigure mockInfoConfigure(Long customerId, boolean exchangeSwitch) {
+        InfoConfigure infoConfigure = new InfoConfigure();
+        infoConfigure.setCustomerId(customerId);
+        infoConfigure.setExchangeSwitch(exchangeSwitch);
+        return infoConfigureRepository.saveAndFlush(infoConfigure);
+    }
+
+    protected MonthReport mockMonthReport(Long userId, Long customerId, boolean isSales, int visitorNum, int extensionScore, int scoreRanking, int followRanking, LocalDate reportMonth) {
+        MonthReport monthReport = new MonthReport();
+        monthReport.setSalesman(isSales);
+        monthReport.setFollowRanking(followRanking);
+        monthReport.setUserId(userId);
+        monthReport.setCustomerId(customerId);
+        monthReport.setVisitorNum(visitorNum);
+        monthReport.setExtensionScore(extensionScore);
+        monthReport.setScoreRanking(scoreRanking);
+        monthReport.setReportMonth(reportMonth);
+        return monthReportRepository.saveAndFlush(monthReport);
+    }
+
+    protected DayReport mockDayReport(Long userId, Long customerId, int visitorNum, int extensionScore, LocalDate reportDay) {
+        DayReport dayReport = new DayReport();
+        dayReport.setUserId(userId);
+        dayReport.setCustomerId(customerId);
+        dayReport.setVisitorNum(visitorNum);
+        dayReport.setExtensionScore(extensionScore);
+        dayReport.setReportDay(reportDay);
+        return dayReportRepository.saveAndFlush(dayReport);
+    }
+
+    protected BusinessCardRecord mockBusinessCardRecord(Long userId, Long customerId) {
+        BusinessCardRecord businessCardRecord = new BusinessCardRecord();
+        businessCardRecord.setUserId(userId);
+        businessCardRecord.setCustomerId(customerId);
+        businessCardRecord.setFollowId(Long.valueOf(String.valueOf(random.nextInt())));
+        businessCardRecord.setFollowDate(LocalDateTime.now());
+        return businessCardRecordRepository.saveAndFlush(businessCardRecord);
+    }
 }

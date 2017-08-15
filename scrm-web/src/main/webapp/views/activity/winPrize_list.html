@@ -87,7 +87,7 @@
             <label class=" control-label" for="startPage">导出记录：</label>
             第<input type="text" class="form-control input-sm mb10" id="startPage" style="width: 80px;"/>页 至
             第<input type="text" class="form-control input-sm mb10" id="endPage" style="width: 80px;"/>页
-            <span th:text="至多+${totalPages}+页" style="color: red"></span>
+            &nbsp;&nbsp;<span th:text="至多+${totalPages}+页" style="color: red"></span>
         </div>
     </div>
 </div>
@@ -107,15 +107,16 @@
 <script type="text/javascript">
     var pageIndex = [[${pageIndex}]];
     var totalPage = [[${totalPages}]];
+    var actId = [[${actId}]];
     var ajaxUrl = "[[@{/mall}]]";
     var isInteger = /^[0-9]*[1-9][0-9]*$/;
     var batchExportModal = $("#batchExportModal").modal("批量导出", function () {
         var startPage = $("#startPage").val();
         var endPage = $("#endPage").val();
         if (isInteger.test(startPage) && isInteger.test(endPage)) {
-            if (startPage <= endPage && startPage > 0) {
+            if (startPage <= endPage && startPage > 0 && endPage <= totalPage) {
                 batchExportModal.hide();
-                window.location.href = ajaxUrl + "/downloadWinDetail?startPage=" + startPage + "&endPage=" + endPage;
+                window.location.href = ajaxUrl + "/downloadWinDetail?startPage=" + startPage + "&endPage=" + endPage + "&actId=" + actId;
             } else {
                 hot.tip.error("页码输入有误");
             }
@@ -127,7 +128,7 @@
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
 
     paging.init(function (p) {
-        window.location.href = ajaxUrl + '/join/record?pageIndex=' + p;
+        window.location.href = ajaxUrl + '/join/record?pageIndex=' + p + '&actId=' + actId;
     });
 
     var winListHandler = {}

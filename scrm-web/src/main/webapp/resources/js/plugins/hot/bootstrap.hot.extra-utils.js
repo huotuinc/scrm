@@ -133,7 +133,7 @@ var hot = $.extend({}, hot, {
             layer.closeAll("loading");
             $("body").append($msg);
 
-            if (time == 'undefined') {
+            if (!time) {
                 time = 1500;
             }
 
@@ -141,10 +141,10 @@ var hot = $.extend({}, hot, {
                 $msg.remove();
                 if (typeof callback == 'function')
                     callback();
-            }, 1500);
+            }, time);
         },
         error: function (content, callback, time) {
-            if (time == 'undefined') {
+            if (!time ) {
                 time = 3000;
             }
 
@@ -158,7 +158,7 @@ var hot = $.extend({}, hot, {
             }, time);
         },
         msg: function (content, callback, time) {
-            if (time == 'undefined') {
+            if (!time) {
                 time = 3000;
             }
 

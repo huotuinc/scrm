@@ -28,26 +28,28 @@ public class ActPrize {
     private Long prizeId;
 
 
-    /**所属活动*/
-    @ManyToOne(cascade={CascadeType.MERGE,CascadeType.REFRESH,CascadeType.PERSIST},optional=false)
-    @JoinColumn(name="Act_Id")
+    /**
+     * 所属活动
+     */
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST}, optional = false)
+    @JoinColumn(name = "Act_Id")
     private Activity activity;
 
     /**
      * 奖品名称
      */
-    @Column(name ="Prize_Name")
+    @Column(name = "Prize_Name")
     private String prizeName;
 
     /**
-     * 奖品图片
+     * 奖品图片相对地址
      */
     @Column(name = "Prize_Image_Url")
     private String prizeImageUrl;
 
 
     /**
-     * 奖品详细图片
+     * 奖品图片详细地址
      */
     @Transient
     private String mallPrizeImageUrl;
@@ -57,7 +59,7 @@ public class ActPrize {
      * 0:谢谢惠顾,1:奖品
      */
     @Column(name = "Prize_Type")
-    private prizeTypeEnum prizeType;
+    private prizeTypeEnum prizeType = prizeTypeEnum.PRIZE_TYPE_ENTITY_PRIZE;
 
     /**
      * 奖品总数量
