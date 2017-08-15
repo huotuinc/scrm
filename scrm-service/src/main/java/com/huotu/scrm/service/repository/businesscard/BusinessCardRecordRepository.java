@@ -3,6 +3,7 @@ package com.huotu.scrm.service.repository.businesscard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -51,6 +52,15 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @return
      */
     int countByUserId(Long userId);
+
+    /**
+     * 查询某个时间之前的所有关注人数
+     *
+     * @param userId
+     * @param date
+     * @return
+     */
+    int countByUserIdAndFollowDateLessThanEqual(Long userId, LocalDateTime date);
 
     /***
      * 查询我关注的名片列表

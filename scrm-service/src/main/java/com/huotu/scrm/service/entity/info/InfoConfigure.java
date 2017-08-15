@@ -51,7 +51,7 @@ public class InfoConfigure {
     private int rewardLimitNum;
 
     /**
-     * 转发奖励获取对象 0 会员  1 小伙伴
+     * 转发奖励获取对象 0 会员  1 小伙伴 2 会员+小伙伴
      */
     @Column(name = "Reward_UserType")
     private int rewardUserType;
@@ -70,7 +70,7 @@ public class InfoConfigure {
 
     /**
      * UV转换积分获取对象
-     * 0 会员  1 小伙伴
+     * 0 会员  1 小伙伴 2:会员+小伙伴
      */
     @Column(name = "Exchange_UserType")
     private int exchangeUserType;
@@ -95,6 +95,6 @@ public class InfoConfigure {
     private String infoIntroduceUrl;
 
     public boolean uvIsBuddyAndIsReward() {
-        return isExchangeSwitch && exchangeUserType == 1;
+        return isExchangeSwitch && (exchangeUserType == 1 || exchangeUserType == 2);
     }
 }

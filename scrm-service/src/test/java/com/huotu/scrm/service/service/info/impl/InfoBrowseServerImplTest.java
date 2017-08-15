@@ -29,7 +29,7 @@ public class InfoBrowseServerImplTest extends CommonTestBase{
     @Test
     public void infoBrowseRecord() throws Exception {
         Pageable pageable = new PageRequest(0, 20);
-        Page<InfoBrowse> page = infoBrowseRepository.findAllBrowseRecord(1232L, 4421L, false, pageable);
+        Page<InfoBrowse> page = infoBrowseRepository.findAllBrowseRecord(1232L, 4421L, pageable);
 
         page.getContent()
                 .stream().forEach(System.out::println);

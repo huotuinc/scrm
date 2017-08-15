@@ -46,8 +46,8 @@ public class InfoRewardController extends MallBaseController{
     @ResponseBody
     public ApiResult saveRewardConfigureFromDb(@ModelAttribute("customerId") Long customerId, InfoConfigure infoConfigure){
         infoConfigure.setCustomerId(customerId);
-        InfoConfigure infoConfigure1 = infoRewardConfigureService.saveRewardConfigure(infoConfigure);
-        if (infoConfigure1 == null){
+        infoConfigure = infoRewardConfigureService.saveRewardConfigure(infoConfigure);
+        if (infoConfigure == null){
             return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
         }
         return ApiResult.resultWith(ResultCodeEnum.SUCCESS);

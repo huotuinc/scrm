@@ -25,9 +25,7 @@ import java.time.LocalDateTime;
 /**
  * Created by cosy on 2017/7/21.
  */
-public class
-
-WebTestOfMock extends CommonTestBase {
+public class WebTestOfMock extends CommonTestBase {
 
         @Autowired
         @SuppressWarnings("SpringJavaAutowiringInspection")

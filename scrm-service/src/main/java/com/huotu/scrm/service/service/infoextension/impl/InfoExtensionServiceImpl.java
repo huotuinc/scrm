@@ -9,13 +9,7 @@ import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
-import com.huotu.scrm.service.model.DayFollowNumInfo;
-import com.huotu.scrm.service.model.DayScoreInfo;
-import com.huotu.scrm.service.model.DayScoreRankingInfo;
-import com.huotu.scrm.service.model.DayVisitorNumInfo;
-import com.huotu.scrm.service.model.InfoModel;
-import com.huotu.scrm.service.model.MonthStatisticInfo;
-import com.huotu.scrm.service.model.StatisticalInformation;
+import com.huotu.scrm.service.model.*;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
@@ -58,10 +52,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     private MonthReportRepository monthReportRepository;
     @Autowired
     private BusinessCardRecordRepository businessCardRecordRepository;
-    Map<Long, Integer> mapRankingVisitor = new HashMap<>();
-    Map<Long, Integer> mapDayScoreRanking = new HashMap<>();
-    Map<Long, Integer> mapMonthScoreRanking = new HashMap<>();
-    Map<Long, Integer> mapDayFollowRanking = new HashMap<>();
+    private Map<Long, Integer> mapRankingVisitor = new HashMap<>();
+    private Map<Long, Integer> mapDayScoreRanking = new HashMap<>();
+    private Map<Long, Integer> mapMonthScoreRanking = new HashMap<>();
+    private Map<Long, Integer> mapDayFollowRanking = new HashMap<>();
 
 
     @Override
@@ -406,9 +400,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * 定时统计当日每个用户的访客量（uv）排名
      * 每隔3分钟统计一次
      */
-    @Scheduled(cron = "0 0/3 * * * *")
+    @Scheduled(cron = "0 */3 * * * *")
     public void setMapVisitorNumRanking() {
-        mapRankingVisitor = new HashMap<>();
+        mapRankingVisitor.clear();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();
@@ -428,10 +422,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * 定时统计今日和本月的积分排名
      * 每隔3分钟统计一次
      */
-    @Scheduled(cron = "0 0/3 * * * *")
+    @Scheduled(cron = "0 */3 * * * *")
     public void setMapDayScoreRanking() {
-        mapDayScoreRanking = new HashMap<>();
-        mapMonthScoreRanking = new HashMap<>();
+        mapDayScoreRanking.clear();
+        mapMonthScoreRanking.clear();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();
@@ -474,9 +468,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * 统计关注排名
      */
 
-    @Scheduled(cron = "0 0/3 * * * *")
+    @Scheduled(cron = "0 */3 * * * *")
     public void setMapFollowRanking() {
-        mapDayFollowRanking = new HashMap<>();
+        mapDayFollowRanking.clear();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();

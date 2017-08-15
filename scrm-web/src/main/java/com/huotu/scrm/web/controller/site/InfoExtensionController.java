@@ -51,17 +51,7 @@ public class InfoExtensionController extends SiteBaseController {
         }
         //获取资讯信息
         List<InfoModel> infoModels = infoExtensionService.findInfo(user);
-        if (infoModels != null) {
-            infoModels.stream().filter(p -> !StringUtils.isEmpty(p.getThumbnailImageUrl()))
-                    .forEach(p -> {
-                        //这里不应该抛出异常，某个资讯获取图片失败，不应该影响到其他资讯的显示
-                        try {
-                            URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, p.getThumbnailImageUrl());
-                            p.setThumbnailImageUrl(uri.toString());
-                        } catch (URISyntaxException ignored) {
-                        }
-                    });
-        }
+        setInfoImg(infoModels);
         model.addAttribute("infoModes", infoModels);
         if (user.getUserType() == UserType.normal) {//普通会员
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
@@ -70,12 +60,27 @@ public class InfoExtensionController extends SiteBaseController {
         } else {//小伙伴
             StatisticalInformation statisticalInformation = infoExtensionService.getInformation(user);
             List<InfoModel> forwardInfoList = infoExtensionService.findForwardInfo(user);
+            setInfoImg(forwardInfoList);
             //判断是否为销售员
             boolean status = infoExtensionService.checkIsSalesman(user);
             model.addAttribute("statisticalInformation", statisticalInformation);
             model.addAttribute("forwardInfoList", forwardInfoList);
             model.addAttribute("status", status);
             return "infoextension/info_center";
+        }
+    }
+
+    private void setInfoImg(List<InfoModel> infoModelList) {
+        if (infoModelList != null && infoModelList.size() > 0) {
+            infoModelList.stream().filter(p -> !StringUtils.isEmpty(p.getThumbnailImageUrl()))
+                    .forEach(p -> {
+                        //这里不应该抛出异常，某个资讯获取图片失败，不应该影响到其他资讯的显示
+                        try {
+                            URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, p.getThumbnailImageUrl());
+                            p.setThumbnailImageUrl(uri.toString());
+                        } catch (URISyntaxException ignored) {
+                        }
+                    });
         }
     }
 

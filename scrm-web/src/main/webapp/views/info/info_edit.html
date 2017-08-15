@@ -16,6 +16,7 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.6/summernote.css" rel="stylesheet">
     <!--<base target="_blank">-->
 </head>
 <body class="gray-bg">
@@ -27,7 +28,7 @@
             <h5>编辑资讯信息</h5>
         </div>
         <div class="ibox-content">
-            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" action="#">
+            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" method="post">
                 <input type="hidden" name="id" value="" th:value="${info.id}"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">资讯标题</label>
@@ -131,19 +132,29 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
+<script src="../../resources/js/summernote/summernote.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 <!---->
 
 <script type="text/javascript">
     $(function () {
-        $('#summerNote').summernote({
+        $("#summerNote").summernote({
             height: 300,
             minHeight: 200,
             maxHeight: 400,
-            focus: true,
+            focus:true,
             lang: 'zh-CN',
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['insert',['picture']]
+            ]
         });
         // 在键盘按下并释放及提交后验证提交表单
         $("#editSaveInfo").validate({
@@ -151,11 +162,11 @@
             ignore: [],  //this is importent
             rules: {
                 imageUrl: "required",
-                content: "required",
+                content: "required"
             },
             messages: {
                 imageUrl: "请选择上传图片",
-                content: "请填写内容",
+                content: "请填写内容"
             }
         });
 
@@ -196,12 +207,14 @@
         },
         uploadInfo: function () {
             var cd = "<p><br></p>";
-            if ($('#summerNote').code() == cd) {
+            var content = $('#summerNote').summernote('code');
+            console.log(content)
+            if ($('#summerNote').summernote('code') == cd) {
                 $("input:hidden[name='content']").val('');
             } else {
-                $("input:hidden[name='content']").val($('#summerNote').code());
+                $("input:hidden[name='content']").val($('#summerNote').summernote('code'));
             }
-            $('#editSaveInfo').valid()
+            $('#editSaveInfo').valid();
             $('#editSaveInfo').submit();
         }
     }

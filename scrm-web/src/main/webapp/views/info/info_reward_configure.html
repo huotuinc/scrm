@@ -62,14 +62,14 @@
                     <div>
                         <label class="col-sm-2 control-label">转发奖励获取对象</label>
                         <div class="col-sm-6">
-                            <div class="radio radio-info radio-inline">
-                                <input type="radio" id="rewardObject0" value="0" name="rewardUserType" data-check="true"
-                                       th:checked="${infoConfigure.rewardUserType == 0}">
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="rewardObject0" value="0" name="rewardUserType" data-check="true"
+                                       th:checked="${infoConfigure.rewardUserType == 0 || infoConfigure.rewardUserType == 2}">
                                 <label for="rewardObject0">会员</label>
                             </div>
-                            <div class="radio radio-inline">
-                                <input type="radio" id="rewardObject1" value="1" name="rewardUserType"
-                                       th:checked="${infoConfigure.rewardUserType == 1}" checked="checked">
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="rewardObject1" value="1" name="rewardUserType"
+                                       th:checked="${infoConfigure.rewardUserType == 1 || infoConfigure.rewardUserType == 2}" checked="checked">
                                 <label for="rewardObject1">小伙伴</label>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                 <div class="ibox-title">
                     <h5>UV转换为积分</h5>
                 </div>
-                <div class="ibox-content">
+                <div class="ibox-content form-group">
                     <label class="col-sm-2 control-label">状态</label>
                     <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="exchangeSwitch"
                                   th:checked="${infoConfigure.exchangeSwitch}"> </label>
@@ -106,18 +106,28 @@
                     <div style="padding-top: 5px;clear: both;">
                         <label class="col-sm-2 control-label">转发奖励获取对象</label>
                         <div class="col-sm-6">
-                            <div class="radio radio-info radio-inline">
-                                <input type="radio" id="turnObject0" value="0" name="exchangeUserType" data-check="true"
-                                       th:checked="${infoConfigure.exchangeUserType==0}" checked="checked">
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="turnObject0" value="0" name="exchangeUserType" data-check="true"
+                                       th:checked="${infoConfigure.exchangeUserType==0 || infoConfigure.exchangeUserType == 2}" checked="checked">
                                 <label for="turnObject0">会员</label>
                             </div>
-                            <div class="radio radio-inline">
-                                <input type="radio" id="turnObject1" value="1" name="exchangeUserType"
-                                       th:checked="${infoConfigure.exchangeUserType==1}">
+                            <div class="checkbox-inline">
+                                <input type="checkbox" id="turnObject1" value="1" name="exchangeUserType"
+                                       th:checked="${infoConfigure.exchangeUserType==1 || infoConfigure.exchangeUserType == 2}">
                                 <label for="turnObject1">小伙伴</label>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="ibox-title">
+                    <h5>其他</h5>
+                </div>
+                <div class="ibox-content">
+                    <div style="padding-top: 5px">
+                        <label class="col-sm-2 control-label">资讯推广链接:</label>
+                        <input name="infoIntroduceUrl" style="width: 500px" th:value="${infoConfigure.infoIntroduceUrl}">
+                    </div>
+                    <br/>
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-5">
                             <button class="btn btn-success btn-submit" type="button" id="infoSubmit"
@@ -143,8 +153,6 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
-<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-utils-1.0.1.js"></script>
-<!---->
 
 <script type="text/javascript">
     function getFormJson(frm) {
@@ -165,7 +173,14 @@
 
     var RewardConfigureHandle = {
         saveScoreConfigure: function () {
-            hot.ajax("/mall/info/saveConfigure", getFormJson("#editSaveInfo"), function (result) {
+            var data = getFormJson("#editSaveInfo");
+            if(data['rewardUserType'].length == 2){
+                data['rewardUserType'] = 2;
+            }
+            if(data['exchangeUserType'].length == 2){
+                data['exchangeUserType'] = 2;
+            }
+            hot.ajax("/mall/info/saveConfigure", data, function (result) {
                 if (result.code == 200) {
                     hot.tip.success('修改成功');
                     setTimeout(function () {
