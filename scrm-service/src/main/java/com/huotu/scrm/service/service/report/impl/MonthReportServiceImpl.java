@@ -60,31 +60,27 @@ public class MonthReportServiceImpl implements MonthReportService {
             if (user == null) {
                 continue;
             }
-            MonthReport monthReport = new MonthReport();
-            //设置用户ID
-            monthReport.setUserId(userId);
-            //设置商户号
-            monthReport.setCustomerId(user.getCustomerId());
-            //设置等级
-            monthReport.setLevelId(user.getLevelId());
-            //设置是否为销售员
             UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
             if (userLevel == null) {
                 continue;
             }
-            monthReport.setSalesman(userLevel.isSalesman());
-            //设置每月咨询转发量
+            MonthReport monthReport = new MonthReport();
+            //获取上月咨询转发量
             int forwardNum = getForwardNum(userId, lastFirstDay, lastEndDay);
-            monthReport.setForwardNum(forwardNum);
-            //设置每月访客量
+            //获取上月访客量
             int visitorNum = getVisitorNum(userId, lastFirstDay, lastEndDay);
-            monthReport.setVisitorNum(visitorNum);
-            //设置每月推广积分
+            //获取上月推广积分
             int extensionScore = getExtensionScore(userId, lastFirstDay, lastEndDay);
+            monthReport.setSalesman(userLevel.isSalesman());
+            //获取上月月被关注量(销售员特有)
+            int followNum = monthReport.isSalesman() ? businessCardRecordRepository.countByUserIdAndFollowDateLessThanEqual(userId,lastEndDay.atStartOfDay()) : 0;
             monthReport.setExtensionScore(extensionScore);
-            //设置每月被关注量(销售员特有)
-            int followNum = monthReport.isSalesman() ? businessCardRecordRepository.countByUserId(userId) : 0;
             monthReport.setFollowNum(followNum);
+            monthReport.setForwardNum(forwardNum);
+            monthReport.setVisitorNum(visitorNum);
+            monthReport.setUserId(userId);
+            monthReport.setCustomerId(user.getCustomerId());
+            monthReport.setLevelId(user.getLevelId());
             //设置统计月份
             monthReport.setReportMonth(lastFirstDay);
             //保存数据
@@ -102,12 +98,12 @@ public class MonthReportServiceImpl implements MonthReportService {
      * 统计每月资讯转发量
      *
      * @param userId  用户ID
-     * @param minDate 统计起始时间
-     * @param maxDate 统计结束时间
+     * @param beginTime 统计起始时间
+     * @param endTime 统计结束时间
      * @return
      */
-    private int getForwardNum(Long userId, LocalDate minDate, LocalDate maxDate) {
-        Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
+    private int getForwardNum(Long userId, LocalDate beginTime, LocalDate endTime) {
+        Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
         int num = 0;
         for (DayReport reportDay : sortAll) {
@@ -120,12 +116,12 @@ public class MonthReportServiceImpl implements MonthReportService {
      * 统计每月访客量(如果统计本月不含当天数据)
      *
      * @param userId  用户ID
-     * @param minDate 统计起始时间
-     * @param maxDate 统计结束时间
+     * @param beginTime 统计起始时间
+     * @param endTime 统计结束时间
      * @return
      */
-    private int getVisitorNum(Long userId, LocalDate minDate, LocalDate maxDate) {
-        Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
+    private int getVisitorNum(Long userId, LocalDate beginTime, LocalDate endTime) {
+        Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
         int num = 0;
         for (DayReport reportDay : sortAll) {
@@ -138,12 +134,12 @@ public class MonthReportServiceImpl implements MonthReportService {
      * 统计每月推广积分
      *
      * @param userId  用户ID
-     * @param minDate 统计起始时间
-     * @param maxDate 统计结束时间
+     * @param beginTime 统计起始时间
+     * @param endTime 统计结束时间
      * @return
      */
-    private int getExtensionScore(Long userId, LocalDate minDate, LocalDate maxDate) {
-        Specification<DayReport> specification = getSpecification(userId, minDate, maxDate);
+    private int getExtensionScore(Long userId, LocalDate beginTime, LocalDate endTime) {
+        Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
         int num = 0;
         for (DayReport reportDay : sortAll) {
