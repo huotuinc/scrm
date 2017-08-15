@@ -1,6 +1,7 @@
 package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.common.ienum.UserType;
+import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
@@ -118,9 +119,9 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
      */
     @Test
     public void getVisitorInfo() throws Exception {
-        mockInfo(customer.getId(), true, true);
-        mockInfoBrowse(1L, userBuddy.getId(), customer.getId());
-        mockInfoBrowse(1L, userBuddy.getId(), customer.getId());
+        Info info = mockInfo(customer.getId(), true, true);
+        mockInfoBrowse(info.getId(), userBuddy.getId(), customer.getId());
+        mockInfoBrowse(info.getId(), userBuddy.getId(), customer.getId());
         mockUserLogin(userBuddy.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
         List<WebElement> weui_media_title = webDriver.findElements(By.className("weui_media_title"));

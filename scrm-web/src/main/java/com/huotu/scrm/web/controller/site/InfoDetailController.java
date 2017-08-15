@@ -52,7 +52,7 @@ public class InfoDetailController extends SiteBaseController {
         //查询当前用户的类型
         UserType readUserType = userRepository.findUserTypeById(userId);
         //判断资讯对该类型用户是否启用
-        if(!((readUserType == UserType.normal && info.isExtend()) || (readUserType == UserType.buddy && info.isStatus()))){
+        if(!((readUserType == UserType.normal && info.isStatus()) || (readUserType == UserType.buddy && info.isExtend()))){
             throw new ApiResultException("资讯未开启");
         }
         //sourceUserId 不为空 时表示用户在浏览别人转发出来的资讯，这时候需要记录浏览记录。
@@ -79,11 +79,12 @@ public class InfoDetailController extends SiteBaseController {
     }
 
     @RequestMapping(value = "/info/infoDetailBrowse")
+    @SuppressWarnings("Duplicates")
     public String infoBrowse(@ModelAttribute("userId") Long userId, Long infoId, Long customerId, Model model) throws URISyntaxException {
 
         //浏览记录
         int browse = infoBrowseService.countByBrowse(infoId);
-        model.addAttribute("browseNum", new Integer(browse));
+        model.addAttribute("browseNum", browse);
 
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);

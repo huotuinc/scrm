@@ -12,14 +12,15 @@ package com.huotu.scrm.service.repository.mall;
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.service.entity.mall.UserFormalIntegral;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Created by helloztt on 2017-08-04.
  */
 public interface UserFormalIntegralRepository extends JpaRepository<UserFormalIntegral, Long> {
 
-    List<UserFormalIntegral> findByUserIdAndMerchantIdAndStatusAndTimeBetween(Long userId, Long customerId, IntegralTypeEnum status, LocalDateTime beginTime, LocalDateTime endTime);
+    @Query("SELECT SUM(u.score) FROM UserFormalIntegral u WHERE u.userId = ?1 AND u.merchantId = ?2 AND u.status = ?3 AND u.time >= ?4 AND u.time <= ?5")
+    Integer sumByScore(Long userId, Long customerId, IntegralTypeEnum status, LocalDateTime beginTime, LocalDateTime endTime);
 }

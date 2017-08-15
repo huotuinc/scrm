@@ -2,12 +2,9 @@ package com.huotu.scrm.service.entity.info;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -71,7 +68,7 @@ public class InfoBrowse {
 
 
     /**
-     * 转发记录是否删除   0 未  1 删除
+     * 浏览记录是否删除   0 未  1 删除
      */
     @Column(name = "Browse_Disable")
     private boolean browseDisable;
@@ -108,21 +105,21 @@ public class InfoBrowse {
         this.sourceUserId = sourceUserId;
     }
 
-    public InfoBrowse(Long infoId, Long sourceUserId, LocalDateTime turnTime, String imgUrl, String nickName) {
+    public InfoBrowse(Long infoId, Long sourceUserId, LocalDateTime turnTime, String imgUrl, String wxNickName,String nickName) {
         this.infoId = infoId;
         this.sourceUserId = sourceUserId;
         this.turnTime = turnTime;
         this.imgUrl = imgUrl;
-        this.nickName = nickName;
+        this.nickName = StringUtils.isEmpty(wxNickName) ? nickName : wxNickName;
     }
 
-    public InfoBrowse(Long infoId, Long sourceUserId, Long readUserId, LocalDateTime browseTime, String imgUrl, String nickName, Long customerId) {
+    public InfoBrowse(Long infoId, Long sourceUserId, Long readUserId, LocalDateTime browseTime, String imgUrl, String wxNickName,String nickName, Long customerId) {
         this.infoId = infoId;
         this.sourceUserId = sourceUserId;
         this.readUserId = readUserId;
         this.browseTime = browseTime;
         this.imgUrl = imgUrl;
-        this.nickName = nickName;
+        this.nickName = StringUtils.isEmpty(wxNickName) ? nickName : wxNickName;
         this.customerId = customerId;
     }
 

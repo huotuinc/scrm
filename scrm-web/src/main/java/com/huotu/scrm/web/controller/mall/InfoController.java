@@ -32,26 +32,28 @@ import java.net.URISyntaxException;
 public class InfoController extends MallBaseController {
 
     @Autowired
-    private  InfoService infoService;
+    private InfoService infoService;
     @Autowired
     private StaticResourceService staticResourceService;
     @Autowired
     private InfoBrowseService infoBrowseService;
+
     /***
      * 展示资讯首页内容
      * @param model
      * @return
      */
     @RequestMapping(value = "/info/infoList")
-    public String infoHomeLists(InformationSearch informationSearch, @ModelAttribute("customerId") Long customerId , Model model){
+    public String infoHomeLists(InformationSearch informationSearch, @ModelAttribute("customerId") Long customerId, Model model) {
         informationSearch.setCustomerId(customerId);
         Page<Info> page = infoService.infoList(informationSearch);
-        model.addAttribute("infoListsPage",page);
+        model.addAttribute("infoListsPage", page);
         return "info/info_list";
     }
 
     /**
      * 商场点击进去详情页
+     *
      * @param infoId
      * @param customerId
      * @param model
@@ -59,37 +61,55 @@ public class InfoController extends MallBaseController {
      * @throws URISyntaxException
      */
     @RequestMapping(value = "/info/infoDetail")
-    public String infoDetail(
-                             Long infoId, Long customerId,
+    public String infoDetail(@ModelAttribute("customerId") Long customerId,
+                             @RequestParam Long infoId,
                              Model model) throws URISyntaxException {
-        Info info =  infoService.findOneByIdAndCustomerId(infoId,customerId);
-        if(!StringUtils.isEmpty(info.getImageUrl())){
+        Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
+        if (!StringUtils.isEmpty(info.getImageUrl())) {
             info.setImageUrl(staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl()).toString());
         }
         int turnNum = infoBrowseService.countByTurn(infoId);
         int browse = infoBrowseService.countByBrowse(infoId);
         model.addAttribute("infoTurnNum", turnNum);
         model.addAttribute("browseNum", browse);
-        model.addAttribute("customerId",customerId);
+        model.addAttribute("customerId", customerId);
 //        model.addAttribute("sourceUserId",sourceUserId);
-        model.addAttribute("info",info);
+        model.addAttribute("info", info);
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
         infoBrowseAndTurnSearch.setInfoId(infoId);
         Page<InfoBrowse> page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
-        model.addAttribute("headImages",page.getContent());
+        model.addAttribute("headImages", page.getContent());
         return "info/information_detail";
     }
 
+    @RequestMapping(value = "/info/infoDetailBrowse")
+    @SuppressWarnings("Duplicates")
+    public String infoBrowse(@ModelAttribute("customerId") Long customerId,
+                             @RequestParam Long infoId,
+                             Model model) throws URISyntaxException {
+
+        //浏览记录
+        int browse = infoBrowseService.countByBrowse(infoId);
+        model.addAttribute("browseNum", browse);
+
+        InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
+        infoBrowseAndTurnSearch.setCustomerId(customerId);
+        infoBrowseAndTurnSearch.setSourceType(1);
+        infoBrowseAndTurnSearch.setInfoId(infoId);
+        Page<InfoBrowse> page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        model.addAttribute("headImages", page.getContent());
+        return "info/browse_log";
+    }
+
     /**
-     *
      * @param model
      * @return
      */
     @RequestMapping(value = "/info/edit")
-    public String infoEditPage(@RequestParam(required = false,defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId){
-        Info info =  infoService.findOneByIdAndCustomerId(id,customerId);
+    public String infoEditPage(@RequestParam(required = false, defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId) {
+        Info info = infoService.findOneByIdAndCustomerId(id, customerId);
         if (info.getId() != null && info.getId() != 0) {
             if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
                 URI imgUri = null;
@@ -101,18 +121,19 @@ public class InfoController extends MallBaseController {
                 info.setMallImageUrl(imgUri.toString());
             }
         }
-        model.addAttribute("info",info);
+        model.addAttribute("info", info);
         return "info/info_edit";
     }
 
     /**
      * 保存修改资讯
+     *
      * @param info
      * @return
      */
     @RequestMapping("/info/saveInfo")
-    public String saveInfo(@ModelAttribute("customerId") Long customerId, Info info){
-        if (info.getCustomerId() == null || info.getCustomerId() == 0){
+    public String saveInfo(@ModelAttribute("customerId") Long customerId, Info info) {
+        if (info.getCustomerId() == null || info.getCustomerId() == 0) {
             info.setCustomerId(customerId);
         }
         infoService.infoSave(info);
@@ -121,17 +142,18 @@ public class InfoController extends MallBaseController {
 
     /**
      * 删除资讯
+     *
      * @param customerId
      * @param id
      * @return
      */
     @RequestMapping("/info/deleteInfo")
     @ResponseBody
-    public ApiResult deleteInfo(@ModelAttribute("customerId") Long customerId, Long id){
-        if (infoService.deleteInfo(customerId,id)){
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"删除成功");
+    public ApiResult deleteInfo(@ModelAttribute("customerId") Long customerId, Long id) {
+        if (infoService.deleteInfo(customerId, id)) {
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "删除成功");
         }
-        return ApiResult.resultWith(ResultCodeEnum.SUCCESS,"删除失败");
+        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, "删除失败");
     }
 
 }

@@ -49,7 +49,7 @@
                 <div class="weui_panel_bd">
                     <div class="weui_media_box weui_media_appmsg">
                         <div class="weui_media_hd">
-                            <img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}">
+                            <img class="weui_media_appmsg_thumb" th:src="${infoModel.thumbnailImageUrl}" style="width: 60px;height: 60px;">
                         </div>
                         <div class="weui_media_bd">
                             <h4 class="weui_media_title" th:text="${infoModel.title}"></h4>
@@ -135,7 +135,7 @@
                         <div class="weui_media_box weui_media_text">
                             <div class="weui_media_hd">
                                 <img class="weui_media_appmsg_thumb"
-                                     th:src="${infoModel.thumbnailImageUrl}"
+                                     th:src="${infoModel.thumbnailImageUrl}" style="width: 60px;height: 60px;"
                                      alt="">
                             </div>
                             <div class="left-font">
@@ -169,6 +169,6 @@
 </html>
 <script type="text/javascript">
     function getInfoDetail(infoId, customerId) {
-        window.location.href = "/mall/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
+        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
     }
 </script>

@@ -18,17 +18,15 @@ import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 名片控制器
@@ -50,18 +48,15 @@ public class BusinessCardController extends SiteBaseController {
 
     /***
      * 编辑销售员名片信息
-     * @param request
-     * @param customerId
-     * @param model
-     * @return
+     * @param userId 当前登录用户
+     * @param customerId 商户ID
+     * @param model {@link Model}
+     * @return 页面地址
      */
     @RequestMapping(value = "/editBusinessCard", method = RequestMethod.GET)
-    public String editBusinessCard(HttpServletRequest request,
-                                   @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+    public String editBusinessCard(@RequestParam(name = "customerId") Long customerId,
+                                   @ModelAttribute("userId") Long userId,
                                    Model model) {
-        long userId = this.getUserId(request);
-
-
         BusinessCard businessCard = businessCardService.getBusinessCard(userId, customerId);
         if (businessCard == null) {
             businessCard = new BusinessCard();
@@ -75,14 +70,15 @@ public class BusinessCardController extends SiteBaseController {
 
     /***
      * 上传名片头像接口
+     * @param userId 当前登录用户
      * @param customerId 商户Id
      * @param btnFile 图片
-     * @return
+     * @return {@link ApiResult}
      */
     @RequestMapping(value = "/uploadAvatar", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult uploadAvatar(HttpServletRequest request,
-                                  @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+    public ApiResult uploadAvatar(@ModelAttribute("userId") Long userId,
+                                  @RequestParam(name = "customerId") Long customerId,
                                   MultipartFile btnFile) throws Exception {
         if (btnFile == null || btnFile.isEmpty() || btnFile.getSize() < 1) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
@@ -91,27 +87,23 @@ public class BusinessCardController extends SiteBaseController {
         if (type == null || !type.toLowerCase().startsWith("image/")) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不支持的文件类型，仅支持图片！");
         }
-
-        Long userId = this.getUserId(request);
-
-        User user = userService.getByIdAndCustomerId(userId , customerId);
+        User user = userService.getByIdAndCustomerId(userId, customerId);
         if (user == null) {
-            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST , "不存在的用户",null);
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不存在的用户", null);
         }
-        UserLevel userLevel = userLevelService.findByLevelAndCustomerId(user.getLevelId(),user.getCustomerId() );
-        if( userLevel ==null || !userLevel.isSalesman()){
-            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息",null);
+        UserLevel userLevel = userLevelService.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        if (userLevel == null || !userLevel.isSalesman()) {
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息", null);
         }
 
         UploadResourceEnum uploadResourceType = UploadResourceEnum.USER;
         String fileName = btnFile.getOriginalFilename();
         String prefix = fileName.substring(fileName.lastIndexOf(".") + 1);
         String path = StaticResourceService.IMG + customerId + "/" + uploadResourceType.getValue() + "/" + userId + "." + prefix;
-        String mode = null;
         //先删除原来的图片
         staticResourceService.deleteResource(path);
         //再上传最新的图片
-        URI uri = staticResourceService.uploadResource(mode, path, btnFile.getInputStream());
+        URI uri = staticResourceService.uploadResource(null, path, btnFile.getInputStream());
         String uriString = uri.toString();
         //然后保存图片的uri地址到数据库
         BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR, uriString);
@@ -120,25 +112,24 @@ public class BusinessCardController extends SiteBaseController {
 
     /***
      * 更新名片信息
-     * @param request
-     * @param type
-     * @param value
-     * @return
+     * @param userId 当前登录用户ID
+     * @param type 修改字段
+     * @param value 修改值
+     * @return {@link ApiResult}
      */
     @RequestMapping(value = "/updateBusinessCardInfo", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult updateBusinessCardInfo(HttpServletRequest request,
-                                            @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+    public ApiResult updateBusinessCardInfo(@ModelAttribute("userId") Long userId,
+                                            @RequestParam(name = "customerId") Long customerId,
                                             @RequestParam(name = "type", required = false, defaultValue = "1") Integer type,
                                             @RequestParam(name = "value", required = false, defaultValue = "") String value) {
-         long userId = this.getUserId(request);
-        User user = userService.getByIdAndCustomerId(userId , customerId);
+        User user = userService.getByIdAndCustomerId(userId, customerId);
         if (user == null) {
-            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST , "不存在的用户",null);
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不存在的用户", null);
         }
-        UserLevel userLevel = userLevelService.findByLevelAndCustomerId(user.getLevelId(),user.getCustomerId() );
-        if( userLevel ==null || !userLevel.isSalesman()){
-            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息",null);
+        UserLevel userLevel = userLevelService.findByLevelAndCustomerId(user.getLevelId(), user.getCustomerId());
+        if (userLevel == null || !userLevel.isSalesman()) {
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "该用户不是销售员，无权编辑名片信息", null);
         }
 
         BusinessCardUpdateTypeEnum typeEnum = EnumHelper.getEnumType(BusinessCardUpdateTypeEnum.class, type);
@@ -151,17 +142,17 @@ public class BusinessCardController extends SiteBaseController {
 
     /***
      * 显示名片页面
-     * @param customerId
-     * @param salesmanId
-     * @param model
-     * @return
+     * @param followerId 当前登录用户
+     * @param customerId 商户ID
+     * @param salesmanId 销售员ID
+     * @param model {@link Model}
+     * @return {@link ModelAndView}
      */
     @RequestMapping("/showBusinessCard")
-    public String showBusinessCard(HttpServletRequest request,
-                                   @RequestParam(name = "customerId", required = false, defaultValue = "0") long customerId,
+    public String showBusinessCard(@ModelAttribute("userId") Long followerId,
+                                   @RequestParam(name = "customerId") long customerId,
                                    @RequestParam(name = "salesmanId", required = false, defaultValue = "0") long salesmanId,
                                    Model model) {
-        Long followerId = this.getUserId(request);
         //检测是否关注了其他销售员
         boolean isFollowedOther = businessCardRecordService.existsByCustomerIdAndFollowerIdNotInSalesmanId(customerId, followerId, salesmanId);
         if (!isFollowedOther) {
@@ -183,17 +174,17 @@ public class BusinessCardController extends SiteBaseController {
 
     /***
      * 取消关注
-     * @param customerId
-     * @param salesmanId
-     * @return
+     * @param followerId 当前登录用户
+     * @param customerId 商户ID
+     * @param salesmanId 销售员ID
+     * @return {@link ModelAndView}
      */
     @RequestMapping(value = "/cancelFollow", method = RequestMethod.POST)
     @ResponseBody
-    public ApiResult cancelFollow(HttpServletRequest request,
-                                  @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId,
+    public ApiResult cancelFollow(@ModelAttribute("userId") Long followerId,
+                                  @RequestParam(name = "customerId") Long customerId,
                                   @RequestParam(name = "salesmanId", required = false, defaultValue = "0") Long salesmanId) {
         try {
-            Long followerId = this.getUserId(request);
             businessCardRecordService.deleteByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
             int numberOfFollower = businessCardRecordService.countNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);
             Map<Object, Object> resultMap = new HashMap<>();
@@ -207,12 +198,13 @@ public class BusinessCardController extends SiteBaseController {
 
     /***
      * 我的名片夹
-     * @param customerId
-     * @return
+     * @param userId 当前登录用户
+     * @param customerId 商户ID
+     * @return {@link ModelAndView}
      */
     @RequestMapping("/myBusinessCard")
-    public ModelAndView myBusinessCard(HttpServletRequest request, @RequestParam(name = "customerId", required = false, defaultValue = "0") Long customerId) {
-        Long userId = this.getUserId(request);
+    public ModelAndView myBusinessCard(@ModelAttribute("userId") Long userId,
+                                       @RequestParam(name = "customerId") Long customerId) {
         List<SalesmanBusinessCard> myBusinessCards = businessCardService.getMyBusinessCardList(customerId, userId);
         ModelAndView modelAndView = new ModelAndView("businesscard/my_businesscard");
         modelAndView.addObject("myBusinessCards", myBusinessCards);

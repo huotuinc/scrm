@@ -92,7 +92,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Override
     public Page<InfoBrowse> infoTurnRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, infoBrowseAndTurnSearch.getPageSize());
-        return infoBrowseRepository.findAllTurnRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), false, pageable);
+        return infoBrowseRepository.findAllTurnRecordAndCustomerId(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), pageable);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     @Override
     public Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, infoBrowseAndTurnSearch.getPageSize());
-        return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), false, pageable);
+        return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), pageable);
     }
 
     @Override

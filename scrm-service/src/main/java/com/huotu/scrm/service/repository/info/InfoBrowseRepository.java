@@ -20,13 +20,18 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     InfoBrowse findOneByInfoIdAndSourceUserIdAndReadUserId(Long infoId, Long sourceId, Long readId);
 
     //查询转发记录
-    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName) from InfoBrowse t left join User u  on  u.id = t.sourceUserId where t.infoId=?1 and t.customerId=?2 and t.turnDisable=?3 group by t.infoId,t.sourceUserId,u.weixinImageUrl,u.wxNickName")
-    Page<InfoBrowse> findAllTurnRecordAndCustomerId(Long infoId, Long customerId, boolean disable, Pageable pageable);
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName,u.nickName) " +
+            "from InfoBrowse t left join User u  on  u.id = t.sourceUserId " +
+            "where t.infoId=?1 and t.customerId=?2 and t.turnDisable=false " +
+            "group by t.infoId,t.sourceUserId,u.weixinImageUrl,u.wxNickName,u.nickName")
+    Page<InfoBrowse> findAllTurnRecordAndCustomerId(Long infoId, Long customerId, Pageable pageable);
 
     //查询浏览记录
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,t.readUserId,t.browseTime,u.weixinImageUrl," +
-            "u.wxNickName, t.customerId) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 and t.browseDisable=?3 ")
-    Page<InfoBrowse> findAllBrowseRecord(Long infoId, Long customerId, boolean disable, Pageable pageable);
+            "u.wxNickName,u.nickName, t.customerId) " +
+            "from InfoBrowse t left join User u  on  u.id = t.readUserId " +
+            "where t.infoId=?1 and t.customerId=?2 and t.browseDisable=false ")
+    Page<InfoBrowse> findAllBrowseRecord(Long infoId, Long customerId, Pageable pageable);
 
 
     /**
@@ -38,7 +43,9 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      * @return
      */
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,u.weixinImageUrl," +
-            "u.wxNickName,t.customerId) from InfoBrowse t left join User u  on  u.id = t.readUserId where t.infoId=?1 and t.customerId=?2 order by t.browseTime")
+            "u.wxNickName,t.customerId) " +
+            "from InfoBrowse t left join User u  on  u.id = t.readUserId " +
+            "where t.infoId=?1 and t.customerId=?2 order by t.browseTime")
     Page<InfoBrowse> findAllBrowseRecordByLimit(Long infoId, Long customerId, Pageable pageable);
 
 
@@ -111,7 +118,8 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
      * @param infoId 咨询ID
      * @return
      */
-    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  from InfoBrowse t group by t.infoId,t.sourceUserId having  t.infoId=?1 ")
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId)  " +
+            "from InfoBrowse t group by t.infoId,t.sourceUserId having  t.infoId=?1 ")
     List<InfoBrowse> findInfoForwardNum(Long infoId);
 
     /**

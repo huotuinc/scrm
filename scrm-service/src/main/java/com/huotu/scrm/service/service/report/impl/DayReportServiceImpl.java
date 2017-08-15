@@ -5,7 +5,6 @@ import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
-import com.huotu.scrm.service.entity.mall.UserFormalIntegral;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
@@ -209,13 +208,8 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
-        List<UserFormalIntegral> formalIntegralList = userFormalIntegralRepository.findByUserIdAndMerchantIdAndStatusAndTimeBetween(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
-        int forwardScore = 0;
-        for (UserFormalIntegral u : formalIntegralList
-                ) {
-            forwardScore += u.getScore();
-        }
-        return forwardScore;
+        Integer totalForwardScore =  userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
+        return totalForwardScore == null ? 0 : totalForwardScore;
     }
 
     /**
@@ -305,7 +299,7 @@ public class DayReportServiceImpl implements DayReportService {
             int visitorScore = getVisitorScore(user, lastBeginTime, todayBeginTime);
             try {
                 if (visitorScore > 0) {
-                    ApiResult apiResult = apiService.rechargePoint(user.getCustomerId(), user.getId(), Long.valueOf(visitorScore), IntegralTypeEnum.BROWSE_INFO);
+                    ApiResult apiResult = apiService.rechargePoint(user.getCustomerId(), user.getId(), (long) visitorScore, IntegralTypeEnum.BROWSE_INFO);
                     System.out.println(apiResult.getCode());
                 }
             } catch (UnsupportedEncodingException e) {

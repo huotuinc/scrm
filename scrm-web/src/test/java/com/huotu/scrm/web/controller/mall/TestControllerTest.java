@@ -4,6 +4,7 @@ import com.huotu.scrm.web.CommonTestBase;
 import com.huotu.scrm.web.controller.page.mall.TestIndexPage;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -32,8 +33,9 @@ public class TestControllerTest extends CommonTestBase {
         mockMvc.perform(post(indexControllerUrl)
                 .param("customerId", String.valueOf(customerId)))
                 .andDo(print())
-                .andExpect(status().isMethodNotAllowed())
-                .andExpect(view().name("error"));
+//                .andExpect(status().isMethodNotAllowed())
+                .andExpect(view().name("error"))
+                .andExpect(model().attribute("status", HttpStatus.METHOD_NOT_ALLOWED.value()));
 
         //case 2:no param
         //expect:redirect to login page
@@ -56,12 +58,12 @@ public class TestControllerTest extends CommonTestBase {
     }
 
     @Test
-    public void testIndex() throws Exception{
+    public void testIndex() throws Exception {
         //case 4:404test
         mockMvc.perform(post(baseUrl + "/123")
                 .param("customerId", String.valueOf(customerId)))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+//                .andDo(print())
+                .andExpect(status().isNotFound());;
     }
 
     @Test
@@ -71,7 +73,9 @@ public class TestControllerTest extends CommonTestBase {
         //expect:method not allowed
         mockMvc.perform(post(htmlIndexControllerUrl)
                 .param("customerId", String.valueOf(customerId)))
-                .andExpect(status().isMethodNotAllowed());
+//                .andExpect(status().isMethodNotAllowed())
+                .andExpect(view().name("error"))
+                .andExpect(model().attribute("status", HttpStatus.METHOD_NOT_ALLOWED.value()));
 
         //case 2:no param
         //expect:redirect to login page

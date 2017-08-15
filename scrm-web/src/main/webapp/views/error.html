@@ -5,7 +5,7 @@
     <title>异常错误</title>
 </head>
 <body>
-    <h2>啊哦，程序出错了！</h2>
+    <h2><th:block th:text="${status}">500</th:block>  啊哦，程序出错了！</h2>
     <h3 th:text="${exception.message}"></h3>
 </body>
 </html>

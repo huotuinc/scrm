@@ -6,6 +6,7 @@ import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.service.api.ApiService;
 import org.apache.http.HttpStatus;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,6 +22,7 @@ public class DayReportServiceTest extends CommonTestBase {
      * 测试保存每日资讯浏览奖励积分测试
      */
     @Test
+    @Ignore
     public void testDaySaveVisitorScore() throws Exception {
         Long customerId = 4421L;
         Long userId = 1058823L;
