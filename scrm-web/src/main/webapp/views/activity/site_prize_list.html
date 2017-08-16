@@ -8,14 +8,14 @@
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" content=""/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="../../resources/css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
+    <link rel="stylesheet" href="../../resources/css/index-lite.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/weui.min.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.css">
     <title></title>
 </head>
 <style>
     .weui_cells {
-        margin-top:2px;
+        margin-top: 2px;
         background-color: #fff;
         line-height: 1.41176471;
         font-size: 17px;
@@ -23,7 +23,7 @@
         position: relative;
     }
 
-    .prize_get{
+    .prize_get {
         float: left;
         border: 1px solid #ff0b0b;
         background-color: #fff;
@@ -31,22 +31,29 @@
         font-size: 12px;
         margin-top: -18px;
         color: #f90000;
-        margin-left: 69px;
+        margin-left: 126px;
     }
 
-.imgbox{
-    width:55px;vertical-align: middle; float: left; margin-left: 10px
-}
-    .title{
-        float: left;margin-top: 5px;
+    .imgbox {
+        width: 55px;
+        vertical-align: middle;
+        float: left;
+        margin-left: 10px
+    }
+
+    .title {
+        float: left;
+        margin-top: 5px;
         margin-left: 10px;
         width: 74%;
     }
-    .title .time{
+
+    .title .time {
         font-size: 12px;
         color: #969696;
     }
-    .titlename{
+
+    .titlename {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -55,50 +62,96 @@
     }
 </style>
 <body>
-<div th:remove="all-but-first">
-    <div class="weui_cells weui_cells_access " th:each="actPrize ,infoState: ${winRecords}">
-
+<div th:remove="all-but-first" id="app">
+    <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}"
+         onclick="AddTel.showUserInfo()">
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
-                <img th:src="${actPrize.prizeImageUrl}" src="../../resources/images/nr.jpg"  class="imgbox">
+                <img th:src="${record.prize.mallPrizeImageUrl}" src="../../resources/images/nr.jpg" class="imgbox">
                 <div class="title">
-                <p class="titlename" th:text="${actPrize.prizeName}">标题标题标题标题标题标题标题标题</p>
-                <p class="time">2017.01.01</p>
+                    <p class="titlename" th:text="${record.prize.prizeName}">标题标题标题标题标题标题标题标题</p>
+                    <p class="time" th:text="${#temporals.format(record.winTime, 'yyyy-MM-dd HH:mm:ss')}">2017.01.01</p>
+                    <button th:if="${record.getReward}" class="prize_get" type="button">已领取</button>
                 </div>
             </div>
-            <div class="weui_cell_ft" style="display:none"> </div>
+            <div class="weui_cell_ft" style="display:none"></div>
         </a>
     </div>
     <div class="weui_cells weui_cells_access ">
 
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
-                <img src="../../resources/images/nr.jpg"  class="imgbox">
+                <img src="../../resources/images/nr.jpg" class="imgbox">
                 <div class="title">
                     <p class="titlename">标题标题标题标题标题标题标题标题</p>
                     <p class="time">2017.01.01</p>
-                    <button class="prize_get" type="button" >已领取</button>
+                    <button class="prize_get" type="button">已领取</button>
                 </div>
             </div>
-            <div class="weui_cell_ft" style="display:none"> </div>
+            <div class="weui_cell_ft" style="display:none"></div>
         </a>
     </div>
     <div class="weui_cells weui_cells_access ">
 
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
-                <img src="../../resources/images/nr.jpg"  class="imgbox">
+                <img src="../../resources/images/nr.jpg" class="imgbox">
                 <div class="title">
                     <p class="titlename">标题标题标题标题标题标题标题标题</p>
                     <p class="time">2017.01.01</p>
                 </div>
             </div>
-            <div class="weui_cell_ft" style="display:none"> </div>
+            <div class="weui_cell_ft" style="display:none"></div>
         </a>
     </div>
 
 </div>
 
+<div class="recommend-modal user-modal" id="J_addTel">
+    <div class="user-info-dialog">
+        <div class="user-info-wrap">
+            <i class="icon close" onclick="AddTel.closeNameAndTel();"></i>
+            <form action="#" id="J_userInfo">
+                <input type="hidden" value="1" th:value="-1" name="ActWinDetailId">
+                <div class="form-group form-user">
+                    <label>
+                        <input type="text" placeholder="请输入姓名" name="name">
+                    </label>
+                </div>
+                <div class="form-group form-mobile">
+                    <label>
+                        <input type="tel" placeholder="请输入手机号" name="mobile">
+                    </label>
+                </div>
+                <div class="form-group form-auth">
+                    <label>
+                        <input type="text" placeholder="请输入验证码" name="authCode">
+                    </label>
+                    <button class="user-info-text" id="J_sendAuth">获取验证码</button>
+                </div>
+                <button type="submit" id="J_userFormBtn" form="J_userInfo" class="user-info-btn">提&nbsp;&nbsp;交</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="http://resali.huobanplus.com/cdn/zepto/1.2.0/zepto.min.js"></script>
+
+<script>
+
+    var AddTel = {
+        closeNameAndTel: function () {
+            $('#J_addTel').hide();
+            AddTel.toggleFilter();
+        },
+        showUserInfo: function () {
+            $('#J_addTel').show();
+            AddTel.toggleFilter();
+        },
+        toggleFilter: function () {
+            $('#app').toggleClass('filter');
+        }
+    }
+</script>
 
 </body>
 </html>
