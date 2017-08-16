@@ -194,19 +194,17 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/act/prizeList")
     public String prizeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId,Model model){
 
+        //查询到用户某个活动的中奖记录
         List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId,userId);
-        List<ActPrize> actPrizes = new ArrayList<>();
-
         list.forEach(p->{
             ActPrize actPrize = p.getPrize();
             try {
-                actPrize.setPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
+                actPrize.setMallPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            actPrizes.add(actPrize);
         });
-        model.addAttribute("winRecords",actPrizes);
+        model.addAttribute("winRecords",list);
         return "activity/site_prize_list";
     }
 

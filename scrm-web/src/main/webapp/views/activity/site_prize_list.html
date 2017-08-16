@@ -31,7 +31,7 @@
         font-size: 12px;
         margin-top: -18px;
         color: #f90000;
-        margin-left: 69px;
+        margin-left: 126px;
     }
 
 .imgbox{
@@ -56,14 +56,15 @@
 </style>
 <body>
 <div th:remove="all-but-first">
-    <div class="weui_cells weui_cells_access " th:each="actPrize ,infoState: ${winRecords}">
+    <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}">
 
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
-                <img th:src="${actPrize.prizeImageUrl}" src="../../resources/images/nr.jpg"  class="imgbox">
+                <img th:src="${record.prize.mallPrizeImageUrl}" src="../../resources/images/nr.jpg"  class="imgbox">
                 <div class="title">
-                <p class="titlename" th:text="${actPrize.prizeName}">标题标题标题标题标题标题标题标题</p>
-                <p class="time">2017.01.01</p>
+                    <p class="titlename" th:text="${record.prize.prizeName}">标题标题标题标题标题标题标题标题</p>
+                    <p class="time" th:text="${#temporals.format(record.winTime, 'yyyy-MM-dd HH:mm:ss')}">2017.01.01</p>
+                    <button th:if="${record.getReward}" class="prize_get"  type="button">已领取</button>
                 </div>
             </div>
             <div class="weui_cell_ft" style="display:none"> </div>
@@ -76,7 +77,7 @@
                 <img src="../../resources/images/nr.jpg"  class="imgbox">
                 <div class="title">
                     <p class="titlename">标题标题标题标题标题标题标题标题</p>
-                    <p class="time">2017.01.01</p>
+                    <p class="time" >2017.01.01</p>
                     <button class="prize_get" type="button" >已领取</button>
                 </div>
             </div>
