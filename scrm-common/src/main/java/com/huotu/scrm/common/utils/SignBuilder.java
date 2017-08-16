@@ -46,7 +46,6 @@ public class SignBuilder {
             }
         }
         stringBuilder.append(suffix);
-        System.out.println(stringBuilder.toString());
         return DigestUtils.md5Hex(stringBuilder.toString().getBytes("utf-8"));
     }
 

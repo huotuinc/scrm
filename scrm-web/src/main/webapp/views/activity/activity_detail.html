@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>活动编辑</title>
     <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.7.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote.css" rel="stylesheet">
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
-    <link href="../../resources/css/daterangepicker.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+    <!--<link href="../../resources/css/daterangepicker.css" th:src="@{/resources/css/daterangepicker.css}" rel="stylesheet">-->
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.6/summernote.css" rel="stylesheet">
 </head>
 
@@ -46,17 +48,9 @@
                         <input type="text" id="actTime" class="form-control"
                                placeholder="开始时间-结束时间" required/>
                         <input type="hidden" id="startDate" name="startDate"
-                               th:if="${not #lists.isEmpty(activity.startDate)}"
-                               th:value="${#temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss')}"
-                        /> <input type="hidden" id="startDate" name="startDate"
-                                  th:if="${ #lists.isEmpty(activity.startDate)}"
-                    />
+                               th:value="${activity.startDate != null ? #temporals.format(activity.startDate,'yyyy-MM-dd HH:mm:ss') : ''}"/>
                         <input type="hidden" id="endDate" name="endDate"
-                               th:if="${not #lists.isEmpty(activity.endDate)}"
-                               th:value="${#temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss')}"
-                        /><input type="hidden" id="endDate" name="endDate"
-                                 th:if="${#lists.isEmpty(activity.endDate)}"
-                    />
+                               th:value="${activity.endDate != null ? #temporals.format(activity.endDate,'yyyy-MM-dd HH:mm:ss') : ''}"/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -92,8 +86,8 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <div class="col-sm-4 col-sm-offset-2">
+                <div  class="form-group">
+                    <div class="col-sm-8 col-sm-offset-5">
                         <button class="btn btn-sm btn-success" type="button" onclick="actDetailHandler.screen()">保存
                         </button>
                     </div>
@@ -114,8 +108,8 @@
 <!--validate-->
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
+<script src="../../resources/js/summernote/summernote.js" th:src="@{/resources/js/summernote/summernote.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
-<script src="../../resources/js/summernote/summernote.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 <script type="text/javascript">

@@ -20,12 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -132,16 +127,15 @@ public class ActController extends MallBaseController {
      */
     @RequestMapping("/act/enable")
     @ResponseBody
-    public ApiResult checkEnable(Long actId) {
+    public ApiResult checkEnable(@RequestParam Long actId) {
         Activity activity = activityService.findByActId(actId);
         List<ActPrize> prizeList = activity.getActPrizes();
-        int rate = 0;
-        for (ActPrize actPrize : prizeList
-                ) {
-            rate += actPrize.getWinRate();
+        if(prizeList.size() < 6 || prizeList.size() > 8){
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,"奖品个数必须为6-8个",null);
         }
+        int rate = prizeList.stream().mapToInt(ActPrize::getWinRate).sum();
         if (rate != 100) {
-            return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,"奖品概率合计值必须为100，当前合计值为" + rate,null);
         }
         activity.setOpenStatus(true);
         activityService.saveActivity(activity);

@@ -27,11 +27,9 @@
             <form method="post" th:action="@{/mall/prize/save}" class="form-horizontal" id="editSavePrize">
                 <input type="hidden" th:value="${actPrize.activity.actId}" name="actId">
                 <input type="hidden" th:value="${actPrize.prizeCount}" name="prizeCount">
-                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeId)}" th:value="${actPrize.prizeId}"
-                       name="prizeId">
-                <input type="hidden" th:if="${not #lists.isEmpty(actPrize.prizeType)}"
-                       th:value="${actPrize.prizeType.code}" name="prizeType">
-                <input type="hidden" th:if="${#lists.isEmpty(actPrize.prizeType)}" value="0" name="prizeType">
+                <input type="hidden" th:if="${actPrize.prizeId != null}" th:value="${actPrize.prizeId}" name="prizeId">
+                <input type="hidden" th:value="${actPrize.prizeType}" name="prizeType">
+                <!--<input type="hidden" th:if="${#lists.isEmpty(actPrize.prizeType)}" value="0" name="prizeType">-->
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品名称:</label>
                     <div class="col-sm-3">
@@ -42,8 +40,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品类型:</label>
                     <div class="col-sm-2">
-                        <span th:if="${actPrize.prizeType.code>0}" id="prizeType">奖品</span>
-                        <span th:if="${actPrize.prizeType.code==0}" id="prizeType">谢谢惠顾</span>
+                        <span th:text="${actPrize.prizeType.value}">谢谢惠顾</span>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
@@ -71,12 +68,8 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">中奖概率:</label>
                     <div class="col-sm-3">
-                        <input type="hidden" id="winRate" th:if="${actPrize.activity.openStatus}" placeholder="中奖概率" maxlength="10"
-                               th:value="${actPrize.winRate}" name="winRate" required
-                               class="form-control">
-                        <span th:if="${actPrize.activity.openStatus}" th:text="${actPrize.winRate}+'%'"></span>
-                        <input th:unless="${actPrize.activity.openStatus}" type="text" placeholder="中奖概率"
-                               th:value="${actPrize.winRate}" name="winRate" id="winRate" required maxlength="10"
+                        <input type="number" placeholder="中奖概率" th:readonly="${actPrize.activity.openStatus}"
+                               th:value="${actPrize.winRate}" name="winRate" id="winRate" required max="100" min="1"
                                class="form-control">
                     </div>
                 </div>
@@ -89,7 +82,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-5">
-                        <button class="btn btn-sm btn-success" type="button" onclick="prizeEditHandler.screen()">
+                        <button class="btn btn-sm btn-success" type="button" onclick="prizeEditHandler.save()">
                             保存
                         </button>
                     </div>
@@ -150,13 +143,7 @@
                 })
             }
         },
-        screen: function () {
-            var type = $("#prizeType").html();
-            if (type == 0) {
-                $("input:hidden[name='prizeType']").val("PRIZE_TYPE_THANKS");
-            } else {
-                $("input:hidden[name='prizeType']").val("PRIZE_TYPE_ENTITY_PRIZE");
-            }
+        save: function () {
             $("#editSavePrize").valid();
            $("#editSavePrize").submit();
         }
@@ -167,13 +154,13 @@
             rules: {
                 remainCount: {"digits": true, min: 1},
                 winRate: {"digits": true, min: 1, max: 100},
-                sort: {"digits": true, min: 1}
+                sort: {"digits": true, min: 0}
             },
             messages: {
                 prizeName:"奖品名称不能为空",
                 remainCount: "奖品数量大于0",
                 winRate: "中奖概率大于0小于100",
-                sort: "排序字段整数大于0",
+                sort: "排序字段整数大于等于0",
 
             }
         });

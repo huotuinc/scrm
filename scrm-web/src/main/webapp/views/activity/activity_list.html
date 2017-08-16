@@ -208,14 +208,14 @@
                 if (res.code == 200) {
                     window.location.reload();
                 } else {
-                    hot.tip.error("启用失败（中奖概率合计有误）")
+                    hot.tip.error(res.msg);
                 }
             })
         },
         actLink: function (actId, customerId) {
             actNum = actId;
             customerNum = customerId;
-            var str = "http://act.caijigaoshou.cn/activity/index?actId=" + actId + "&customerId=" + customerId;
+            var str = window.location.origin + "/site/activity/index?actId=" + actId+ "&customerId=" + customerId;
             $("#actLinkStr").html(str);
         }
     }
