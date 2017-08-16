@@ -55,9 +55,8 @@
     }
 </style>
 <body>
-<div th:remove="all-but-first">
-    <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}">
-
+<div th:remove="all-but-first" id="app">
+    <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}" onclick="AddTel.showUserInfo()" >
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <img th:src="${record.prize.mallPrizeImageUrl}" src="../../resources/images/nr.jpg"  class="imgbox">
@@ -100,6 +99,57 @@
 
 </div>
 
+<div class="recommend-modal user-modal" id="J_addTel">
+    <div class="user-info-dialog">
+        <div class="user-info-wrap">
+            <i class="icon close"></i>
+            <form action="#" id="J_userInfo">
+                <input type="hidden" value="1" th:value="-1" name="ActWinDetailId">
+                <div class="form-group form-user">
+                    <label>
+                        <input type="text" placeholder="请输入姓名" name="name">
+                    </label>
+                </div>
+                <div class="form-group form-mobile">
+                    <label>
+                        <input type="tel" placeholder="请输入手机号" name="mobile">
+                    </label>
+                </div>
+                <div class="form-group form-auth">
+                    <label>
+                        <input type="text" placeholder="请输入验证码" name="authCode">
+                    </label>
+                    <button class="user-info-text" id="J_sendAuth">获取验证码</button>
+                </div>
+                <button type="submit" id="J_userFormBtn" form="J_userInfo" class="user-info-btn">提&nbsp;&nbsp;交</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    var AddTel = {
+        closeNameAndTel: function () {
+            $('#J_addTel').find('.close').click(function () {
+                $('#J_addTel').hide();
+                game.toggleFilter();
+            })
+        },
+        showUserInfo: function () {
+            $('#J_addTel').show();
+            AddTel.toggleFilter();
+        },
+
+        toggleFilter: function () {
+            $('#app').toggleClass('filter');
+        },
+
+    }
+
+
+
+</script>
 
 </body>
 </html>
