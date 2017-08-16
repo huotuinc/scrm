@@ -35,6 +35,4 @@ public interface ActWinDetailRepository extends JpaRepository<ActWinDetail, Long
 
     Page<ActWinDetail> findAllByActId(Long actId, Pageable pageable);
 
-
-
 }

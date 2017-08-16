@@ -27,11 +27,12 @@ public interface ActWinDetailService {
      * 分页查询活动的中奖记录
      *
      * @param actId
+     * @param type
      * @param pageNo
      * @param pageSize
      * @return
      */
-    Page<ActWinDetail> getPageActWinDetail(Long actId, int pageNo, int pageSize);
+    Page<ActWinDetail> getPageActWinDetail(Long actId, int type, int pageNo, int pageSize);
 
     /**
      * 添加中奖记录
@@ -47,7 +48,7 @@ public interface ActWinDetailService {
      *
      * @return
      */
-    List<Map<String, Object>> createExcelRecord(Long actId,int startPage, int endPage);
+    List<Map<String, Object>> createExcelRecord(Long actId, int type,int startPage, int endPage);
 
 
     @Transactional
@@ -56,6 +57,7 @@ public interface ActWinDetailService {
 
     /**
      * 获取某人某个活动的中奖记录
+     *
      * @param actId
      * @param userId
      * @return
