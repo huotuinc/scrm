@@ -38,7 +38,7 @@ public class VerifyServiceImpl implements VerifyService {
 
         @Override
         public String message(String code) {
-            return "中奖短信验证码为：" + code + "，如果没有提交请求请忽略";
+            return "短信验证码为：" + code + "，如果没有提交请求请忽略";
         }
     };
 
