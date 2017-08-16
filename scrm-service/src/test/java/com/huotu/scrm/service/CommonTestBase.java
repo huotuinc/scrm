@@ -19,7 +19,7 @@ import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
-import com.huotu.scrm.service.model.prizeTypeEnum;
+import com.huotu.scrm.service.model.PrizeType;
 import com.huotu.scrm.service.repository.activity.ActPrizeRepository;
 import com.huotu.scrm.service.repository.activity.ActivityRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
@@ -130,7 +130,7 @@ public class CommonTestBase {
         return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
 
-    protected ActPrize mockActPrize(Activity activity, prizeTypeEnum typeEnum) {
+    protected ActPrize mockActPrize(Activity activity, PrizeType typeEnum) {
         ActPrize actPrize = new ActPrize();
         actPrize.setActivity(activity);
         actPrize.setPrizeName(UUID.randomUUID().toString());

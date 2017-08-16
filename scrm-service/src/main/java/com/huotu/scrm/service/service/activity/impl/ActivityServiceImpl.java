@@ -11,7 +11,7 @@ package com.huotu.scrm.service.service.activity.impl;
 
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
-import com.huotu.scrm.service.model.prizeTypeEnum;
+import com.huotu.scrm.service.model.PrizeType;
 import com.huotu.scrm.service.repository.activity.ActivityRepository;
 import com.huotu.scrm.service.service.activity.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class ActivityServiceImpl implements ActivityService {
             }
         } else {
             ActPrize actPrize = new ActPrize();
-            actPrize.setPrizeType(prizeTypeEnum.PRIZE_TYPE_THANKS);
+            actPrize.setPrizeType(PrizeType.PRIZE_TYPE_THANKS);
             actPrize.setActivity(activity);
             actPrize.setPrizeName("谢谢惠顾");
             List<ActPrize> actPrizeList = new ArrayList<>();
