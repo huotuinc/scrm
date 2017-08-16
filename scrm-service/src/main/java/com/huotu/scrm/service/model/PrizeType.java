@@ -8,10 +8,10 @@ import com.huotu.scrm.common.ienum.ICommonEnum;
  * Created by luohaibo on 2017/8/3.
  */
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum prizeTypeEnum implements ICommonEnum {
+public enum PrizeType implements ICommonEnum {
 
     PRIZE_TYPE_THANKS(0, "谢谢参与"),
-    PRIZE_TYPE_ENTITY_PRIZE(1, "实物");
+    PRIZE_TYPE_ENTITY_PRIZE(1, "奖品");
 
     private int code;
     private String value;
@@ -26,7 +26,7 @@ public enum prizeTypeEnum implements ICommonEnum {
         return this.value;
     }
 
-    prizeTypeEnum(int code, String value) {
+    PrizeType(int code, String value) {
         this.code = code;
         this.value = value;
     }

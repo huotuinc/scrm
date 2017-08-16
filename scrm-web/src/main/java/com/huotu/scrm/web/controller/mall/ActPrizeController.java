@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.URISyntaxException;
-import java.util.Comparator;
 
 /**
  * 奖品控制层
@@ -53,13 +52,11 @@ public class ActPrizeController extends MallBaseController {
     @RequestMapping("/prize/list")
     public String getPrizeDetail(Long actId, Model model) {
         Activity activity = activityService.findByActId(actId);
-        activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
         activity.getActPrizes().forEach(p -> {
             if (!StringUtils.isEmpty(p.getPrizeImageUrl())) {
                 try {
                     p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
+                } catch (URISyntaxException ignored) {
                 }
             }
         });
@@ -103,9 +100,10 @@ public class ActPrizeController extends MallBaseController {
      * @return
      */
     @RequestMapping("/prize/save")
-    public String savePrize(ActPrize actPrize, Long actId) {
+    public String savePrize(ActPrize actPrize,
+                            @RequestParam Long actId) {
         Activity activity = activityService.findByActId(actId);
-        if ((actPrize.getPrizeId() == null)) {
+        if (actPrize.getPrizeId() == null) {
             actPrize.setPrizeCount(actPrize.getRemainCount());
             actPrize.setActivity(activity);
             activity.getActPrizes().add(actPrize);
