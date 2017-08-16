@@ -2,7 +2,7 @@
  * Created by Jinxiangdong on 2017/7/11.
  */
 $(function () {
-    'use strict';
+    //'use strict';
 
     var $customerId = $("#customerId");
     var $userId = $("#userId");
@@ -46,7 +46,15 @@ $(function () {
         $btnFile.click();
     }
 
+    function supportFormData() {
+        return !! window.FormData;
+    }
+
     function uploadAvatar() {
+
+        var suppFormData = supportFormData();
+        console.log("support FormData=" + suppFormData);
+
         //var $uploadimage = $("#btnInput");
         if( !$btnFile.val()  ) return false;
 
@@ -64,9 +72,10 @@ $(function () {
         var data = new FormData( $avatarForm[0] );
 
         console.log(data);
+        console.log( JSON.stringify( data));
 
         $.ajax(url,{
-            method:"post",
+            type:'post',
             data:data,
             dataType:'json',
             processData: false,
@@ -89,7 +98,7 @@ $(function () {
                 }
             },
             error:function (error) {
-                console.log("error="+error);
+                console.log("error="+ JSON.stringify(error) );
                 layer.msg(error.responseText);
             }
         });
@@ -120,31 +129,32 @@ $(function () {
         var url = $('body').attr("js-data-update-url");
         var customerId = $customerId.val();
         //var userId = $userId.val();
-        var data ={ customerId : customerId , type: updateType , value:text};
+        var data = {customerId: customerId, type: updateType, typeValue: text};
 
-        console.log("url="+url);
+        console.log("url=" + url);
+        console.log("data=" + JSON.stringify(data));
 
         $.ajax({
-           url: url,
-            type:"post",
-           dataType:"json",
+            url: url,
+            type: 'POST',
+            dataType: 'json',
             data: data,
-            beforeSend:function () {
+            beforeSend: function () {
                 layerIndex = layer.load();
             },
-            complete:function () {
+            complete: function () {
                 layer.close(layerIndex);
             },
-            success:function (data) {
-                if(data.code==200){
-                    ele.text( text );
-                }else{
+            success: function (data) {
+                if (data.code == 200) {
+                    ele.text(text);
+                } else {
                     layer.msg(data.msg);
                 }
             },
-            error:function (error) {
-               console.log(error);
-               layer.msg(error.responseText);
+            error: function (error) {
+                console.log(error);
+                layer.msg(error.responseText);
             },
         });
     }

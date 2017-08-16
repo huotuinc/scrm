@@ -72,6 +72,7 @@ public class BusinessCardController extends SiteBaseController {
      * 上传名片头像接口
      * @param userId 当前登录用户
      * @param customerId 商户Id
+     * @param userId 用户Id
      * @param btnFile 图片
      * @return {@link ApiResult}
      */
@@ -87,6 +88,7 @@ public class BusinessCardController extends SiteBaseController {
         if (type == null || !type.toLowerCase().startsWith("image/")) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不支持的文件类型，仅支持图片！");
         }
+
         User user = userService.getByIdAndCustomerId(userId, customerId);
         if (user == null) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不存在的用户", null);

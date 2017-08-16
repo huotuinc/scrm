@@ -23,11 +23,11 @@ import java.util.List;
 @Transactional
 public class BusinessCardServiceImpl implements BusinessCardService {
     @Autowired
-    BusinessCardRepository businessCardRepository;
+    private BusinessCardRepository businessCardRepository;
     @Autowired
-    BusinessCardRecordRepository businessCardRecordRepository;
+    private BusinessCardRecordRepository businessCardRecordRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     public BusinessCard getBusinessCard(Long salesmanId, Long customerId) {
         BusinessCard businessCard = businessCardRepository.getByUserIdAndCustomerId(salesmanId, customerId);

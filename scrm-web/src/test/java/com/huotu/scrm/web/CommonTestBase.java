@@ -105,6 +105,12 @@ public abstract class CommonTestBase extends SpringWebTest {
         webDriver.manage().addCookie(new Cookie(cookieName, cookieValue));
     }
 
+    public javax.servlet.http.Cookie mockCookie(Long userId , Long customerId) throws Exception{
+        String cookieName = UserInterceptor.USER_ID_PREFIX + customerId;
+        String cookieValue = EncryptUtils.aesEncrypt(String.valueOf(userId),UserInterceptor.USER_ID_SECRET_KEY);
+        return new javax.servlet.http.Cookie(cookieName , cookieValue);
+    }
+
 
     /**
      * 测试嵌入到伙伴商城的页面，不带参数 customerId 的情况

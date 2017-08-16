@@ -1,12 +1,15 @@
 package com.huotu.scrm.service.service;
 
+import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.CommonTestBase;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
 import com.huotu.scrm.service.repository.mall.CustomerRepository;
+import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import org.junit.Assert;
@@ -14,9 +17,10 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Random;
+import java.util.UUID;
 
 /**
- * Created by Administrator on 2017/7/11.
+ * Created by Jinxiangdong on 2017/7/11.
  */
 public class BusinessCardServiceTest extends CommonTestBase {
     @Autowired
@@ -25,6 +29,8 @@ public class BusinessCardServiceTest extends CommonTestBase {
     private CustomerRepository customerRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserLevelRepository userLevelRepository;
 
     @Test
     public void getSalesmanBusinessCard(){
@@ -84,8 +90,19 @@ public class BusinessCardServiceTest extends CommonTestBase {
 
     @Test
     public void  updateBusinessCard() {
-        long customerId = 4886;
-        long userId = 531757;
+        Customer customer = mockCustomer();
+        customer = customerRepository.saveAndFlush(customer);
+        long customerId = customer.getId();
+        UserLevel userLevel = new UserLevel();
+        userLevel.setType(UserType.buddy);
+        userLevel.setSalesman(true);
+        userLevel.setLevelName(UUID.randomUUID().toString());
+        userLevel.setLevel(new Random().nextInt(10));
+        userLevel.setCustomerId(customerId);
+        userLevel = userLevelRepository.saveAndFlush(userLevel);
+        User user = mockUser(customerId , userLevel.getType(),userLevel.getId());
+        user = userRepository.saveAndFlush(user);
+        long userId = user.getId();
         //
         BusinessCardUpdateTypeEnum type = BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR;
         String text = "名片头像地址";
