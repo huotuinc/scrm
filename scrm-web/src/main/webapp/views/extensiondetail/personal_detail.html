@@ -94,16 +94,16 @@
                         </ul>
                     </div>
                 </div>
-                <div class="weui_cells weui_cells_access"
+                <div class="weui_cells"
                      th:each="monthRanking:${dayScoreRankingInfo.monthScoreRankingList}">
                     <a class="weui_cell">
                         <div class="weui_cell_bd weui_cell_primary">
                             <p th:text="${monthRanking.month}+'排名'"></p>
                         </div>
                         <div class="weui_cell_ft" th:text="${monthRanking.data}+'位'"
-                             th:if="${monthRanking.data}>0"></div>
-                        <div class="weui_cell_ft" th:if="${monthRanking.data}==0">--</div>
-                        <div class="weui_cell_ft" th:if="${monthRanking.data}<0">200名以外</div>
+                             th:if="${monthRanking.data}>0" style="border-style: none"></div>
+                        <div class="weui_cell_ft" th:if="${monthRanking.data}==0" style="border-style: none">--</div>
+                        <div class="weui_cell_ft" th:if="${monthRanking.data}<0" style="border-style: none">200名以外</div>
                     </a>
                 </div>
             </div>
@@ -130,26 +130,26 @@
                             <li>
                                 <a>
                                     <p class="sj" th:text="${dayVisitorNumInfo.monthVisitorNum}"></p>
-                                    <p>本月UV（位）</p>
+                                    <p>本月UV（个）</p>
                                 </a>
                             </li>
                             <li>
                                 <a style="border-left: 1px solid #57acf0;">
                                     <p class="sj" th:text="${dayVisitorNumInfo.highestMonthVisitorNum}"></p>
-                                    <p>历史最最高月UV（位）</p>
+                                    <p>历史最最高月UV（个）</p>
                                 </a>
                             </li>
 
                         </ul>
                     </div>
                 </div>
-                <div class="weui_cells weui_cells_access"
+                <div class="weui_cells"
                      th:each="monthVisitorInfo:${dayVisitorNumInfo.monthVisitorNumList}">
                     <a class="weui_cell">
                         <div class="weui_cell_bd weui_cell_primary">
                             <p th:text="${monthVisitorInfo.month}"></p>
                         </div>
-                        <div class="weui_cell_ft" th:text="${monthVisitorInfo.data}+'位'"></div>
+                        <div class="weui_cell_ft" th:text="${monthVisitorInfo.data}+'个'" style="border-style: none"></div>
                     </a>
                 </div>
             </div>
@@ -189,12 +189,12 @@
                         </ul>
                     </div>
                 </div>
-                <div class="weui_cells weui_cells_access" th:each="monthScoreInfo:${dayScoreInfo.monthScoreList}">
+                <div class="weui_cells" th:each="monthScoreInfo:${dayScoreInfo.monthScoreList}">
                     <a class="weui_cell">
                         <div class="weui_cell_bd weui_cell_primary">
                             <p th:text="${monthScoreInfo.month}"></p>
                         </div>
-                        <div class="weui_cell_ft" th:text="${monthScoreInfo.data}+'分'"></div>
+                        <div class="weui_cell_ft" th:text="${monthScoreInfo.data}+'分'" style="border-style: none"></div>
                     </a>
                 </div>
             </div>
@@ -238,16 +238,16 @@
                         </ul>
                     </div>
                 </div>
-                <div class="weui_cells weui_cells_access"
+                <div class="weui_cells"
                      th:each="monthFollowInfo:${dayFollowNumInfo.monthFollowRankingList}">
-                    <a class="weui_cell">
+                    <a class="weui_cell" >
                         <div class="weui_cell_bd weui_cell_primary">
                             <p th:text="${monthFollowInfo.month}+'排名'"></p>
                         </div>
                         <div class="weui_cell_ft" th:text="${monthFollowInfo.data}+'位'"
-                             th:if="${monthFollowInfo.data}>0"></div>
-                        <div class="weui_cell_ft" th:if="${monthFollowInfo.data}==0">--</div>
-                        <div class="weui_cell_ft" th:if="${monthFollowInfo.data}<0">200名以外</div>
+                             th:if="${monthFollowInfo.data}>0" style="border-style: none"></div>
+                        <div class="weui_cell_ft" th:if="${monthFollowInfo.data}==0" style="border-style: none">--</div>
+                        <div class="weui_cell_ft" th:if="${monthFollowInfo.data}<0" style="border-style: none">200名以外</div>
                     </a>
                 </div>
             </div>

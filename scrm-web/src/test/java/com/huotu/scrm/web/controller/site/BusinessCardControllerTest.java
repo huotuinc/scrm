@@ -17,32 +17,27 @@ import com.huotu.scrm.web.controller.page.site.TestEditBusinessCardPage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runners.Parameterized;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockMultipartHttpServletRequest;
-import org.springframework.test.web.client.match.MockRestRequestMatchers;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.util.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import java.util.List;
+import java.util.UUID;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 /**
@@ -141,7 +136,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
 
         //1.检测get请求url
         mockMvc.perform( MockMvcRequestBuilders.get(url).cookie(cookie).param("customerId", String.valueOf(customerId)) )
-                .andExpect(status().isMethodNotAllowed());
+                .andExpect(status().isOk());
 
 
         //2.检测不是图片的 post请求
