@@ -105,11 +105,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     private int getForwardNum(Long userId, LocalDate beginTime, LocalDate endTime) {
         Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
-        int num = 0;
-        for (DayReport reportDay : sortAll) {
-            num += reportDay.getForwardNum();
-        }
-        return num;
+        return sortAll.stream().mapToInt(DayReport::getForwardNum).sum();
     }
 
     /**
@@ -123,11 +119,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     private int getVisitorNum(Long userId, LocalDate beginTime, LocalDate endTime) {
         Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
-        int num = 0;
-        for (DayReport reportDay : sortAll) {
-            num += reportDay.getVisitorNum();
-        }
-        return num;
+        return sortAll.stream().mapToInt(DayReport::getVisitorNum).sum();
     }
 
     /**
@@ -141,11 +133,7 @@ public class MonthReportServiceImpl implements MonthReportService {
     private int getExtensionScore(Long userId, LocalDate beginTime, LocalDate endTime) {
         Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
         List<DayReport> sortAll = dayReportRepository.findAll(specification);
-        int num = 0;
-        for (DayReport reportDay : sortAll) {
-            num += reportDay.getExtensionScore();
-        }
-        return num;
+        return sortAll.stream().mapToInt(DayReport::getExtensionScore).sum();
     }
 
     /**

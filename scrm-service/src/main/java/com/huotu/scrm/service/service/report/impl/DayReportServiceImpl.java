@@ -140,10 +140,7 @@ public class DayReportServiceImpl implements DayReportService {
         int historyScore = 0;
         //获取本月之前的用户的积分
         List<MonthReport> monthReportList = monthReportRepository.findByUserId(user.getId());
-        for (MonthReport monthReport : monthReportList
-                ) {
-            historyScore += monthReport.getExtensionScore();
-        }
+        historyScore = monthReportList.stream().mapToInt(MonthReport::getExtensionScore).sum();
         int monthScore = getMonthEstimateScore(user);
         return historyScore + monthScore;
     }
@@ -208,7 +205,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     public int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
-        Integer totalForwardScore =  userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
+        Integer totalForwardScore = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
         return totalForwardScore == null ? 0 : totalForwardScore;
     }
 
@@ -248,10 +245,7 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDateTime beginTime = today.atStartOfDay();
         LocalDate monthBegin = today.withDayOfMonth(1);
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayGreaterThanEqual(user.getId(), monthBegin);
-        for (DayReport dayReport :
-                dayReportList) {
-            monthVisitorNum += dayReport.getVisitorNum();
-        }
+        monthVisitorNum = dayReportList.stream().mapToInt(DayReport::getVisitorNum).sum();
         //获取今日访客量
         int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now);
         return monthVisitorNum + dayVisitorNum;
@@ -265,10 +259,7 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDateTime beginTime = today.atStartOfDay();
         LocalDate monthBegin = today.withDayOfMonth(1);
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayGreaterThanEqual(user.getId(), monthBegin);
-        for (DayReport dayReport :
-                dayReportList) {
-            monthForwardNum += dayReport.getForwardNum();
-        }
+        monthForwardNum = dayReportList.stream().mapToInt(DayReport::getForwardNum).sum();
         //获取今日转发量
         int dayForwardNum = infoBrowseRepository.findForwardNumBySourceUserId(beginTime, now, user.getId()).size();
         return monthForwardNum + dayForwardNum;
@@ -280,10 +271,7 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDate today = LocalDate.now();
         LocalDate monthBegin = today.withDayOfMonth(1);
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayGreaterThanEqual(user.getId(), monthBegin);
-        for (DayReport dayReport :
-                dayReportList) {
-            monthEstimateScore += dayReport.getExtensionScore();
-        }
+        monthEstimateScore = dayReportList.stream().mapToInt(DayReport::getExtensionScore).sum();
         return monthEstimateScore;
     }
 

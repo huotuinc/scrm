@@ -16,7 +16,7 @@
 </head>
 <body class="grbg">
 <div>
-    <p class="joinus">亲，赶紧加入小伙伴计划赚取积分吧！<a th:if="${not #lists.isEmpty(infoConfigure)}" th:href="@{${infoConfigure.infoIntroduceUrl}}">点击查看</a></p>
+    <p class="joinus">亲，赶紧加入小伙伴计划赚取积分吧！<a th:href="${infoConfigure}!=null?${infoConfigure.infoIntroduceUrl}:null">点击查看</a></p>
 </div>
 <div class="xzdd-list">
     <div class="weui_panel" th:each="infoModel:${infoModes}"

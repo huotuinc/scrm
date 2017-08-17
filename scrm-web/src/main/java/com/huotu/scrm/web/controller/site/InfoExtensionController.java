@@ -87,8 +87,8 @@ public class InfoExtensionController extends SiteBaseController {
     /**
      * 获取推广明细（统计明细）
      *
-     * @param userId
-     * @param model
+     * @param userId 用户id
+     * @param model  {@link Model}
      * @return
      */
     @RequestMapping("extension/getInfoDetail")

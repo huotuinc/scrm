@@ -137,7 +137,13 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         //用户uv
         List<WebElement> sj = webDriver.findElements(By.className("sj"));
         Assert.assertEquals(2, Integer.parseInt(sj.get(1).getText()));
-        // TODO: 2017-08-12 我的推广页面资讯的转发和浏览
+//        List<WebElement> title = webDriver.findElements(By.className("weui_media_title"));
+//        Assert.assertEquals(2,title.size());
+//        List<WebElement> info_meta = webDriver.findElements(By.className("weui_media_info_meta"));
+//        //咨询转发量
+//        Assert.assertEquals(1,Integer.parseInt(info_meta.get(0).getText()));
+
+
     }
 
     /**

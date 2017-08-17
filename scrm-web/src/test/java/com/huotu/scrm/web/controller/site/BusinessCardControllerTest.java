@@ -172,7 +172,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
         byte[] buffer = new byte[length];
         outputStream1.write(buffer);
         //String c = new String(buffer);
-                //.andExpect(status().is(302));
+        //.andExpect(status().is(302));
         //String mv = resultActions.andReturn().getModelAndView().getViewName();
 
         //5.检测非法用户的post请求
