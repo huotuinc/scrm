@@ -80,11 +80,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     @Override
     public List<InfoModel> findForwardInfo(User user) {
         List<Long> infoIdList = infoBrowseRepository.findUserForwardInfo(user.getId());
-        if (infoIdList != null && infoIdList.size() > 0) {
-            List<Info> infoList = infoRepository.findInfoList(infoIdList);
-            return getInfoModes(infoList);
+        if (infoIdList.isEmpty()) {
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+        List<Info> infoList = infoRepository.findInfoList(infoIdList);
+        return getInfoModes(infoList);
     }
 
     @Override
@@ -145,7 +145,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         if (mapMonthScoreRanking.containsKey(user.getId())) {
             monthRanking = mapMonthScoreRanking.get(user.getId());
         }
-        //判断用户是否有预计积分（只需判断今日是否有转发浏览记录）
+        //判断用户是否有预计积分（只需判断今日是否有转发浏览记录,本月的同理）
         if (dayScoreRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now) > 0) {
             //表示200名以外
             dayScoreRanking = -1;
@@ -189,7 +189,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int lastScore = (dayReport == null) ? 0 : dayReport.getExtensionScore();
         //设置历史累积积分
         int cumulativeScore = dayReportService.getCumulativeScore(user);
-        //获取本月预计积分
+        //获取本月积分
         int monthScore = dayReportService.getMonthEstimateScore(user);
         //设置近几个月积分信息
         List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();

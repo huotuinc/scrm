@@ -91,12 +91,8 @@ public class DayReportServiceImpl implements DayReportService {
             DayReport dayReport = new DayReport();
             dayReport.setSalesman(userLevel.isSalesman());
             //昨日被关注量(销售员特有,即总的关注量)
-            if (dayReport.isSalesman()) {
-                int followNum = businessCardRecordRepository.countByUserId(sourceUserId);
-                dayReport.setFollowNum(followNum);
-            } else {
-                dayReport.setFollowNum(0);
-            }
+            int followNum = dayReport.isSalesman() ? businessCardRecordRepository.countByUserId(sourceUserId) : 0;
+            dayReport.setFollowNum(followNum);
             dayReport.setUserId(sourceUserId);
             dayReport.setCustomerId(user.getCustomerId());
             dayReport.setLevelId(user.getLevelId());
@@ -119,7 +115,7 @@ public class DayReportServiceImpl implements DayReportService {
     }
 
     /**
-     * 统计推广积分
+     * 统计积分(只限当天的积分统计)
      *
      * @param user      用户
      * @param beginTime 开始时间
@@ -226,11 +222,7 @@ public class DayReportServiceImpl implements DayReportService {
         int exchangeRate = infoConfigure.getExchangeRate();
         //判断是否开启访客量积分奖励
         if (infoConfigure.uvIsBuddyAndIsReward()) {
-            if (infoConfigure.isDayExchangeLimitSwitch()) {
-                visitorScore = Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / exchangeRate);
-            } else {
-                visitorScore = visitorNum / exchangeRate;
-            }
+            visitorScore = infoConfigure.isDayExchangeLimitSwitch() ? Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / exchangeRate) : (visitorNum / exchangeRate);
         }
         return visitorScore;
     }
