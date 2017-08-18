@@ -53,7 +53,7 @@
             <div class="f-bigbox">
                 <div class="fa-bigbox">
                     <div style="  margin: 0 auto; text-align: center; padding-bottom: 8px;">
-                        <p class="phone">今日积分排名（位）</p>
+                        <p class="phone">今日预计积分排名（位）</p>
                         <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}<0">
                             200名以外</p>
                         <p style="color: #fff; font-size: 30px;" th:if="${dayScoreRankingInfo.dayScoreRanking}==0">
@@ -78,7 +78,7 @@
                                     <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}>0"
                                        th:text="${dayScoreRankingInfo.monthScoreRanking}"></p>
                                     <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}==0">--</p>
-                                    <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}<0">--</p>
+                                    <p class="sj" th:if="${dayScoreRankingInfo.monthScoreRanking}<0">200名以为</p>
                                     <p>本月积分排名（位）</p>
                                 </a>
                             </li>

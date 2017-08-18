@@ -4,7 +4,12 @@ import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.exception.ApiResultException;
-import com.huotu.scrm.service.model.*;
+import com.huotu.scrm.service.model.statisticinfo.DayFollowNumInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayScoreInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayScoreRankingInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayVisitorNumInfo;
+import com.huotu.scrm.service.model.info.InfoModel;
+import com.huotu.scrm.service.model.statisticinfo.StatisticalInformation;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
@@ -88,7 +93,7 @@ public class InfoExtensionController extends SiteBaseController {
      * 获取推广明细（统计明细）
      *
      * @param userId 用户id
-     * @param model  {@link Model}
+     * @param model  model
      * @return
      */
     @RequestMapping("extension/getInfoDetail")

@@ -9,13 +9,13 @@ import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
-import com.huotu.scrm.service.model.DayFollowNumInfo;
-import com.huotu.scrm.service.model.DayScoreInfo;
-import com.huotu.scrm.service.model.DayScoreRankingInfo;
-import com.huotu.scrm.service.model.DayVisitorNumInfo;
-import com.huotu.scrm.service.model.InfoModel;
-import com.huotu.scrm.service.model.MonthStatisticInfo;
-import com.huotu.scrm.service.model.StatisticalInformation;
+import com.huotu.scrm.service.model.statisticinfo.DayFollowNumInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayScoreInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayScoreRankingInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayVisitorNumInfo;
+import com.huotu.scrm.service.model.info.InfoModel;
+import com.huotu.scrm.service.model.statisticinfo.MonthStatisticInfo;
+import com.huotu.scrm.service.model.statisticinfo.StatisticalInformation;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
@@ -150,7 +150,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             //表示200名以外
             dayScoreRanking = -1;
         }
-        if (monthRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), firstDay, now) > 0) {
+        if (monthRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), firstDay, localDate.atStartOfDay()) > 0) {
             //表示200名以外
             monthRanking = -1;
         }
@@ -405,6 +405,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     @Scheduled(cron = "0 */3 * * * *")
     public void setMapVisitorNumRanking() {
         mapRankingVisitor.clear();
+        mapDayScoreRanking.clear();
+        mapMonthScoreRanking.clear();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();
@@ -430,9 +432,12 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             List<Long> sourceIdList = businessCardRecordRepository.findUserIdList(customerId);
             sourceIdList.forEach((Long userId) -> {
                 int followNum = businessCardRecordRepository.countByUserId(userId);
-                map.put(userId, followNum);
+                if (followNum > 0) {
+                    map.put(userId, followNum);
+                }
             });
             setRanking(map, 3);
+            map.clear();
         });
     }
 
@@ -456,9 +461,15 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             int dayScore = dayReportService.getEstimateScore(user, todayBegin, now);
             int monthScore = dayReportService.getMonthEstimateScore(user);
             int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, todayBegin, now);
-            mapDayVisitorNum.put(userId, dayVisitorNum);
-            mapDayScore.put(userId, dayScore);
-            mapMonthScore.put(userId, monthScore);
+            if (dayVisitorNum > 0) {
+                mapDayVisitorNum.put(userId, dayVisitorNum);
+            }
+            if (dayScore > 0) {
+                mapDayScore.put(userId, dayScore);
+            }
+            if (monthScore > 0) {
+                mapMonthScore.put(userId, monthScore);
+            }
         });
         mapList.add(mapDayVisitorNum);
         mapList.add(mapDayScore);
@@ -473,7 +484,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @return
      */
     private int setHighestMonthRanking(List<MonthStatisticInfo> monthStatisticInfoList) {
-        //先排序200名以内
+        //先排序200名以内（升序）
         List<MonthStatisticInfo> monthStatisticList = monthStatisticInfoList.stream().filter(monthStatisticInfo -> monthStatisticInfo.getData() > 0).sorted(Comparator.comparing(MonthStatisticInfo::getData))
                 .collect(Collectors.toList());
         if (monthStatisticList.isEmpty()) {
@@ -491,7 +502,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @return
      */
     private int setHighestMonthNum(List<MonthStatisticInfo> monthStatisticInfoList) {
-        //先排序200名以内
+        //先排序200名以内（降序）
         return monthStatisticInfoList.stream().sorted(Comparator.comparing(MonthStatisticInfo::getData).reversed())
                 .collect(Collectors.toList()).get(0).getData();
     }

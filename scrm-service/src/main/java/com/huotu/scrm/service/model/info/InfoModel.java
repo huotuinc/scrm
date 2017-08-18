@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.model;
+package com.huotu.scrm.service.model.info;
 
 import lombok.Getter;
 import lombok.Setter;
