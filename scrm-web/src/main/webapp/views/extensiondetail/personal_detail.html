@@ -231,7 +231,8 @@
                                 <a style="border-left: 1px solid #57acf0;">
                                     <p class="sj" th:text="${dayFollowNumInfo.highestFollowRanking}"
                                        th:if="${dayFollowNumInfo.highestFollowRanking}>0"></p>
-                                    <p class="sj" th:unless="${dayFollowNumInfo.highestFollowRanking}>0">--</p>
+                                    <p class="sj" th:if="${dayFollowNumInfo.highestFollowRanking}==0">--</p>
+                                    <p class="sj" th:if="${dayFollowNumInfo.highestFollowRanking}<0">200名以外</p>
                                     <p>近几个月最高排名</p>
                                 </a>
                             </li>
