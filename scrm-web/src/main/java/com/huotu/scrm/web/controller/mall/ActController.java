@@ -20,12 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -132,16 +127,15 @@ public class ActController extends MallBaseController {
      */
     @RequestMapping("/act/enable")
     @ResponseBody
-    public ApiResult checkEnable(Long actId) {
+    public ApiResult checkEnable(@RequestParam Long actId) {
         Activity activity = activityService.findByActId(actId);
         List<ActPrize> prizeList = activity.getActPrizes();
-        int rate = 0;
-        for (ActPrize actPrize : prizeList
-                ) {
-            rate += actPrize.getWinRate();
+        if(prizeList.size() < 6 || prizeList.size() > 8){
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,"奖品个数必须为6-8个",null);
         }
+        int rate = prizeList.stream().mapToInt(ActPrize::getWinRate).sum();
         if (rate != 100) {
-            return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,"奖品概率合计值必须为100，当前合计值为" + rate,null);
         }
         activity.setOpenStatus(true);
         activityService.saveActivity(activity);
@@ -155,14 +149,15 @@ public class ActController extends MallBaseController {
      * @return
      */
     @RequestMapping("/join/record")
-    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex,Long actId, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(actId,pageIndex, Constant.PAGE_SIZE);
+    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex,Long actId,@RequestParam(required = false, defaultValue = "0")int type, Model model) {
+        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(actId,type,pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("joinRecord", pageActWinDetail);
         model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
         model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
         model.addAttribute("pageIndex", pageIndex);
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
         model.addAttribute("actId",actId);
+        model.addAttribute("type",type);
         return "activity/winPrize_list";
     }
 
@@ -173,10 +168,10 @@ public class ActController extends MallBaseController {
      * @throws IOException
      */
     @RequestMapping("/downloadWinDetail")
-    public void downloadAllWinDetail(HttpServletResponse response,Long actId, int startPage, int endPage) throws IOException {
+    public void downloadAllWinDetail(HttpServletResponse response,Long actId,@RequestParam(required = false, defaultValue = "0")int type, int startPage, int endPage) throws IOException {
         //完善配置信息
         String fileName = "活动中奖记录";
-        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(actId,startPage, endPage);
+        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(actId, type,startPage, endPage);
         List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
         List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
         ByteArrayOutputStream os = new ByteArrayOutputStream();

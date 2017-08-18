@@ -37,7 +37,7 @@ public class ActPrizeServiceImpl implements ActPrizeService {
 
     @Override
     public void saveActPrice(ActPrize actPrize) {
-        actPrizeRepository.save(actPrize);
+        actPrizeRepository.saveAndFlush(actPrize);
     }
 
 

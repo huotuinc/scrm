@@ -12,7 +12,7 @@ public interface DayReportService {
     void saveDayReport();
 
     /**
-     * 统计某段时间预计积分
+     * 统计某段时间预计积分(只限当天的积分统计)
      *
      * @param user      用户
      * @param beginTime 统计起始日期
@@ -31,9 +31,9 @@ public interface DayReportService {
     /**
      * 统计某用户某个时间段的转发咨询奖励积分
      *
-     * @param user
-     * @param beginTime
-     * @param endTime
+     * @param user 用户
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
      * @return
      */
     int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime);
@@ -41,7 +41,9 @@ public interface DayReportService {
     /**
      * 统计某商户的浏览咨询奖励积分
      *
-     * @param user
+     * @param user 用户
+     * @param beginTime 开始时间
+     * @param endTime 结束时间
      * @return
      */
     int getVisitorScore(User user, LocalDateTime beginTime, LocalDateTime endTime);
@@ -49,7 +51,7 @@ public interface DayReportService {
     /**
      * 统计本月的访客量（浏览量）
      *
-     * @param user
+     * @param user 用户
      * @return
      */
     int getMonthVisitorNum(User user);
@@ -57,19 +59,22 @@ public interface DayReportService {
     /**
      * 统计本月的转发量
      *
-     * @param user
+     * @param user 用户
      * @return
      */
     int getMonthForwardNum(User user);
 
     /**
-     * 获取本月的预计积分
+     * 获取本月的积分（不包含今日的预计积分）
      *
-     * @param user
+     * @param user 用户
      * @return
      */
     int getMonthEstimateScore(User user);
 
+    /**
+     * 保存每日浏览积分到积分表
+     */
     void saveDayVisitorScore();
 
 }

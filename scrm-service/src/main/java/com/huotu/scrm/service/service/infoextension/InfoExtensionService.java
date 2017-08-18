@@ -1,12 +1,12 @@
 package com.huotu.scrm.service.service.infoextension;
 
 import com.huotu.scrm.service.entity.mall.User;
-import com.huotu.scrm.service.model.DayFollowNumInfo;
-import com.huotu.scrm.service.model.DayScoreInfo;
-import com.huotu.scrm.service.model.DayScoreRankingInfo;
-import com.huotu.scrm.service.model.DayVisitorNumInfo;
-import com.huotu.scrm.service.model.InfoModel;
-import com.huotu.scrm.service.model.StatisticalInformation;
+import com.huotu.scrm.service.model.statisticinfo.DayFollowNumInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayScoreInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayScoreRankingInfo;
+import com.huotu.scrm.service.model.statisticinfo.DayVisitorNumInfo;
+import com.huotu.scrm.service.model.info.InfoModel;
+import com.huotu.scrm.service.model.statisticinfo.StatisticalInformation;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface InfoExtensionService {
     /**
      * 查询用户转发过的资讯（我的推广）
      *
-     * @param
+     * @param user 用户
      * @return
      */
     List<InfoModel> findForwardInfo(User user);
@@ -74,7 +74,7 @@ public interface InfoExtensionService {
     /**
      * 判断是否为销售 (在小伙伴的前提下)
      *
-     * @param user
+     * @param user 用户
      * @return
      */
     boolean checkIsSalesman(User user);

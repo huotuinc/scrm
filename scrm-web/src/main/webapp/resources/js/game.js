@@ -350,7 +350,7 @@ $(function () {
                 mobile: mobile,
                 name: name,
                 authCode:authCode,
-                ActWinDetailId:deId
+                actWinDetailId:deId
             },
             dataType: 'json',
             success: function (data) {

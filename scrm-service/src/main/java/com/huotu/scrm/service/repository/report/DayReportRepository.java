@@ -17,7 +17,7 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
      * 查询某段时间内所有统计用户（去除重复用户）
      *
      * @param beginTime 起始时间
-     * @param endTime 结束时间
+     * @param endTime   结束时间
      * @return
      */
     @Query("select distinct t.userId from DayReport t where t.reportDay>=?1 and t.reportDay<=?2")
@@ -32,7 +32,15 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
      */
     DayReport findByUserIdAndReportDay(Long userId, LocalDate date);
 
-    List<DayReport> findByUserIdAndReportDayGreaterThanEqual(Long userId,LocalDate date);
+    /**
+     * 查询某段时间统计数据
+     *
+     * @param userId    用户ID
+     * @param beginTime 起始时间
+     * @param endTime   结束时间
+     * @return
+     */
+    List<DayReport> findByUserIdAndReportDayBetween(Long userId, LocalDate beginTime, LocalDate endTime);
 
     /**
      * 查询某天日期下的所有商户
@@ -42,7 +50,6 @@ public interface DayReportRepository extends JpaRepository<DayReport, Long>, Jpa
      */
     @Query("select distinct t.customerId from DayReport  t where t.reportDay=?1")
     List<Long> findCustomerByReportDay(LocalDate date);
-
 
 
 }

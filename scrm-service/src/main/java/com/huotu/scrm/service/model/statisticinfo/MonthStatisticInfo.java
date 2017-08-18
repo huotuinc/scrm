@@ -1,4 +1,4 @@
-package com.huotu.scrm.service.model;
+package com.huotu.scrm.service.model.statisticinfo;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +22,12 @@ public class MonthStatisticInfo implements Serializable {
      * 统计数据（积分排名等）
      */
     private int data;
+
+    public MonthStatisticInfo(){
+
+    }
+    public MonthStatisticInfo(String month, int data) {
+        this.month = month;
+        this.data = data;
+    }
 }

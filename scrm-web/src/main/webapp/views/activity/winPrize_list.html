@@ -26,6 +26,21 @@
                     <div>
                         <label class="">中奖记录</label>
                     </div>
+                    <form class="search-panel" method="post" id="searchForm">
+                        <div class="ibox-content p-m no-borders">
+                            <div class="form-inline ">
+                                <div class="form-group m-r-sm">
+                                    <label class="control-label" for="type">活动类型：</label>
+                                    <select id="type" class="form-control input">
+                                        <option value="0">全部</option>
+                                        <option value="1">谢谢惠顾</option>
+                                        <option value="2">中奖</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-success js-search" onclick="winListHandler.search()">筛选</button>
+                            </div>
+                        </div>
+                    </form>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
                         <button type="button" class="btn btn-white" id="btnBatchExport">批量导出</button>
@@ -42,6 +57,7 @@
                                 <th>电话</th>
                                 <th>日期</th>
                                 <th>IP</th>
+                                <th>领取情况</th>
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
@@ -60,6 +76,11 @@
                                 <td th:text="${actWinDetail.winnerTel}"></td>
                                 <td th:text="${#temporals.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td th:text="${actWinDetail.ipAddress}"></td>
+                                <td>
+                                    <p th:if="${actWinDetail.prize.prizeType.code==1}"
+                                       th:text="${actWinDetail.isGetReward()?'已领取':'未领取'}"></p>
+                                    <p th:if="${actWinDetail.prize.prizeType.code==0}">未中奖</p>
+                                </td>
                             </tr>
                             </tbody>
                         </table>
@@ -108,6 +129,8 @@
     var pageIndex = [[${pageIndex}]];
     var totalPage = [[${totalPages}]];
     var actId = [[${actId}]];
+    var prizeType = [[${type}]];
+    $("#type").val(prizeType);
     var ajaxUrl = "[[@{/mall}]]";
     var isInteger = /^[0-9]*[1-9][0-9]*$/;
     var batchExportModal = $("#batchExportModal").modal("批量导出", function () {
@@ -116,7 +139,8 @@
         if (isInteger.test(startPage) && isInteger.test(endPage)) {
             if (startPage <= endPage && startPage > 0 && endPage <= totalPage) {
                 batchExportModal.hide();
-                window.location.href = ajaxUrl + "/downloadWinDetail?startPage=" + startPage + "&endPage=" + endPage + "&actId=" + actId;
+                var typeId = $("#type").val();
+                window.location.href = ajaxUrl + "/downloadWinDetail?startPage=" + startPage + "&endPage=" + endPage + "&actId=" + actId+"&type="+typeId;
             } else {
                 hot.tip.error("页码输入有误");
             }
@@ -128,10 +152,16 @@
     var paging = new hot.paging(".pagination", pageIndex, totalPage, 5);
 
     paging.init(function (p) {
-        window.location.href = ajaxUrl + '/join/record?pageIndex=' + p + '&actId=' + actId;
+        var type = $('#type').val();
+        window.location.href = ajaxUrl + '/join/record?pageIndex=' + p + '&actId=' + actId+'&type='+type;
     });
 
-    var winListHandler = {}
+    var winListHandler = {
+        search:function () {
+            var type = $("#type").val();
+            window.location.href = ajaxUrl+"/join/record?pageIndex="+pageIndex+"&actId="+actId+"&type="+type;
+        }
+    }
     $(function () {
         $("#btnBatchExport").click(function () {
             batchExportModal.show();

@@ -8,6 +8,7 @@
  */
 
 package com.huotu.scrm.web.controller.site;
+
 import com.huotu.scrm.common.ienum.IntegralTypeEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
@@ -16,6 +17,8 @@ import com.huotu.scrm.service.entity.activity.ActWinDetail;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.model.ActivityStatus;
+import com.huotu.scrm.service.model.PrizeType;
+import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActWinDetailService;
 import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.api.ApiService;
@@ -26,11 +29,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -56,12 +61,16 @@ public class ActWinController extends SiteBaseController {
     @Autowired
     private ActivityService activityService;
     @Autowired
+    private ActPrizeService actPrizeService;
+    @Autowired
     private ApiService apiService;
     @Autowired
     private VerifyService verifyService;
 
     @RequestMapping("/activity/index")
-    public String marketingActivity(@ModelAttribute("userId") Long userId, Long customerId, Long actId, Model model) {
+    public String marketingActivity(@ModelAttribute("userId") Long userId,
+                                    @RequestParam Long customerId,
+                                    @RequestParam Long actId, Model model) {
 
         //查询用户积分
         User user = userService.getByIdAndCustomerId(userId, customerId);
@@ -95,7 +104,8 @@ public class ActWinController extends SiteBaseController {
     @ResponseBody
     public ApiResult joinAct(HttpServletRequest request,
                              @ModelAttribute("userId") Long userId,
-                             Long actId, Long customerId) {
+                             @RequestParam Long actId,
+                             @RequestParam Long customerId) {
         //查询用户积分
         User user = userService.getByIdAndCustomerId(userId, customerId);
         //获取活动
@@ -103,16 +113,14 @@ public class ActWinController extends SiteBaseController {
         //活动情况
         //1、活动还没开始
         if (!activity.activeBegin()) {
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_UNBEGIN);
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, ActivityStatus.ACTIVITY_STAUS_TYPE_UNBEGIN);
         }
         //2、活动结束
         if (!activity.activeEnd()) {
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_END);
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, ActivityStatus.ACTIVITY_STAUS_TYPE_END);
         }
 
         if (activityUseTimes(activity, user) > 0) { //判读用户是否有抽奖机会
-            //抽取中奖奖品
-            Long prizeId = WinArithmetic(actId);
             //调商城接口扣除积分
             ApiResult apiResult;
             try {
@@ -122,15 +130,17 @@ public class ActWinController extends SiteBaseController {
                 return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL,"积分扣取失败,请稍后再试",null);
             }
             if(apiResult.getCode() == 200) {
-                //记入中奖激励
-                ActWinDetail actWinDetail = winPrizeRecord(request.getRemoteAddr(), prizeId, userId, activity);
+                ActPrize actPrize;
+                ActWinDetail actWinDetail;
+                synchronized (actId){
+                    //抽取中奖奖品
+                    actPrize = winArithmetic(activity.getActPrizes());
+                    //记入中奖记录，奖品数量减1
+                    actWinDetail = winPrizeRecord(request.getRemoteAddr(), userId, activity,actPrize);
+                }
                 if (actWinDetail != null) {
-                    ActPrize actPrize = getPrizeByPrizeId(activity, prizeId);
-                    if (actPrize.getPrizeCount() <= 0) {
-                        return ApiResult.resultWith(ResultCodeEnum.SUCCESS, ActivityStatus.ACTIVITY_STAUS_TYPE_PRIZEOVER);
-                    }
                     Map<String, Object> data = new HashMap<>();
-                    data.put("prizeId", prizeId);
+                    data.put("prizeId", actPrize.getPrizeId());
                     data.put("prizeName", actPrize.getPrizeName());
                     data.put("prizeType",actPrize.getPrizeType());
                     data.put("prizeDetailId",actWinDetail.getWinDetailId());
@@ -151,7 +161,7 @@ public class ActWinController extends SiteBaseController {
     /**
      * 更新中奖记录
      * @param userId
-     * @param ActWinDetailId
+     * @param actWinDetailId
      * @param name
      * @param mobile
      * @param authCode
@@ -159,10 +169,13 @@ public class ActWinController extends SiteBaseController {
      */
     @RequestMapping(value = "/update/winRecord")
     @ResponseBody
-    public ApiResult winPrizeRecordUpdate(@ModelAttribute("userId") Long userId, Long ActWinDetailId, String name, String mobile,
-                                        String authCode){
+    public ApiResult winPrizeRecordUpdate(@ModelAttribute("userId") Long userId,
+                                          @RequestParam Long actWinDetailId,
+                                          @RequestParam String name,
+                                          @RequestParam String mobile,
+                                          @RequestParam String authCode){
         if (verifyService.verifyVerificationCode(mobile,authCode)){
-            ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(ActWinDetailId,name,mobile);
+            ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(actWinDetailId,name,mobile);
             if (actWinDetail!=null){
                 return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
             }
@@ -181,19 +194,17 @@ public class ActWinController extends SiteBaseController {
     @RequestMapping(value = "/act/prizeList")
     public String prizeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId,Model model){
 
+        //查询到用户某个活动的中奖记录
         List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId,userId);
-        List<ActPrize> actPrizes = new ArrayList<>();
-
-        list.stream().forEach(p->{
+        list.forEach(p->{
             ActPrize actPrize = p.getPrize();
             try {
-                actPrize.setPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
+                actPrize.setMallPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
-            actPrizes.add(actPrize);
         });
-        model.addAttribute("winRecords",actPrizes);
+        model.addAttribute("winRecords",list);
         return "activity/site_prize_list";
     }
 
@@ -207,33 +218,21 @@ public class ActWinController extends SiteBaseController {
      * @param activity
      * @return
      */
-    private ActWinDetail winPrizeRecord(String ipAddress, Long prizeId, Long userId,
-                                        Activity activity) {
-
+    @Transactional
+    private ActWinDetail winPrizeRecord(String ipAddress, Long userId,
+                                        Activity activity,ActPrize actPrize) {
+        if(!PrizeType.PRIZE_TYPE_THANKS.equals(actPrize.getPrizeType())){
+            actPrize.setRemainCount(actPrize.getRemainCount()-1);
+            actPrize.setPrizeCount(actPrize.getPrizeCount()-1);
+            actPrizeService.saveActPrice(actPrize);
+        }
         ActWinDetail actWinDetail = new ActWinDetail();
         actWinDetail.setUserId(userId);
         actWinDetail.setWinTime(LocalDateTime.now());
-        actWinDetail.setPrize(getPrizeByPrizeId(activity, prizeId));
+        actWinDetail.setPrize(actPrize);
         actWinDetail.setIpAddress(ipAddress);
         actWinDetail.setActId(activity.getActId());
         return actWinDetailService.saveActWinDetail(actWinDetail);
-    }
-
-    /**
-     * 通过id查找对应奖品
-     *
-     * @param activity
-     * @param prizeId
-     * @return
-     */
-    private ActPrize getPrizeByPrizeId(Activity activity, Long prizeId) {
-        for (ActPrize actPrize : activity.getActPrizes()
-                ) {
-            if (actPrize.getPrizeId().longValue() == prizeId.longValue()) {
-                return actPrize;
-            }
-        }
-        return null;
     }
 
     /**
@@ -246,44 +245,37 @@ public class ActWinController extends SiteBaseController {
     private int activityUseTimes(Activity activity, User user) {
         double score = user.getUserIntegral() - user.getLockedIntegral();
         int costScore = activity.getGameCostlyScore();
-        if (score > costScore)
+        if(score > 0){
             return (int) (score / costScore);
+        }
         return 0;
     }
 
     /**
      * 抽奖算法
      *
-     * @param actId
+     * @param actPrizes 奖品列表
      * @return
      */
-    private Long WinArithmetic(Long actId) {
-        //获取奖品
-        Activity activity = activityService.findByActId(actId);
-        double totalProbability = 0;
-        Map<Long, Map<Double, Double>> prizesMap = new HashMap<>();
-        for (ActPrize p : activity.getActPrizes()
-                ) {
-            double temp = (totalProbability + p.getWinRate());
-            Map<Double, Double> tpRange = new HashMap<>();
-            tpRange.put(new Double(totalProbability / 100), new Double(temp / 100));
-            prizesMap.put(p.getPrizeId(), tpRange);
-            totalProbability = temp;
+    private ActPrize winArithmetic(List<ActPrize> actPrizes) {
+        Integer[] prizeArray = new Integer[actPrizes.size() + 1];
+        prizeArray[0] = 0;
+        //抽奖奖项,默认为谢谢惠顾
+        ActPrize winAward = actPrizes.stream().filter(p-> PrizeType.PRIZE_TYPE_THANKS.equals(p.getPrizeType()))
+                .findFirst().orElse(null);
+        for(int i = 0 ; i < actPrizes.size();i++){
+            prizeArray[i+1] = prizeArray[i] + actPrizes.get(i).getWinRate();
         }
-        //抽奖奖项
-        Long winAwardId = -1L;
-        double ran = Math.random();
-        Set<Long> prizeIds = prizesMap.keySet();
-        for (Long prizeId : prizeIds
-                ) {
-            Map<Double, Double> tpRange = prizesMap.get(prizeId);
-            Double key = (Double) tpRange.keySet().toArray()[0];
-            Double value = tpRange.get(key);
-            if (ran >= key.doubleValue() && ran < value.doubleValue()) {
-                winAwardId = prizeId;
+        int ran = new Random().nextInt(prizeArray[prizeArray.length - 1]);
+        for(int i = 0 ; i < prizeArray.length - 1;i++){
+            //ran 在[,)区间内，并且剩余奖品数量足够
+            if(ran >= prizeArray[i] && ran < prizeArray[i+1]){
+                if(actPrizes.get(i).getRemainCount() > 0){
+                    winAward = actPrizes.get(i);
+                }
                 break;
             }
         }
-        return winAwardId;
+        return winAward;
     }
 }

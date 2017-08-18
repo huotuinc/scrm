@@ -2,6 +2,7 @@ package com.huotu.scrm.service.repository.businesscard;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -69,6 +70,21 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @return
      */
     List<BusinessCardRecord> findByCustomerIdAndFollowId(Long customerId, Long followId);
+
+    /**
+     * 查询所有商户
+     * @return
+     */
+    @Query("select distinct (t.customerId) from BusinessCardRecord t ")
+    List<Long> findCustomerList();
+
+    /**
+     * 查询某个商户下所有用户
+     * @param customerId
+     * @return
+     */
+    @Query("select distinct (t.userId) from BusinessCardRecord t where t.customerId=?1")
+    List<Long> findUserIdList(Long customerId);
 
 
 }

@@ -71,4 +71,10 @@ public class ActWinDetail {
     @Column(name = "Act_Id")
     private Long actId;
 
+    /**
+     * 活动Id  0表示未领取  1表示已领取
+     */
+    @Column(name = "Get_Reward")
+    private boolean isGetReward;
+
 }

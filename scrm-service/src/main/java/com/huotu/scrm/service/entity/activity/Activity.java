@@ -1,7 +1,6 @@
 package com.huotu.scrm.service.entity.activity;
 
 import com.huotu.scrm.common.ienum.ActEnum;
-import com.huotu.scrm.service.model.ActivityStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,6 +34,7 @@ public class Activity {
      * 获取活动相关的奖品
      */
     @OneToMany(mappedBy = "activity",cascade=CascadeType.ALL,fetch=FetchType.LAZY,orphanRemoval = true)
+    @OrderBy("sort asc")
     private List<ActPrize> actPrizes;
 
     /**

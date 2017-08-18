@@ -8,31 +8,52 @@
     <meta name="format-detection" content="telephone=no"/>
     <meta name="description" content=""/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="../../resources/css/common.css"/>
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/jquery-weui.min.css">
-    <link rel="stylesheet" type="text/css" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.2/weui.min.css">
+    <link rel="stylesheet" href="../../resources/css/index-lite.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/weui.min.css">
+    <link rel="stylesheet" href="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.css">
     <title></title>
 </head>
 <style>
     .weui_cells {
-        margin-top:2px;
+        margin-top: 2px;
         background-color: #fff;
         line-height: 1.41176471;
         font-size: 17px;
         overflow: hidden;
         position: relative;
     }
-.imgbox{
-    width:55px;vertical-align: middle; float: left; margin-left: 10px
-}
-    .title{
-        float: left;margin-top: 5px; margin-left: 10px
+
+    .prize_get {
+        float: left;
+        border: 1px solid #ff0b0b;
+        background-color: #fff;
+        padding: 1px 10px;
+        font-size: 12px;
+        margin-top: -18px;
+        color: #f90000;
+        margin-left: 126px;
     }
-    .title .time{
+
+    .imgbox {
+        width: 55px;
+        vertical-align: middle;
+        float: left;
+        margin-left: 10px
+    }
+
+    .title {
+        float: left;
+        margin-top: 5px;
+        margin-left: 10px;
+        width: 74%;
+    }
+
+    .title .time {
         font-size: 12px;
         color: #969696;
     }
-    .titlename{
+
+    .titlename {
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -41,49 +62,182 @@
     }
 </style>
 <body>
-<div th:remove="all-but-first">
-    <div class="weui_cells weui_cells_access " th:each="actPrize ,infoState: ${winRecords}">
-
+<div th:remove="all-but-first" id="app">
+    <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}"
+         onclick="AddTel.showUserInfo()" th:onclick="(${record.getReward})?'':|AddTel.showUserInfo(${record.winDetailId})|">
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
-                <img th:src="${actPrize.prizeImageUrl}" src="../../resources/images/nr.jpg"  class="imgbox">
+                <img th:src="${record.prize.mallPrizeImageUrl}" src="../../resources/images/nr.jpg" class="imgbox">
                 <div class="title">
-                <p class="titlename" th:text="${actPrize.prizeName}">标题标题标题标题标题标题标题标题</p>
-                <p class="time">2017.01.01</p>
+                    <p class="titlename" th:text="${record.prize.prizeName}">标题标题标题标题标题标题标题标题</p>
+                    <p class="time" th:text="${#temporals.format(record.winTime, 'yyyy-MM-dd HH:mm:ss')}">2017.01.01</p>
+                    <button th:if="${record.getReward}" class="prize_get" type="button">已领取</button>
                 </div>
             </div>
-            <div class="weui_cell_ft" style="display:none"> </div>
+            <div class="weui_cell_ft" style="display:none"></div>
         </a>
     </div>
-    <div class="weui_cells weui_cells_access ">
-
-        <a class="weui_cell" href="javascript:void(0);">
-            <div class="weui_cell_bd weui_cell_primary">
-                <img src="../../resources/images/nr.jpg"  class="imgbox">
-                <div class="title">
-                    <p class="titlename">标题标题标题标题标题标题标题标题</p>
-                    <p class="time">2017.01.01</p>
-                </div>
-            </div>
-            <div class="weui_cell_ft" style="display:none"> </div>
-        </a>
-    </div>
-    <div class="weui_cells weui_cells_access ">
-
-        <a class="weui_cell" href="javascript:void(0);">
-            <div class="weui_cell_bd weui_cell_primary">
-                <img src="../../resources/images/nr.jpg"  class="imgbox">
-                <div class="title">
-                    <p class="titlename">标题标题标题标题标题标题标题标题</p>
-                    <p class="time">2017.01.01</p>
-                </div>
-            </div>
-            <div class="weui_cell_ft" style="display:none"> </div>
-        </a>
-    </div>
-
 </div>
 
+<div class="recommend-modal user-modal" id="J_addTel">
+    <div class="user-info-dialog">
+        <div class="user-info-wrap">
+            <i class="icon close" onclick="AddTel.closeNameAndTel();"></i>
+            <form id="J_userInfo" action="#">
+                <input type="hidden" value="1" th:value="-1" name="ActWinDetailId">
+                <div class="form-group form-user">
+                    <label>
+                        <input type="text" placeholder="请输入姓名" name="name">
+                    </label>
+                </div>
+                <div class="form-group form-mobile">
+                    <label>
+                        <input type="tel" placeholder="请输入手机号" name="mobile">
+                    </label>
+                </div>
+                <div class="form-group form-auth">
+                    <label>
+                        <input type="text" placeholder="请输入验证码" name="authCode">
+                    </label>
+                    <button class="user-info-text" id="J_sendAuth" onclick="AddTel.sendMessage()">获取验证码</button>
+                </div>
+                <button type="submit" onclick="AddTel.verifyForm()" id="J_userFormBtn" form="J_userInfo" class="user-info-btn">提&nbsp;&nbsp;交</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="http://resali.huobanplus.com/cdn/zepto/1.2.0/zepto.min.js"></script>
+
+<script>
+
+    var time;
+
+    var AddTel = {
+        closeNameAndTel: function () {
+            $('#J_addTel').hide();
+            AddTel.toggleFilter();
+        },
+        showUserInfo: function (obj) {
+            $("input[name='ActWinDetailId']").val(obj);
+            $('#J_addTel').show();
+            AddTel.toggleFilter();
+        },
+        toggleFilter: function () {
+            $('#app').toggleClass('filter');
+        },
+        sendMessage: function () {
+            //短信接口，下面为mock，请用实际
+            var sendAuthCodeUrl = '/sendAuthCode';
+
+            $('#J_sendAuth').click(function () {
+                var self = $(this);
+                var mobile = $('#J_userInfo').find('input[name="mobile"]').val();
+                if (!/^1([34578])\d{9}$/.test(mobile)) {
+                    AddTel.showMsg('请输入正确的手机号');
+                    return;
+                }
+                AddTel.sendSMS(self);
+                $.ajax({
+                    url: sendAuthCodeUrl,
+                    type: 'POST',
+                    data: {
+                        loginName: mobile
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.resultCode === 400) {
+                            AddTel.showMsg(data.resultMsg);
+                            return false;
+                        }
+                        if (data.resultCode !== 200) {
+                            AddTel.showMsg("发送失败，请重试");
+                            return false;
+                        }
+                    },
+                    error: function (data) {
+                        AddTel.showMsg("系统错误");
+                    }
+                })
+            });
+        },
+
+        verifyForm: function () {
+            var form = $('#J_userInfo');
+            var name = form.find('input[name="name"]').val();
+            var mobile = form.find('input[name="mobile"]').val();
+            var authCode = form.find('input[name="authCode"]').val();
+            var deId = form.find('input[name="ActWinDetailId"]').val();
+            if (!name) {
+                AddTel.showMsg('姓名不能为空');
+                return false;
+            }
+            if (!(/^1([34578])\d{9}$/.test(mobile))) {
+                AddTel.showMsg('请填写正确的手机号');
+                return false;
+            }
+            if (!authCode) {
+                AddTel.showMsg('验证码不能为空');
+                return false;
+            }
+
+            $.ajax({
+                url: "/site/update/winRecord",
+                type: 'POST',
+                data: {
+                    mobile: mobile,
+                    name: name,
+                    authCode: authCode,
+                    actWinDetailId: deId
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.code != 200) {
+                        AddTel.showMsg(data.data);
+                        return false;
+                    }
+                    showMsg(data.msg);
+                    setTimeout(function () {
+                        $('#J_addTel').hide();
+                        game.toggleFilter();
+                    }, 3000);
+                },
+                error: function () {
+                    AddTel.showMsg("系统错误");
+                    return false;
+                }
+            })
+
+        },
+
+
+        showMsg: function (t) {
+            clearTimeout(time);
+            var modal = $('#J_msgModal');
+            var p = modal.find('p');
+            p.text(t);
+            modal.addClass('show');
+            time = setTimeout(function () {
+                modal.removeClass('show');
+            }, 2000);
+        },
+
+
+        sendSMS: function (ele) {
+            ele.prop('disabled', true)
+                .addClass('disabled');
+            var s = 60;
+            var t = setInterval(function () {
+                ele.text('重新发送' + s-- + '秒');
+                if (s === -1) {
+                    clearInterval(t);
+                    ele.text('获取验证码')
+                        .prop('disabled', false)
+                        .removeClass('disabled');
+                }
+            }, 1000);
+        }
+    }
+</script>
 
 </body>
 </html>
