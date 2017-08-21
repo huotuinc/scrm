@@ -12,7 +12,10 @@ public enum ResultCodeEnum {
     APP_KEY_ERROR(401, "没有授权"),
     SIGN_ERROR(402, "签名无效"),
     SYSTEM_BAD_REQUEST(500, "系统请求失败"),
-    NO_REPEAT_SEND(501, "请勿重复点击发送按钮！");
+    NO_REPEAT_SEND(501, "请勿重复点击发送按钮！"),
+    DATA_BAD_PARSER(600,"数据解析失败"),
+    SEND_LIMIT(714, "请验证图片验证码后再获取"),
+    IMAGE_CODE_ERROR(715, "图片验证码校验错误"),;
 
     //todo 其他状态
     private int resultCode;
