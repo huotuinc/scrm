@@ -70,11 +70,11 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     @Override
     public List<InfoModel> findForwardInfo(User user) {
         List<Long> infoIdList = infoBrowseRepository.findUserForwardInfo(user.getId());
-        if (infoIdList != null && infoIdList.size() > 0) {
-            List<Info> infoList = infoRepository.findInfoList(infoIdList);
-            return getInfoModes(infoList);
+        if (infoIdList.isEmpty()) {
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
+        List<Info> infoList = infoRepository.findInfoList(infoIdList);
+        return getInfoModes(infoList);
     }
 
     @Override
@@ -135,12 +135,12 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         if (mapMonthScoreRanking.containsKey(user.getId())) {
             monthRanking = mapMonthScoreRanking.get(user.getId());
         }
-        //判断用户是否有预计积分（只需判断今日是否有转发浏览记录）
+        //判断用户是否有预计积分（只需判断今日是否有转发浏览记录,本月的同理）
         if (dayScoreRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now) > 0) {
             //表示200名以外
             dayScoreRanking = -1;
         }
-        if (monthRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), firstDay, now) > 0) {
+        if (monthRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), firstDay, localDate.atStartOfDay()) > 0) {
             //表示200名以外
             monthRanking = -1;
         }
@@ -179,7 +179,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         int lastScore = (dayReport == null) ? 0 : dayReport.getExtensionScore();
         //设置历史累积积分
         int cumulativeScore = dayReportService.getCumulativeScore(user);
-        //获取本月预计积分
+        //获取本月积分
         int monthScore = dayReportService.getMonthEstimateScore(user);
         //设置近几个月积分信息
         List<MonthStatisticInfo> monthStatisticInfoList;
@@ -395,6 +395,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     @Scheduled(cron = "0 */3 * * * *")
     public void setMapVisitorNumRanking() {
         mapRankingVisitor.clear();
+        mapDayScoreRanking.clear();
+        mapMonthScoreRanking.clear();
         LocalDate today = LocalDate.now();
         LocalDateTime todayBegin = today.atStartOfDay();
         LocalDateTime now = LocalDateTime.now();
@@ -420,9 +422,12 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             List<Long> sourceIdList = businessCardRecordRepository.findUserIdList(customerId);
             sourceIdList.forEach((Long userId) -> {
                 int followNum = businessCardRecordRepository.countByUserId(userId);
-                map.put(userId, followNum);
+                if (followNum > 0) {
+                    map.put(userId, followNum);
+                }
             });
             setRanking(map, 3);
+            map.clear();
         });
     }
 
@@ -446,9 +451,15 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             int dayScore = dayReportService.getEstimateScore(user, todayBegin, now);
             int monthScore = dayReportService.getMonthEstimateScore(user);
             int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, todayBegin, now);
-            mapDayVisitorNum.put(userId, dayVisitorNum);
-            mapDayScore.put(userId, dayScore);
-            mapMonthScore.put(userId, monthScore);
+            if (dayVisitorNum > 0) {
+                mapDayVisitorNum.put(userId, dayVisitorNum);
+            }
+            if (dayScore > 0) {
+                mapDayScore.put(userId, dayScore);
+            }
+            if (monthScore > 0) {
+                mapMonthScore.put(userId, monthScore);
+            }
         });
         mapList.add(mapDayVisitorNum);
         mapList.add(mapDayScore);
@@ -463,7 +474,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @return
      */
     private int setHighestMonthRanking(List<MonthStatisticInfo> monthStatisticInfoList) {
-        //先排序200名以内
+        //先排序200名以内（升序）
         List<MonthStatisticInfo> monthStatisticList = monthStatisticInfoList.stream().filter(monthStatisticInfo -> monthStatisticInfo.getData() > 0).sorted(Comparator.comparing(MonthStatisticInfo::getData))
                 .collect(Collectors.toList());
         if (monthStatisticList.isEmpty()) {
@@ -481,7 +492,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @return
      */
     private int setHighestMonthNum(List<MonthStatisticInfo> monthStatisticInfoList) {
-        //先排序200名以内
+        //先排序200名以内（降序）
         return monthStatisticInfoList.stream().sorted(Comparator.comparing(MonthStatisticInfo::getData).reversed())
                 .collect(Collectors.toList()).get(0).getData();
     }

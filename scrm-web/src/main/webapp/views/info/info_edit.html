@@ -132,8 +132,8 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
+<script src="../../resources/js/summernote/summernote.js" th:src="@{/resources/js/summernote/summernote.js}"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
-<script src="../../resources/js/summernote/summernote.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 <!---->
 
@@ -153,7 +153,7 @@
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
-                ['insert',['picture']]
+                ['insert',['picture','video']]
             ]
         });
         // 在键盘按下并释放及提交后验证提交表单
@@ -167,7 +167,7 @@
             messages: {
                 imageUrl: "请选择上传图片",
                 content: "请填写内容"
-            }
+            },
         });
 
     });

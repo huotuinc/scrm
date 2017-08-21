@@ -92,7 +92,6 @@ public class IndexController {
             //请勿重复点击发送按钮
             return ModelMapUtil.createModelMap(ResultCodeEnum.NO_REPEAT_SEND, null);
         }
-
         return ModelMapUtil.createModelMap(ResultCodeEnum.SUCCESS, null);
     }
 }
