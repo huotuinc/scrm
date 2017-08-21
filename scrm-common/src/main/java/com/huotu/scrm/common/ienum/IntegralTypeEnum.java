@@ -16,7 +16,7 @@ package com.huotu.scrm.common.ienum;
 public enum  IntegralTypeEnum implements ICommonEnum{
     TURN_INFO(1000,"资讯转发奖励积分"),
     BROWSE_INFO(1001,"资讯浏览奖励积分"),
-    ACTIVE_SCRORE(1002,"大转盘消耗奖励积分");
+    ACTIVE_SCORE(1002,"大转盘消耗奖励积分");
     private Integer code;
     private String value;
 

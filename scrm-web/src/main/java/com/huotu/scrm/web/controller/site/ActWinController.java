@@ -94,6 +94,7 @@ public class ActWinController extends SiteBaseController {
 
     /**
      * 参加抽奖活动
+     *
      * @param request
      * @param userId
      * @param actId
@@ -124,26 +125,26 @@ public class ActWinController extends SiteBaseController {
             //调商城接口扣除积分
             ApiResult apiResult;
             try {
-                apiResult = apiService.rechargePoint(customerId,userId,0L-activity.getGameCostlyScore(), IntegralTypeEnum.ACTIVE_SCRORE);
+                apiResult = apiService.rechargePoint(customerId, userId, 0L - activity.getGameCostlyScore(), IntegralTypeEnum.ACTIVE_SCORE);
             } catch (UnsupportedEncodingException e) {
-                logger.error("积分扣取失败",e);
-                return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL,"积分扣取失败,请稍后再试",null);
+                logger.error("积分扣取失败", e);
+                return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL, "积分扣取失败,请稍后再试", null);
             }
-            if(apiResult.getCode() == 200) {
+            if (apiResult.getCode() == 200) {
                 ActPrize actPrize;
                 ActWinDetail actWinDetail;
-                synchronized (actId){
+                synchronized (actId) {
                     //抽取中奖奖品
                     actPrize = winArithmetic(activity.getActPrizes());
                     //记入中奖记录，奖品数量减1
-                    actWinDetail = winPrizeRecord(request.getRemoteAddr(), userId, activity,actPrize);
+                    actWinDetail = winPrizeRecord(request.getRemoteAddr(), userId, activity, actPrize);
                 }
                 if (actWinDetail != null) {
                     Map<String, Object> data = new HashMap<>();
                     data.put("prizeId", actPrize.getPrizeId());
                     data.put("prizeName", actPrize.getPrizeName());
-                    data.put("prizeType",actPrize.getPrizeType());
-                    data.put("prizeDetailId",actWinDetail.getWinDetailId());
+                    data.put("prizeType", actPrize.getPrizeType());
+                    data.put("prizeDetailId", actWinDetail.getWinDetailId());
                     try {
                         String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
                         data.put("prizeImageUrl", imageUrl);
@@ -153,13 +154,14 @@ public class ActWinController extends SiteBaseController {
                     return ApiResult.resultWith(ResultCodeEnum.SUCCESS, data);
                 }
             }
-            return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL,"积分扣取失败,请稍后再试",null);
+            return ApiResult.resultWith(ResultCodeEnum.SEND_FAIL, "积分扣取失败,请稍后再试", null);
         }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "您当前抽奖机会已用完",null);
+        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "您当前抽奖机会已用完", null);
     }
 
     /**
      * 更新中奖记录
+     *
      * @param userId
      * @param actWinDetailId
      * @param name
@@ -173,30 +175,31 @@ public class ActWinController extends SiteBaseController {
                                           @RequestParam Long actWinDetailId,
                                           @RequestParam String name,
                                           @RequestParam String mobile,
-                                          @RequestParam String authCode){
-        if (verifyService.verifyVerificationCode(mobile,authCode)){
-            ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(actWinDetailId,name,mobile);
-            if (actWinDetail!=null){
+                                          @RequestParam String authCode) {
+        if (verifyService.verifyVerificationCode(mobile, authCode)) {
+            ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(actWinDetailId, name, mobile);
+            if (actWinDetail != null) {
                 return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
             }
             return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
         }
-         return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,null,"手机验证码错误");
+        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, null, "手机验证码错误");
     }
 
 
     /**
      * 获取用户某个活动的中奖记录
+     *
      * @param userId
      * @param actId
      * @return
      */
     @RequestMapping(value = "/act/prizeList")
-    public String prizeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId,Model model){
+    public String prizeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId, Model model) {
 
         //查询到用户某个活动的中奖记录
-        List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId,userId);
-        list.forEach(p->{
+        List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId, userId);
+        list.forEach(p -> {
             ActPrize actPrize = p.getPrize();
             try {
                 actPrize.setMallPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
@@ -204,10 +207,9 @@ public class ActWinController extends SiteBaseController {
                 e.printStackTrace();
             }
         });
-        model.addAttribute("winRecords",list);
+        model.addAttribute("winRecords", list);
         return "activity/site_prize_list";
     }
-
 
 
     /**
@@ -220,10 +222,10 @@ public class ActWinController extends SiteBaseController {
      */
     @Transactional
     private ActWinDetail winPrizeRecord(String ipAddress, Long userId,
-                                        Activity activity,ActPrize actPrize) {
-        if(!PrizeType.PRIZE_TYPE_THANKS.equals(actPrize.getPrizeType())){
-            actPrize.setRemainCount(actPrize.getRemainCount()-1);
-            actPrize.setPrizeCount(actPrize.getPrizeCount()-1);
+                                        Activity activity, ActPrize actPrize) {
+        if (!PrizeType.PRIZE_TYPE_THANKS.equals(actPrize.getPrizeType())) {
+            actPrize.setRemainCount(actPrize.getRemainCount() - 1);
+            actPrize.setPrizeCount(actPrize.getPrizeCount() - 1);
             actPrizeService.saveActPrice(actPrize);
         }
         ActWinDetail actWinDetail = new ActWinDetail();
@@ -245,7 +247,7 @@ public class ActWinController extends SiteBaseController {
     private int activityUseTimes(Activity activity, User user) {
         double score = user.getUserIntegral() - user.getLockedIntegral();
         int costScore = activity.getGameCostlyScore();
-        if(score > 0){
+        if (score > 0) {
             return (int) (score / costScore);
         }
         return 0;
@@ -261,16 +263,16 @@ public class ActWinController extends SiteBaseController {
         Integer[] prizeArray = new Integer[actPrizes.size() + 1];
         prizeArray[0] = 0;
         //抽奖奖项,默认为谢谢惠顾
-        ActPrize winAward = actPrizes.stream().filter(p-> PrizeType.PRIZE_TYPE_THANKS.equals(p.getPrizeType()))
+        ActPrize winAward = actPrizes.stream().filter(p -> PrizeType.PRIZE_TYPE_THANKS.equals(p.getPrizeType()))
                 .findFirst().orElse(null);
-        for(int i = 0 ; i < actPrizes.size();i++){
-            prizeArray[i+1] = prizeArray[i] + actPrizes.get(i).getWinRate();
+        for (int i = 0; i < actPrizes.size(); i++) {
+            prizeArray[i + 1] = prizeArray[i] + actPrizes.get(i).getWinRate();
         }
         int ran = new Random().nextInt(prizeArray[prizeArray.length - 1]);
-        for(int i = 0 ; i < prizeArray.length - 1;i++){
+        for (int i = 0; i < prizeArray.length - 1; i++) {
             //ran 在[,)区间内，并且剩余奖品数量足够
-            if(ran >= prizeArray[i] && ran < prizeArray[i+1]){
-                if(actPrizes.get(i).getRemainCount() > 0){
+            if (ran >= prizeArray[i] && ran < prizeArray[i + 1]) {
+                if (actPrizes.get(i).getRemainCount() > 0) {
                     winAward = actPrizes.get(i);
                 }
                 break;

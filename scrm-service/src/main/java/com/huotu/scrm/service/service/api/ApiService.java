@@ -24,7 +24,26 @@ public interface ApiService {
      * @param userId       用户ID
      * @param integral     增加积分
      * @param integralType 积分类型
-     * @return
+     * @return 返回结果
      */
     ApiResult rechargePoint(Long customerId, Long userId, Long integral, IntegralTypeEnum integralType) throws UnsupportedEncodingException;
+
+    /**
+     * 发送短信验证码
+     *
+     * @param customerId 商户ID
+     * @param mobile     手机号
+     * @return 返回结果
+     */
+    ApiResult sendCode(Long customerId, String mobile) throws UnsupportedEncodingException;
+
+    /**
+     * 短息验证码校验
+     *
+     * @param customerId 商户ID
+     * @param mobile     手机号
+     * @param code       验证码
+     * @return 返回结果
+     */
+    ApiResult checkCode(Long customerId, String mobile, String code) throws UnsupportedEncodingException;
 }

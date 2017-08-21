@@ -9,13 +9,7 @@ import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.entity.report.MonthReport;
-import com.huotu.scrm.service.model.DayFollowNumInfo;
-import com.huotu.scrm.service.model.DayScoreInfo;
-import com.huotu.scrm.service.model.DayScoreRankingInfo;
-import com.huotu.scrm.service.model.DayVisitorNumInfo;
-import com.huotu.scrm.service.model.InfoModel;
-import com.huotu.scrm.service.model.MonthStatisticInfo;
-import com.huotu.scrm.service.model.StatisticalInformation;
+import com.huotu.scrm.service.model.*;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
@@ -31,11 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -124,7 +114,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
     }
 
     /**
-     * 统计今日积分排名页面信息
+     * 统计今日积分排名页面信息:今日积分排名；本月积分排名；最高月积分排名
      *
      * @param user 用户
      * @return
@@ -155,7 +145,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             monthRanking = -1;
         }
         //近几个月积分排名
-        List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
+        List<MonthStatisticInfo> monthStatisticInfoList;
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
         monthInfo.setMonth("本月");
         monthInfo.setData(monthRanking);
@@ -192,7 +182,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         //获取本月预计积分
         int monthScore = dayReportService.getMonthEstimateScore(user);
         //设置近几个月积分信息
-        List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
+        List<MonthStatisticInfo> monthStatisticInfoList;
         MonthStatisticInfo monInfo = new MonthStatisticInfo();
         monInfo.setMonth("本月");
         monInfo.setData(monthScore);
@@ -219,7 +209,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         LocalDateTime beginTime = today.atStartOfDay();
         int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now);
         int monthVisitorNum = dayReportService.getMonthVisitorNum(user);
-        List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
+        List<MonthStatisticInfo> monthStatisticInfoList;
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
         monthInfo.setMonth("本月");
         monthInfo.setData(monthVisitorNum);
@@ -254,7 +244,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             //表示200名以外
             followRanking = -1;
         }
-        List<MonthStatisticInfo> monthStatisticInfoList = new ArrayList<>();
+        List<MonthStatisticInfo> monthStatisticInfoList;
         MonthStatisticInfo monthInfo = new MonthStatisticInfo();
         monthInfo.setMonth("本月");
         //本月关注量排名

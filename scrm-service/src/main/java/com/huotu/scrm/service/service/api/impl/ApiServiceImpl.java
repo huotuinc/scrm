@@ -33,37 +33,76 @@ public class ApiServiceImpl implements ApiService {
     @Override
     public void userLogin(Long customerId, String redirectUrl) {
         Customer customer = customerRepository.findOne(customerId);
-        if(customer == null){
+        if (customer == null) {
             return;
         }
-        Map<String,String> requestMap = new HashMap<>();
+        Map<String, String> requestMap = new HashMap<>();
         requestMap.put("customerid", String.valueOf(customerId));
         try {
             redirectUrl = URLEncoder.encode(redirectUrl, Constant.UTF8);
         } catch (UnsupportedEncodingException e) {
-            log.error("url encode error",e);
+            log.error("url encode error", e);
         }
         requestMap.put("redirecturl", redirectUrl);
-        HttpClientUtil.getInstance().get(customer.getSubDomain() + SysConstant.COOKIE_DOMAIN + "/OAuth2/XiangzhangAuthorize.aspx",requestMap);
+        HttpClientUtil.getInstance().get(customer.getSubDomain() + SysConstant.COOKIE_DOMAIN + "/OAuth2/XiangzhangAuthorize.aspx", requestMap);
     }
 
     @Override
     public ApiResult rechargePoint(Long customerId, Long userId, Long integral, IntegralTypeEnum integralType) throws UnsupportedEncodingException {
-        Map<String,Object> requestMap = new TreeMap<>();
+        Map<String, Object> requestMap = new TreeMap<>();
         requestMap.put("customerid", customerId);
         requestMap.put("userid", userId);
         requestMap.put("trandno", SerialNo.create());
         requestMap.put("integral", integral);
         requestMap.put("integraltype", integralType.getCode());
-        requestMap.put("appid",SysConstant.HUOBANMALL_PUSH_APPID);
+        requestMap.put("appid", SysConstant.HUOBANMALL_PUSH_APPID);
         String sign = SignBuilder.buildSignIgnoreEmpty(requestMap, null, SysConstant.HUOBANMALL_PUSH_APP_SECRET);
-        requestMap.put("sign",sign);
+        requestMap.put("sign", sign);
         ApiResult apiResult;
-        HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/Account/rechargePoints",requestMap);
+        HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/Account/rechargePoints", requestMap);
         if (httpResult.getHttpStatus() == HttpStatus.SC_OK) {
             apiResult = JSON.parseObject(httpResult.getHttpContent(), ApiResult.class);
-        }else{
+        } else {
             apiResult = ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST);
+        }
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult sendCode(Long customerId, String mobile) throws UnsupportedEncodingException {
+        Map<String, Object> requestMap = new TreeMap<>();
+        requestMap.put("customerid", customerId);
+        requestMap.put("mobile", mobile);
+        requestMap.put("appid", SysConstant.HUOBANMALL_PUSH_APPID);
+        String sign = SignBuilder.buildSignIgnoreEmpty(requestMap, null, SysConstant.HUOBANMALL_PUSH_APP_SECRET);
+        requestMap.put("sign", sign);
+        ApiResult apiResult;
+        HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/Account/sendCode", requestMap);
+        if (httpResult.getHttpStatus() == HttpStatus.SC_OK) {
+            apiResult = JSON.parseObject(httpResult.getHttpContent(), ApiResult.class);
+        } else {
+            int responseCode = httpResult.getHttpStatus();
+            apiResult = ApiResult.resultWith(ResultCodeEnum.getByResultCode(responseCode));
+        }
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult checkCode(Long customerId, String mobile, String code) throws UnsupportedEncodingException {
+        Map<String, Object> requestMap = new TreeMap<>();
+        requestMap.put("customerid", customerId);
+        requestMap.put("mobile", mobile);
+        requestMap.put("code", code);
+        requestMap.put("appid", SysConstant.HUOBANMALL_PUSH_APPID);
+        String sign = SignBuilder.buildSignIgnoreEmpty(requestMap, null, SysConstant.HUOBANMALL_PUSH_APP_SECRET);
+        requestMap.put("sign", sign);
+        ApiResult apiResult;
+        HttpResult httpResult = HttpClientUtil.getInstance().post(SysConstant.HUOBANMALL_PUSH_URL + "/Account/checkCode", requestMap);
+        if (httpResult.getHttpStatus() == HttpStatus.SC_OK) {
+            apiResult = JSON.parseObject(httpResult.getHttpContent(), ApiResult.class);
+        } else {
+            int responseCode = httpResult.getHttpStatus();
+            apiResult = ApiResult.resultWith(ResultCodeEnum.getByResultCode(responseCode));
         }
         return apiResult;
     }
