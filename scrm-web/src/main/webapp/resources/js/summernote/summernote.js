@@ -398,7 +398,9 @@
          * @param {Array[]}
          */
         var clusterBy = function (array, fn) {
-            if (!array.length) { return []; }
+            if (!array.length) {
+                return [];
+            }
             var aTail = tail(array);
             return aTail.reduce(function (memo, v) {
                 var aLast = last(memo);
@@ -780,7 +782,9 @@
         var commonAncestor = function (nodeA, nodeB) {
             var ancestors = listAncestor(nodeA);
             for (var n = nodeB; n; n = n.parentNode) {
-                if ($.inArray(n, ancestors) > -1) { return n; }
+                if ($.inArray(n, ancestors) > -1) {
+                    return n;
+                }
             }
             return null; // difference document area
         };
@@ -796,7 +800,9 @@
 
             var nodes = [];
             while (node) {
-                if (pred(node)) { break; }
+                if (pred(node)) {
+                    break;
+                }
                 nodes.push(node);
                 node = node.previousSibling;
             }
@@ -814,7 +820,9 @@
 
             var nodes = [];
             while (node) {
-                if (pred(node)) { break; }
+                if (pred(node)) {
+                    break;
+                }
                 nodes.push(node);
                 node = node.nextSibling;
             }
@@ -1333,8 +1341,12 @@
          * @param {Boolean} isRemoveChild
          */
         var remove = function (node, isRemoveChild) {
-            if (!node || !node.parentNode) { return; }
-            if (node.removeNode) { return node.removeNode(isRemoveChild); }
+            if (!node || !node.parentNode) {
+                return;
+            }
+            if (node.removeNode) {
+                return node.removeNode(isRemoveChild);
+            }
 
             var parent = node.parentNode;
             if (!isRemoveChild) {
@@ -1426,8 +1438,7 @@
                 var regexTag = /<(\/?)(\b(?!!)[^>\s]*)(.*?)(\s*\/?>)/g;
                 markup = markup.replace(regexTag, function (match, endSlash, name) {
                     name = name.toUpperCase();
-                    var isEndOfInlineContainer = /^DIV|^TD|^TH|^P|^LI|^H[1-7]/.test(name) &&
-                        !!endSlash;
+                    var isEndOfInlineContainer = /^DIV|^TD|^TH|^P|^LI|^H[1-7]/.test(name) && !!endSlash;
                     var isBlockNode = /^BLOCKQUOTE|^TABLE|^TBODY|^TR|^HR|^UL|^OL/.test(name);
 
                     return match + ((isEndOfInlineContainer || isBlockNode) ? '\n' : '');
@@ -1916,24 +1927,24 @@
 
     var dropdown = renderer.create('<div class="dropdown-menu">', function ($node, options) {
         var markup = $.isArray(options.items) ? options.items.map(function (item) {
-            var value = (typeof item === 'string') ? item : (item.value || '');
-            var content = options.template ? options.template(item) : item;
-            var option = (typeof item === 'object') ? item.option : undefined;
+                var value = (typeof item === 'string') ? item : (item.value || '');
+                var content = options.template ? options.template(item) : item;
+                var option = (typeof item === 'object') ? item.option : undefined;
 
-            var dataValue = 'data-value="' + value + '"';
-            var dataOption = (option !== undefined) ? ' data-option="' + option + '"' : '';
-            return '<li><a href="#" ' + (dataValue + dataOption) + '>' + content + '</a></li>';
-        }).join('') : options.items;
+                var dataValue = 'data-value="' + value + '"';
+                var dataOption = (option !== undefined) ? ' data-option="' + option + '"' : '';
+                return '<li><a href="#" ' + (dataValue + dataOption) + '>' + content + '</a></li>';
+            }).join('') : options.items;
 
         $node.html(markup);
     });
 
     var dropdownCheck = renderer.create('<div class="dropdown-menu note-check">', function ($node, options) {
         var markup = $.isArray(options.items) ? options.items.map(function (item) {
-            var value = (typeof item === 'string') ? item : (item.value || '');
-            var content = options.template ? options.template(item) : item;
-            return '<li><a href="#" data-value="' + value + '">' + icon(options.checkClassName) + ' ' + content + '</a></li>';
-        }).join('') : options.items;
+                var value = (typeof item === 'string') ? item : (item.value || '');
+                var content = options.template ? options.template(item) : item;
+                return '<li><a href="#" data-value="' + value + '">' + icon(options.checkClassName) + ' ' + content + '</a></li>';
+            }).join('') : options.items;
         $node.html(markup);
     });
 
@@ -2067,17 +2078,17 @@
         createLayout: function ($note, options) {
             self.options = options;
             var $editor = (options.airMode ? ui.airEditor([
-                ui.editingArea([
-                    ui.airEditable()
-                ])
-            ]) : ui.editor([
-                ui.toolbar(),
-                ui.editingArea([
-                    ui.codable(),
-                    ui.editable()
-                ]),
-                ui.statusbar()
-            ])).render();
+                    ui.editingArea([
+                        ui.airEditable()
+                    ])
+                ]) : ui.editor([
+                    ui.toolbar(),
+                    ui.editingArea([
+                        ui.codable(),
+                        ui.editable()
+                    ]),
+                    ui.statusbar()
+                ])).render();
 
             $editor.insertAfter($note);
 
@@ -2421,7 +2432,7 @@
                 if (dom.isText(container)) {
                     var prevTextNodes = dom.listPrev(container, func.not(dom.isText));
                     var prevContainer = list.last(prevTextNodes).previousSibling;
-                    node =  prevContainer || container.parentNode;
+                    node = prevContainer || container.parentNode;
                     offset += list.sum(list.tail(prevTextNodes), dom.nodeLength);
                     isCollapseToStart = !prevContainer;
                 } else {
@@ -3439,7 +3450,8 @@
                     'font-strikethrough': document.queryCommandState('strikethrough') ? 'strikethrough' : 'normal',
                     'font-family': document.queryCommandValue('fontname') || styleInfo['font-family']
                 });
-            } catch (e) {}
+            } catch (e) {
+            }
 
             // list-style-type to list-style(unordered, ordered)
             if (!rng.isOnList()) {
@@ -3496,7 +3508,7 @@
             var self = this;
             var rng = range.create(editable).wrapBodyInlineWithPara();
 
-            var paras = rng.nodes(dom.isPara, { includeAncestor: true });
+            var paras = rng.nodes(dom.isPara, {includeAncestor: true});
             var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
 
             $.each(clustereds, function (idx, paras) {
@@ -3522,7 +3534,7 @@
             var self = this;
             var rng = range.create(editable).wrapBodyInlineWithPara();
 
-            var paras = rng.nodes(dom.isPara, { includeAncestor: true });
+            var paras = rng.nodes(dom.isPara, {includeAncestor: true});
             var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
 
             $.each(clustereds, function (idx, paras) {
@@ -3550,7 +3562,7 @@
         this.toggleList = function (listName, editable) {
             var rng = range.create(editable).wrapBodyInlineWithPara();
 
-            var paras = rng.nodes(dom.isPara, { includeAncestor: true });
+            var paras = rng.nodes(dom.isPara, {includeAncestor: true});
             var bookmark = rng.paraBookmark(paras);
             var clustereds = list.clusterBy(paras, func.peq2('parentNode'));
 
@@ -3628,11 +3640,11 @@
                 var headList = isEscapseToBody ? dom.lastAncestor(head, dom.isList) :
                     head.parentNode;
                 var lastList = headList.childNodes.length > 1 ? dom.splitTree(headList, {
-                    node: last.parentNode,
-                    offset: dom.position(last) + 1
-                }, {
-                    isSkipPaddingBlankHTML: true
-                }) : null;
+                        node: last.parentNode,
+                        offset: dom.position(last) + 1
+                    }, {
+                        isSkipPaddingBlankHTML: true
+                    }) : null;
 
                 var middleList = dom.splitTree(headList, {
                     node: head.parentNode,
@@ -3768,7 +3780,7 @@
      * @param {object} domTable Dom element of table to make changes.
      */
     var TableResultAction = function (startPoint, where, action, domTable) {
-        var _startPoint = { 'colPos': 0, 'rowPos': 0 };
+        var _startPoint = {'colPos': 0, 'rowPos': 0};
         var _virtualTable = [];
         var _actionCellList = [];
 
@@ -3950,7 +3962,7 @@
                 case TableResultAction.where.Column:
                     if (cell.isColSpan) {
                         return TableResultAction.resultAction.SumSpanCount;
-                    } else if(cell.isRowSpan && cell.isVirtual) {
+                    } else if (cell.isRowSpan && cell.isVirtual) {
                         return TableResultAction.resultAction.Ignore;
                     }
                     break;
@@ -4020,17 +4032,23 @@
      *
      * Where action occours enum.
      */
-    TableResultAction.where = { 'Row': 0, 'Column': 1 };
+    TableResultAction.where = {'Row': 0, 'Column': 1};
     /**
      *
      * Requested action to apply enum.
      */
-    TableResultAction.requestAction = { 'Add': 0, 'Delete': 1 };
+    TableResultAction.requestAction = {'Add': 0, 'Delete': 1};
     /**
      *
      * Result action to be executed enum.
      */
-    TableResultAction.resultAction = { 'Ignore': 0, 'SubtractSpanCount': 1, 'RemoveCell': 2, 'AddCell': 3, 'SumSpanCount': 4 };
+    TableResultAction.resultAction = {
+        'Ignore': 0,
+        'SubtractSpanCount': 1,
+        'RemoveCell': 2,
+        'AddCell': 3,
+        'SumSpanCount': 4
+    };
 
     /**
      *
@@ -4212,7 +4230,9 @@
                         continue;
                     case TableResultAction.resultAction.AddCell:
                         var nextRow = row.next('tr')[0];
-                        if (!nextRow) { continue; }
+                        if (!nextRow) {
+                            continue;
+                        }
                         var cloneRow = row[0].cells[cellPos];
                         if (hasRowspan) {
                             if (rowspanNumber > 2) {
@@ -4232,10 +4252,14 @@
                             if (rowspanNumber > 2) {
                                 rowspanNumber--;
                                 baseCell.setAttribute('rowSpan', rowspanNumber);
-                                if (virtualPosition.rowIndex !== rowPos && baseCell.cellIndex === cellPos) { baseCell.innerHTML = ''; }
+                                if (virtualPosition.rowIndex !== rowPos && baseCell.cellIndex === cellPos) {
+                                    baseCell.innerHTML = '';
+                                }
                             } else if (rowspanNumber === 2) {
                                 baseCell.removeAttribute('rowSpan');
-                                if (virtualPosition.rowIndex !== rowPos && baseCell.cellIndex === cellPos) { baseCell.innerHTML = ''; }
+                                if (virtualPosition.rowIndex !== rowPos && baseCell.cellIndex === cellPos) {
+                                    baseCell.innerHTML = '';
+                                }
                             }
                         }
                         continue;
@@ -4277,10 +4301,14 @@
                             if (colspanNumber > 2) {
                                 colspanNumber--;
                                 baseCell.setAttribute('colSpan', colspanNumber);
-                                if (baseCell.cellIndex === cellPos) { baseCell.innerHTML = ''; }
+                                if (baseCell.cellIndex === cellPos) {
+                                    baseCell.innerHTML = '';
+                                }
                             } else if (colspanNumber === 2) {
                                 baseCell.removeAttribute('colSpan');
-                                if (baseCell.cellIndex === cellPos) { baseCell.innerHTML = ''; }
+                                if (baseCell.cellIndex === cellPos) {
+                                    baseCell.innerHTML = '';
+                                }
                             }
                         }
                         continue;
@@ -4427,9 +4455,15 @@
             var keyMap = options.keyMap[agent.isMac ? 'mac' : 'pc'];
             var keys = [];
 
-            if (event.metaKey) { keys.push('CMD'); }
-            if (event.ctrlKey && !event.altKey) { keys.push('CTRL'); }
-            if (event.shiftKey) { keys.push('SHIFT'); }
+            if (event.metaKey) {
+                keys.push('CMD');
+            }
+            if (event.ctrlKey && !event.altKey) {
+                keys.push('CTRL');
+            }
+            if (event.shiftKey) {
+                keys.push('SHIFT');
+            }
 
             var keyName = key.nameFromCode[event.keyCode];
             if (keyName) {
@@ -4571,7 +4605,7 @@
             'formatBlock', 'removeFormat',
             'backColor', 'foreColor', 'fontName'];
 
-        for (var idx = 0, len = commands.length; idx < len; idx ++) {
+        for (var idx = 0, len = commands.length; idx < len; idx++) {
             this[commands[idx]] = (function (sCmd) {
                 return function (value) {
                     beforeCommand();
@@ -4667,8 +4701,8 @@
                     }
                     $image.css('width', Math.min($editable.width(), $image.width()));
                 }
-                $image.css('height','25%');
-                $image.css('width','25%');
+                $image.css('height', '25%');
+                $image.css('width', '25%');
                 $image.show();
                 range.create(editable).insertNode($image[0]);
                 range.createFromNodeAfter($image[0]).select();
@@ -4784,14 +4818,15 @@
         context.memo('help.formatPara', lang.help.formatPara);
 
         /* jshint ignore:start */
-        for (var idx = 1; idx <= 6; idx ++) {
+        for (var idx = 1; idx <= 6; idx++) {
             this['formatH' + idx] = function (idx) {
                 return function () {
                     this.formatBlock('H' + idx);
                 };
             }(idx);
-            context.memo('help.formatH'+idx, lang.help['formatH' + idx]);
-        };
+            context.memo('help.formatH' + idx, lang.help['formatH' + idx]);
+        }
+        ;
         /* jshint ignore:end */
 
         /**
@@ -4987,8 +5022,12 @@
             var foreColor = colorInfo.foreColor;
             var backColor = colorInfo.backColor;
 
-            if (foreColor) { document.execCommand('foreColor', false, foreColor); }
-            if (backColor) { document.execCommand('backColor', false, backColor); }
+            if (foreColor) {
+                document.execCommand('foreColor', false, foreColor);
+            }
+            if (backColor) {
+                document.execCommand('backColor', false, backColor);
+            }
         });
 
         /**
@@ -5223,7 +5262,7 @@
                     array[i] = decodedData.charCodeAt(i);
                 }
 
-                var blob = new Blob([array], { type: 'image/png' });
+                var blob = new Blob([array], {type: 'image/png'});
                 blob.name = 'clipboard.png';
 
                 context.invoke('editor.restoreRange');
@@ -5558,7 +5597,7 @@
                 $scrollbar.css('overflow', 'hidden');
             } else {
                 $window.off('resize', this.onResize);
-                this.resizeTo({ h: $editable.data('orgHeight') });
+                this.resizeTo({h: $editable.data('orgHeight')});
                 $scrollbar.css('overflow', 'visible');
             }
 
@@ -5868,7 +5907,7 @@
                         template: function (item) {
 
                             if (typeof item === 'string') {
-                                item = { tag: item, title: (lang.style.hasOwnProperty(item) ? lang.style[item] : item) };
+                                item = {tag: item, title: (lang.style.hasOwnProperty(item) ? lang.style[item] : item)};
                             }
 
                             var tag = item.tag;
@@ -5876,7 +5915,7 @@
                             var style = item.style ? ' style="' + item.style + '" ' : '';
                             var className = item.className ? ' class="' + item.className + '"' : '';
 
-                            return '<' + tag + style + className + '>' + title + '</' + tag +  '>';
+                            return '<' + tag + style + className + '>' + title + '</' + tag + '>';
                         },
                         click: context.createInvokeHandler('editor.formatBlock')
                     })
@@ -6067,7 +6106,7 @@
                 }).render();
             });
 
-            context.memo('button.ul',  function () {
+            context.memo('button.ul', function () {
                 return ui.button({
                     contents: ui.icon(options.icons.unorderedlist),
                     tooltip: lang.lists.unordered + representShortcut('insertUnorderedList'),
@@ -6079,7 +6118,7 @@
                 return ui.button({
                     contents: ui.icon(options.icons.orderedlist),
                     tooltip: lang.lists.ordered + representShortcut('insertOrderedList'),
-                    click:  context.createInvokeHandler('editor.insertOrderedList')
+                    click: context.createInvokeHandler('editor.insertOrderedList')
                 }).render();
             });
 
@@ -6293,7 +6332,7 @@
                 }).render();
             });
             context.memo('button.imageSize50', function () {
-                return  ui.button({
+                return ui.button({
                     contents: '<span class="note-fontsize-10">50%</span>',
                     tooltip: lang.image.resizeHalf,
                     click: context.createInvokeHandler('editor.resize', '0.5')
@@ -6538,15 +6577,15 @@
                 r: Math.ceil(posOffset.y / PX_PER_EM) || 1
             };
 
-            $highlighted.css({ width: dim.c + 'em', height: dim.r + 'em' });
+            $highlighted.css({width: dim.c + 'em', height: dim.r + 'em'});
             $catcher.data('value', dim.c + 'x' + dim.r);
 
             if (3 < dim.c && dim.c < options.insertTableMaxSize.col) {
-                $unhighlighted.css({ width: dim.c + 1 + 'em'});
+                $unhighlighted.css({width: dim.c + 1 + 'em'});
             }
 
             if (3 < dim.r && dim.r < options.insertTableMaxSize.row) {
-                $unhighlighted.css({ height: dim.r + 1 + 'em'});
+                $unhighlighted.css({height: dim.r + 1 + 'em'});
             }
 
             $dimensionDisplay.html(dim.c + ' x ' + dim.r);
@@ -7189,7 +7228,7 @@
                     .attr('width', '510')
                     .attr('src', '//player.youku.com/embed/' + youkuMatch[1]);
             } else if ((qqMatch && qqMatch[1].length) || (qqMatch2 && qqMatch2[2].length)) {
-                var vid = ((qqMatch && qqMatch[1].length) ? qqMatch[1]:qqMatch2[2]);
+                var vid = ((qqMatch && qqMatch[1].length) ? qqMatch[1] : qqMatch2[2]);
                 $video = $('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>')
                     .attr('frameborder', 0)
                     .attr('height', '310')
