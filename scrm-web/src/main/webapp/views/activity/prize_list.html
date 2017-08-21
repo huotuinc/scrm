@@ -82,7 +82,7 @@
                                     <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip"
                                                                   data-original-title="删除"
-                                                                  th:onclick="'javascript:prizeListHandler.prizeDelete('+${prize.prizeId}+')'">删除</i></span>
+                                                                  th:onclick="'javascript:prizeListHandler.prizeDelete('+${prize.prizeId}+','+${prize.prizeType.code}+')'">删除</i></span>
                                 </td>
                             </tr>
                             </tbody>
@@ -118,15 +118,20 @@
 
 
         },
-        prizeDelete: function (prizeId) {
+        prizeDelete: function (prizeId, prizeType) {
+            if (prizeType == 0) {
+                hot.tip.error("谢谢惠顾不能删除");
+                return;
+            }
             var status = $("#status").val();
             if (status == "true") {
                 hot.tip.error("该活动已启用，不能删除奖品");
-            } else {
+                return;
+            }
                 hot.confirm("确定要删除么？", function () {
                     var requestData = {
                         prizeId: prizeId
-                    }
+                    };
                     hot.ajax(ajaxUrl + "/prize/delete", requestData, function (res) {
                         if (res.code == 200) {
                             window.location.reload();
@@ -135,7 +140,6 @@
                         }
                     })
                 })
-            }
         },
         prizeAdd: function (actId) {
             var status = $("#status").val();
