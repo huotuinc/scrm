@@ -125,7 +125,6 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         mockUserLogin(userBuddy.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
         List<WebElement> weui_media_title = webDriver.findElements(By.className("weui_media_title"));
-        //我的推广默认也还有一条
         Assert.assertEquals(2, weui_media_title.size());
         List<WebElement> elements = webDriver.findElements(By.className("weui_media_info_meta"));
         //资讯转发量
@@ -137,11 +136,12 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         //用户uv
         List<WebElement> sj = webDriver.findElements(By.className("sj"));
         Assert.assertEquals(2, Integer.parseInt(sj.get(1).getText()));
-//        List<WebElement> title = webDriver.findElements(By.className("weui_media_title"));
-//        Assert.assertEquals(2,title.size());
-//        List<WebElement> info_meta = webDriver.findElements(By.className("weui_media_info_meta"));
-//        //咨询转发量
-//        Assert.assertEquals(1,Integer.parseInt(info_meta.get(0).getText()));
+      List<WebElement> title = webDriver.findElements(By.className("weui_media_title"));
+       Assert.assertEquals(2,title.size());
+      //咨询转发量
+        Assert.assertEquals(1,Integer.parseInt(elements.get(3).getText()));
+        //资讯浏览量
+        Assert.assertEquals(2, Integer.parseInt(elements.get(4).getText()));
 
 
     }
@@ -159,7 +159,7 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         mockInfoBrowse(2L, userBuddy.getId(), customer.getId());
         mockInfoBrowse(2L, userBuddy.getId(), customer.getId());
         //没有开启浏览积分奖励
-        mockInfoConfigure(customer.getId(), false);
+        mockInfoConfigure(customer.getId());
         mockUserLogin(userBuddy.getId(), customer.getId());
         webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
         List<WebElement> weui_navbar_item = webDriver.findElements(By.className("weui_navbar_item"));
@@ -258,6 +258,15 @@ public class InfoExtensionControllerSeleniumTest extends CommonTestBase {
         List<WebElement> elements = webDriver.findElements(By.className("sj"));
         String accumulateScore = elements.get(0).getText();
         Assert.assertEquals("--", accumulateScore);
-        // TODO: 2017-08-12 有uv,排名显示 
+        // 有uv,排名显示（因为定时任务统计的原因，显示的是200名以外）
+        Info info = mockInfo(customer.getId());
+        mockInfoBrowse(info.getId(),userBuddy.getId(),customer.getId());
+        mockUserLogin(userBuddy.getId(), customer.getId());
+        webDriver.get("http://localhost" + baseUrl + "/getInfoExtension?customerId=" + customer.getId());
+        List<WebElement> weui_navbar_item1 = webDriver.findElements(By.className("weui_navbar_item"));
+        weui_navbar_item1.get(1).click();
+        List<WebElement> elements1 = webDriver.findElements(By.className("sj"));
+        String accumulateScore1 = elements1.get(0).getText();
+        Assert.assertEquals("200名以外", accumulateScore1);
     }
 }

@@ -252,7 +252,6 @@ public abstract class CommonTestBase extends SpringWebTest {
         infoBrowse.setBrowseTime(LocalDateTime.now());
         return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
-
     protected InfoConfigure mockInfoConfigure(Long customerId, boolean exchangeSwitch, int type,int rate, boolean exchangeLimitSwitch, int dayExchangeLimit) {
         InfoConfigure infoConfigure = new InfoConfigure();
         infoConfigure.setCustomerId(customerId);
@@ -264,10 +263,10 @@ public abstract class CommonTestBase extends SpringWebTest {
         return infoConfigureRepository.saveAndFlush(infoConfigure);
     }
 
-    protected InfoConfigure mockInfoConfigure(Long customerId, boolean exchangeSwitch) {
+    protected InfoConfigure mockInfoConfigure(Long customerId) {
         InfoConfigure infoConfigure = new InfoConfigure();
         infoConfigure.setCustomerId(customerId);
-        infoConfigure.setExchangeSwitch(exchangeSwitch);
+        infoConfigure.setExchangeSwitch(false);
         return infoConfigureRepository.saveAndFlush(infoConfigure);
     }
 
