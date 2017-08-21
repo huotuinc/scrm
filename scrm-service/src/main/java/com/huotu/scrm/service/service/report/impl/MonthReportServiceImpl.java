@@ -1,5 +1,6 @@
 package com.huotu.scrm.service.service.report.impl;
 
+import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
@@ -41,7 +42,6 @@ public class MonthReportServiceImpl implements MonthReportService {
     private UserRepository userRepository;
     @Autowired
     private BusinessCardRecordRepository businessCardRecordRepository;
-    private int pageSize = 200;
 
     @Override
     @Transactional
@@ -72,8 +72,8 @@ public class MonthReportServiceImpl implements MonthReportService {
             //获取上月推广积分
             int extensionScore = getExtensionScore(userId, lastFirstDay, lastEndDay);
             monthReport.setSalesman(userLevel.isSalesman());
-            //获取上月月被关注量(销售员特有)
-            int followNum = monthReport.isSalesman() ? businessCardRecordRepository.countByUserIdAndFollowDateLessThanEqual(userId,lastEndDay.atStartOfDay()) : 0;
+            //获取上月被关注量(销售员特有)
+            int followNum = monthReport.isSalesman() ? businessCardRecordRepository.countByUserIdAndFollowDateLessThanEqual(userId, lastEndDay.atStartOfDay()) : 0;
             monthReport.setExtensionScore(extensionScore);
             monthReport.setFollowNum(followNum);
             monthReport.setForwardNum(forwardNum);
@@ -97,55 +97,40 @@ public class MonthReportServiceImpl implements MonthReportService {
     /**
      * 统计每月资讯转发量
      *
-     * @param userId  用户ID
+     * @param userId    用户ID
      * @param beginTime 统计起始时间
-     * @param endTime 统计结束时间
+     * @param endTime   统计结束时间
      * @return
      */
     private int getForwardNum(Long userId, LocalDate beginTime, LocalDate endTime) {
-        Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
-        List<DayReport> sortAll = dayReportRepository.findAll(specification);
-        int num = 0;
-        for (DayReport reportDay : sortAll) {
-            num += reportDay.getForwardNum();
-        }
-        return num;
+        List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayBetween(userId, beginTime, endTime);
+        return dayReportList.stream().mapToInt(DayReport::getForwardNum).sum();
     }
 
     /**
-     * 统计每月访客量(如果统计本月不含当天数据)
+     * 统计每月访客量
      *
-     * @param userId  用户ID
+     * @param userId    用户ID
      * @param beginTime 统计起始时间
-     * @param endTime 统计结束时间
+     * @param endTime   统计结束时间
      * @return
      */
     private int getVisitorNum(Long userId, LocalDate beginTime, LocalDate endTime) {
-        Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
-        List<DayReport> sortAll = dayReportRepository.findAll(specification);
-        int num = 0;
-        for (DayReport reportDay : sortAll) {
-            num += reportDay.getVisitorNum();
-        }
-        return num;
+        List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayBetween(userId, beginTime, endTime);
+        return dayReportList.stream().mapToInt(DayReport::getVisitorNum).sum();
     }
 
     /**
      * 统计每月推广积分
      *
-     * @param userId  用户ID
+     * @param userId    用户ID
      * @param beginTime 统计起始时间
-     * @param endTime 统计结束时间
+     * @param endTime   统计结束时间
      * @return
      */
     private int getExtensionScore(Long userId, LocalDate beginTime, LocalDate endTime) {
-        Specification<DayReport> specification = getSpecification(userId, beginTime, endTime);
-        List<DayReport> sortAll = dayReportRepository.findAll(specification);
-        int num = 0;
-        for (DayReport reportDay : sortAll) {
-            num += reportDay.getExtensionScore();
-        }
-        return num;
+        List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayBetween(userId, beginTime, endTime);
+        return dayReportList.stream().mapToInt(DayReport::getExtensionScore).sum();
     }
 
     /**
@@ -175,7 +160,7 @@ public class MonthReportServiceImpl implements MonthReportService {
                 return cb.and(predicates.toArray(new Predicate[predicates.size()]));
             });
             Sort sort = new Sort(Sort.Direction.DESC, rankingAttribute);
-            Page<MonthReport> monthReportPage = monthReportRepository.findAll(specification, new PageRequest(0, pageSize, sort));
+            Page<MonthReport> monthReportPage = monthReportRepository.findAll(specification, new PageRequest(0, Constant.SORT_NUM, sort));
             List<MonthReport> monthReportList = monthReportPage.getContent();
             for (int i = 0; i < monthReportList.size(); i++) {
                 MonthReport monthReport = monthReportList.get(i);
@@ -186,16 +171,6 @@ public class MonthReportServiceImpl implements MonthReportService {
                 }
                 monthReportRepository.save(monthReport);
             }
-        });
-    }
-
-    private Specification<DayReport> getSpecification(Long userId, LocalDate lastFirstDay, LocalDate lastEndDay) {
-        return ((root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-            predicates.add(cb.equal(root.get("userId").as(Long.class), userId));
-            predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastFirstDay));
-            predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(LocalDate.class), lastEndDay));
-            return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         });
     }
 }

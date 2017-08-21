@@ -14,6 +14,8 @@ import com.huotu.scrm.service.service.mall.UserLevelService;
 import com.huotu.scrm.web.CommonTestBase;
 import com.huotu.scrm.web.controller.page.site.ShowBusinessCardPage;
 import com.huotu.scrm.web.controller.page.site.TestEditBusinessCardPage;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -87,7 +89,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
                 .param("customerId", String.valueOf(customer.getId()))
                 .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB.getCode()))
                 .param("typeValue", temp)
-                .cookie( mockCookie( user.getId() , customer.getId() ))
+                .cookie(mockCookie(user.getId(), customer.getId()))
         );
 
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
@@ -98,7 +100,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
                 .param("customerId", String.valueOf(customer.getId()))
                 .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYADDRESS.getCode()))
                 .param("typeValue", temp)
-                .cookie( mockCookie( user.getId() , customer.getId() ))
+                .cookie(mockCookie(user.getId(), customer.getId()))
         ).andExpect(jsonPath("$.code").value(200));
 
         temp = UUID.randomUUID().toString();
@@ -106,24 +108,24 @@ public class BusinessCardControllerTest extends CommonTestBase {
                 .param("customerId", String.valueOf(customer.getId()))
                 .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_QQ.getCode()))
                 .param("typeValue", temp)
-                .cookie( mockCookie( user.getId() , customer.getId() ))
+                .cookie(mockCookie(user.getId(), customer.getId()))
         ).andExpect(jsonPath("$.code").value(200));
 
         temp = UUID.randomUUID().toString();
-        mockMvc.perform( post(updateBusinessCardUrl)
-                .param("customerId" , String.valueOf(customer.getId()) )
-                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYNAME.getCode()) )
-                .param("typeValue" ,temp )
-                .cookie( mockCookie( user.getId() , customer.getId() ))
-        ).andExpect( jsonPath("$.code").value(200) );
+        mockMvc.perform(post(updateBusinessCardUrl)
+                .param("customerId", String.valueOf(customer.getId()))
+                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYNAME.getCode()))
+                .param("typeValue", temp)
+                .cookie(mockCookie(user.getId(), customer.getId()))
+        ).andExpect(jsonPath("$.code").value(200));
 
         temp = UUID.randomUUID().toString();
-        mockMvc.perform( post(updateBusinessCardUrl)
-                .param("customerId" , String.valueOf(customer.getId()) )
-                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_TEL.getCode()) )
-                .param("typeValue" ,temp )
-                .cookie( mockCookie( user.getId() , customer.getId() ))
-        ).andExpect( jsonPath("$.code").value(200) );
+        mockMvc.perform(post(updateBusinessCardUrl)
+                .param("customerId", String.valueOf(customer.getId()))
+                .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_TEL.getCode()))
+                .param("typeValue", temp)
+                .cookie(mockCookie(user.getId(), customer.getId()))
+        ).andExpect(jsonPath("$.code").value(200));
 
     }
 
@@ -132,84 +134,105 @@ public class BusinessCardControllerTest extends CommonTestBase {
     public void uploadAvatar() throws Exception {
         String url = "http://localhost/site/businessCard/uploadAvatar";
 
-        Cookie cookie = mockCookie( user.getId() , customerId );
+        Cookie cookie = mockCookie(user.getId(), customerId);
 
         //1.检测get请求url
-        mockMvc.perform( MockMvcRequestBuilders.get(url).cookie(cookie).param("customerId", String.valueOf(customerId)) )
-                .andExpect(status().isOk());
+        String customerId = mockMvc.perform(MockMvcRequestBuilders.get(url).cookie(cookie).param("customerId", String.valueOf(this.customerId)))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+
+        Assert.assertThat(customerId, new Matcher<String>() {
+            @Override
+            public boolean matches(Object item) {
+                if (customerId.contains("异常错误")) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public void describeMismatch(Object item, Description mismatchDescription) {
+            }
+
+            @Override
+            public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        });
 
 
         //2.检测不是图片的 post请求
-        String filename=UUID.randomUUID().toString();
+        String filename = UUID.randomUUID().toString();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        BufferedImage image = new BufferedImage(250,250, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(250, 250, BufferedImage.TYPE_INT_RGB);
         Graphics graphics = image.getGraphics();
-        graphics.drawString("金向东", 20,20);
-        ImageIO.write( image , "png" , outputStream );
+        graphics.drawString("金向东", 20, 20);
+        ImageIO.write(image, "png", outputStream);
 
-        MockMultipartFile mockMultipartFile = new MockMultipartFile("btnFile", filename , "text/*" , outputStream.toByteArray() );
+        MockMultipartFile mockMultipartFile = new MockMultipartFile("btnFile", filename, "text/*", outputStream.toByteArray());
         MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.fileUpload(url);
-        builder.file(mockMultipartFile).param("customerId", String.valueOf( customerId )).cookie(cookie);
+        builder.file(mockMultipartFile).param("customerId", String.valueOf(this.customerId)).cookie(cookie);
 
-        mockMvc.perform( builder )
-                .andExpect( status().is(200) )
+        mockMvc.perform(builder)
+                .andExpect(status().is(200))
                 .andExpect(jsonPath("$.code").value(500))
                 .andExpect(jsonPath("$.data").value("不支持的文件类型，仅支持图片！"));
 
         //3.检测大文件的post请求
 
 
-
         //4.检测未登录的post请求,怎么？？
         builder = MockMvcRequestBuilders.fileUpload(url);
-        builder.file(mockMultipartFile).param("customerId", String.valueOf(customerId));
+        builder.file(mockMultipartFile).param("customerId", String.valueOf(this.customerId));
         ResultActions resultActions = mockMvc.perform(builder);
         MvcResult mvcResult = resultActions.andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
         int status = response.getStatus();
-        OutputStream outputStream1 =  mvcResult.getResponse().getOutputStream();
+        OutputStream outputStream1 = mvcResult.getResponse().getOutputStream();
         int length = resultActions.andReturn().getResponse().getContentLength();
         byte[] buffer = new byte[length];
         outputStream1.write(buffer);
         //String c = new String(buffer);
-                //.andExpect(status().is(302));
+        //.andExpect(status().is(302));
         //String mv = resultActions.andReturn().getModelAndView().getViewName();
 
         //5.检测非法用户的post请求
 
 
-
-
         //6.检测非销售员的post请求
 
-        UserLevel userLevel = mockUserLevel(customerId, UserType.normal , false);
-        User user = mockUser(customerId,userLevel);
-        cookie = mockCookie(user.getId(),customerId);
-        mockMultipartFile = new MockMultipartFile("btnFile", filename , "image/*" , outputStream.toByteArray() );
+        UserLevel userLevel = mockUserLevel(this.customerId, UserType.normal, false);
+        User user = mockUser(this.customerId, userLevel);
+        cookie = mockCookie(user.getId(), this.customerId);
+        mockMultipartFile = new MockMultipartFile("btnFile", filename, "image/*", outputStream.toByteArray());
         builder = MockMvcRequestBuilders.fileUpload(url);
-        builder.file(mockMultipartFile).param("customerId", String.valueOf( customerId )).cookie(cookie);
-        mockMvc.perform( builder.cookie(cookie) )
+        builder.file(mockMultipartFile).param("customerId", String.valueOf(this.customerId)).cookie(cookie);
+        mockMvc.perform(builder.cookie(cookie))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$.code").value(500))
                 .andExpect(jsonPath("$.msg").value("该用户不是销售员，无权编辑名片信息"));
 
         //7.检测正确的post请求
 
-        userLevel = mockUserLevel(customerId, UserType.buddy , true);
-        user = mockUser(customerId,userLevel);
-        cookie = mockCookie(user.getId(),customerId);
+        userLevel = mockUserLevel(this.customerId, UserType.buddy, true);
+        user = mockUser(this.customerId, userLevel);
+        cookie = mockCookie(user.getId(), this.customerId);
         builder = MockMvcRequestBuilders.fileUpload(url);
-        builder.file(mockMultipartFile).param("customerId", String.valueOf( customerId )).cookie(cookie);
-        mockMvc.perform( builder )
+        builder.file(mockMultipartFile).param("customerId", String.valueOf(this.customerId)).cookie(cookie);
+        mockMvc.perform(builder)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code"  ).value( 200 ));
+                .andExpect(jsonPath("$.code").value(200));
 
     }
 
     @Test
     public void editBusinessCard() throws Exception {
 
-        user = mockUser(customerId , userLevel);
+        user = mockUser(customerId, userLevel);
 
         Long userId = user.getId();
         // TODO: 2017-08-01 修改图片后验证？其他字段为什么不验证？？单元测试需要包含所有case
@@ -220,7 +243,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
         editUrl += "?customerId=" + customerId + "&userId=" + userId;
         System.out.println("customerId:" + customerId + ";userId=" + userId);
         //以 userId 登录
-        mockUserLogin(userId,customerId);
+        mockUserLogin(userId, customerId);
 
         webDriver.get(editUrl);
         TestEditBusinessCardPage editBusinessCardPage = this.initPage(TestEditBusinessCardPage.class);
@@ -234,10 +257,10 @@ public class BusinessCardControllerTest extends CommonTestBase {
     @Test
     public void showBusinessCard() throws Exception {
 
-        UserLevel userLevel = mockUserLevel(customerId,UserType.buddy,true);
-        User salesman = mockUser(customerId,userLevel);
-        User user = mockUser(customerId,userLevel);
-        Cookie cookie = mockCookie(user.getId() , customerId);
+        UserLevel userLevel = mockUserLevel(customerId, UserType.buddy, true);
+        User salesman = mockUser(customerId, userLevel);
+        User user = mockUser(customerId, userLevel);
+        Cookie cookie = mockCookie(user.getId(), customerId);
 
         BusinessCard businessCard = new BusinessCard();
         businessCard.setJob(UUID.randomUUID().toString());
@@ -246,9 +269,9 @@ public class BusinessCardControllerTest extends CommonTestBase {
         businessCard.setAvatar(UUID.randomUUID().toString());
         businessCard.setCustomerId(customerId);
         businessCard.setCompanyName(UUID.randomUUID().toString());
-        businessCard.setEmail(UUID.randomUUID().toString().substring(0,10));
-        businessCard.setQq(UUID.randomUUID().toString().substring(0,10));
-        businessCard.setTel(UUID.randomUUID().toString().substring(0,10));
+        businessCard.setEmail(UUID.randomUUID().toString().substring(0, 10));
+        businessCard.setQq(UUID.randomUUID().toString().substring(0, 10));
+        businessCard.setTel(UUID.randomUUID().toString().substring(0, 10));
         businessCard = businessCardRepository.saveAndFlush(businessCard);
 
         SalesmanBusinessCard salesmanBusinessCard = new SalesmanBusinessCard();
