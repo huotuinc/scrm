@@ -45,7 +45,6 @@
                                 <th class="col-sm-2">奖品名称</th>
                                 <th class="col-sm-3">奖品图片</th>
                                 <th>奖品类型</th>
-                                <!--<th>奖品总量</th>-->
                                 <th>奖品剩余数量</th>
                                 <th>中奖概率</th>
                                 <th>操作</th>
@@ -55,7 +54,6 @@
                             <tr th:each="prize,iterStat:${prizeList}">
                                 <input id="status" type="hidden" th:value="${prize.activity.openStatus}">
                                 <td th:text="${iterStat.index}+1">
-
                                 </td>
                                 <td th:text="${prize.prizeName}">
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
@@ -66,7 +64,6 @@
                                     </img>
                                 </td>
                                 <td th:text="${prize.prizeType.value}"></td>
-                                <!--<td th:text="${prize.prizeCount}"></td>-->
                                 <td th:text="${prize.remainCount}"></td>
                                 <td>
                                     <span class="js_winRate" th:text="${prize.winRate}"></span><span
