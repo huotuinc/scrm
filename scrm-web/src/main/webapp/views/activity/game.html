@@ -25,10 +25,10 @@
     </script>
     <link rel="stylesheet" href="../../resources/css/index.css">
 </head>
-<body th:attr="activeId=${active.actId}" activeId="2">
+<body th:attr="activeId=${active.actId},customerId=${customerId}" activeId="2" customerId="4421">
 <section id="app">
 
-    <a class="record" href="site_prize_list.html" th:href="@{/site/act/prizeList(actId=${active.actId})}"></a>
+    <a class="record" href="site_prize_list.html" th:href="@{/site/act/prizeList(actId=${active.actId},customerId=${customerId})}"></a>
 
     <div class="banner">
         <img src="../../resources/images/theme.png" th:src="@{../../resources/images/theme.png}">

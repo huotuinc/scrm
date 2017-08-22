@@ -143,7 +143,7 @@
             height: 300,
             minHeight: 200,
             maxHeight: 400,
-            focus:true,
+            focus: true,
             lang: 'zh-CN',
             toolbar: [
                 // [groupName, [list of button]]
@@ -153,7 +153,7 @@
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
-                ['insert',['picture','video']]
+                ['insert', ['picture', 'video']]
             ]
         });
         // 在键盘按下并释放及提交后验证提交表单
@@ -173,11 +173,7 @@
     });
 
     var infoSaveEditHandler = {
-
-
         uploadFile: function (obj) {
-
-
             if ($('#uploadFile').val() == undefined || $('#uploadFile').val().length == 0) {
                 hot.tip.msg("图片不能为空");
             } else {
