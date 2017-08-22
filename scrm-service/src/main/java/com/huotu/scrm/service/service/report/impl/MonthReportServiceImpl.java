@@ -73,7 +73,7 @@ public class MonthReportServiceImpl implements MonthReportService {
             int extensionScore = getExtensionScore(userId, lastFirstDay, lastEndDay);
             monthReport.setSalesman(userLevel.isSalesman());
             //获取上月被关注量(销售员特有)
-            int followNum = monthReport.isSalesman() ? businessCardRecordRepository.countByUserIdAndFollowDateLessThanEqual(userId, lastEndDay.atStartOfDay()) : 0;
+            int followNum = monthReport.isSalesman() ? businessCardRecordRepository.countByUserIdAndFollowDateLessThanEqual(userId, firstDay.atStartOfDay()) : 0;
             monthReport.setExtensionScore(extensionScore);
             monthReport.setFollowNum(followNum);
             monthReport.setForwardNum(forwardNum);
