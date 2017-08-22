@@ -37,13 +37,14 @@ $(function () {
         },
         getOrder: function () {
             var actId = $("body").attr("activeId");
+            var customerId = $("body").attr("customerId");
             game.loadingModal();
             $.ajax({
                 type: 'POST',
                 url: '/site/join/act',
                 data: {
                     actId: actId,
-                    customerId: 4421
+                    customerId: customerId
                 },
                 dataType: 'json',
                 success: function (res) {

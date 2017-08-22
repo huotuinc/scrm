@@ -88,6 +88,7 @@ public class ActWinController extends SiteBaseController {
         int times = activityUseTimes(activity, user);
         model.addAttribute("times", times);
         model.addAttribute("active", activity);
+        model.addAttribute("customerId", customerId);
         return "activity/game";
 
     }
@@ -175,15 +176,21 @@ public class ActWinController extends SiteBaseController {
                                           @RequestParam Long actWinDetailId,
                                           @RequestParam String name,
                                           @RequestParam String mobile,
-                                          @RequestParam String authCode) {
-        if (verifyService.verifyVerificationCode(mobile, authCode)) {
-            ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(actWinDetailId, name, mobile);
-            if (actWinDetail != null) {
-                return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+                                          @RequestParam String authCode,
+                                          @RequestParam Long customerId) {
+        try {
+            ApiResult apiResult = apiService.checkCode(customerId, mobile, authCode);
+            if (apiResult.getCode() == 200) {
+                ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(actWinDetailId, name, mobile);
+                if (actWinDetail != null) {
+                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+                }
             }
-            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR);
+            return apiResult;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, null, "手机验证码错误");
         }
-        return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, null, "手机验证码错误");
     }
 
 
@@ -195,7 +202,7 @@ public class ActWinController extends SiteBaseController {
      * @return
      */
     @RequestMapping(value = "/act/prizeList")
-    public String prizeList(@ModelAttribute("userId") Long userId, @RequestParam(value = "actId") Long actId, Model model) {
+    public String prizeList(@ModelAttribute("userId") Long userId,@ModelAttribute("customerId") Long customerId, @RequestParam(value = "actId") Long actId, Model model) {
 
         //查询到用户某个活动的中奖记录
         List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId, userId);
@@ -208,6 +215,7 @@ public class ActWinController extends SiteBaseController {
             }
         });
         model.addAttribute("winRecords", list);
+        model.addAttribute("customerId", customerId);
         return "activity/site_prize_list";
     }
 
