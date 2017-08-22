@@ -126,7 +126,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         LocalDateTime now = LocalDateTime.now();
         LocalDate localDate = LocalDate.now();
         LocalDateTime beginTime = localDate.atStartOfDay();
-        LocalDateTime firstDay = localDate.withDayOfMonth(1).atStartOfDay();
+        LocalDate firstDay = localDate.withDayOfMonth(1);
         DayScoreRankingInfo dayScoreRankingInfo = new DayScoreRankingInfo();
         int dayScoreRanking = 0;
         int monthRanking = 0;
@@ -136,12 +136,13 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         if (mapMonthScoreRanking.containsKey(user.getId())) {
             monthRanking = mapMonthScoreRanking.get(user.getId());
         }
-        //判断用户是否有预计积分（只需判断今日是否有转发浏览记录,本月的同理）
+        //判断用户是否有预计积分（只需判断今日是否有转发浏览记录）
         if (dayScoreRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now) > 0) {
             //表示200名以外
             dayScoreRanking = -1;
         }
-        if (monthRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), firstDay, localDate.atStartOfDay()) > 0) {
+        //判断用户本月是否有预计积分（只需判断每日统计表是否有本月的数据）
+        if (monthRanking == 0 && dayReportRepository.findByUserIdAndReportDayBetween(user.getId(), firstDay, localDate).size() > 0) {
             //表示200名以外
             monthRanking = -1;
         }
@@ -308,7 +309,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             } else {
                 switch (type) {
                     case 0:
-                        if (monthReport.getScoreRanking() == 0 && monthReportRepository.findByUserId(userId).size() > 0) {
+                        if (monthReport.getScoreRanking() == 0 && monthReportRepository.findByUserIdAndReportMonth(userId,monthReport.getReportMonth())!=null) {
                             monthStatisticInfo.setData(-1);
                         } else {
                             monthStatisticInfo.setData(monthReport.getScoreRanking());
@@ -321,7 +322,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
                         monthStatisticInfo.setData(monthReport.getVisitorNum());
                         break;
                     default:
-                        if (monthReport.getFollowRanking() == 0 && monthReportRepository.findByUserId(userId).size() > 0) {
+                        if (monthReport.getFollowRanking() == 0 && monthReportRepository.findByUserIdAndReportMonth(userId,monthReport.getReportMonth())!=null) {
                             monthStatisticInfo.setData(-1);
                         } else {
                             monthStatisticInfo.setData(monthReport.getFollowRanking());
