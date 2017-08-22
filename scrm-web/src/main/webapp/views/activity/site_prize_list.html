@@ -71,7 +71,7 @@
                 <div class="title">
                     <p class="titlename" th:text="${record.prize.prizeName}">标题标题标题标题标题标题标题标题</p>
                     <p class="time" th:text="${#temporals.format(record.winTime, 'yyyy-MM-dd HH:mm:ss')}">2017.01.01</p>
-                    <button th:if="${record.getReward}" class="prize_get" type="button">已领取</button>
+                    <button th:if="${record.prize.prizeType.code}!=0 and ${record.getReward}"  th:text="已领取" class="prize_get" type="button">已领取</button>
                 </div>
             </div>
             <div class="weui_cell_ft" style="display:none"></div>
