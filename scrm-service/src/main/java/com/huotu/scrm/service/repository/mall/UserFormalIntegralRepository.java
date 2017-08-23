@@ -21,6 +21,6 @@ import java.time.LocalDateTime;
  */
 public interface UserFormalIntegralRepository extends JpaRepository<UserFormalIntegral, Long> {
 
-    @Query("SELECT SUM(u.score) FROM UserFormalIntegral u WHERE u.userId = ?1 AND u.merchantId = ?2 AND u.status = ?3 AND u.time >= ?4 AND u.time <= ?5")
-    Integer sumByScore(Long userId, Long customerId, IntegralTypeEnum status, LocalDateTime beginTime, LocalDateTime endTime);
+    @Query("SELECT SUM(u.score) FROM UserFormalIntegral u WHERE u.userId = ?1 AND u.merchantId = ?2 AND u.userLevelId = ?3 and u.userType = ?4 and u.status = ?5 AND u.time >= ?6 AND u.time <= ?7")
+    Integer sumByScore(Long userId, Long customerId, Integer userLevelId, Integer userType, IntegralTypeEnum status, LocalDateTime beginTime, LocalDateTime endTime);
 }
