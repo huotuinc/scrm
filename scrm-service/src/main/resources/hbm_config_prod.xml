@@ -14,7 +14,7 @@
 
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
         <property name="jndiName">
-            <value>jdbc/huobanplus_supplier</value>
+            <value>jdbc/huobanplus_scrm</value>
         </property>
         <property name="resourceRef">
             <value>true</value>
