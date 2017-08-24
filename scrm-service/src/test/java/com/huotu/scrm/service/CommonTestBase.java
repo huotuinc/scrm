@@ -15,6 +15,7 @@ import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.config.ServiceConfig;
 import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
@@ -24,6 +25,7 @@ import com.huotu.scrm.service.entity.mall.UserFormalIntegral;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.repository.activity.ActivityRepository;
+import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
@@ -73,6 +75,8 @@ public class CommonTestBase {
     protected InfoRepository infoRepository;
     @Autowired
     protected UserFormalIntegralRepository userFormalIntegralRepository;
+    @Autowired
+    protected BusinessCardRecordRepository businessCardRecordRepository;
 
 
     protected Random random = new Random();
@@ -166,6 +170,15 @@ public class CommonTestBase {
         infoBrowse.setBrowseTime(LocalDateTime.now().minusHours(1));
         return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
+    protected InfoBrowse mockInfoBrowse(Long infoId, Long sourceUserId, Long readUserId, Long customerId,LocalDateTime time) {
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setInfoId(infoId);
+        infoBrowse.setSourceUserId(sourceUserId);
+        infoBrowse.setReadUserId(readUserId);
+        infoBrowse.setCustomerId(customerId);
+        infoBrowse.setBrowseTime(time);
+        return infoBrowseRepository.saveAndFlush(infoBrowse);
+    }
 
     protected Info mockInfo(Long customerId) {
         Info info = new Info();
@@ -223,9 +236,10 @@ public class CommonTestBase {
         return activity;
     }
 
-    protected DayReport mockDayReport(User user, int visitorNum, int extensionScore, LocalDate reportDay) {
+    protected DayReport mockDayReport(User user, int forwardNum,int visitorNum, int extensionScore, LocalDate reportDay) {
         DayReport dayReport = new DayReport();
         dayReport.setUserId(user.getId());
+        dayReport.setForwardNum(forwardNum);
         dayReport.setCustomerId(user.getCustomerId());
         dayReport.setVisitorNum(visitorNum);
         dayReport.setExtensionScore(extensionScore);
@@ -243,5 +257,13 @@ public class CommonTestBase {
         userFormalIntegral.setStatus(IntegralTypeEnum.TURN_INFO);
         userFormalIntegral.setTime(time);
         return userFormalIntegralRepository.saveAndFlush(userFormalIntegral);
+    }
+    protected BusinessCardRecord mockBusinessCardRecord(Long userId, Long customerId,LocalDateTime time) {
+        BusinessCardRecord businessCardRecord = new BusinessCardRecord();
+        businessCardRecord.setUserId(userId);
+        businessCardRecord.setCustomerId(customerId);
+        businessCardRecord.setFollowId(Long.valueOf(String.valueOf(random.nextInt())));
+        businessCardRecord.setFollowDate(time);
+        return businessCardRecordRepository.saveAndFlush(businessCardRecord);
     }
 }

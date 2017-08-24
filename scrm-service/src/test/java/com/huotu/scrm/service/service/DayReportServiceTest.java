@@ -8,6 +8,7 @@ import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
+import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.report.DayReportService;
 import org.apache.http.HttpStatus;
@@ -31,15 +32,12 @@ public class DayReportServiceTest extends CommonTestBase {
     private DayReportService dayReportService;
     private Customer customer;
     private User userBuddy;
-    private User userBuddyIsSales;
 
     @Before
     public void setInfo() throws Exception {
         customer = mockCustomer();
         UserLevel userLevelBuddy = mockUserLevel(customer.getId(), UserType.buddy, false);
-        UserLevel userLevelBuddyIsSales = mockUserLevel(customer.getId(), UserType.buddy, true);
         userBuddy = mockUser(customer.getId(), userLevelBuddy);
-        userBuddyIsSales = mockUser(customer.getId(), userLevelBuddyIsSales);
     }
 
     /**
@@ -78,8 +76,8 @@ public class DayReportServiceTest extends CommonTestBase {
     public void testGetMonthVisitorNum() {
         LocalDate now = LocalDate.now();
         Info info = mockInfo(customer.getId());
-        mockDayReport(userBuddy, 1, 1, now.withDayOfMonth(1));
-        mockDayReport(userBuddy, 2, 2, now.minusDays(1));
+        mockDayReport(userBuddy, 1, 1, 1, now.withDayOfMonth(1));
+        mockDayReport(userBuddy, 2, 2, 2, now.minusDays(1));
         mockInfoBrowse(info.getId(), userBuddy.getId(), userBuddy.getId(), customer.getId());
         int monthVisitorNum = dayReportService.getMonthVisitorNum(userBuddy);
         Assert.assertEquals(4, monthVisitorNum);
@@ -91,10 +89,31 @@ public class DayReportServiceTest extends CommonTestBase {
     @Test
     public void testGetMonthEstimateScore() {
         LocalDate now = LocalDate.now();
-        mockDayReport(userBuddy, 1, 1, now.minusDays(1));
-        mockDayReport(userBuddy, 1, 2, now.minusDays(2));
-        mockDayReport(userBuddy, 1, 3, now.minusDays(3));
+        mockDayReport(userBuddy, 1, 1, 1, now.minusDays(1));
+        mockDayReport(userBuddy, 1, 1, 2, now.minusDays(2));
+        mockDayReport(userBuddy, 1, 1, 3, now.minusDays(3));
         int monthEstimateScore = dayReportService.getMonthEstimateScore(userBuddy);
         Assert.assertEquals(6, monthEstimateScore);
+    }
+
+    @Test
+    public void testDayReportService() {
+        Info info = mockInfo(customer.getId());
+        Info info1 = mockInfo(customer.getId());
+        mockInfoConfigure(customer.getId());
+        LocalDateTime time = LocalDateTime.now().minusDays(1);
+        mockUserFormalIntegral(userBuddy, 1, time);
+        mockInfoBrowse(info.getId(), userBuddy.getId(), userBuddy.getId(), customer.getId(),time);
+        mockInfoBrowse(info1.getId(), userBuddy.getId(), userBuddy.getId(), customer.getId(),time);
+        dayReportService.saveDayReport();
+        DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userBuddy.getId(), LocalDate.now().minusDays(1));
+        Assert.assertNotNull(dayReport);
+        Assert.assertEquals(3, dayReport.getExtensionScore());
+        Assert.assertEquals(2, dayReport.getForwardNum());
+        Assert.assertEquals(2, dayReport.getVisitorNum());
+        Assert.assertEquals(0, dayReport.getFollowNum());
+        Assert.assertEquals(3, dayReport.getExtensionScore());
+        Assert.assertEquals(0, dayReport.getFollowRanking());
+        Assert.assertEquals(1, dayReport.getVisitorRanking());
     }
 }

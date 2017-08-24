@@ -46,10 +46,16 @@ public class ActController extends MallBaseController {
      */
     @RequestMapping("/act/list")
     public String actList(@RequestParam(required = false, defaultValue = "1") int pageIndex, @ModelAttribute("customerId") Long customerId, Model model) {
+        if (pageIndex == 0) {
+            pageIndex = 1;
+        }
         Page<Activity> allActivity = activityService.findAllActivity(customerId, pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("activities", allActivity.getContent());
         model.addAttribute("totalPages", allActivity.getTotalPages());
         model.addAttribute("totalRecords", allActivity.getTotalElements());
+        if (allActivity.getTotalPages() == 0) {
+            pageIndex = 0;
+        }
         model.addAttribute("pageIndex", pageIndex);
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
         return "activity/activity_list";
@@ -130,12 +136,12 @@ public class ActController extends MallBaseController {
     public ApiResult checkEnable(@RequestParam Long actId) {
         Activity activity = activityService.findByActId(actId);
         List<ActPrize> prizeList = activity.getActPrizes();
-        if(prizeList.size() < 6 || prizeList.size() > 8){
-            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,"奖品个数必须为6-8个",null);
+        if (prizeList.size() < 6 || prizeList.size() > 8) {
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "奖品个数必须为6-8个", null);
         }
         int rate = prizeList.stream().mapToInt(ActPrize::getWinRate).sum();
         if (rate != 100) {
-            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR,"奖品概率合计值必须为100，当前合计值为" + rate,null);
+            return ApiResult.resultWith(ResultCodeEnum.SAVE_DATA_ERROR, "奖品概率合计值必须为100，当前合计值为" + rate, null);
         }
         activity.setOpenStatus(true);
         activityService.saveActivity(activity);
@@ -149,15 +155,15 @@ public class ActController extends MallBaseController {
      * @return
      */
     @RequestMapping("/join/record")
-    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex,Long actId,@RequestParam(required = false, defaultValue = "0")int type, Model model) {
-        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(actId,type,pageIndex, Constant.PAGE_SIZE);
+    public String getJoinRecord(@RequestParam(required = false, defaultValue = "1") int pageIndex, Long actId, @RequestParam(required = false, defaultValue = "0") int type, Model model) {
+        Page<ActWinDetail> pageActWinDetail = actWinDetailService.getPageActWinDetail(actId, type, pageIndex, Constant.PAGE_SIZE);
         model.addAttribute("joinRecord", pageActWinDetail);
         model.addAttribute("totalPages", pageActWinDetail.getTotalPages());
         model.addAttribute("totalRecords", pageActWinDetail.getTotalElements());
         model.addAttribute("pageIndex", pageIndex);
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
-        model.addAttribute("actId",actId);
-        model.addAttribute("type",type);
+        model.addAttribute("actId", actId);
+        model.addAttribute("type", type);
         return "activity/winPrize_list";
     }
 
@@ -168,10 +174,10 @@ public class ActController extends MallBaseController {
      * @throws IOException
      */
     @RequestMapping("/downloadWinDetail")
-    public void downloadAllWinDetail(HttpServletResponse response,Long actId,@RequestParam(required = false, defaultValue = "0")int type, int startPage, int endPage) throws IOException {
+    public void downloadAllWinDetail(HttpServletResponse response, Long actId, @RequestParam(required = false, defaultValue = "0") int type, int startPage, int endPage) throws IOException {
         //完善配置信息
         String fileName = "活动中奖记录";
-        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(actId, type,startPage, endPage);
+        List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(actId, type, startPage, endPage);
         List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
         List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
