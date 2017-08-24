@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en" class="yellow-bg">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="yellow-bg">
 <head>
     <meta name="viewport"
           content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
@@ -147,13 +147,11 @@
                     },
                     dataType: 'json',
                     success: function (data) {
-                        if (data.resultCode === 400) {
-                            AddTel.showMsg(data.resultMsg);
+                        if (data.code != 200) {
+                            AddTel.showMsg(data.msg);
                             return false;
-                        }
-                        if (data.resultCode !== 200) {
-                            AddTel.showMsg("发送失败，请重试");
-                            return false;
+                        }else{
+                            return true;
                         }
                     },
                     error: function (data) {
