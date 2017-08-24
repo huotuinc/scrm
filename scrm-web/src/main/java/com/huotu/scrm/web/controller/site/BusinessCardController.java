@@ -143,7 +143,7 @@ public class BusinessCardController extends SiteBaseController {
     public ApiResult updateBusinessCardInfo(@ModelAttribute("userId") Long userId,
                                             @RequestParam(name = "customerId") Long customerId,
                                             @RequestParam(name = "type", required = false, defaultValue = "1") Integer type,
-                                            @RequestParam(name = "value", required = false, defaultValue = "") String value) {
+                                            @RequestParam(name = "typeValue", required = false, defaultValue = "") String value) {
         User user = userService.getByIdAndCustomerId(userId, customerId);
         if (user == null) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不存在的用户", null);
