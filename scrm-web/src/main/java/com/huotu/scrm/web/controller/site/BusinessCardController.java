@@ -1,15 +1,18 @@
 package com.huotu.scrm.web.controller.site;
 
+import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.EnumHelper;
 import com.huotu.scrm.common.ienum.UploadResourceEnum;
 import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
+import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
 import com.huotu.scrm.service.model.SalesmanBusinessCard;
+import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardRecordService;
 import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import com.huotu.scrm.service.service.mall.UserLevelService;
@@ -22,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
+import javax.ws.rs.NotFoundException;
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -45,6 +50,8 @@ public class BusinessCardController extends SiteBaseController {
     private UserService userService;
     @Autowired
     private UserLevelService userLevelService;
+    @Autowired
+    private CustomerRepository customerRepository;
 
     /***
      * 编辑销售员名片信息
@@ -64,6 +71,18 @@ public class BusinessCardController extends SiteBaseController {
             businessCard.setUserId(userId);
             businessCard.setAvatar("");
         }
+
+        Customer customer = customerRepository.findOne(customerId);
+        if( customer ==null ){
+            throw new RuntimeException("商户号没有找到");
+        }
+
+        String siteDomain = customer.getSubDomain() + SysConstant.COOKIE_DOMAIN;
+        if(!siteDomain.toLowerCase().startsWith("http://")){
+            siteDomain = "http://"+ siteDomain;
+        }
+
+        model.addAttribute("siteDomain" , siteDomain);
         model.addAttribute("businessCard", businessCard);
         return "businesscard/edit_businesscard";
     }
@@ -124,7 +143,7 @@ public class BusinessCardController extends SiteBaseController {
     public ApiResult updateBusinessCardInfo(@ModelAttribute("userId") Long userId,
                                             @RequestParam(name = "customerId") Long customerId,
                                             @RequestParam(name = "type", required = false, defaultValue = "1") Integer type,
-                                            @RequestParam(name = "value", required = false, defaultValue = "") String value) {
+                                            @RequestParam(name = "typeValue", required = false, defaultValue = "") String value) {
         User user = userService.getByIdAndCustomerId(userId, customerId);
         if (user == null) {
             return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, "不存在的用户", null);
