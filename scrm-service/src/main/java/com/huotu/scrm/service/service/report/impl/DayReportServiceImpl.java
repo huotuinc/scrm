@@ -198,8 +198,8 @@ public class DayReportServiceImpl implements DayReportService {
      * @param endTime   结束时间
      * @return
      */
-    public int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
-        Integer totalForwardScore = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
+    private int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
+        Integer totalForwardScore = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), user.getLevelId().intValue(), user.getUserType().ordinal(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
         return totalForwardScore == null ? 0 : totalForwardScore;
     }
 
@@ -211,7 +211,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @param endTime   结束时间
      * @return
      */
-    public int getVisitorScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
+    private int getVisitorScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
         int visitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, endTime);
         //获取访客量奖励积分
         InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
@@ -238,19 +238,6 @@ public class DayReportServiceImpl implements DayReportService {
         //获取今日访客量
         int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now);
         return monthVisitorNum + dayVisitorNum;
-    }
-
-    @Override
-    public int getMonthForwardNum(User user) {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDate today = LocalDate.now();
-        LocalDateTime beginTime = today.atStartOfDay();
-        LocalDate monthBegin = today.withDayOfMonth(1);
-        List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayBetween(user.getId(), monthBegin, today);
-        int monthForwardNum = dayReportList.stream().mapToInt(DayReport::getForwardNum).sum();
-        //获取今日转发量
-        int dayForwardNum = infoBrowseRepository.findForwardNumBySourceUserId(beginTime, now, user.getId()).size();
-        return monthForwardNum + dayForwardNum;
     }
 
     @Override

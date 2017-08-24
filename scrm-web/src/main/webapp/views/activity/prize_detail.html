@@ -132,7 +132,7 @@
                             console.log(data.fileUri);
                             console.log(data.fileUrl);
                             $('#imageShow').attr('src', data.fileUrl);
-                            $("input:hidden[name='prizeImageUrl']").val(data.fileUri);
+                            $("input:hidden[name='prizeImageUrl']").val(data.fileUrl);
                             hot.tip.success("上传成功");
                         }
                     },
@@ -160,8 +160,7 @@
                 prizeName:"奖品名称不能为空",
                 remainCount: "奖品数量大于0",
                 winRate: "中奖概率大于0小于100",
-                sort: "排序字段整数大于等于0",
-
+                sort: "排序字段整数大于等于0"
             }
         });
     });
