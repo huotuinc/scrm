@@ -14,8 +14,8 @@
 var domain = [[${domain}]],customerId= [[${customerId}]],sourceUserId= [[${sourceUserId}]];
 var info = eval([[${info}]]);
 document.write('<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>');
-document.write('<script type="text/javascript" src="http://m' + domain + '.com/Weixin/JsSdk/RegConfig.aspx?customerid=' + customerId+ '&debug=0"></script>');
-document.write('<script src="http://m' + domain + '.com/Weixin/JsSdk/wxShare.js?20150112"></script>');
+document.write('<script type="text/javascript" src="http://m' + domain + '/Weixin/JsSdk/RegConfig.aspx?customerid=' + customerId+ '&debug=1"></script>');
+document.write('<script src="http://m' + domain + '/Weixin/JsSdk/wxShare.js?20150112"></script>');
 var scrm_wxShare_template = [
     "wxShare.InitShare({",
     "    title: '" + info.title + "',",

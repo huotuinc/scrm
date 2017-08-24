@@ -81,8 +81,8 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     private void addMallScore(Long customerId, InfoBrowse infoBrowse, InfoConfigure infoConfigure, int score) throws UnsupportedEncodingException {
         //没开启
         UserType userType = userRepository.findUserTypeById(infoBrowse.getSourceUserId());
-        //转发奖励获取对象 0 会员
-        if (infoConfigure.getRewardUserType() == userType.ordinal()) {
+        //转发奖励获取对象 0 会员;2:会员+小伙伴
+        if (infoConfigure.getRewardUserType() == userType.ordinal() || infoConfigure.getRewardUserType() == 2) {
             //调商城接口扣除积分
             apiService.rechargePoint(customerId, infoBrowse.getSourceUserId(), 0L + score, IntegralTypeEnum.TURN_INFO);
         }
