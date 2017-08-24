@@ -104,7 +104,10 @@ public class HttpClientUtil {
             }
             HttpGet httpGet = new HttpGet(finalUrl.toString());
             try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                return new HttpResult(response.getStatusLine().getStatusCode(), EntityUtils.toString(response.getEntity()));
+                log.info("response status code:" + response.getStatusLine().getStatusCode());
+                String responseContent = EntityUtils.toString(response.getEntity());
+                log.info("response content:" + responseContent);
+                return new HttpResult(response.getStatusLine().getStatusCode(), responseContent);
             }
         } catch (IOException e) {
             log.error("get error",e);

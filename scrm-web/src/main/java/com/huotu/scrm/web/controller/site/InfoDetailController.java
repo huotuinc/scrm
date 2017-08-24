@@ -63,11 +63,11 @@ public class InfoDetailController extends SiteBaseController {
             info.setImageUrl(staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl()).toString());
         }
         int turnNum = infoBrowseService.countByTurn(infoId);
-        model.addAttribute("infoTurnNum", new Integer(turnNum));
+        model.addAttribute("infoTurnNum", turnNum);
         int browse = infoBrowseService.countByBrowse(infoId);
-        model.addAttribute("browseNum", new Integer(browse));
+        model.addAttribute("browseNum", browse);
         model.addAttribute("customerId", customerId);
-        model.addAttribute("sourceUserId", sourceUserId);
+        model.addAttribute("userId", userId);
         model.addAttribute("info", info);
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);

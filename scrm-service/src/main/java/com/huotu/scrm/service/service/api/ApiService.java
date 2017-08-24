@@ -10,12 +10,12 @@ import java.io.UnsupportedEncodingException;
  */
 public interface ApiService {
     /**
-     * 用户微信授权登录
+     * 用户微信授权登录请求地址
      *
      * @param customerId  商户ID
      * @param redirectUrl 执行成功后跳转的ID
      */
-    void userLogin(Long customerId, String redirectUrl);
+    String userLogin(Long customerId, String redirectUrl);
 
     /**
      * 用户增加积分

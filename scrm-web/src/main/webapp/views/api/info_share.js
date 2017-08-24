@@ -14,13 +14,17 @@
 var domain = [[${domain}]],customerId= [[${customerId}]],sourceUserId= [[${sourceUserId}]];
 var info = eval([[${info}]]);
 document.write('<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>');
-document.write('<script type="text/javascript" src="http://m.' + domain + '.com/Weixin/JsSdk/RegConfig.aspx?customerid=' + customerId+ '&debug=0"></script>');
-document.write('<script src="http://m.' + domain + '.com/Weixin/JsSdk/wxShare.js?20150112"></script>');
-wxShare.InitShare({
-    title: info.title,
-    desc: info.introduce,
-    link: window.location.href + '&sourceUserId=' + sourceUserId,//分享网址，一般在这里添加自己想要的参数
-    img_url: info.mallImageUrl
-});
+document.write('<script type="text/javascript" src="http://m' + domain + '.com/Weixin/JsSdk/RegConfig.aspx?customerid=' + customerId+ '&debug=0"></script>');
+document.write('<script src="http://m' + domain + '.com/Weixin/JsSdk/wxShare.js?20150112"></script>');
+var scrm_wxShare_template = [
+    "wxShare.InitShare({",
+    "    title: '" + info.title + "',",
+    "    desc: '"+info.introduce + "',",
+    "    link: '" + window.location.href + '&sourceUserId=' + sourceUserId + "',",//分享网址，一般在这里添加自己想要的参数
+    "    img_url: '"+info.mallImageUrl + "'",
+    "});"
+].join("\n");
+document.write("<script>" + scrm_wxShare_template + "</script>");
+
 
 
