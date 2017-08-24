@@ -48,7 +48,7 @@
                     <div>
                         <label class="col-sm-2 control-label">转发奖励限制</label>
                         <label><input class="mui-switch mui-switch-animbg" type="checkbox" name="rewardLimitSwitch"
-                                      th:checked="${infoConfigure.rewardLimitSwitch}"></label>
+                                      th:checked="${infoConfigure.rewardLimitSwitch}?${infoConfigure.rewardLimitSwitch}:0"></label>
                     </div>
                     </br>
                     <div style="padding-top: 5px">

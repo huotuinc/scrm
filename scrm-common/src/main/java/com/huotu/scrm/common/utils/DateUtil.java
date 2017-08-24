@@ -42,10 +42,12 @@ public class DateUtil {
 
     public static String compareLocalDateTime(LocalDateTime localDateTime1, LocalDateTime localDateTime2) {
         Duration duration = Duration.between(localDateTime1, localDateTime2);
-        System.out.println(duration.toHours());
         long totalDays = duration.toDays();
         long totalHours = duration.toHours();
         long totalMin = duration.toMinutes();
+        if (totalMin < 1L) {
+            return "刚刚";
+        }
         StringBuilder sb = new StringBuilder();
         //显示了天就不用显示分了
         boolean isDay = false;
