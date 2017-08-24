@@ -39,7 +39,7 @@
     <div class="sl-ka superli" style="font-size:12px">
         <ul class="sl-float-ul ka  pjf_5ge custom-paixu">
             <li >
-                <a th:href="${'http://msite.xiangzhang.com/UserCenter/UserSetting.aspx?customerid='+ businessCard.getCustomerId()}">
+                <a th:href="@{${siteDomain}+'/UserCenter/UserSetting.aspx?customerid='+${businessCard.getCustomerId()}}">
                     个人设置
                 </a>
             </li>

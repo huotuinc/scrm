@@ -54,14 +54,15 @@
                         </button>
                         <span class="help-block"><i class="fa fa-info-circle"></i>推荐尺寸：200*200</span>
                         <img id="imageShow" src="../../resources/images/infoBg.png" th:src="${actPrize.prizeImageUrl}"
-                              style="width:200px;height:200px;"/>
+                             style="width:200px;height:200px;"/>
                     </div>
                 </div>
                 <div class="hr-line-dashed"></div>
                 <div class="form-group">
                     <label class="col-sm-3 control-label">奖品数量:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="奖品数量" class="form-control" id="remainCount" name="remainCount" required maxlength="10"
+                        <input type="text" placeholder="奖品数量" class="form-control" id="remainCount" name="remainCount"
+                               required maxlength="10"
                                th:value="${actPrize.remainCount}">
                     </div>
                 </div>
@@ -76,7 +77,8 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">排序字段:</label>
                     <div class="col-sm-3">
-                        <input type="text" placeholder="排序字段" id="sort" class="form-control" th:value="${actPrize.sort}" required maxlength="10"
+                        <input type="text" placeholder="排序字段" id="sort" class="form-control" th:value="${actPrize.sort}"
+                               required maxlength="10"
                                name="sort">
                     </div>
                 </div>
@@ -114,38 +116,52 @@
     var prizeEditHandler = {
         uploadFile: function () {
             hot.loading.show();
-            if($('#uploadFile').val() == undefined ||  $('#uploadFile').val().length == 0 ) {
+            var fileName = $('#uploadFile').val();
+            if (fileName == undefined || fileName.length == 0) {
                 hot.tip.error("图片不能为空");
-            }else{
-                $.ajaxFileUpload({
-                    url: "/common/upload",
-                    data:{
-                        customerId:customerId
-                    },
-                    secureuri: false,// 一般设置为false
-                    fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
-                    dataType: 'json',// 返回值类型 一般设置为json
-                    type: "post",
-                    success: function (data) // 服务器成功响应处理函数
-                    {
-                        if (data.result == 1) {
-                            console.log(data.fileUri);
-                            console.log(data.fileUrl);
-                            $('#imageShow').attr('src', data.fileUrl);
-                            $("input:hidden[name='prizeImageUrl']").val(data.fileUrl);
-                            hot.tip.success("上传成功");
-                        }
-                    },
-                    error: function ()// 服务器响应失败处理函数
-                    {
-                        hot.tip.error("服务器异常,请稍后再试");
-                    }
-                })
+                return;
             }
+            if (!prizeEditHandler.checkImage(fileName)) {
+                hot.tip.error("请上传图片");
+                return;
+            }
+            $.ajaxFileUpload({
+                url: "/common/upload",
+                data: {
+                    customerId: customerId
+                },
+                secureuri: false,// 一般设置为false
+                fileElementId: "uploadFile",// 文件上传表单的id <input type="file" id="fileUpload" name="file" />
+                dataType: 'json',// 返回值类型 一般设置为json
+                type: "post",
+                success: function (data) // 服务器成功响应处理函数
+                {
+                    if (data.result == 1) {
+                        console.log(data.fileUri);
+                        console.log(data.fileUrl);
+                        $('#imageShow').attr('src', data.fileUrl);
+                        $("input:hidden[name='prizeImageUrl']").val(data.fileUrl);
+                        hot.tip.success("上传成功");
+                    }
+                },
+                error: function (res)// 服务器响应失败处理函数
+                {
+                    hot.tip.error(res.data);
+                }
+            })
+
         },
         save: function () {
             $("#editSavePrize").valid();
-           $("#editSavePrize").submit();
+            $("#editSavePrize").submit();
+        },
+        checkImage: function (fileName) {
+            var imgType = fileName.toLowerCase().split('.');
+            var type = imgType[imgType.length - 1];
+            if (type != "png" && type != "jpeg" && type != "bmp" && type != "jpg") {
+                return false;
+            }
+            return true;
         }
     }
     $(function () {
@@ -157,7 +173,7 @@
                 sort: {"digits": true, min: 0}
             },
             messages: {
-                prizeName:"奖品名称不能为空",
+                prizeName: "奖品名称不能为空",
                 remainCount: "奖品数量大于0",
                 winRate: "中奖概率大于0小于100",
                 sort: "排序字段整数大于等于0"
