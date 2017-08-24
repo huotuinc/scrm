@@ -9,6 +9,7 @@
 
 package com.huotu.scrm.web.controller.common;
 
+import com.huotu.scrm.common.utils.ApiResult;
 import com.huotu.scrm.common.utils.ModelMapUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
 import com.huotu.scrm.service.service.api.ApiService;
