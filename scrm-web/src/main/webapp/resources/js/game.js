@@ -297,6 +297,7 @@ $(function () {
     $('#J_sendAuth').click(function () {
         var self = $(this);
         var mobile = $('#J_userInfo').find('input[name="mobile"]').val();
+        var customerId = $("body").attr("customerId");
         if (!/^1([34578])\d{9}$/.test(mobile)) {
             showMsg('请输入正确的手机号');
             return;
@@ -306,7 +307,8 @@ $(function () {
             url:sendAuthCodeUrl,
             type: 'POST',
             data: {
-                loginName: mobile
+                loginName: mobile,
+                customerId:customerId,
             },
             dataType: 'json',
             success: function (data) {

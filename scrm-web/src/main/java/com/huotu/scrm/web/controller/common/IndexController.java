@@ -11,6 +11,7 @@ package com.huotu.scrm.web.controller.common;
 
 import com.huotu.scrm.common.utils.ModelMapUtil;
 import com.huotu.scrm.common.utils.ResultCodeEnum;
+import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.web.service.VerifyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,6 +40,8 @@ public class IndexController {
     private final Map<String, Integer> map = new HashMap<>();
     @Autowired
     private VerifyService verifyService;
+    @Autowired
+    private ApiService apiService;
 
     @RequestMapping({"/","/index"})
     public String index(){
@@ -56,7 +59,7 @@ public class IndexController {
      */
     @RequestMapping(value = "/sendAuthCode", method = RequestMethod.POST)
     @ResponseBody
-    public ModelMap sendAuthCode(@RequestParam String loginName, HttpServletRequest request
+    public ModelMap sendAuthCode(@RequestParam String loginName,@RequestParam Long customerId, HttpServletRequest request
             , String imageCode, HttpSession session) {
         String ip;
         if (request.getHeader("x-forwarded-for") == null) {
@@ -82,7 +85,7 @@ public class IndexController {
         }
 
         try {
-            verifyService.sendVerificationCode(loginName);
+            apiService.sendCode(customerId,loginName);
         } catch (IOException e) {
             // 对于未知情况需要进行记录
             log.debug("unknown error", e);
