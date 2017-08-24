@@ -34,7 +34,7 @@
                     <label class="col-sm-2 control-label">资讯标题</label>
                     <div class="col-sm-6">
                         <input type="text" id="title" name="title" maxlength="30" class="form-control" value=""
-                               th:value="${info.title}" required>
+                               th:value="${info.title}" required  >
                         <span class="help-block"><i class="fa fa-info-circle"></i>最多30个字符</span>
                     </div>
                 </div>
@@ -162,11 +162,25 @@
             ignore: [],  //this is importent
             rules: {
                 imageUrl: "required",
-                content: "required"
+                content: "required",
+                title:{
+                    maxlength:30,
+                    require:true
+                },
+                introduce:{
+                    maxlength:150,
+                    require:true
+                }
             },
             messages: {
                 imageUrl: "请选择上传图片",
-                content: "请填写内容"
+                content: "请填写内容",
+                title:{
+                    maxlength:"资讯标题不能超过30"
+                },
+                introduce:{
+                    maxlength:"资讯标题不能超过150"
+                }
             },
         });
 
