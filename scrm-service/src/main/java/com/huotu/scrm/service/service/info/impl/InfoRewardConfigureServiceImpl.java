@@ -22,6 +22,10 @@ public class InfoRewardConfigureServiceImpl implements InfoRewardConfigureServic
         InfoConfigure newInfoConfigure;
         if (infoConfigure.getCustomerId() != null && infoConfigure.getCustomerId() != 0){
             newInfoConfigure = infoConfigureRepository.findOne(infoConfigure.getCustomerId());
+            if (newInfoConfigure == null){
+                newInfoConfigure = new InfoConfigure();
+                newInfoConfigure.setCustomerId(infoConfigure.getCustomerId());
+            }
         }else {
             newInfoConfigure = new InfoConfigure();
             newInfoConfigure.setCustomerId(infoConfigure.getCustomerId());

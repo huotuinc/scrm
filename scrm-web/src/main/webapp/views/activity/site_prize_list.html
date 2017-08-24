@@ -1,5 +1,5 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en" class="yellow-bg">
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="yellow-bg">
 <head>
     <meta name="viewport"
           content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
@@ -61,7 +61,7 @@
         width: 95%;
     }
 </style>
-<body>
+<body th:attr="customerId=${customerId}" customerId="4421">
 <div th:remove="all-but-first" id="app">
     <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}"
          onclick="AddTel.showUserInfo()" th:onclick="(${record.getReward})?'':|AddTel.showUserInfo(${record.winDetailId})|">
@@ -132,6 +132,7 @@
             $('#J_sendAuth').click(function () {
                 var self = $(this);
                 var mobile = $('#J_userInfo').find('input[name="mobile"]').val();
+                var customerId = $("body").attr("customerId");
                 if (!/^1([34578])\d{9}$/.test(mobile)) {
                     AddTel.showMsg('请输入正确的手机号');
                     return;
@@ -141,17 +142,16 @@
                     url: sendAuthCodeUrl,
                     type: 'POST',
                     data: {
-                        loginName: mobile
+                        loginName: mobile,
+                        customerId: customerId
                     },
                     dataType: 'json',
                     success: function (data) {
-                        if (data.resultCode === 400) {
-                            AddTel.showMsg(data.resultMsg);
+                        if (data.code != 200) {
+                            AddTel.showMsg(data.msg);
                             return false;
-                        }
-                        if (data.resultCode !== 200) {
-                            AddTel.showMsg("发送失败，请重试");
-                            return false;
+                        }else{
+                            return true;
                         }
                     },
                     error: function (data) {
@@ -167,6 +167,7 @@
             var mobile = form.find('input[name="mobile"]').val();
             var authCode = form.find('input[name="authCode"]').val();
             var deId = form.find('input[name="ActWinDetailId"]').val();
+            var customerId = $("body").attr("customerId");
             if (!name) {
                 AddTel.showMsg('姓名不能为空');
                 return false;
@@ -187,7 +188,8 @@
                     mobile: mobile,
                     name: name,
                     authCode: authCode,
-                    actWinDetailId: deId
+                    actWinDetailId: deId,
+                    customerId:customerId
                 },
                 dataType: 'json',
                 success: function (data) {

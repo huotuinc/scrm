@@ -24,7 +24,6 @@ import com.huotu.scrm.service.service.activity.ActivityService;
 import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
-import com.huotu.scrm.web.service.VerifyService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +63,6 @@ public class ActWinController extends SiteBaseController {
     private ActPrizeService actPrizeService;
     @Autowired
     private ApiService apiService;
-    @Autowired
-    private VerifyService verifyService;
 
     @RequestMapping("/activity/index")
     public String marketingActivity(@ModelAttribute("userId") Long userId,
