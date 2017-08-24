@@ -33,6 +33,10 @@ public class InfoRewardController extends MallBaseController{
     @RequestMapping("/info/configure")
     public String readRewardConfigureFromDb(@ModelAttribute("customerId") Long customerId, Model model){
         InfoConfigure infoConfigure = infoRewardConfigureService.readRewardConfigure(customerId);
+        if(infoConfigure == null){
+            infoConfigure = new InfoConfigure();
+            infoConfigure.setCustomerId(customerId);
+        }
         model.addAttribute("infoConfigure",infoConfigure);
         return "info/info_reward_configure";
     }
