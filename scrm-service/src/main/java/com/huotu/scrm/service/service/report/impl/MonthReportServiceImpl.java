@@ -102,7 +102,7 @@ public class MonthReportServiceImpl implements MonthReportService {
      * @param endTime   统计结束时间
      * @return
      */
-    public int getForwardNum(Long userId, LocalDate beginTime, LocalDate endTime) {
+    private int getForwardNum(Long userId, LocalDate beginTime, LocalDate endTime) {
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayBetween(userId, beginTime, endTime);
         return dayReportList.stream().mapToInt(DayReport::getForwardNum).sum();
     }
