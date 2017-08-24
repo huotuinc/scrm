@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -36,15 +35,19 @@ public class ApiServiceImpl implements ApiService {
         if (customer == null) {
             return;
         }
-        Map<String, String> requestMap = new HashMap<>();
-        requestMap.put("customerid", String.valueOf(customerId));
         try {
             redirectUrl = URLEncoder.encode(redirectUrl, Constant.UTF8);
         } catch (UnsupportedEncodingException e) {
             log.error("url encode error", e);
         }
-        requestMap.put("redirecturl", redirectUrl);
-        HttpClientUtil.getInstance().get(customer.getSubDomain() + SysConstant.COOKIE_DOMAIN + "/OAuth2/XiangzhangAuthorize.aspx", requestMap);
+
+        StringBuilder sb = new StringBuilder("http://");
+        sb = sb.append(customer.getSubDomain()).append(SysConstant.COOKIE_DOMAIN)
+                .append("/OAuth2/XiangzhangAuthorize.aspx")
+                .append("?customerid=").append(customerId)
+                .append("&redirecturl=").append(redirectUrl);
+        log.info("login url:" + sb.toString());
+        HttpClientUtil.getInstance().get(sb.toString(), null);
     }
 
     @Override
