@@ -196,7 +196,7 @@
                     },
                     error: function (data)// 服务器响应失败处理函数
                     {
-                        hot.tip.error("服务器异常,请稍后再试");
+                        hot.tip.error(data.data);
                     }
                 })
             }
