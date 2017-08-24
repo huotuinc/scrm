@@ -162,20 +162,6 @@
         </dependency>
         <!--LOG END-->
 
-
-        <!--短信验证码-->
-        <dependency>
-            <groupId>com.huotu.verification-code</groupId>
-            <artifactId>vc-service</artifactId>
-            <version>1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.huotu.verification-code</groupId>
-            <artifactId>vc-test</artifactId>
-            <version>1.1</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>

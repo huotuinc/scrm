@@ -3,6 +3,7 @@
  */
 $(function () {
     FastClick.attach(document.body);
+    var customerId = $("body").attr("customerId");
 
     var game = {
         thanksDeg: null,
@@ -37,7 +38,6 @@ $(function () {
         },
         getOrder: function () {
             var actId = $("body").attr("activeId");
-            var customerId = $("body").attr("customerId");
             game.loadingModal();
             $.ajax({
                 type: 'POST',
@@ -297,7 +297,6 @@ $(function () {
     $('#J_sendAuth').click(function () {
         var self = $(this);
         var mobile = $('#J_userInfo').find('input[name="mobile"]').val();
-        var customerId = $("body").attr("customerId");
         if (!/^1([34578])\d{9}$/.test(mobile)) {
             showMsg('请输入正确的手机号');
             return;
@@ -312,13 +311,11 @@ $(function () {
             },
             dataType: 'json',
             success: function (data) {
-                if (data.resultCode === 400) {
-                    showMsg(data.resultMsg);
+                if (data.code != 200) {
+                    AddTel.showMsg(data.msg);
                     return false;
-                }
-                if (data.resultCode !== 200) {
-                    showMsg("发送失败，请重试");
-                    return false;
+                }else{
+                    return true;
                 }
             },
             error: function () {
@@ -353,7 +350,8 @@ $(function () {
                 mobile: mobile,
                 name: name,
                 authCode:authCode,
-                actWinDetailId:deId
+                actWinDetailId:deId,
+                customerId:customerId
             },
             dataType: 'json',
             success: function (data) {
