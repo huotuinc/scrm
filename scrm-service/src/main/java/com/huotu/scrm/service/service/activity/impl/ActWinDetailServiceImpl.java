@@ -99,6 +99,7 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
         if (actWinDetail != null) {
             actWinDetail.setWinnerName(name);
             actWinDetail.setWinnerTel(mobile);
+            actWinDetail.setGetReward(true);
             return actWinDetailRepository.save(actWinDetail);
 
         }

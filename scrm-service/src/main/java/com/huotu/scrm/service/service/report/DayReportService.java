@@ -41,7 +41,7 @@ public interface DayReportService {
 
 
     /**
-     * 获取本月的积分（不包含今日的预计积分）
+     * 获取本月的积分（不包含今日的浏览资讯奖励积分，包含转发资讯奖励积分）
      *
      * @param user 用户
      * @return
