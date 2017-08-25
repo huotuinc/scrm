@@ -47,7 +47,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">上传图片</label>
                     <div class="col-sm-3">
-                        <input type="hidden" name="prizeImageUrl" th:value="${actPrize.prizeImageUrl}"/>
+                        <input type="hidden" id="prizeImageUrl" name="prizeImageUrl" th:value="${actPrize.prizeImageUrl}"/>
                         <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
                         <button class="btn btn-sm btn-success" id="uploadImage" type="button"
                                 onclick="prizeEditHandler.uploadFile()">上传图片
@@ -153,6 +153,10 @@
         },
         save: function () {
             $("#editSavePrize").valid();
+            var url = $("#prizeImageUrl").val();
+            if(url==null){
+                $("#prizeImageUrl").val('');
+            }
             $("#editSavePrize").submit();
         },
         checkImage: function (fileName) {

@@ -245,7 +245,21 @@ public class DayReportServiceImpl implements DayReportService {
         LocalDate today = LocalDate.now();
         LocalDate monthBegin = today.withDayOfMonth(1);
         List<DayReport> dayReportList = dayReportRepository.findByUserIdAndReportDayBetween(user.getId(), monthBegin, today);
-        return dayReportList.stream().mapToInt(DayReport::getExtensionScore).sum();
+        int todayForwardScore = getTodayForwardScore(user);
+        return dayReportList.stream().mapToInt(DayReport::getExtensionScore).sum() + todayForwardScore;
+    }
+
+    /**
+     * 获取今日转发积分
+     *
+     * @param user 用户
+     * @return
+     */
+    private int getTodayForwardScore(User user) {
+        LocalDate localDate = LocalDate.now();
+        LocalDateTime now = LocalDateTime.now();
+        Integer score = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), user.getLevelId().intValue(), user.getUserType().ordinal(), IntegralTypeEnum.TURN_INFO, localDate.atStartOfDay(), now);
+        return score == null ? 0 : score;
     }
 
     /**

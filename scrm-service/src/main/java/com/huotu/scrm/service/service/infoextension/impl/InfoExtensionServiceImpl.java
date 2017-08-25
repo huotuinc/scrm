@@ -136,13 +136,13 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         if (mapMonthScoreRanking.containsKey(user.getId())) {
             monthRanking = mapMonthScoreRanking.get(user.getId());
         }
-        //判断用户是否有预计积分（只需判断今日是否有转发浏览记录）
-        if (dayScoreRanking == 0 && infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(user.getId(), beginTime, now) > 0) {
+        //判断用户今日是否有预计积分
+        if (dayScoreRanking == 0 && dayReportService.getEstimateScore(user,beginTime,now) > 0) {
             //表示200名以外
             dayScoreRanking = -1;
         }
-        //判断用户本月是否有预计积分（只需判断每日统计表是否有本月的数据）
-        if (monthRanking == 0 && dayReportRepository.findByUserIdAndReportDayBetween(user.getId(), firstDay, localDate).size() > 0) {
+        //判断用户本月是否有预计积分
+        if (monthRanking == 0 && dayReportService.getMonthEstimateScore(user) > 0) {
             //表示200名以外
             monthRanking = -1;
         }
