@@ -91,7 +91,7 @@ public class InfoExtensionDetailSeleniumTest extends CommonTestBase {
         weui_navbar_item.get(1).click();
         WebElement weui_cell = webDriver.findElement(By.className("weui_cell"));
         String url = weui_cell.getAttribute("href");
-        webDriver.get(url + "?customerId=" + customer.getId());
+        webDriver.get(url);
         webDriver.findElements(By.className("weui_navbar_item")).get(3).click();
         WebElement follow = webDriver.findElement(By.id("follow"));
         //关注排名 （因为定时任务统计的原因，显示的是200名以外）
@@ -143,6 +143,7 @@ public class InfoExtensionDetailSeleniumTest extends CommonTestBase {
     @Test
     public void testScoreRanking() throws Exception {
         Info info = mockInfo(customer.getId());
+        mockInfoConfigure(customer.getId(), true, 1, 1, false, 2);
         mockInfoBrowse(info.getId(), userBuddy.getId(), customer.getId());
         mockInfoBrowse(info.getId(), userBuddy.getId(), customer.getId());
         mockInfoBrowse(info.getId(), userBuddyIsSales.getId(), customer.getId());
