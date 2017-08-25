@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.servlet.http.Cookie;
+import java.net.URLEncoder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,9 +41,9 @@ public class InfoExtensionControllerTest extends CommonTestBase {
         userBuddy = mockUser(customer.getId(), userLevelBuddy);
         userBuddyIsSales = mockUser(customer.getId(), userLevelBuddyIsSales);
         String cookieName = UserInterceptor.USER_ID_PREFIX + customer.getId();
-        String cookieValueNormal = EncryptUtils.aesEncrypt(String.valueOf(userNormal.getId()), UserInterceptor.USER_ID_SECRET_KEY);
-        String cookieValueBuddy = EncryptUtils.aesEncrypt(String.valueOf(userBuddy.getId()), UserInterceptor.USER_ID_SECRET_KEY);
-        String cookieValueBuddyIsSales = EncryptUtils.aesEncrypt(String.valueOf(userBuddyIsSales.getId()), UserInterceptor.USER_ID_SECRET_KEY);
+        String cookieValueNormal = URLEncoder.encode(EncryptUtils.aesEncrypt(String.valueOf(userNormal.getId()), UserInterceptor.USER_ID_SECRET_KEY),"utf-8");
+        String cookieValueBuddy = URLEncoder.encode(EncryptUtils.aesEncrypt(String.valueOf(userBuddy.getId()), UserInterceptor.USER_ID_SECRET_KEY),"utf-8");
+        String cookieValueBuddyIsSales = URLEncoder.encode(EncryptUtils.aesEncrypt(String.valueOf(userBuddyIsSales.getId()), UserInterceptor.USER_ID_SECRET_KEY),"utf-8");
         cookieNormal = new Cookie(cookieName, cookieValueNormal);
         cookieBuddy = new Cookie(cookieName, cookieValueBuddy);
         cookieBuddyIsSales = new Cookie(cookieName, cookieValueBuddyIsSales);

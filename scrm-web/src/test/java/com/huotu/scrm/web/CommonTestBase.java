@@ -35,6 +35,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -102,12 +103,12 @@ public abstract class CommonTestBase extends SpringWebTest {
         String cookieValue = EncryptUtils.aesEncrypt(String.valueOf(userId), UserInterceptor.USER_ID_SECRET_KEY);
         webDriver.get("http://localhost");
         webDriver.manage().deleteAllCookies();
-        webDriver.manage().addCookie(new Cookie(cookieName, cookieValue));
+        webDriver.manage().addCookie(new Cookie(cookieName, URLEncoder.encode(cookieValue,"utf-8") ));
     }
 
     public javax.servlet.http.Cookie mockCookie(Long userId , Long customerId) throws Exception{
         String cookieName = UserInterceptor.USER_ID_PREFIX + customerId;
-        String cookieValue = EncryptUtils.aesEncrypt(String.valueOf(userId),UserInterceptor.USER_ID_SECRET_KEY);
+        String cookieValue = URLEncoder.encode(EncryptUtils.aesEncrypt(String.valueOf(userId),UserInterceptor.USER_ID_SECRET_KEY),"utf-8");
         return new javax.servlet.http.Cookie(cookieName , cookieValue);
     }
 

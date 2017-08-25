@@ -281,7 +281,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
         salesmanBusinessCard.setSalesman(salesman);
         salesmanBusinessCard.setNumberOfFollowers(1);
 
-
+        mockUserLogin(user.getId(),customerId);
         String url = "http://localhost/site/businessCard/showBusinessCard?customerId=" + customerId + "&salesmanId=" + salesman.getId();
         webDriver.get(url);
         ShowBusinessCardPage page = this.initPage(ShowBusinessCardPage.class);
