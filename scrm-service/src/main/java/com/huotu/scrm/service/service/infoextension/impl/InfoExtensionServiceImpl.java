@@ -126,7 +126,6 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         LocalDateTime now = LocalDateTime.now();
         LocalDate localDate = LocalDate.now();
         LocalDateTime beginTime = localDate.atStartOfDay();
-        LocalDate firstDay = localDate.withDayOfMonth(1);
         DayScoreRankingInfo dayScoreRankingInfo = new DayScoreRankingInfo();
         int dayScoreRanking = 0;
         int monthRanking = 0;

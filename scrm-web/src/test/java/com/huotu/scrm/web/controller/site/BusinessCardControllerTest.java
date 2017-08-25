@@ -109,7 +109,7 @@ public class BusinessCardControllerTest extends CommonTestBase {
                 .param("type", String.valueOf(BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_QQ.getCode()))
                 .param("typeValue", temp)
                 .cookie(mockCookie(user.getId(), customer.getId()))
-        ).andExpect(jsonPath("$.code").value(200));
+        ).andExpect(status().isOk());
 
         temp = UUID.randomUUID().toString();
         mockMvc.perform(post(updateBusinessCardUrl)

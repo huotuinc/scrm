@@ -30,6 +30,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -75,7 +76,7 @@ public class ActWinController extends SiteBaseController {
         Activity activity = activityService.findByActId(actId);
         activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
 
-        activity.getActPrizes().stream().filter(p ->p != null & p.getPrizeImageUrl()!=null
+        activity.getActPrizes().stream().filter(p -> !StringUtils.isEmpty(p.getPrizeImageUrl())
         ).forEach(p -> {
             try {
                 p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
