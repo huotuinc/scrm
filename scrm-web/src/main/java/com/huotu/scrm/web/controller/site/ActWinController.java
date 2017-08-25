@@ -74,7 +74,9 @@ public class ActWinController extends SiteBaseController {
         //获取奖品
         Activity activity = activityService.findByActId(actId);
         activity.getActPrizes().sort(Comparator.comparingInt(ActPrize::getSort));
-        activity.getActPrizes().forEach(p -> {
+
+        activity.getActPrizes().stream().filter(p ->p != null & p.getPrizeImageUrl()!=null
+        ).forEach(p -> {
             try {
                 p.setPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
             } catch (URISyntaxException e) {
