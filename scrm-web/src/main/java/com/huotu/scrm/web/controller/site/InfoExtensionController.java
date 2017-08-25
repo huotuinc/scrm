@@ -71,6 +71,7 @@ public class InfoExtensionController extends SiteBaseController {
             model.addAttribute("statisticalInformation", statisticalInformation);
             model.addAttribute("forwardInfoList", forwardInfoList);
             model.addAttribute("status", status);
+            model.addAttribute("customerId", user.getCustomerId());
             return "infoextension/info_center";
         }
     }
