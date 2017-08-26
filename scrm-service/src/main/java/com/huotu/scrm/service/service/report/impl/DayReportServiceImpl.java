@@ -220,6 +220,9 @@ public class DayReportServiceImpl implements DayReportService {
         }
         int visitorScore = 0;
         int exchangeRate = infoConfigure.getExchangeRate();
+        if (exchangeRate < 1) {
+            return 0;
+        }
         //判断是否开启访客量积分奖励
         if (infoConfigure.uvIsBuddyAndIsReward()) {
             visitorScore = infoConfigure.isDayExchangeLimitSwitch() ? Math.min(infoConfigure.getDayExchangeLimit(), visitorNum / exchangeRate) : (visitorNum / exchangeRate);
