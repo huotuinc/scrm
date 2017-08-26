@@ -41,7 +41,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
             //普通会员
 //            request.setAttribute("userId",1043079);
 
-//            return true;
+            return true;
         }
         //先获取customerId
         String customerId = request.getParameter(CUSTOMER_ID);

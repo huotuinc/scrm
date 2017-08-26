@@ -109,13 +109,19 @@ $(function () {
         var dataType= $(this).attr("js-data-type");
         var title = $(this).attr("js-data-hint");
         var $ele = $(this).find(".ui-data-ele");
+        var maxlength = $(this).attr("js-data-maxlength");
         var text = $ele.text();
-        console.log(text);
+        //console.log(text);
+        //console.log( maxlength);
 
         $.prompt({
             text: "",
-            title: title,
+            title: title+",长度不要超过"+maxlength,
             onOK: function (text) {
+                if(text.length > maxlength){
+                    layer.msg("您输入的内容长度太多了，请重新设置吧！");
+                    return;
+                }
                 ajaxRequest( $ele , dataType , text );
             },
             onCancel: function () {

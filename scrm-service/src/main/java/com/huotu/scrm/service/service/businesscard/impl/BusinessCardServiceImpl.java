@@ -12,6 +12,7 @@ import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +32,27 @@ public class BusinessCardServiceImpl implements BusinessCardService {
 
     public BusinessCard getBusinessCard(Long salesmanId, Long customerId) {
         BusinessCard businessCard = businessCardRepository.getByUserIdAndCustomerId(salesmanId, customerId);
+        if (businessCard == null) {
+            businessCard = new BusinessCard();
+            businessCard.setCustomerId(customerId);
+            businessCard.setUserId(salesmanId);
+            businessCard.setAvatar("");
+        }
+
+        //假如销售员头像为空，则取微信的头像
+        if( StringUtils.isEmpty( businessCard.getAvatar()) ) {
+            User user = userRepository.getByIdAndCustomerId(salesmanId , customerId);
+            if (user != null) {
+                businessCard.setAvatar(user.getWeixinImageUrl());
+            }
+        }
+
         return businessCard;
     }
 
     public SalesmanBusinessCard getSalesmanBusinessCard(Long customerId, Long salesmanId, Long followerId) {
-        BusinessCard businessCard = businessCardRepository.getByUserIdAndCustomerId(salesmanId, customerId);
+        BusinessCard businessCard = getBusinessCard(salesmanId, customerId);
+
         User user = userRepository.getByIdAndCustomerId(salesmanId, customerId);
         Integer numberOfFollowers = businessCardRecordRepository.countNumberOfFollowerByCustomerIdAndUserId( customerId , salesmanId); //businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);
         Boolean isFollowed = businessCardRecordRepository.existsByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);

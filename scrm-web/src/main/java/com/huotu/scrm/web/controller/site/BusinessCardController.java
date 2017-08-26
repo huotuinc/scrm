@@ -21,6 +21,7 @@ import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -64,18 +65,13 @@ public class BusinessCardController extends SiteBaseController {
     public String editBusinessCard(@RequestParam(name = "customerId") Long customerId,
                                    @ModelAttribute("userId") Long userId,
                                    Model model) {
-        BusinessCard businessCard = businessCardService.getBusinessCard(userId, customerId);
-        if (businessCard == null) {
-            businessCard = new BusinessCard();
-            businessCard.setCustomerId(customerId);
-            businessCard.setUserId(userId);
-            businessCard.setAvatar("");
-        }
 
         Customer customer = customerRepository.findOne(customerId);
         if( customer ==null ){
             throw new RuntimeException("商户号没有找到");
         }
+
+        BusinessCard businessCard = businessCardService.getBusinessCard(userId, customerId);
 
         String siteDomain = customer.getSubDomain() + SysConstant.COOKIE_DOMAIN;
         if(!siteDomain.toLowerCase().startsWith("http://")){
