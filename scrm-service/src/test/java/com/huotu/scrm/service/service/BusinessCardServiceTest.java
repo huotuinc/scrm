@@ -33,63 +33,64 @@ public class BusinessCardServiceTest extends CommonTestBase {
     private UserLevelRepository userLevelRepository;
 
     @Test
-    public void getSalesmanBusinessCard(){
+    public void getSalesmanBusinessCard() {
         //测试不存在的信息
         Customer customer = mockCustomer();
         customer = customerRepository.save(customer);
-        Random random =new Random();
+        Random random = new Random();
         Long customerId = customer.getId();
-        Long userId= random.nextLong();
+        Long userId = random.nextLong();
         Long followerId = random.nextLong();
-        SalesmanBusinessCard userBusinessCard = businessCardService.getSalesmanBusinessCard(customerId , userId , followerId );
-        Assert.assertEquals(null , userBusinessCard.getBusinessCard());
-        Assert.assertEquals(null , userBusinessCard.getSalesman());
+        SalesmanBusinessCard userBusinessCard = businessCardService.getSalesmanBusinessCard(customerId, userId, followerId);
+        Assert.assertNotNull(userBusinessCard.getBusinessCard());
+        Assert.assertEquals(null, userBusinessCard.getSalesman());
+
         //测试存在用户基本信息和不存在名片信息
 
         User user = mockUser(customerId);
         user = userRepository.saveAndFlush(user);
         User user1 = userRepository.findOne(user.getId());
-        User user2 = userRepository.getByIdAndCustomerId(user.getId(),customerId);
-        Assert.assertEquals(user.getId(),user2.getId());
-        userId=user.getId();
+        User user2 = userRepository.getByIdAndCustomerId(user.getId(), customerId);
+        Assert.assertEquals(user.getId(), user2.getId());
+        userId = user.getId();
         //User follower = mockUser(customerId);
         //followerId = random.nextLong();
 
 
-        userBusinessCard = businessCardService.getSalesmanBusinessCard( customerId , userId , followerId);
-        Assert.assertTrue( userBusinessCard !=null );
-        Assert.assertTrue( userBusinessCard.getSalesman() !=null);
-        Assert.assertTrue( userBusinessCard.getBusinessCard() ==null );
-        Assert.assertEquals( userId ,userBusinessCard.getSalesman().getId() );
-        Assert.assertEquals( customerId , userBusinessCard.getSalesman().getCustomerId());
+        userBusinessCard = businessCardService.getSalesmanBusinessCard(customerId, userId, followerId);
+        Assert.assertTrue(userBusinessCard != null);
+        Assert.assertTrue(userBusinessCard.getSalesman() != null);
+        Assert.assertTrue(userBusinessCard.getBusinessCard() != null);
+        Assert.assertEquals(userId, userBusinessCard.getSalesman().getId());
+        Assert.assertEquals(customerId, userBusinessCard.getSalesman().getCustomerId());
 
         //先 新增名片信息
         BusinessCardUpdateTypeEnum type = BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_AVATAR;
         String text = "名片头像地址";
-        BusinessCard businessCard = businessCardService.updateBusinessCard( customerId , userId , type , text );
+        BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, type, text);
         //再 测试 是否存在 名片信息
-        userBusinessCard = businessCardService.getSalesmanBusinessCard( customerId , userId , followerId);
-        Assert.assertTrue( userBusinessCard !=null );
-        Assert.assertTrue( userBusinessCard.getSalesman() !=null);
-        Assert.assertTrue( userBusinessCard.getBusinessCard() !=null );
-        Assert.assertEquals( userId ,userBusinessCard.getSalesman().getId() );
-        Assert.assertEquals( customerId , userBusinessCard.getSalesman().getCustomerId());
-        Assert.assertEquals( userId , userBusinessCard.getBusinessCard().getUserId() );
-        Assert.assertEquals(customerId , userBusinessCard.getBusinessCard().getCustomerId());
-        Assert.assertEquals( text , userBusinessCard.getBusinessCard().getAvatar() );
+        userBusinessCard = businessCardService.getSalesmanBusinessCard(customerId, userId, followerId);
+        Assert.assertTrue(userBusinessCard != null);
+        Assert.assertTrue(userBusinessCard.getSalesman() != null);
+        Assert.assertTrue(userBusinessCard.getBusinessCard() != null);
+        Assert.assertEquals(userId, userBusinessCard.getSalesman().getId());
+        Assert.assertEquals(customerId, userBusinessCard.getSalesman().getCustomerId());
+        Assert.assertEquals(userId, userBusinessCard.getBusinessCard().getUserId());
+        Assert.assertEquals(customerId, userBusinessCard.getBusinessCard().getCustomerId());
+        Assert.assertEquals(text, userBusinessCard.getBusinessCard().getAvatar());
 
     }
 
     @Test
-    public void getBusinessCard(){
-        long userid=0;
-        long customerid=0;
-        BusinessCard businessCard = businessCardService.getBusinessCard( userid , customerid );
-        Assert.assertEquals( null , businessCard );
+    public void getBusinessCard() {
+        long userid = 0;
+        long customerid = 0;
+        BusinessCard businessCard = businessCardService.getBusinessCard(userid, customerid);
+        Assert.assertNotNull(businessCard);
     }
 
     @Test
-    public void  updateBusinessCard() {
+    public void updateBusinessCard() {
         Customer customer = mockCustomer();
         customer = customerRepository.saveAndFlush(customer);
         long customerId = customer.getId();
@@ -100,7 +101,7 @@ public class BusinessCardServiceTest extends CommonTestBase {
         userLevel.setLevel(new Random().nextInt(10));
         userLevel.setCustomerId(customerId);
         userLevel = userLevelRepository.saveAndFlush(userLevel);
-        User user = mockUser(customerId , userLevel.getType(),userLevel.getId());
+        User user = mockUser(customerId, userLevel.getType(), userLevel.getId());
         user = userRepository.saveAndFlush(user);
         long userId = user.getId();
         //
@@ -108,44 +109,44 @@ public class BusinessCardServiceTest extends CommonTestBase {
         String text = "名片头像地址";
 
         BusinessCard businessCard = businessCardService.updateBusinessCard(customerId, userId, type, text);
-        BusinessCard businessCard1=businessCardService.getBusinessCard( userId , customerId );
-        Assert.assertTrue( businessCard1!=null);
-        Assert.assertEquals( text , businessCard1.getAvatar() );
+        BusinessCard businessCard1 = businessCardService.getBusinessCard(userId, customerId);
+        Assert.assertTrue(businessCard1 != null);
+        Assert.assertEquals(text, businessCard1.getAvatar());
 
         type = BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYADDRESS;
-        text="企业地址";
-        businessCard = businessCardService.updateBusinessCard( customerId , userId , type , text);
-        businessCard1 = businessCardService.getBusinessCard(userId , customerId);
-        Assert.assertTrue( businessCard1!=null);
-        Assert.assertEquals( text , businessCard1.getCompanyAddress() );
+        text = "企业地址";
+        businessCard = businessCardService.updateBusinessCard(customerId, userId, type, text);
+        businessCard1 = businessCardService.getBusinessCard(userId, customerId);
+        Assert.assertTrue(businessCard1 != null);
+        Assert.assertEquals(text, businessCard1.getCompanyAddress());
 
         type = BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_COMPANYNAME;
-        text="企业名称";
-        businessCard = businessCardService.updateBusinessCard( customerId , userId , type , text);
-        businessCard1 = businessCardService.getBusinessCard(userId , customerId);
-        Assert.assertTrue( businessCard1!=null);
-        Assert.assertEquals( text , businessCard1.getCompanyName() );
+        text = "企业名称";
+        businessCard = businessCardService.updateBusinessCard(customerId, userId, type, text);
+        businessCard1 = businessCardService.getBusinessCard(userId, customerId);
+        Assert.assertTrue(businessCard1 != null);
+        Assert.assertEquals(text, businessCard1.getCompanyName());
 
         type = BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_JOB;
-        text="职位";
-        businessCard = businessCardService.updateBusinessCard( customerId , userId , type , text);
-        businessCard1 = businessCardService.getBusinessCard(userId , customerId);
-        Assert.assertTrue( businessCard1!=null);
-        Assert.assertEquals( text , businessCard1.getJob() );
+        text = "职位";
+        businessCard = businessCardService.updateBusinessCard(customerId, userId, type, text);
+        businessCard1 = businessCardService.getBusinessCard(userId, customerId);
+        Assert.assertTrue(businessCard1 != null);
+        Assert.assertEquals(text, businessCard1.getJob());
 
         type = BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_TEL;
-        text="固定电话";
-        businessCard = businessCardService.updateBusinessCard( customerId , userId , type , text);
-        businessCard1 = businessCardService.getBusinessCard(userId , customerId);
-        Assert.assertTrue( businessCard1!=null);
-        Assert.assertEquals( text , businessCard1.getTel() );
+        text = "固定电话";
+        businessCard = businessCardService.updateBusinessCard(customerId, userId, type, text);
+        businessCard1 = businessCardService.getBusinessCard(userId, customerId);
+        Assert.assertTrue(businessCard1 != null);
+        Assert.assertEquals(text, businessCard1.getTel());
 
         type = BusinessCardUpdateTypeEnum.BUSINESS_CARD_UPDATE_TYPE_QQ;
-        text="QQ";
-        businessCard = businessCardService.updateBusinessCard( customerId , userId , type , text);
-        businessCard1 = businessCardService.getBusinessCard(userId , customerId);
-        Assert.assertTrue( businessCard1!=null);
-        Assert.assertEquals( text , businessCard1.getQq() );
+        text = "QQ";
+        businessCard = businessCardService.updateBusinessCard(customerId, userId, type, text);
+        businessCard1 = businessCardService.getBusinessCard(userId, customerId);
+        Assert.assertTrue(businessCard1 != null);
+        Assert.assertEquals(text, businessCard1.getQq());
 
 
     }

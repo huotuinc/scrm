@@ -3,7 +3,6 @@ package com.huotu.scrm.web.controller.page.site;
 import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.web.controller.page.AbstractPage;
-import org.apache.xpath.operations.Bool;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
