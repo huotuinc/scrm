@@ -72,37 +72,37 @@
                 </div>
 
         </a>
-        <a class="weui_cell" id="weuishow_companyname" js-data-type="2" js-data-hint="请输入企业名" href="javascript:void(0);">
+        <a class="weui_cell" id="weuishow_companyname" js-data-type="2" js-data-maxlength="100" js-data-hint="请输入企业名" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <p>企业名</p>
             </div>
             <div id="div_companyname"  class="weui_cell_ft ui-data-ele" style="" th:text="${businessCard.getCompanyName()}"></div>
         </a>
-        <a class="weui_cell" id="weuishow_job" js-data-type="3" js-data-hint="请输入职位" href="javascript:void(0);">
+        <a class="weui_cell" id="weuishow_job" js-data-type="3" js-data-maxlength="50" js-data-hint="请输入职位" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <p>职位</p>
             </div>
             <div id="div_job" class="weui_cell_ft ui-data-ele" style="" th:text="${businessCard.getJob()}"></div>
         </a>
-        <a class="weui_cell" id="weuishow_tel" js-data-type="4" js-data-hint="请输入固定电话" href="javascript:void(0);">
+        <a class="weui_cell" id="weuishow_tel" js-data-type="4" js-data-maxlength="100" js-data-hint="请输入固定电话" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <p>固话</p>
             </div>
             <div id="div_tel" class="weui_cell_ft ui-data-ele" style="" th:text="${businessCard.getTel()}"></div>
         </a>
-        <a class="weui_cell" id="weuishow_qq" js-data-type="5" js-data-hint="请输入QQ" href="javascript:void(0);">
+        <a class="weui_cell" id="weuishow_qq" js-data-type="5" js-data-maxlength="15" js-data-hint="请输入QQ" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <p>QQ</p>
             </div>
             <div id="div_qq" class="weui_cell_ft ui-data-ele" th:text="${businessCard.getQq()}"></div>
         </a>
-        <a class="weui_cell" id="weuishow_email" js-data-type="7" js-data-hint="请输入邮箱"  href="javascript:void(0);">
+        <a class="weui_cell" id="weuishow_email" js-data-type="7" js-data-maxlength="50" js-data-hint="请输入邮箱"  href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <p>邮箱</p>
             </div>
             <div id="div_email" class="weui_cell_ft ui-data-ele" th:text="${businessCard.getEmail()}"></div>
         </a>
-        <a class="weui_cell" id="weuishow_companyaddress" js-data-type="6" js-data-hint="请输入企业地址" href="javascript:void(0);">
+        <a class="weui_cell" id="weuishow_companyaddress" js-data-type="6" js-data-maxlength="256" js-data-hint="请输入企业地址" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <p style="min-width:40px; ">公司地址</p>
             </div>
