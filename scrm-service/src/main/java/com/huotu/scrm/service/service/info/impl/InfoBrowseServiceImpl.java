@@ -40,9 +40,10 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
 
     @Override
     public void infoTurnInSave(InfoBrowse infoBrowse, Long customerId) throws UnsupportedEncodingException {
-        InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
-                infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());
-        if (infoBrowseData == null) {
+        boolean flag = false;
+        // 判断浏览记录表里：用户转发的资讯是否有浏览记录 有：不用添加转发积分奖励 没有：添加转发积分奖励
+        int count = infoBrowseRepository.countBySourceUserIdAndInfoId(infoBrowse.getSourceUserId(), infoBrowse.getInfoId());
+        if (count == 0) {
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(customerId);
             //转发开关
             if (infoConfigure.isRewardSwitch()) {
@@ -59,7 +60,16 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
                     addMallScore(customerId, infoBrowse, infoConfigure, score);
                 }
             }
-            infoBrowseData = new InfoBrowse();
+            flag = true;
+        } else {
+            InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
+                    infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());
+            if (infoBrowseData == null) {
+                flag = true;
+            }
+        }
+        if (flag) {
+            InfoBrowse infoBrowseData = new InfoBrowse();
             infoBrowseData.setTurnTime(LocalDateTime.now());
             infoBrowseData.setCustomerId(customerId);
             infoBrowseData.setInfoId(infoBrowse.getInfoId());

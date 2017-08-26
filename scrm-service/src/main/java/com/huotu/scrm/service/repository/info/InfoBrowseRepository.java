@@ -19,6 +19,16 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     //查找资讯
     InfoBrowse findOneByInfoIdAndSourceUserIdAndReadUserId(Long infoId, Long sourceId, Long readId);
 
+    /**
+     * 查询是否有转发记录
+     *
+     * @param sourceUserId 转发用户id
+     * @param infoId       资讯id
+     * @return
+     */
+
+    int countBySourceUserIdAndInfoId(Long sourceUserId, Long infoId);
+
     //查询转发记录
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,MIN(t.browseTime),u.weixinImageUrl,u.wxNickName,u.nickName) " +
             "from InfoBrowse t left join User u  on  u.id = t.sourceUserId " +

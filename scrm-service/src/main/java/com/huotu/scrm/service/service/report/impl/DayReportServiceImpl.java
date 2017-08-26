@@ -199,7 +199,7 @@ public class DayReportServiceImpl implements DayReportService {
      * @return
      */
     private int getForwardScore(User user, LocalDateTime beginTime, LocalDateTime endTime) {
-        Integer totalForwardScore = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), user.getLevelId().intValue(), user.getUserType().ordinal(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
+        Integer totalForwardScore = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, beginTime, endTime);
         return totalForwardScore == null ? 0 : totalForwardScore;
     }
 
@@ -261,7 +261,7 @@ public class DayReportServiceImpl implements DayReportService {
     private int getTodayForwardScore(User user) {
         LocalDate localDate = LocalDate.now();
         LocalDateTime now = LocalDateTime.now();
-        Integer score = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), user.getLevelId().intValue(), user.getUserType().ordinal(), IntegralTypeEnum.TURN_INFO, localDate.atStartOfDay(), now);
+        Integer score = userFormalIntegralRepository.sumByScore(user.getId(), user.getCustomerId(), IntegralTypeEnum.TURN_INFO, localDate.atStartOfDay(), now);
         return score == null ? 0 : score;
     }
 
