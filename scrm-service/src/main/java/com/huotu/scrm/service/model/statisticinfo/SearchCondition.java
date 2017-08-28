@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.model.statisticinfo;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -17,9 +18,11 @@ public class SearchCondition implements Serializable {
     /**
      * 统计起始日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate statisticsStartDate;
     /**
      * 统计结束日期
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate statisticsEndDate;
 }

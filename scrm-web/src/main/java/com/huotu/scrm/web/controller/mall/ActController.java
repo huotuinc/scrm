@@ -209,4 +209,20 @@ public class ActController extends MallBaseController {
                 bos.close();
         }
     }
+
+    /**
+     * 编辑中奖的领取情况
+     *
+     * @param winDetailId 中奖记录编号
+     * @return
+     */
+    @RequestMapping("/update/rewardStatus")
+    @ResponseBody
+    public ApiResult editReceiveStatus(Long winDetailId) {
+        if (winDetailId != null && winDetailId > 0) {
+            actWinDetailService.updateRewardStatus(winDetailId);
+            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+        }
+        return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
+    }
 }

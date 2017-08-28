@@ -26,16 +26,16 @@ public class StatisticsInfoServiceImpl implements StatisticsInfoService{
     @Autowired
     private DayReportRepository dayReportRepository;
     @Override
-    public Page<DayReport> getDayReportList(SearchCondition searchCondition,int pageNo) {
+    public Page<DayReport> getDayReportList(SearchCondition searchCondition,int pageIndex) {
         Sort sort = new Sort(Sort.Direction.ASC, "reportDay");
-        Pageable pageable = new PageRequest(pageNo-1, Constant.PAGE_SIZE,sort);
+        Pageable pageable = new PageRequest(pageIndex-1, Constant.PAGE_SIZE,sort);
         Specification<DayReport> specification = getSpecification(searchCondition);
         return dayReportRepository.findAll(specification,pageable);
     }
     private Specification<DayReport> getSpecification(SearchCondition searchCondition) {
         List<Predicate> predicates = new ArrayList<>();
         return ((root, query, cb) -> {
-            if(searchCondition.getUserId()>0){
+            if(searchCondition.getUserId()!=null){
                 predicates.add(cb.equal(root.get("userId").as(Long.class),searchCondition.getUserId()));
             }
             if(searchCondition.getStatisticsStartDate()!=null){

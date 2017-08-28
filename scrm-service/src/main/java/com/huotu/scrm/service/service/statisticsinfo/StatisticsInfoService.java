@@ -11,8 +11,8 @@ public interface StatisticsInfoService {
     /**
      * 获取每日统计数据
      * @param searchCondition 查询条件
-     * @param pageNo 页数
+     * @param pageIndex 页数
      * @return
      */
-    Page<DayReport> getDayReportList(SearchCondition searchCondition, int pageNo);
+    Page<DayReport> getDayReportList(SearchCondition searchCondition, int pageIndex);
 }

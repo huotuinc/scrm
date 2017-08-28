@@ -21,13 +21,13 @@ public class StatisticsInfoController extends MallBaseController {
     private StatisticsInfoService statisticsInfoService;
     @RequestMapping("/Statistics/getDayReport")
     public String getDayReport(@ModelAttribute("searchCondition") SearchCondition searchCondition,
-                               @RequestParam(required = false, defaultValue = "1") int pageNo, Model model) {
-        Page<DayReport> reportListPage = statisticsInfoService.getDayReportList(searchCondition, pageNo);
+                               @RequestParam(required = false, defaultValue = "1") int pageIndex, Model model) {
+        Page<DayReport> reportListPage = statisticsInfoService.getDayReportList(searchCondition, pageIndex);
         model.addAttribute("dayReportList",reportListPage.getContent());
         model.addAttribute("totalPages", reportListPage.getTotalPages());
         model.addAttribute("totalRecords", reportListPage.getTotalElements());
         model.addAttribute("pageSize", Constant.PAGE_SIZE);
-        model.addAttribute("pageNo", pageNo);
+        model.addAttribute("pageIndex", pageIndex);
         return "statisticsinfo/statistics_info";
     }
 }

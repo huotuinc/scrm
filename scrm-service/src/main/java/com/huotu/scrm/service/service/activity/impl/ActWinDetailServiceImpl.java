@@ -91,9 +91,9 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     }
 
     @Override
-    public ActWinDetail updateActWinDetail(Long winDetailID, String name, String mobile) {
+    public ActWinDetail updateActWinDetail(Long winDetailId, String name, String mobile) {
 
-        ActWinDetail actWinDetail = actWinDetailRepository.findOne(winDetailID);
+        ActWinDetail actWinDetail = actWinDetailRepository.findOne(winDetailId);
         if (actWinDetail != null) {
             actWinDetail.setWinnerName(name);
             actWinDetail.setWinnerTel(mobile);
@@ -107,6 +107,14 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     @Override
     public List<ActWinDetail> getActWinDetailRecordByActIdAndUserId(Long actId, Long userId) {
         return actWinDetailRepository.findAllByActIdAndUserId(actId, userId);
+    }
+
+    @Override
+    public void updateRewardStatus(Long winDetailId) {
+        ActWinDetail actWinDetail = actWinDetailRepository.findOne(winDetailId);
+        actWinDetail.setGetReward(true);
+        actWinDetailRepository.save(actWinDetail);
+
     }
 
     /**
