@@ -115,11 +115,11 @@ public class ActWinController extends SiteBaseController {
         //活动情况
         //1、活动还没开始
         if (!activity.activeBegin()) {
-            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, ActivityStatus.ACTIVITY_STAUS_TYPE_UNBEGIN);
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, ActivityStatus.ACTIVITY_STAUS_TYPE_UNBEGIN.getValue());
         }
         //2、活动结束
         if (!activity.activeEnd()) {
-            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, ActivityStatus.ACTIVITY_STAUS_TYPE_END);
+            return ApiResult.resultWith(ResultCodeEnum.SYSTEM_BAD_REQUEST, ActivityStatus.ACTIVITY_STAUS_TYPE_END.getValue());
         }
 
         if (activityUseTimes(activity, user) > 0) { //判读用户是否有抽奖机会

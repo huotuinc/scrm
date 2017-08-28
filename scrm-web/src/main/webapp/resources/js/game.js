@@ -49,12 +49,8 @@ $(function () {
                 dataType: 'json',
                 success: function (res) {
                     game.closeLoadModal();
-                    if (res.code !== 200) {
+                    if (res.code != 200) {
                         game.errorModals(res.msg);
-                        return;
-                    }
-                    if (res.data.code <= 0) {
-                        game.errorModals(res.data.value);
                         return;
                     }
                     game.gameTimes--;
