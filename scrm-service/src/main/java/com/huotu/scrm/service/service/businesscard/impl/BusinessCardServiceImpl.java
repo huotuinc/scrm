@@ -55,7 +55,7 @@ public class BusinessCardServiceImpl implements BusinessCardService {
 
         User user = userRepository.getByIdAndCustomerId(salesmanId, customerId);
         Integer numberOfFollowers = businessCardRecordRepository.countNumberOfFollowerByCustomerIdAndUserId( customerId , salesmanId); //businessCardRecordReposity.getNumberOfFollowerByCustomerIdAndUserId(customerId, salesmanId);
-        Boolean isFollowed = businessCardRecordRepository.existsByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId);
+        Boolean isFollowed = businessCardRecordRepository.countByCustomerIdAndUserIdAndFollowId(customerId, salesmanId, followerId) > 0;
         SalesmanBusinessCard userBusinessCard = new SalesmanBusinessCard();
         userBusinessCard.setBusinessCard(businessCard);
         userBusinessCard.setSalesman(user);

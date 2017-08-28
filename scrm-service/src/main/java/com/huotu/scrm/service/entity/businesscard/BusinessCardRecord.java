@@ -4,19 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  * 销售员名片关注表
  * Created by jinxiangdong on 2017/7/12.
  */
-@Getter
-@Setter
 @Entity
 @Table(name = "SCRM_BusinessCardRecord")
 @IdClass(BusinessCardRecordPK.class)
-public class BusinessCardRecord implements Serializable {
+@Getter
+@Setter
+public class BusinessCardRecord{
     /***
      * 被关注者ID
      */
