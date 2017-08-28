@@ -120,7 +120,7 @@ public class TestEditBusinessCardPage extends AbstractPage {
             }
         });
 
-        String qq = UUID.randomUUID().toString().substring(0 ,20);
+        String qq = UUID.randomUUID().toString().substring(0 ,10);
         ele.sendKeys(qq );
 
         webDriverWait = new WebDriverWait(webDriver, 10);
@@ -140,26 +140,26 @@ public class TestEditBusinessCardPage extends AbstractPage {
 
 
         WebElement ele2 = webDriver.findElement(By.linkText("确定"));
-        WebElement eleParent = ele2.findElement(By.xpath(".."));
-        eleParent.click();
+        //WebElement eleParent = ele2.findElement(By.xpath(".."));
+        //eleParent.click();
         ele2.click();
 
-        webDriverWait = new WebDriverWait(webDriver , 30);
-        webDriverWait.until(new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(WebDriver webDriver) {
-                WebElement temp = webDriver.findElement(By.id("weui-prompt-input"));
-                Boolean isShow = temp.isDisplayed();
-                if( !isShow ) return true;
-                return false;
-            }
-        });
+//        webDriverWait = new WebDriverWait(webDriver , 30);
+//        webDriverWait.until(new ExpectedCondition<Boolean>() {
+//            @Override
+//            public Boolean apply(WebDriver webDriver) {
+//                WebElement temp = webDriver.findElement(By.id("weui-prompt-input"));
+//                Boolean isShow = temp.isDisplayed();
+//                if( !isShow ) return true;
+//                return false;
+//            }
+//        });
 
 //        ele = webDriver.findElement(By.id("weui-prompt-input"));
 //        Assert.assertEquals(null , ele);
 
 
-        webDriverWait = new WebDriverWait(webDriver, 40);
+        webDriverWait = new WebDriverWait(webDriver, 30);
         webDriverWait.until(new ExpectedCondition<Boolean>() {
             @Override
             public Boolean apply(WebDriver webDriver) {
@@ -171,11 +171,11 @@ public class TestEditBusinessCardPage extends AbstractPage {
             }
         });
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         Assert.assertEquals(qq , div_qq.getText());
 
