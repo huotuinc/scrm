@@ -29,12 +29,12 @@ public class BusinessCardRecordServiceImpl implements BusinessCardRecordService 
 
     @Override
     public boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId, Long userId, Long followId) {
-        return businessCardRecordRepository.existsByCustomerIdAndUserIdAndFollowId(customerId, userId, followId);
+        return businessCardRecordRepository.countByCustomerIdAndUserIdAndFollowId(customerId, userId, followId) > 0;
     }
 
     @Override
     public boolean existsByCustomerIdAndFollowerIdNotInSalesmanId(Long customerId, Long followerId, Long salesmanId) {
-        return businessCardRecordRepository.existsByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId, salesmanId);
+        return businessCardRecordRepository.countByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId, salesmanId) > 0;
     }
 
     @Override

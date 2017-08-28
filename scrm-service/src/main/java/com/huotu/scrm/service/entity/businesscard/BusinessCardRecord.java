@@ -3,22 +3,19 @@ package com.huotu.scrm.service.entity.businesscard;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
  * 销售员名片关注表
  * Created by jinxiangdong on 2017/7/12.
  */
-@Getter
-@Setter
 @Entity
 @Table(name = "SCRM_BusinessCardRecord")
-public class BusinessCardRecord implements Serializable {
+@IdClass(BusinessCardRecordPK.class)
+@Getter
+@Setter
+public class BusinessCardRecord{
     /***
      * 被关注者ID
      */

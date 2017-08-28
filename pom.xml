@@ -17,7 +17,7 @@
     <properties>
         <spring.version>4.3.9.RELEASE</spring.version>
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
-        <spring.jpa.version>1.11.4.RELEASE</spring.jpa.version>
+        <spring.jpa.version>1.9.4.RELEASE</spring.jpa.version>
         <thymeleaf.version>3.0.6.RELEASE</thymeleaf.version>
         <thymeleaf.extras.version>3.0.0.RELEASE</thymeleaf.extras.version>
         <seleniumhq.varsion>2.48.2</seleniumhq.varsion>
@@ -91,6 +91,11 @@
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jpa</artifactId>
+            <version>${spring.jpa.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
