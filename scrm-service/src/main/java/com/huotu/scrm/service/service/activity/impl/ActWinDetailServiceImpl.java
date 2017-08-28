@@ -23,7 +23,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -120,7 +119,7 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
         return ((root, query, cb) -> {
             PrizeType prizeType = (type == 1) ? PrizeType.PRIZE_TYPE_THANKS : PrizeType.PRIZE_TYPE_ENTITY_PRIZE;
             predicates.add(cb.equal(root.get("actId").as(Long.class), actId));
-            predicates.add(cb.equal(root.join("prize", JoinType.LEFT).get("prizeType").as(PrizeType.class), prizeType));
+            predicates.add(cb.equal(root.get("prizeType").as(PrizeType.class), prizeType));
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));
         });
     }
