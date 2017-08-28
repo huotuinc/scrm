@@ -44,7 +44,7 @@
     <div class="grsbg" style="padding: 20px 0px;">
         <img style="border-radius: 50px; width: 100px;  height: 100px;" th:src="${businessCard.getBusinessCard().getAvatar()}? (${businessCard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg' : ${businessCard.getBusinessCard().getAvatar()} ): '../../resources/images/mrtx.jpg'" >
         <div class="grsname">
-            <p><b style="color: #fff;" th:text="${businessCard.getSalesman().getNickName()}"></b>
+            <p><b style="color: #fff;" th:text="${businessCard.getSalesman().getRealName()}"></b>
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}">♂</i>&lt;!&ndash;♂切换性别&ndash;&gt;-->
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('女')}">♀</i>-->
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}" th:text="${businessCard.getSalesman().getUserGender()}"></i>-->

@@ -116,4 +116,10 @@ public class User {
     @Column(name="UB_UserMobile",length = 50)
     private String userMobile;
 
+    /***
+     * 姓名
+     */
+    @Column(name="UB_UserRealName",length = 100)
+    private String realName;
+
 }
