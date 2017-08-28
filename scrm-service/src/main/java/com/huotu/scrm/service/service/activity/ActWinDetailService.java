@@ -52,7 +52,7 @@ public interface ActWinDetailService {
 
 
     @Transactional
-    ActWinDetail updateActWinDetail(Long winDetailID, String name, String mobile);
+    ActWinDetail updateActWinDetail(Long winDetailId, String name, String mobile);
 
 
     /**
@@ -63,5 +63,12 @@ public interface ActWinDetailService {
      * @return
      */
     List<ActWinDetail> getActWinDetailRecordByActIdAndUserId(Long actId, Long userId);
+
+    /**
+     * 修改记录的领取状态
+     * @param winDetailId
+     */
+    @Transactional
+    void updateRewardStatus(Long winDetailId);
 
 }

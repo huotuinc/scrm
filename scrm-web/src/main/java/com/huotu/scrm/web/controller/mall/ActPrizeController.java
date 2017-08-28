@@ -15,7 +15,6 @@ import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActivityService;
-import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,8 +35,6 @@ public class ActPrizeController extends MallBaseController {
     private ActPrizeService actPrizeService;
     @Autowired
     private ActivityService activityService;
-    @Autowired
-    private StaticResourceService staticResourceService;
 
     /**
      * 显示某个活动对应的奖品页面
