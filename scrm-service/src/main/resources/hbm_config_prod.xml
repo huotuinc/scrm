@@ -27,7 +27,6 @@
         <property name="packagesToScan">
             <array>
                 <value>com.huotu.scrm.service.entity</value>
-                <value>com.huotu.verification.entity</value>
             </array>
         </property>
         <property name="persistenceProvider">

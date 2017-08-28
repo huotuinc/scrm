@@ -49,12 +49,8 @@ $(function () {
                 dataType: 'json',
                 success: function (res) {
                     game.closeLoadModal();
-                    if (res.code !== 200) {
+                    if (res.code != 200) {
                         game.errorModals(res.msg);
-                        return;
-                    }
-                    if (res.data.code <= 0) {
-                        game.errorModals(res.data.value);
                         return;
                     }
                     game.gameTimes--;
@@ -186,7 +182,7 @@ $(function () {
                 '<p class="modal-title">' + data.prizeName + '</p>' +
                 '<div class="coupon-imageBg">' +
                 '<div class="coupon-image">' +
-                '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
+                '<a href="#"><img style="width:250px;height: 130px;" src="' + ((!!data.prizeImageUrl)?data.prizeImageUrl:'../../resources/images/gift.png') + '"></a>' +
                 '</div>' +
                 '</div>' +
                 '<a href="javascript:;" class="coupon-use" data-type="' + data.prizeType.code + '">' + "确定" + '</a>' +
