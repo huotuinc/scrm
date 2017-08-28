@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.service.businesscard.impl;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecordPK;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardRecordService;
 import org.springframework.beans.factory.annotation.Autowired;

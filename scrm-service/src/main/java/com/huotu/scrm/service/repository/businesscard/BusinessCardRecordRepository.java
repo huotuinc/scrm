@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.repository.businesscard;
 
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
+import com.huotu.scrm.service.entity.businesscard.BusinessCardRecordPK;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * 名片关注记录表
  * Created by Jinxiangdong on 2017/7/12.
  */
-public interface BusinessCardRecordRepository extends JpaRepository<BusinessCardRecord, Long> {
+public interface BusinessCardRecordRepository extends JpaRepository<BusinessCardRecord, BusinessCardRecordPK> {
     /***
      * 根据商户Id和销售员Id和关注人id删除关注记录
      * @param customerId

@@ -3,10 +3,7 @@ package com.huotu.scrm.service.entity.businesscard;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "SCRM_BusinessCardRecord")
+@IdClass(BusinessCardRecordPK.class)
 public class BusinessCardRecord implements Serializable {
     /***
      * 被关注者ID
