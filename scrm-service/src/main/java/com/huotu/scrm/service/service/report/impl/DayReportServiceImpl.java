@@ -17,6 +17,8 @@ import com.huotu.scrm.service.repository.report.DayReportRepository;
 import com.huotu.scrm.service.repository.report.MonthReportRepository;
 import com.huotu.scrm.service.service.api.ApiService;
 import com.huotu.scrm.service.service.report.DayReportService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +41,8 @@ import java.util.List;
  */
 @Service
 public class DayReportServiceImpl implements DayReportService {
+
+    private static final Log log = LogFactory.getLog(DayReportServiceImpl.class);
 
     @Autowired
     private DayReportRepository dayReportRepository;
@@ -271,6 +275,7 @@ public class DayReportServiceImpl implements DayReportService {
     @Override
     @Scheduled(cron = "0 5 0 * * *")
     public void saveDayVisitorScore() {
+        log.info("每日统计浏览奖励积分开始");
         LocalDate today = LocalDate.now();
         LocalDateTime todayBeginTime = today.atStartOfDay();
         LocalDateTime lastBeginTime = todayBeginTime.minusDays(1);
@@ -280,10 +285,11 @@ public class DayReportServiceImpl implements DayReportService {
             int visitorScore = getVisitorScore(user, lastBeginTime, todayBeginTime);
             try {
                 if (visitorScore > 0) {
+                    log.info("浏览奖励积分记录成功！");
                     apiService.rechargePoint(user.getCustomerId(), user.getId(), (long) visitorScore, IntegralTypeEnum.BROWSE_INFO);
                 }
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                log.info("每日浏览积分统计有误：" + e.getMessage());
             }
         });
     }

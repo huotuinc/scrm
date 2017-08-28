@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>统计列表</title>
+    <link href="http://resali.huobanplus.com/cdn/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Morris -->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/animate.min.css" rel="stylesheet">
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/style.min-1.0.8.css" rel="stylesheet">
+    <!--checkbox-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+          rel="stylesheet">
+    <!--datetimepick-->
+    <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
+</head>
+
+<body class="gray-bg" data-unitTest="false" data-prototype="true">
+<div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div>
+                    <label class="">统计筛选</label>
+                </div>
+                <form class="search-panel" method="post" th:action="@{/mall//Statistics/getDayReport}" id="searchForm" th:object="${searchCondition}">
+                    <!--用来传递页码-->
+                    <input type="hidden" name="pageNo" th:value="${pageNo}"/>
+                    <div class="ibox-content p-m no-borders">
+                        <div class="form-inline ">
+                            <div class="form-group m-r-sm">
+                                <label class="control-label" for="">用户编号：</label>
+                                <input type="text" class="form-control input-sm mb10" id=""
+                                       name="searchCondition"
+                                       th:value="*{userId}" placeholder="用户编号"/>
+                            </div>
+                            <div class="form-group m-r-sm">
+                                <label class="control-label" for="statisticsTime">统计时间:</label>
+                                <input type="text" id="statisticsTime" class="form-control"
+                                       placeholder="开始时间-结束时间"  style="width:200px"/>
+                                <input type="hidden" id="statisticsStartDate" name="statisticsStartDate"
+                                       th:value="${searchCondition.statisticsStartDate != null ? #temporals.format(searchCondition.statisticsStartDate,'yyyy-MM-dd') : ''}"/>
+                                <input type="hidden" id="statisticsEndDate" name="statisticsEndDate"
+                                       th:value="${searchCondition.statisticsEndDate != null ? #temporals.format(searchCondition.statisticsEndDate,'yyyy-MM-dd') : ''}"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins m-b-none">
+                <div class="ibox-content p-xxs no-top-border">
+                    <div>
+                        <label class="">统计信息显示</label>
+                    </div>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover table-center">
+                            <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>用户编号</th>
+                                <th>商户编号</th>
+                                <th>资讯转发量</th>
+                                <th>访问量（uv）</th>
+                                <th>是否是销售员</th>
+                                <th>被关注量</th>
+                                <th>uv排名</th>
+                                <th>积分排名</th>
+                                <th>关注排名</th>
+                                <th>日期</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody th:remove="all-but-first">
+                            <tr th:each="dayReport ,dayReportState: ${dayReportList}">
+                                <td th:text="${dayReportState.index}">
+                                </td>
+                                <td th:text="${dayReport.userId}" style="width: 20%;">
+                                </td>
+                                <td th:text="${dayReport.customerId}" style="width: 20%;">
+                                </td>
+                                <td th:text="${dayReport.forwardNum}">
+                                </td>
+                                <td th:text="${dayReport.visitorNum}"></td>
+                                <td>
+                                    <p th:if="${dayReport.salesman}" style="color: green">是</p>
+                                    <p th:unless="${dayReport.salesman}" style="color: red">否</p>
+                                </td>
+                                <td th:text="${dayReport.followNum}">
+                                </td>
+                                <td th:text="${dayReport.visitorRanking}">
+                                </td>
+                                <td th:text="${dayReport.scoreRanking}">
+                                </td>
+                                <td th:text="${dayReport.followRanking}">
+                                </td>
+                                <td th:text="${#temporals.format(dayReport.reportDay,'yyyy-MM-dd')}"></td>
+                                <td>操作</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        共
+                        <th:block th:text="${totalRecords}">0</th:block>
+                        条记录，当前第
+                        <th:block th:text="${pageNo}">1</th:block>
+                        /
+                        <th:block th:text="${totalPages}">1</th:block>
+                        ，每页
+                        <th:block th:text="${pageSize}">0</th:block>
+                        条记录
+                        <ul style="float: right;" class="pagination pagination-split">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--基础框架js-->
+<script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js"></script>
+<script src="../../resources/js/plugins/hot/bootstrap.hot.extra-utils.js"
+        th:src="@{/resources/js/plugins/hot/bootstrap.hot.extra-utils.js}"></script>
+<script src="http://resali.huobanplus.com/cdn/bootstrap/3.3.5/bootstrap.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/content.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
+
+<script type="text/javascript">
+    $("#statisticsTime").on('cancel.daterangepicker', function () {
+        $("#statisticsTime").val("");
+        $("#statisticsStartDate").val("");
+        $("#statisticsEndDate").val("");
+    });
+    $('#statisticsTime').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
+        $('#statisticsStartDate').val(picker.startDate.format('YYYY-MM-DD'));
+        $("#statisticsEndDate").val(picker.endDate.format('YYYY-MM-DD'));
+    });
+    //初始化时间控件
+    $('#statisticsTime').daterangepicker(
+        {
+            showDropdowns: true,
+            showWeekNumbers: false, //是否显示第几周
+            timePicker: true, //是否显示小时和分钟
+            timePickerIncrement: 60, //时间的增量，单位为分钟
+            timePicker12Hour: false, //是否使用12小时制来显示时间
+            opens: 'right', //日期选择框的弹出位置
+            buttonClasses: ['btn btn-default'],
+            applyClass: 'btn-small btn-primary blue',
+            cancelClass: 'btn-small',
+            autoUpdateInput: false,
+            format: 'YYYY-MM-DD', //控件中from和to 显示的日期格式
+            separator: ' to ',
+            locale: {
+                applyLabel: '确定',
+                cancelLabel: '取消',
+                fromLabel: '起始时间',
+                toLabel: '结束时间',
+                customRangeLabel: '自定义',
+                daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                    '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                firstDay: 1
+            }
+        }, function (start, end) {//格式化日期显示框
+            $('#statisticsTime input').val(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+            $('#statisticsStartDate').val(start.format('YYYY-MM-DD'));
+            $("#statisticsEndDate").val(end.format('YYYY-MM-DD'));
+        });
+</script>
+</body>
+
+</html>
