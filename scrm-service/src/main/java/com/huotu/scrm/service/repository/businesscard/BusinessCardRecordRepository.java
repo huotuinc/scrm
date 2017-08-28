@@ -36,7 +36,7 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @param followId
      * @return
      */
-    Boolean existsByCustomerIdAndUserIdAndFollowId(Long customerId, Long salesmanId, Long followId);
+    int countByCustomerIdAndUserIdAndFollowId(Long customerId, Long salesmanId, Long followId);
 
     /***
      * 检测是否存在关注了除了指定的销售员名片的其他名片
@@ -45,7 +45,7 @@ public interface BusinessCardRecordRepository extends JpaRepository<BusinessCard
      * @param userId
      * @return
      */
-    Boolean existsByCustomerIdAndFollowIdAndUserIdNot(Long customerId, Long followId, Long userId);
+    int countByCustomerIdAndFollowIdAndUserIdNot(Long customerId, Long followId, Long userId);
 
     /**
      * 查询用户被关注关注人数

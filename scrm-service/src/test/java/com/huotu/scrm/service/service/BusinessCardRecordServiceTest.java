@@ -2,21 +2,20 @@ package com.huotu.scrm.service.service;
 
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.CommonTestBase;
-import com.huotu.scrm.service.entity.businesscard.BusinessCard;
 import com.huotu.scrm.service.entity.businesscard.BusinessCardRecord;
 import com.huotu.scrm.service.entity.mall.Customer;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.model.BusinessCardUpdateTypeEnum;
-import com.huotu.scrm.service.repository.businesscard.BusinessCardRepository;
-import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.businesscard.BusinessCardRecordRepository;
+import com.huotu.scrm.service.repository.mall.CustomerRepository;
 import com.huotu.scrm.service.repository.mall.UserLevelRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.businesscard.BusinessCardService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,7 +47,7 @@ public class BusinessCardRecordServiceTest extends CommonTestBase {
         User follower = mockUser(customerId);
         Long followerId=follower.getId();
 
-        boolean  isExist = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId( customerId, userId,followerId );
+        boolean  isExist = businessCardRecordReposity.countByCustomerIdAndUserIdAndFollowId( customerId, userId,followerId ) > 0;
         Assert.assertFalse( isExist );
 
         BusinessCardRecord businessCardRecord = new BusinessCardRecord();
@@ -59,7 +58,7 @@ public class BusinessCardRecordServiceTest extends CommonTestBase {
 
         businessCardRecordReposity.saveAndFlush(businessCardRecord);
 
-        isExist = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId( customerId, userId,followerId );
+        isExist = businessCardRecordReposity.countByCustomerIdAndUserIdAndFollowId( customerId, userId,followerId ) > 0;
         Assert.assertTrue( isExist );
 
     }
@@ -95,16 +94,16 @@ public class BusinessCardRecordServiceTest extends CommonTestBase {
         record.setFollowDate( LocalDateTime.now());
         businessCardRecordReposity.save( record );
         //检测是否关注了除userId的其他记录
-        boolean isFollowed_128579 = businessCardRecordReposity.existsByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId ,userId);
+        boolean isFollowed_128579 = businessCardRecordReposity.countByCustomerIdAndFollowIdAndUserIdNot(customerId, followerId ,userId) > 0;
         Assert.assertEquals( true , isFollowed_128579 );
         //检测是否关注了除userid2的其他记录
-        boolean isFollwed_1058510 = businessCardRecordReposity.existsByCustomerIdAndFollowIdAndUserIdNot(customerId,followerId,userId2);
+        boolean isFollwed_1058510 = businessCardRecordReposity.countByCustomerIdAndFollowIdAndUserIdNot(customerId,followerId,userId2) > 0;
         Assert.assertEquals( false , isFollwed_1058510);
         //检测是否关注了userid
-        boolean isFollowed_1 = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId,userId , followerId);
+        boolean isFollowed_1 = businessCardRecordReposity.countByCustomerIdAndUserIdAndFollowId(customerId,userId , followerId) > 0;
         Assert.assertEquals( false , isFollowed_1);
         //检测是否关注了userid2
-        boolean  isFollowed_2 = businessCardRecordReposity.existsByCustomerIdAndUserIdAndFollowId(customerId,userId2 , followerId);
+        boolean  isFollowed_2 = businessCardRecordReposity.countByCustomerIdAndUserIdAndFollowId(customerId,userId2 , followerId) > 0;
         Assert.assertEquals( true , isFollowed_2);
     }
 
