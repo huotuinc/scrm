@@ -178,7 +178,7 @@ public class ActController extends MallBaseController {
         //完善配置信息
         String fileName = "活动中奖记录";
         List<Map<String, Object>> excelRecord = actWinDetailService.createExcelRecord(actId, type, startPage, endPage);
-        List<String> columnNames = Arrays.asList("用户编号", "活动名称", "奖品名称", "姓名", "电话", "日期", "IP");
+        List<String> columnNames = Arrays.asList("用户编号", "奖品名称", "姓名", "电话", "日期", "IP");
         List<String> keys = Arrays.asList("userId", "actName", "prizeName", "winnerName", "winnerTel", "winTime", "ipAddress");
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ExcelUtil.createWorkBook(excelRecord, keys, columnNames).write(os);

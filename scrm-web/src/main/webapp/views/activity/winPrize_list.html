@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +51,7 @@
                             <tr>
                                 <th>序号</th>
                                 <th class="col-sm-2">用户编号</th>
-                                <th class="col-sm-1">活动名称</th>
+                                <!--<th class="col-sm-1">活动名称</th>-->
                                 <th>奖品名称</th>
                                 <th>姓名</th>
                                 <th>电话</th>
@@ -62,24 +62,21 @@
                             </thead>
                             <tbody th:remove="all-but-first">
                             <tr th:each="actWinDetail,itenSatus:${joinRecord}">
+                                <!--/*@thymesVar id="actWinDetail" type="com.huotu.scrm.service.entity.activity.ActWinDetail"*/-->
                                 <td th:text="${itenSatus.index}+1"></td>
                                 <td th:text="${actWinDetail.userId}">
                                     <div class="checkbox checkbox-primary m-b-none m-t-none">
                                     </div>
                                 </td>
-                                <td th:text="${actWinDetail.prize.activity.actTitle}" style="width: 5%;">
-                                    <p style="width: 100%; height: 50px;">
-                                    </p>
-                                </td>
-                                <td th:text="${actWinDetail.prize.prizeName}"></td>
+                                <td th:text="${actWinDetail.prizeName}"></td>
                                 <td th:text="${actWinDetail.winnerName}"></td>
                                 <td th:text="${actWinDetail.winnerTel}"></td>
                                 <td th:text="${#temporals.format(actWinDetail.winTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td th:text="${actWinDetail.ipAddress}"></td>
                                 <td>
-                                    <p th:if="${actWinDetail.prize.prizeType.code==1}"
+                                    <p th:if="${actWinDetail.prizeType.code==1}" th:style="${actWinDetail.getReward ? 'color:green' : 'color:red;'}"
                                        th:text="${actWinDetail.isGetReward()?'已领取':'未领取'}"></p>
-                                    <p th:if="${actWinDetail.prize.prizeType.code==0}">未中奖</p>
+                                    <p th:if="${actWinDetail.prizeType.code==0}">未中奖</p>
                                 </td>
                             </tr>
                             </tbody>

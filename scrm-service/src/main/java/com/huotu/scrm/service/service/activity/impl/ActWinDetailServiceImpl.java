@@ -81,8 +81,7 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
         actWinDetailList.forEach(actWinDetail -> {
             Map<String, Object> mapValue = new LinkedHashMap<>();
             mapValue.put("userId", actWinDetail.getUserId());
-            mapValue.put("actName", actWinDetail.getPrize().getActivity().getActTitle());
-            mapValue.put("prizeName", actWinDetail.getPrize().getPrizeName());
+            mapValue.put("prizeName", actWinDetail.getPrizeName());
             mapValue.put("winnerName", actWinDetail.getWinnerName());
             mapValue.put("winnerTel", actWinDetail.getWinnerTel());
             mapValue.put("winTime", actWinDetail.getWinTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));

@@ -147,8 +147,10 @@ public class ActWinController extends SiteBaseController {
                     data.put("prizeType", actPrize.getPrizeType());
                     data.put("prizeDetailId", actWinDetail.getWinDetailId());
                     try {
-                        String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
-                        data.put("prizeImageUrl", imageUrl);
+                        if(!StringUtils.isEmpty(actPrize.getPrizeImageUrl())){
+                            String imageUrl = staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString();
+                            data.put("prizeImageUrl", imageUrl);
+                        }
                     } catch (URISyntaxException e) {
                         e.printStackTrace();
                     }
@@ -206,10 +208,9 @@ public class ActWinController extends SiteBaseController {
 
         //查询到用户某个活动的中奖记录
         List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId, userId);
-        list.forEach(p -> {
-            ActPrize actPrize = p.getPrize();
+        list.stream().filter(p->!StringUtils.isEmpty(p.getPrizeImageUrl())).forEach(p -> {
             try {
-                actPrize.setMallPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
+                p.setMallPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -239,7 +240,10 @@ public class ActWinController extends SiteBaseController {
         ActWinDetail actWinDetail = new ActWinDetail();
         actWinDetail.setUserId(userId);
         actWinDetail.setWinTime(LocalDateTime.now());
-        actWinDetail.setPrize(actPrize);
+        actWinDetail.setPrizeId(actPrize.getPrizeId());
+        actWinDetail.setPrizeName(actPrize.getPrizeName());
+        actWinDetail.setPrizeType(actPrize.getPrizeType());
+        actWinDetail.setPrizeImageUrl(actPrize.getPrizeImageUrl());
         actWinDetail.setIpAddress(ipAddress);
         actWinDetail.setActId(activity.getActId());
         return actWinDetailService.saveActWinDetail(actWinDetail);

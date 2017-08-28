@@ -182,7 +182,7 @@ $(function () {
                 '<p class="modal-title">' + data.prizeName + '</p>' +
                 '<div class="coupon-imageBg">' +
                 '<div class="coupon-image">' +
-                '<a href="#"><img src="' + data.prizeImageUrl + '"></a>' +
+                '<a href="#"><img style="width:250px;height: 130px;" src="' + ((!!data.prizeImageUrl)?data.prizeImageUrl:'../../resources/images/gift.png') + '"></a>' +
                 '</div>' +
                 '</div>' +
                 '<a href="javascript:;" class="coupon-use" data-type="' + data.prizeType.code + '">' + "确定" + '</a>' +

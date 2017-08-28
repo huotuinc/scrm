@@ -36,6 +36,7 @@
 
     .imgbox {
         width: 55px;
+        height: 55px;
         vertical-align: middle;
         float: left;
         margin-left: 10px
@@ -64,14 +65,15 @@
 <body th:attr="customerId=${customerId}" customerId="4421">
 <div th:remove="all-but-first" id="app">
     <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}"
-         onclick="AddTel.showUserInfo()" th:onclick="(${record.getReward})?'':|AddTel.showUserInfo(${record.winDetailId})|">
+         onclick="AddTel.showUserInfo()" th:onclick="(${record.prizeType}!=0 and ${record.getReward})?'':|AddTel.showUserInfo(${record.winDetailId})|">
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
-                <img th:src="${record.prize.mallPrizeImageUrl}" src="../../resources/images/nr.jpg" class="imgbox">
+                <img th:src="${record.mallPrizeImageUrl}!=null?${record.mallPrizeImageUrl}:@{/resources/images/gift.png}"
+                     src="../../resources/images/nr.jpg" class="imgbox">
                 <div class="title">
-                    <p class="titlename" th:text="${record.prize.prizeName}">标题标题标题标题标题标题标题标题</p>
+                    <p class="titlename" th:text="${record.prizeName}">标题标题标题标题标题标题标题标题</p>
                     <p class="time" th:text="${#temporals.format(record.winTime, 'yyyy-MM-dd HH:mm:ss')}">2017.01.01</p>
-                    <button th:if="${record.prize.prizeType.code}!=0 and ${record.getReward}"  th:text="已领取" class="prize_get" type="button">已领取</button>
+                    <button th:if="${record.prizeType.code}!=0"  th:text="${record.getReward} ? '已领取':'待领取'" class="prize_get" type="button">已领取</button>
                 </div>
             </div>
             <div class="weui_cell_ft" style="display:none"></div>
