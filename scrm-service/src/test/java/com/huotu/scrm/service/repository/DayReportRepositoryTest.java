@@ -12,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class DayReportRepositoryTest extends CommonTestBase {
      */
     @Test
     public void testDayReportRepository() {
-         mockInfoBrowse(1L, 1L, 2L, 3344L);
+        mockInfoBrowse(1L, 1L, 2L, 3344L);
         mockInfoBrowse(2L, 1L, 4L, 3344L);
         LocalDateTime now = LocalDateTime.now(), threeDayBefore = now.minusDays(3);
         List<InfoBrowse> list = infoBrowseRepository.findForwardNumBySourceUserId(threeDayBefore, now, 1L);
@@ -45,5 +46,12 @@ public class DayReportRepositoryTest extends CommonTestBase {
         User user = mockUser(customer.getId(), userLevel.getType(), userLevel.getId());
         UserLevel byLevelAndCustomerId = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
         Assert.assertNotNull(byLevelAndCustomerId);
+    }
+
+    @Test
+    public void test() {
+        LocalDateTime now =  LocalDate.parse("2017-06-01").atStartOfDay();
+        List<InfoBrowse> forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(now,now.plusDays(1), 2L);
+        Assert.assertNotNull(forwardNumBySourceUserId);
     }
 }

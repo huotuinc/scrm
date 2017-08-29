@@ -3,6 +3,9 @@ package com.huotu.scrm.service.service.statisticsinfo;
 import com.huotu.scrm.service.entity.report.DayReport;
 import com.huotu.scrm.service.model.statisticinfo.SearchCondition;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 
 /**
  * Created by hxh on 2017-08-28.
@@ -15,4 +18,7 @@ public interface StatisticsInfoService {
      * @return
      */
     Page<DayReport> getDayReportList(SearchCondition searchCondition, int pageIndex);
+
+    @Transactional
+    boolean againStatistic(Long userId,LocalDate date);
 }

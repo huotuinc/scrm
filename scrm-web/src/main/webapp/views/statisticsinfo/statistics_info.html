@@ -63,20 +63,21 @@
                         <label class="">统计信息显示</label>
                     </div>
                     <div class="panel-body">
-                        <table class="table table-bordered table-hover table-center">
+                        <table class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>序号</th>
                                 <th>用户编号</th>
                                 <th>商户编号</th>
+                                <th>日期</th>
                                 <th>资讯转发量</th>
                                 <th>访问量（uv）</th>
+                                <th>推广积分</th>
                                 <th>是否是销售员</th>
                                 <th>被关注量</th>
                                 <th>uv排名</th>
                                 <th>积分排名</th>
                                 <th>关注排名</th>
-                                <th>日期</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -84,13 +85,15 @@
                             <tr th:each="dayReport ,dayReportState: ${dayReportList}">
                                 <td th:text="${dayReportState.index+1}">
                                 </td>
-                                <td th:text="${dayReport.userId}" style="width: 20%;">
+                                <td th:text="${dayReport.userId}">
                                 </td>
-                                <td th:text="${dayReport.customerId}" style="width: 20%;">
+                                <td th:text="${dayReport.customerId}">
                                 </td>
+                                <td th:text="${#temporals.format(dayReport.reportDay,'yyyy-MM-dd')}"></td>
                                 <td th:text="${dayReport.forwardNum}">
                                 </td>
                                 <td th:text="${dayReport.visitorNum}"></td>
+                                <td th:text="${dayReport.extensionScore}"></td>
                                 <td>
                                     <p th:style="${dayReport.salesman ? 'color:green' : 'color:red;'}"
                                        th:text="${dayReport.salesman ? '是': '否'}"
@@ -104,10 +107,9 @@
                                 </td>
                                 <td th:text="${dayReport.followRanking}">
                                 </td>
-                                <td th:text="${#temporals.format(dayReport.reportDay,'yyyy-MM-dd')}"></td>
                                 <td>
                                     <span class="cursor-point" onclick="">
-                                       <i class="fa tooltips" data-toggle="tooltip" data-original-title="重新统计">重新统计</i>
+                                       <i class="fa tooltips" data-toggle="tooltip" data-original-title="重新统计" th:onclick="'javascript:statisticsInfoHandler.againStatistic('+${dayReport.userId}+',\''+${dayReport.reportDay}+'\')'">重新统计</i>
                                     </span>
                                 </td>
                             </tr>
@@ -208,6 +210,19 @@
     var statisticsInfoHandler = {
         search: function () {
             $('#searchForm').submit();
+        },
+        againStatistic:function (userId,date) {
+            var requestDate = {
+                userId:userId,
+                date:date
+            }
+        hot.ajax("/mall/Statistics/againStatistic",requestDate,function (res) {
+            if(res.code==200){
+                window.location.reload();
+            }else {
+                hot.tip.error(res.data);
+            }
+        })
         }
     }
 </script>
