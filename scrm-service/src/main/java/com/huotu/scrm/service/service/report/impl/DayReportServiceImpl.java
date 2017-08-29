@@ -274,7 +274,6 @@ public class DayReportServiceImpl implements DayReportService {
      */
     @Override
     @Scheduled(cron = "0 5 0 * * *")
-//    @Scheduled(cron = "0 */1 * * * *")
     public void saveDayVisitorScore() {
         log.info("每日统计浏览奖励积分开始");
         LocalDate today = LocalDate.now();
