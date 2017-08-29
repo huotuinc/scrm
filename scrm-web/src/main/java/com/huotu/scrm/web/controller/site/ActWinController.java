@@ -185,7 +185,7 @@ public class ActWinController extends SiteBaseController {
             if (apiResult.getCode() == 200) {
                 ActWinDetail actWinDetail = actWinDetailService.updateActWinDetail(actWinDetailId, name, mobile);
                 if (actWinDetail != null) {
-                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+                    return ApiResult.resultWith(ResultCodeEnum.SUCCESS,null,"领取成功");
                 }
             }
             return apiResult;
