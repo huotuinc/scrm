@@ -20,5 +20,5 @@ public interface StatisticsInfoService {
     Page<DayReport> getDayReportList(SearchCondition searchCondition, int pageIndex);
 
     @Transactional
-    void againStatistic(Long userId,LocalDate date);
+    boolean againStatistic(Long userId,LocalDate date);
 }

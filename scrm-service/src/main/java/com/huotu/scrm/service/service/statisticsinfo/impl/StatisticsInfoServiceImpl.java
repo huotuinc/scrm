@@ -31,7 +31,7 @@ import java.util.List;
  * Created by hxh on 2017-08-28.
  */
 @Service
-public class StatisticsInfoServiceImpl implements StatisticsInfoService{
+public class StatisticsInfoServiceImpl implements StatisticsInfoService {
     @Autowired
     private DayReportRepository dayReportRepository;
     @Autowired
@@ -44,18 +44,22 @@ public class StatisticsInfoServiceImpl implements StatisticsInfoService{
     private BusinessCardRecordRepository businessCardRecordRepository;
     @Autowired
     private UserLevelRepository userLevelRepository;
+
     @Override
-    public Page<DayReport> getDayReportList(SearchCondition searchCondition,int pageIndex) {
+    public Page<DayReport> getDayReportList(SearchCondition searchCondition, int pageIndex) {
         Sort sort = new Sort(Sort.Direction.ASC, "reportDay");
-        Pageable pageable = new PageRequest(pageIndex-1, Constant.PAGE_SIZE,sort);
+        Pageable pageable = new PageRequest(pageIndex - 1, Constant.PAGE_SIZE, sort);
         Specification<DayReport> specification = getSpecification(searchCondition);
-        return dayReportRepository.findAll(specification,pageable);
+        return dayReportRepository.findAll(specification, pageable);
     }
 
     @Override
-    public void againStatistic(Long userId ,LocalDate date) {
+    public boolean againStatistic(Long userId, LocalDate date) {
         User user = userRepository.findOne(userId);
         UserLevel userLevel = userLevelRepository.findByIdAndCustomerId(user.getLevelId(), user.getCustomerId());
+        if (userLevel == null) {
+            return false;
+        }
         LocalDateTime beginTime = date.atStartOfDay();
         LocalDateTime endTime = beginTime.plusDays(1);
         List<InfoBrowse> infoBrowseList = infoBrowseRepository.findForwardNumBySourceUserId(beginTime, endTime, user.getId());
@@ -80,18 +84,19 @@ public class StatisticsInfoServiceImpl implements StatisticsInfoService{
         report.setFollowRanking(dayReport.getFollowRanking());
         dayReportRepository.delete(dayReport);
         dayReportRepository.save(report);
+        return true;
     }
 
     private Specification<DayReport> getSpecification(SearchCondition searchCondition) {
         List<Predicate> predicates = new ArrayList<>();
         return ((root, query, cb) -> {
-            if(searchCondition.getUserId()!=null){
-                predicates.add(cb.equal(root.get("userId").as(Long.class),searchCondition.getUserId()));
+            if (searchCondition.getUserId() != null) {
+                predicates.add(cb.equal(root.get("userId").as(Long.class), searchCondition.getUserId()));
             }
-            if(searchCondition.getStatisticsStartDate()!=null){
+            if (searchCondition.getStatisticsStartDate() != null) {
                 predicates.add(cb.greaterThanOrEqualTo(root.get("reportDay").as(LocalDate.class), searchCondition.getStatisticsStartDate()));
             }
-            if(searchCondition.getStatisticsEndDate()!=null){
+            if (searchCondition.getStatisticsEndDate() != null) {
                 predicates.add(cb.lessThanOrEqualTo(root.get("reportDay").as(LocalDate.class), searchCondition.getStatisticsEndDate()));
             }
             return cb.and(predicates.toArray(new Predicate[predicates.size()]));

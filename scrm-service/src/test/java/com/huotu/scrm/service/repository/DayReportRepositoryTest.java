@@ -52,6 +52,6 @@ public class DayReportRepositoryTest extends CommonTestBase {
     public void test() {
         LocalDateTime now =  LocalDate.parse("2017-06-01").atStartOfDay();
         List<InfoBrowse> forwardNumBySourceUserId = infoBrowseRepository.findForwardNumBySourceUserId(now,now.plusDays(1), 2L);
-        System.out.println(forwardNumBySourceUserId.size());
+        Assert.assertNotNull(forwardNumBySourceUserId);
     }
 }

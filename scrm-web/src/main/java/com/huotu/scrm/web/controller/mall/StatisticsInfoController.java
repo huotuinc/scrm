@@ -42,8 +42,12 @@ public class StatisticsInfoController extends MallBaseController {
     @ResponseBody
     public ApiResult againStatistic(Long userId, String date) {
         if (userId != null && !StringUtils.isEmpty(date)) {
-            statisticsInfoService.againStatistic(userId, LocalDate.parse(date));
-            return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+            boolean statistic = statisticsInfoService.againStatistic(userId, LocalDate.parse(date));
+            if (statistic) {
+                return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
+            } else {
+                ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER, "用户等级不存在", null);
+            }
         }
         return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
     }

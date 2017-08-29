@@ -15,13 +15,17 @@ import com.huotu.scrm.service.entity.activity.ActPrize;
 import com.huotu.scrm.service.entity.activity.Activity;
 import com.huotu.scrm.service.service.activity.ActPrizeService;
 import com.huotu.scrm.service.service.activity.ActivityService;
+import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.net.URISyntaxException;
 
 /**
  * 奖品控制层
@@ -35,6 +39,8 @@ public class ActPrizeController extends MallBaseController {
     private ActPrizeService actPrizeService;
     @Autowired
     private ActivityService activityService;
+    @Autowired
+    private StaticResourceService staticResourceService;
 
     /**
      * 显示某个活动对应的奖品页面
@@ -46,6 +52,14 @@ public class ActPrizeController extends MallBaseController {
     @RequestMapping("/prize/list")
     public String getPrizeDetail(Long actId, Model model) {
         Activity activity = activityService.findByActId(actId);
+        activity.getActPrizes().forEach(p -> {
+            if (!StringUtils.isEmpty(p.getPrizeImageUrl())) {
+                try {
+                    p.setMallPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
+                } catch (URISyntaxException e) {
+                }
+            }
+        });
         model.addAttribute("prizeList", activity.getActPrizes());
         model.addAttribute("actId", actId);
         return "activity/prize_list";
@@ -66,6 +80,13 @@ public class ActPrizeController extends MallBaseController {
         } else {
             Activity activity = activityService.findByActId(actId);
             actPrize.setActivity(activity);
+        }
+        if (!StringUtils.isEmpty(actPrize.getPrizeImageUrl())) {
+            try {
+                actPrize.setMallPrizeImageUrl(staticResourceService.getResource(null, actPrize.getPrizeImageUrl()).toString());
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
         model.addAttribute("customer", customerId);
         model.addAttribute("actPrize", actPrize);
