@@ -66,6 +66,7 @@ public class StatisticsInfoServiceImpl implements StatisticsInfoService{
         DayReport report = new DayReport();
         report.setSalesman(userLevel.isSalesman());
         int followNum = report.isSalesman() ? businessCardRecordRepository.countByUserId(user.getId()) : 0;
+        DayReport dayReport = dayReportRepository.findByUserIdAndReportDay(userId, date);
         report.setFollowNum(followNum);
         report.setUserId(user.getId());
         report.setCustomerId(user.getCustomerId());
@@ -74,6 +75,10 @@ public class StatisticsInfoServiceImpl implements StatisticsInfoService{
         report.setVisitorNum(visitorNum);
         report.setExtensionScore(dayScore);
         report.setReportDay(date);
+        report.setScoreRanking(dayReport.getScoreRanking());
+        report.setVisitorRanking(dayReport.getVisitorRanking());
+        report.setFollowRanking(dayReport.getFollowRanking());
+        dayReportRepository.delete(dayReport);
         dayReportRepository.save(report);
     }
 

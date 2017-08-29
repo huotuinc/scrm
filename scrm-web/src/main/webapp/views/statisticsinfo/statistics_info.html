@@ -72,6 +72,7 @@
                                 <th>日期</th>
                                 <th>资讯转发量</th>
                                 <th>访问量（uv）</th>
+                                <th>推广积分</th>
                                 <th>是否是销售员</th>
                                 <th>被关注量</th>
                                 <th>uv排名</th>
@@ -84,14 +85,15 @@
                             <tr th:each="dayReport ,dayReportState: ${dayReportList}">
                                 <td th:text="${dayReportState.index+1}">
                                 </td>
-                                <td th:text="${dayReport.userId}" style="width: 20%;">
+                                <td th:text="${dayReport.userId}">
                                 </td>
-                                <td th:text="${dayReport.customerId}" style="width: 20%;">
+                                <td th:text="${dayReport.customerId}">
                                 </td>
                                 <td th:text="${#temporals.format(dayReport.reportDay,'yyyy-MM-dd')}"></td>
                                 <td th:text="${dayReport.forwardNum}">
                                 </td>
                                 <td th:text="${dayReport.visitorNum}"></td>
+                                <td th:text="${dayReport.extensionScore}"></td>
                                 <td>
                                     <p th:style="${dayReport.salesman ? 'color:green' : 'color:red;'}"
                                        th:text="${dayReport.salesman ? '是': '否'}"
@@ -210,8 +212,6 @@
             $('#searchForm').submit();
         },
         againStatistic:function (userId,date) {
-            console.log(userId);
-            console.log(date);
             var requestDate = {
                 userId:userId,
                 date:date
