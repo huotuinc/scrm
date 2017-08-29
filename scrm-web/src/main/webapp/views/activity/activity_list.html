@@ -178,7 +178,7 @@
                     if (res.code == 200) {
                         window.location.reload();
                     } else {
-                        hot.tip.error(res.msg);
+                        hot.tip.error("删除失败");
                     }
                 })
             })
@@ -200,6 +200,8 @@
             hot.ajax(ajaxUrl + "/act/disable", {actId: actId}, function (res) {
                 if (res.code == 200) {
                     window.location.reload();
+                }else{
+                    hot.tip.error("禁用失败")
                 }
             })
         },
@@ -208,7 +210,7 @@
                 if (res.code == 200) {
                     window.location.reload();
                 } else {
-                    hot.tip.error(res.msg);
+                    hot.tip.error("启用失败");
                 }
             })
         },
