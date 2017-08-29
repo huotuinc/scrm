@@ -208,6 +208,7 @@ public class ActWinController extends SiteBaseController {
 
         //查询到用户某个活动的中奖记录
         List<ActWinDetail> list = actWinDetailService.getActWinDetailRecordByActIdAndUserId(actId, userId);
+        list.stream().sorted(Comparator.comparing(ActWinDetail::getWinTime));
         list.stream().filter(p->!StringUtils.isEmpty(p.getPrizeImageUrl())).forEach(p -> {
             try {
                 p.setMallPrizeImageUrl(staticResourceService.getResource(null, p.getPrizeImageUrl()).toString());
