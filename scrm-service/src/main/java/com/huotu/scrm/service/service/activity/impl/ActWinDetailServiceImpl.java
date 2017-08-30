@@ -92,14 +92,12 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
 
     @Override
     public ActWinDetail updateActWinDetail(Long winDetailId, String name, String mobile) {
-
         ActWinDetail actWinDetail = actWinDetailRepository.findOne(winDetailId);
         if (actWinDetail != null) {
             actWinDetail.setWinnerName(name);
             actWinDetail.setWinnerTel(mobile);
             actWinDetail.setGetReward(true);
             return actWinDetailRepository.save(actWinDetail);
-
         }
         return null;
     }

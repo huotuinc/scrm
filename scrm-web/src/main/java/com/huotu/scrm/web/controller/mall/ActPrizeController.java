@@ -45,7 +45,7 @@ public class ActPrizeController extends MallBaseController {
     /**
      * 显示某个活动对应的奖品页面
      *
-     * @param actId
+     * @param actId 活动编号
      * @param model
      * @return
      */

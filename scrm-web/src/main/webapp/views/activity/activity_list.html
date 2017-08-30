@@ -67,10 +67,14 @@
                                     <span th:unless="${activity.openStatus}" style="color: red">禁用</span>
                                 </td>
                                 <td>
-                                    <span class="cursor-point"><i class="fa tooltips"
+                                     <span class="cursor-point" th:if="${activity.openStatus}"><i class="fa tooltips"
+                                                                   data-toggle="modal"
+                                                                   data-original-title="活动链接" data-target="#actLink"
+                                                                   th:onclick="'javascript:actListHandler.actLink('+${activity.actId}+','+${activity.customerId}+','+${activity.openStatus}+')'">活动链接</i></span>
+                                    <span class="cursor-point" th:unless="${activity.openStatus}"><i class="fa tooltips"
                                                                   data-toggle="modal"
-                                                                  data-original-title="活动链接" data-target="#actLink"
-                                                                  th:onclick="'javascript:actListHandler.actLink('+${activity.actId}+','+${activity.customerId}+')'">活动链接</i></span>
+                                                                  data-original-title="活动链接"
+                                                                  th:onclick="'javascript:actListHandler.actLink('+${activity.actId}+','+${activity.customerId}+','+${activity.openStatus}+')'">活动链接</i></span>
                                     &nbsp;&nbsp;
                                     <span class="cursor-point"><i class="fa  tooltips" data-placement="top"
                                                                   data-toggle="tooltip" data-original-title="奖品设置"
@@ -214,11 +218,15 @@
                 }
             })
         },
-        actLink: function (actId, customerId) {
-            actNum = actId;
-            customerNum = customerId;
-            var str = window.location.origin + "/site/activity/index?actId=" + actId+ "&customerId=" + customerId;
-            $("#actLinkStr").html(str);
+        actLink: function (actId, customerId,status) {
+            if(status){
+                actNum = actId;
+                customerNum = customerId;
+                var str = window.location.origin + "/site/activity/index?actId=" + actId+ "&customerId=" + customerId;
+                $("#actLinkStr").html(str)
+            }else {
+                hot.tip.error("该活动已禁用，请先启用活动");
+            }
         }
     }
 </script>
