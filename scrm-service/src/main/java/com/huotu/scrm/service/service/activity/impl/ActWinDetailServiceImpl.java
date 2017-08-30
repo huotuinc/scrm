@@ -116,7 +116,7 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     }
 
     /**
-     * @param actId
+     * @param actId 活动编号
      * @param type  1：查询未领取 2：查询已领取
      * @return
      */
