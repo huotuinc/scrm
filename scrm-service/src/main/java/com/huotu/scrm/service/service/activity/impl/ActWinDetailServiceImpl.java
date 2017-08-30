@@ -106,7 +106,7 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
 
     @Override
     public List<ActWinDetail> getActWinDetailRecordByActIdAndUserId(Long actId, Long userId) {
-        return actWinDetailRepository.findAllByActIdAndUserId(actId, userId);
+        return actWinDetailRepository.findAllByActIdAndUserIdOrderByWinTimeDesc(actId, userId);
     }
 
     @Override

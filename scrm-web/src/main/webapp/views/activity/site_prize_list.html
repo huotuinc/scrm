@@ -62,10 +62,13 @@
         width: 95%;
     }
 </style>
-<body th:attr="customerId=${customerId}" customerId="4421">
+<body th:attr="customerId=${customerId}"   customerId="4421">
+
+<!--/*@thymesVar id="record" type="com.huotu.scrm.service.entity.activity.ActWinDetail"*/-->
+
 <div th:remove="all-but-first" id="app">
     <div class="weui_cells weui_cells_access " th:each="record ,infoState: ${winRecords}"
-         onclick="AddTel.showUserInfo()" th:onclick="(${record.prizeType}!=0 and ${record.getReward})?'':|AddTel.showUserInfo(${record.winDetailId})|">
+         onclick="AddTel.showUserInfo()" th:onclick="(${record.prizeType.code}!=0 and !${record.isGetReward()})?|AddTel.showUserInfo(${record.winDetailId})|:''">
         <a class="weui_cell" href="javascript:void(0);">
             <div class="weui_cell_bd weui_cell_primary">
                 <img th:src="${record.mallPrizeImageUrl}!=null?${record.mallPrizeImageUrl}:@{/resources/images/gift.png}"
@@ -101,9 +104,9 @@
                     <label>
                         <input type="text" placeholder="请输入验证码" name="authCode">
                     </label>
-                    <button class="user-info-text" id="J_sendAuth" onclick="AddTel.sendMessage()">获取验证码</button>
+                    <button type="button" class="user-info-text" id="J_sendAuth" onclick="AddTel.sendMessage()">获取验证码</button>
                 </div>
-                <button type="submit" onclick="AddTel.verifyForm()" id="J_userFormBtn" form="J_userInfo" class="user-info-btn">提&nbsp;&nbsp;交</button>
+                <button type="button" onclick="AddTel.verifyForm()" id="J_userFormBtn"  class="user-info-btn">提&nbsp;&nbsp;交</button>
             </form>
         </div>
     </div>
@@ -197,13 +200,16 @@
                 success: function (data) {
                     if (data.code != 200) {
                         AddTel.showMsg(data.data);
+                        AddTel.toggleFilter();
                         return false;
                     }
-                    showMsg(data.msg);
+                    AddTel.showMsg(data.data);
                     setTimeout(function () {
                         $('#J_addTel').hide();
-                        game.toggleFilter();
-                    }, 3000);
+                        AddTel.toggleFilter();
+                        window.location.reload();
+                        return true;
+                    }, 2000);
                 },
                 error: function () {
                     AddTel.showMsg("系统错误");

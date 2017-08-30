@@ -283,13 +283,14 @@ public class DayReportServiceImpl implements DayReportService {
         userIdList.forEach((Long userId) -> {
             User user = userRepository.findOne(userId);
             int visitorScore = getVisitorScore(user, lastBeginTime, todayBeginTime);
+            log.info("用户浏览积分："+visitorScore);
             try {
                 if (visitorScore > 0) {
                     log.info("浏览奖励积分记录成功！");
                     apiService.rechargePoint(user.getCustomerId(), user.getId(), (long) visitorScore, IntegralTypeEnum.BROWSE_INFO);
                 }
             } catch (UnsupportedEncodingException e) {
-                log.info("每日浏览积分统计有误：" + e.getMessage());
+                log.error("每日浏览积分统计有误：" + e.getMessage());
             }
         });
     }
