@@ -235,7 +235,7 @@ $(function () {
             });
         },
         toggleFilter: function () {
-            $('#app').toggleClass('filter');
+            // $('#app').toggleClass('filter');
         },
         switchInfo: function () {
             $('#J_ruleModal').find('.nav').click(function () {
