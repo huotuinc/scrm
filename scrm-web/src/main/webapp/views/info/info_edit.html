@@ -28,13 +28,13 @@
             <h5>编辑资讯信息</h5>
         </div>
         <div class="ibox-content">
-            <form class="form-horizontal" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" method="post">
+            <form class="form-horizontal" name="editSaveInfo" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" method="post">
                 <input type="hidden" name="id" value="" th:value="${info.id}"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">资讯标题</label>
                     <div class="col-sm-6">
-                        <input type="text" id="title" name="title" maxlength="30" class="form-control" value=""
-                               th:value="${info.title}" required  >
+                        <input type="text" id="title" name="title" class="form-control" value=""
+                               th:value="${info.title}" >
                         <span class="help-block"><i class="fa fa-info-circle"></i>最多30个字符</span>
                     </div>
                 </div>
@@ -42,8 +42,8 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">资讯简介</label>
                     <div class="col-sm-6">
-                        <textarea rows="3" id="introduce" name="introduce" maxlength="150" class="form-control"
-                                  th:text="${info.introduce}" required>资讯简介</textarea>
+                        <textarea rows="3" id="introduce" name="introduce"  class="form-control"
+                                  th:text="${info.introduce}" >资讯简介</textarea>
                         <span class="help-block"><i class="fa fa-info-circle"></i>最多150个字符</span>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">上传封面</label>
                     <div class="col-sm-6">
-                        <input type="hidden" name="imageUrl" value="" th:value="${info.imageUrl}"/>
+                        <input type="hidden" id="imageUrl" name="imageUrl" value="" th:value="${info.imageUrl}"/>
                         <input type="file" id="uploadFile" name="btnFile" readonly="readonly" class="form-control">
                         <button class="btn btn-success" id="uploadImage" type="button"
                                 onclick="infoSaveEditHandler.uploadFile()">上传图片
@@ -128,7 +128,7 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/switchery/switchery.js"></script>
 <script src="http://resali.huobanplus.com/cdn/layer/3.0.3/layer.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/sweetalert/sweetalert.min.js"></script>
-<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/jquery.validate.min.js"></script>
+<script src="http://resali.huobanplus.com/cdn/jquery-validation/1.16.0/jquery.validate.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/additional-methods.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/jquery-validation/1.15.0/localization/messages_zh.min.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/validate/messages_zh.min.js"></script>
@@ -159,27 +159,31 @@
         // 在键盘按下并释放及提交后验证提交表单
         $("#editSaveInfo").validate({
 
-            ignore: [],  //this is importent
+            //ignore: [],  //this is importent
+            ignore:"not:hidden",
             rules: {
                 imageUrl: "required",
                 content: "required",
                 title:{
+                    required:true,
                     maxlength:30,
-                    require:true
                 },
                 introduce:{
+                    required:true,
                     maxlength:150,
-                    require:true
+
                 }
             },
             messages: {
                 imageUrl: "请选择上传图片",
                 content: "请填写内容",
                 title:{
+                    required:"请输入资讯标题",
                     maxlength:"资讯标题不能超过30"
                 },
                 introduce:{
-                    maxlength:"资讯标题不能超过150"
+                    required:"请输入资讯简介",
+                    maxlength:"资讯简介不能超过150"
                 }
             },
         });
