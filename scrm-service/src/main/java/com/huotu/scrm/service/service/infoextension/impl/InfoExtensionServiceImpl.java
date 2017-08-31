@@ -136,7 +136,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             monthRanking = mapMonthScoreRanking.get(user.getId());
         }
         //判断用户今日是否有预计积分
-        if (dayScoreRanking == 0 && dayReportService.getEstimateScore(user,beginTime,now) > 0) {
+        if (dayScoreRanking == 0 && dayReportService.getEstimateScore(user, beginTime, now) > 0) {
             //表示200名以外
             dayScoreRanking = -1;
         }
@@ -308,11 +308,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             } else {
                 switch (type) {
                     case 0:
-                        if (monthReport.getScoreRanking() == 0 && monthReportRepository.findByUserIdAndReportMonth(userId,monthReport.getReportMonth())!=null) {
-                            monthStatisticInfo.setData(-1);
-                        } else {
-                            monthStatisticInfo.setData(monthReport.getScoreRanking());
-                        }
+                        int scoreRanking = (monthReport.getScoreRanking() == 0) ? -1 : monthReport.getScoreRanking();
+                        monthStatisticInfo.setData(scoreRanking);
                         break;
                     case 1:
                         monthStatisticInfo.setData(monthReport.getExtensionScore());
@@ -321,11 +318,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
                         monthStatisticInfo.setData(monthReport.getVisitorNum());
                         break;
                     default:
-                        if (monthReport.getFollowRanking() == 0 && monthReportRepository.findByUserIdAndReportMonth(userId,monthReport.getReportMonth())!=null) {
-                            monthStatisticInfo.setData(-1);
-                        } else {
-                            monthStatisticInfo.setData(monthReport.getFollowRanking());
-                        }
+                        int followRanking = (monthReport.getFollowRanking() == 0) ? -1 : monthReport.getFollowRanking();
+                        monthStatisticInfo.setData(followRanking);
                 }
             }
             monthStatisticInfoList.add(monthStatisticInfo);

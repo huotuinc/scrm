@@ -92,21 +92,19 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
 
     @Override
     public ActWinDetail updateActWinDetail(Long winDetailId, String name, String mobile) {
-
         ActWinDetail actWinDetail = actWinDetailRepository.findOne(winDetailId);
         if (actWinDetail != null) {
             actWinDetail.setWinnerName(name);
             actWinDetail.setWinnerTel(mobile);
             actWinDetail.setGetReward(true);
             return actWinDetailRepository.save(actWinDetail);
-
         }
         return null;
     }
 
     @Override
     public List<ActWinDetail> getActWinDetailRecordByActIdAndUserId(Long actId, Long userId) {
-        return actWinDetailRepository.findAllByActIdAndUserId(actId, userId);
+        return actWinDetailRepository.findAllByActIdAndUserIdOrderByWinTimeDesc(actId, userId);
     }
 
     @Override
@@ -118,7 +116,7 @@ public class ActWinDetailServiceImpl implements ActWinDetailService {
     }
 
     /**
-     * @param actId
+     * @param actId 活动编号
      * @param type  1：查询未领取 2：查询已领取
      * @return
      */

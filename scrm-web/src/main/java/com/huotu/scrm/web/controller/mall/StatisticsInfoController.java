@@ -45,9 +45,8 @@ public class StatisticsInfoController extends MallBaseController {
             boolean statistic = statisticsInfoService.againStatistic(userId, LocalDate.parse(date));
             if (statistic) {
                 return ApiResult.resultWith(ResultCodeEnum.SUCCESS);
-            } else {
-                ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER, "用户等级不存在", null);
             }
+            ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER, "用户等级不存在", null);
         }
         return ApiResult.resultWith(ResultCodeEnum.DATA_BAD_PARSER);
     }

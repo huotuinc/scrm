@@ -46,6 +46,7 @@
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
                         <button type="button" class="btn btn-white" id="btnBatchExport">批量导出</button>
+                        <button type="button" class="btn btn-success" onclick="winListHandler.back()">返回</button>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
@@ -176,9 +177,12 @@
                 if (res.code == 200) {
                     window.location.reload();
                 } else {
-                    hot.tip.error(res.data)
+                    hot.tip.error("修改失败")
                 }
             })
+        },
+        back:function () {
+            window.location.href=ajaxUrl+"/act/list";
         }
     }
     $(function () {

@@ -84,7 +84,8 @@ public class InfoExtensionController extends SiteBaseController {
                         try {
                             URI uri = staticResourceService.getResource(StaticResourceService.huobanmallMode, p.getThumbnailImageUrl());
                             p.setThumbnailImageUrl(uri.toString());
-                        } catch (URISyntaxException ignored) {
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
                         }
                     });
         }

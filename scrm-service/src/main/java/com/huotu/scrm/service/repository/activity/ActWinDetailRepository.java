@@ -31,7 +31,7 @@ public interface ActWinDetailRepository extends JpaRepository<ActWinDetail, Long
      * 获取某个人某个活动的所以中奖记录
      * @return
      */
-    List<ActWinDetail> findAllByActIdAndUserId(Long actId, Long userId);
+    List<ActWinDetail> findAllByActIdAndUserIdOrderByWinTimeDesc(Long actId, Long userId);
 
     Page<ActWinDetail> findAllByActId(Long actId, Pageable pageable);
 

@@ -60,7 +60,7 @@
             <div class="ibox float-e-margins m-b-none">
                 <div class="ibox-content p-xxs no-top-border">
                     <div>
-                        <label class="">统计信息显示</label>
+                        <label class="">每日统计信息显示</label>
                     </div>
                     <div class="panel-body">
                         <table class="table table-bordered table-hover">
@@ -109,7 +109,8 @@
                                 </td>
                                 <td>
                                     <span class="cursor-point" onclick="">
-                                       <i class="fa tooltips" data-toggle="tooltip" data-original-title="重新统计" th:onclick="'javascript:statisticsInfoHandler.againStatistic('+${dayReport.userId}+',\''+${dayReport.reportDay}+'\')'">重新统计</i>
+                                       <i class="fa tooltips" data-toggle="tooltip" data-original-title="重新统计"
+                                          th:onclick="'javascript:statisticsInfoHandler.againStatistic('+${dayReport.userId}+',\''+${dayReport.reportDay}+'\')'">重新统计</i>
                                     </span>
                                 </td>
                             </tr>
@@ -211,18 +212,18 @@
         search: function () {
             $('#searchForm').submit();
         },
-        againStatistic:function (userId,date) {
+        againStatistic: function (userId, date) {
             var requestDate = {
-                userId:userId,
-                date:date
+                userId: userId,
+                date: date
             }
-        hot.ajax("/mall/Statistics/againStatistic",requestDate,function (res) {
-            if(res.code==200){
-                window.location.reload();
-            }else {
-                hot.tip.error(res.data);
-            }
-        })
+            hot.ajax("/mall/Statistics/againStatistic", requestDate, function (res) {
+                if (res.code == 200) {
+                    window.location.reload();
+                } else {
+                    hot.tip.error("用户等级为空");
+                }
+            })
         }
     }
 </script>
