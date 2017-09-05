@@ -13,6 +13,13 @@
 <!--JSSDK分享接口BEGIN-->
 var domain = [[${domain}]],customerId= [[${customerId}]],sourceUserId= [[${sourceUserId}]];
 var info = eval([[${info}]]);
+//过滤单引号和回车
+info.title = info.title.replace('\'','');
+info.title = info.title.replace('\r','');
+info.title = info.title.replace('\n','');
+info.introduce = info.introduce.replace('\'','');
+info.introduce = info.introduce.replace('\r','');
+info.introduce = info.introduce.replace('\n','');
 document.write('<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>');
 document.write('<script type="text/javascript" src="http://m' + domain + '/Weixin/JsSdk/RegConfig.aspx?customerid=' + customerId+ '&debug=0"></script>');
 document.write('<script src="http://m' + domain + '/Weixin/JsSdk/wxShare.js?20150112"></script>');
