@@ -1,15 +1,13 @@
 package com.huotu.scrm.web.controller.site;
 
 import com.huotu.scrm.common.ienum.UserType;
+import com.huotu.scrm.service.entity.config.CustomerConfig;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.exception.ApiResultException;
-import com.huotu.scrm.service.model.statisticinfo.DayFollowNumInfo;
-import com.huotu.scrm.service.model.statisticinfo.DayScoreInfo;
-import com.huotu.scrm.service.model.statisticinfo.DayScoreRankingInfo;
-import com.huotu.scrm.service.model.statisticinfo.DayVisitorNumInfo;
 import com.huotu.scrm.service.model.info.InfoModel;
-import com.huotu.scrm.service.model.statisticinfo.StatisticalInformation;
+import com.huotu.scrm.service.model.statisticinfo.*;
+import com.huotu.scrm.service.repository.config.CustomerConfigRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.infoextension.InfoExtensionService;
@@ -20,7 +18,10 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -39,6 +40,8 @@ public class InfoExtensionController extends SiteBaseController {
     private UserRepository userRepository;
     @Autowired
     private InfoConfigureRepository infoConfigureRepository;
+    @Autowired
+    private CustomerConfigRepository customerConfigRepository;
 
     /**
      * 进入资讯状态（普通会员：进入资讯推广 小伙伴：进入推广中心）
@@ -58,6 +61,7 @@ public class InfoExtensionController extends SiteBaseController {
         List<InfoModel> infoModels = infoExtensionService.findInfo(user);
         setInfoImg(infoModels);
         model.addAttribute("infoModes", infoModels);
+        model.addAttribute("customerId",user.getCustomerId());
         if (user.getUserType() == UserType.normal) {//普通会员
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
             model.addAttribute("infoConfigure", infoConfigure);
@@ -73,6 +77,18 @@ public class InfoExtensionController extends SiteBaseController {
             model.addAttribute("status", status);
             model.addAttribute("customerId", user.getCustomerId());
             return "infoextension/info_center";
+        }
+    }
+
+    @RequestMapping("/extension/getIntroducePage")
+    public String getIntroducePage(@RequestParam Long customerId, HttpServletResponse response) throws IOException {
+        CustomerConfig customerConfig = customerConfigRepository.findOne(customerId);
+        if(customerConfig != null && !StringUtils.isEmpty(customerConfig.getPageOfPartners())){
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().write(customerConfig.getPageOfPartners());
+            return null;
+        }else{
+            return "info/empty_introduce";
         }
     }
 

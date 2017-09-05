@@ -123,11 +123,15 @@
                     <h5>其他</h5>
                 </div>
                 <div class="ibox-content">
-                    <div style="padding-top: 5px">
+                    <div style="padding-top: 5px;clear: both;">
                         <label class="col-sm-2 control-label">资讯推广链接:</label>
-                        <input name="infoIntroduceUrl" style="width: 500px" th:value="${infoConfigure.infoIntroduceUrl}">
+                        <input id="infoIntroduceUrl" style="width: 500px">
                     </div>
                     <br/>
+                    <!--<div style="padding-top: 5px;clear: both;">
+                        <label class="col-sm-2 control-label">资讯推广链接:</label>
+                        <input name="infoIntroduceUrl" style="width: 500px" th:value="${infoConfigure.infoIntroduceUrl}">
+                    </div>-->
                     <div class="form-group">
                         <div class="col-sm-8 col-sm-offset-5">
                             <button class="btn btn-success btn-submit" type="button" id="infoSubmit"
@@ -154,7 +158,9 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/summernote/summernote-zh-CN.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+    var introducePage = /*[[@{/site/extension/getIntroducePage}]]*/ "/site/extension/getIntroducePage";
+    $("#infoIntroduceUrl").val(window.location.origin + introducePage);
     function getFormJson(frm) {
         var o = {};
         var a = $(frm).serializeArray();
