@@ -45,8 +45,7 @@ public class ApiServiceImpl implements ApiService {
         sb = sb.append(customer.getSubDomain()).append(SysConstant.COOKIE_DOMAIN)
                 .append("/OAuth2/XiangzhangAuthorize.aspx")
                 .append("?customerid=").append(customerId)
-                .append("&redirecturl=").append(redirectUrl)
-                .append("?customerid=").append(customerId);
+                .append("&redirecturl=").append(redirectUrl);
         log.info("login url:" + sb.toString());
         return sb.toString();
     }
