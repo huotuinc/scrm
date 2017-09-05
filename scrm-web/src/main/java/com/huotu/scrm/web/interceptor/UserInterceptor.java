@@ -56,8 +56,6 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         String userIdValue = CookieUtils.getCookieVal(request, userIdKey);
         if (StringUtils.isEmpty(userIdValue)) {
             //调用商城接口
-            // TODO: 2017-07-12 等待测试
-            String userLoginUrl = apiService.userLogin(Long.valueOf(customerId), request.getRequestURL().toString());
             Map<String, String[]> requestParameterMap =  request.getParameterMap();
             String origin = requestParameterMap.entrySet().stream()
                     .map(pair -> {
@@ -68,8 +66,9 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
                         }
                     })
                     .collect(Collectors.joining("&"));
+            String userLoginUrl = apiService.userLogin(Long.valueOf(customerId), request.getRequestURL().toString() + "?"+ origin);
 
-            response.sendRedirect(userLoginUrl+origin);
+            response.sendRedirect(userLoginUrl);
             return false;
         }
         userIdValue = URLDecoder.decode(userIdValue, "UTF-8");
