@@ -159,7 +159,7 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
-    var introducePage = /*[[@{/site/extension/getIntroducePage}]]*/ "/site/extension/getIntroducePage";
+    var introducePage = /*[[@{/site/extension/getInfoExtension}]]*/ "/site/extension/getInfoExtension";
     $("#infoIntroduceUrl").val(window.location.origin + introducePage);
     function getFormJson(frm) {
         var o = {};
