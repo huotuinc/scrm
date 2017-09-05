@@ -125,7 +125,7 @@
                 <div class="ibox-content">
                     <div style="padding-top: 5px;clear: both;">
                         <label class="col-sm-2 control-label">资讯推广链接:</label>
-                        <input id="infoIntroduceUrl" style="width: 500px">
+                        <span id="infoIntroduceUrl" style="padding-top: 6px;display: block;">123</span>
                     </div>
                     <br/>
                     <!--<div style="padding-top: 5px;clear: both;">
@@ -160,7 +160,7 @@
 
 <script type="text/javascript" th:inline="javascript">
     var introducePage = /*[[@{/site/extension/getInfoExtension(customerId=${customerId})}]]*/ "/site/extension/getInfoExtension?customerId=4421";
-    $("#infoIntroduceUrl").val(window.location.origin + introducePage);
+    $("#infoIntroduceUrl").text(window.location.origin + introducePage);
     function getFormJson(frm) {
         var o = {};
         var a = $(frm).serializeArray();
