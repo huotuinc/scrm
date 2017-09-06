@@ -121,6 +121,13 @@ public class InfoController extends MallBaseController {
                 info.setMallImageUrl(imgUri.toString());
             }
         }
+        try {
+            model.addAttribute("mallSite",staticResourceService.getResource(StaticResourceService.huobanmallMode,""));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        model.addAttribute("customerId",customerId);
         model.addAttribute("info", info);
         return "info/info_edit";
     }

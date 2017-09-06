@@ -19,7 +19,7 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.6/summernote.css" rel="stylesheet">
     <!--<base target="_blank">-->
 </head>
-<body class="gray-bg">
+<body class="gray-bg" th:attr="customerId=${customerId},mallSite=${mallSite}" customerId="4421" >
 <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
 <!--/*@thymesVar id="goodsName" type="java.lang.String"*/-->
 <div class="wrapper wrapper-content">
@@ -29,7 +29,7 @@
         </div>
         <div class="ibox-content">
             <form class="form-horizontal" name="editSaveInfo" id="editSaveInfo" th:action="@{/mall/info/saveInfo}" method="post">
-                <input type="hidden" name="id" value="" th:value="${info.id}"/>
+                <input id="infoId" type="hidden" name="id" value="" th:value="${info.id}"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">资讯标题</label>
                     <div class="col-sm-6">
@@ -155,8 +155,43 @@
                 ['height', ['height']],
                 ['insert', ['picture', 'video']],
                 ['codeview',['codeview']]
-            ]
+            ],
+            callbacks: {
+                onImageUpload: function (files,editor,$editors) { //the onImageUpload API
+                    img = sendFile(files[0],editor,$editors);
+                }
+            },
+
         });
+        function sendFile(file,editor,$editors) {
+            data = new FormData();
+            data.append("btnFile", file);
+            console.log(data);
+            var mallSite = $('body').attr('mallSite');
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/mall/common/upload",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if(data.code==200){
+
+                        editor.insertImage($editors,data.fileUrl);
+//                        $("#summernote").summernote('insertImage', data.fileUrl, function ($image) {
+//                            $image.attr('src', data.fileUrl);
+//                        });
+//                        $("#summernote").summernote('insertImage', data.fileUrl, file.name());
+                    }
+                    // the insertImage API
+                },
+                error:function(data){
+                    console.log(data);
+                }
+            });
+        }
+
         // 在键盘按下并释放及提交后验证提交表单
         $("#editSaveInfo").validate({
 
