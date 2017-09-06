@@ -15,8 +15,8 @@
           th:href="@{../../resources/css/weui.min-xz-diy.css}"/>
     <title>资讯详情</title>
     <style>
-        img {
-            width:100%;
+        .utext-content img {
+            max-width: 100%;
         }
     </style>
 </head>
@@ -53,7 +53,7 @@
         <section>
             <img src="../../resources/images/111.png" th:src="${info.imageUrl}" width="100%">
 
-            <div th:utext="${info.getContent()}">
+            <div th:utext="${info.getContent()}" class="utext-content">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                     quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
