@@ -138,8 +138,9 @@
 <!---->
 
 <script type="text/javascript">
+    var infoDetail;
     $(function () {
-        $("#summerNote").summernote({
+        infoDetail = $("#summerNote").summernote({
             height: 300,
             minHeight: 200,
             maxHeight: 400,
@@ -177,14 +178,8 @@
                 processData: false,
                 success: function(data) {
                     if(data.code==200){
-
-                        editor.insertImage($editors,data.fileUrl);
-//                        $("#summernote").summernote('insertImage', data.fileUrl, function ($image) {
-//                            $image.attr('src', data.fileUrl);
-//                        });
-//                        $("#summernote").summernote('insertImage', data.fileUrl, file.name());
+                        infoDetail.summernote('insertImage', data.fileUrl);
                     }
-                    // the insertImage API
                 },
                 error:function(data){
                     console.log(data);
