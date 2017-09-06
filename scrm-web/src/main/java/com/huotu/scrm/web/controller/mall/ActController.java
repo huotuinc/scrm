@@ -69,12 +69,13 @@ public class ActController extends MallBaseController {
      * @return
      */
     @RequestMapping("/act/detail")
-    public String getActDetail(@RequestParam(required = false, defaultValue = "0") Long actId, Model model) {
+    public String getActDetail(@RequestParam(required = false, defaultValue = "0") Long actId,@ModelAttribute("customerId") Long customerId, Model model) {
         Activity activity = new Activity();
         if (actId != 0) {
             activity = activityService.findByActId(actId);
         }
         model.addAttribute("activity", activity);
+        model.addAttribute("customerId",customerId);
         return "activity/activity_detail";
     }
 
