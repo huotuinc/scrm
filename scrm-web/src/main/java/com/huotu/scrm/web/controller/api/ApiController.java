@@ -10,8 +10,11 @@
 package com.huotu.scrm.web.controller.api;
 
 import com.huotu.scrm.common.SysConstant;
+import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.exception.ApiResultException;
 import com.huotu.scrm.service.repository.info.InfoRepository;
+import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,11 +36,14 @@ public class ApiController {
     private InfoRepository infoRepository;
     @Autowired
     private StaticResourceService staticResourceService;
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * 资讯分享引用脚本
-     * @param customerId 商户ID
-     * @param infoId 资讯主键
+     *
+     * @param customerId   商户ID
+     * @param infoId       资讯主键
      * @param sourceUserId 资讯来源用户ID
      * @return js文件
      */
@@ -45,26 +51,34 @@ public class ApiController {
     public ModelAndView infoShare(
             @RequestParam(value = "customerId") Long customerId,
             @RequestParam(value = "infoId") Long infoId,
-            @RequestParam(value = "sourceUserId") Long sourceUserId){
+            @RequestParam(value = "sourceUserId") Long sourceUserId) {
         ModelAndView model = new ModelAndView();
-        Info info = infoRepository.findOneByIdAndCustomerIdAndIsDisableFalse(infoId,customerId);
-        if(info != null){
-            //设置图片
-            if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
-                URI imgUri = null;
-                try {
-                    imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
+        Info info = infoRepository.findOneByIdAndCustomerIdAndIsDisableFalse(infoId, customerId);
+        if (info != null) {
+            //查询当前用户的类型
+            UserType readUserType = userRepository.findUserTypeById(sourceUserId);
+            //判断资讯对该类型用户是否启用
+            if (!((readUserType == UserType.normal) && info.isStatus() && info.isExtend())) {
+                model.setViewName("api/info_empty.js");
+            } else {
+                //设置图片
+                if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
+                    URI imgUri = null;
+                    try {
+                        imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                    info.setMallImageUrl(imgUri != null ? imgUri.toString() : null);
                 }
-                info.setMallImageUrl(imgUri != null ? imgUri.toString() : null);
+                model.setViewName("api/info_share.js");
+                model.addObject("customerId", customerId);
+                model.addObject("info", info);
+                model.addObject("sourceUserId", sourceUserId);
+                model.addObject("domain", SysConstant.COOKIE_DOMAIN);
             }
-            model.setViewName("api/info_share.js");
-            model.addObject("customerId",customerId);
-            model.addObject("info",info);
-            model.addObject("sourceUserId",sourceUserId);
-            model.addObject("domain", SysConstant.COOKIE_DOMAIN);
-        }else {
+
+        } else {
             model.setViewName("api/info_empty.js");
         }
         return model;
