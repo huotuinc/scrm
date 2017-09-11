@@ -57,7 +57,8 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label">游戏消耗积分:</label>
                     <div class="col-sm-3">
-                        <input type="number" placeholder="游戏消耗积分" class="form-control" maxlength="10" id="gameCostlyScore"
+                        <input type="number" placeholder="游戏消耗积分" class="form-control" maxlength="10"
+                               id="gameCostlyScore"
                                th:value="${activity.gameCostlyScore}" name="gameCostlyScore" required>
                     </div>
                 </div>
@@ -68,7 +69,7 @@
                         <div class="ibox-content no-padding">
                             <input type="hidden" name="ruleDesc" id="ruleDescContent" th:value="${activity.ruleDesc}"
                             >
-                            <div style="display: none;" class="js_summerNote" id="ruleDesc"
+                            <div style="display: none;" class="rule_summerNote" id="ruleDesc"
                                  th:utext="${activity.ruleDesc}">
                             </div>
                         </div>
@@ -80,14 +81,14 @@
                         <div class="ibox-content no-padding">
                             <input type="hidden" name="rateDesc" id="rateDescContent" th:value="${activity.rateDesc}"
                                    required>
-                            <div style="display: none;" class="js_summerNote" id="rateDesc"
+                            <div style="display: none;" class="rate_summerNote" id="rateDesc"
                                  th:utext="${activity.rateDesc}"
                             >
                             </div>
                         </div>
                     </div>
                 </div>
-                <div  class="form-group">
+                <div class="form-group">
                     <div class="col-sm-8 col-sm-offset-5">
                         <button class="btn btn-sm btn-success" type="button" onclick="actDetailHandler.screen()">保存
                         </button>
@@ -114,12 +115,15 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 <script type="text/javascript">
+    var ruleDetail;
+    var rateDetail;
+    var customerId = [[${customerId}]];
     $("#actTime").on('cancel.daterangepicker', function () {
         $("#actTime").val("");
         $("#startDate").val("");
         $("#endDate").val("");
     });
-    $('#actTime').on('apply.daterangepicker', function(ev, picker) {
+    $('#actTime').on('apply.daterangepicker', function (ev, picker) {
         $(this).val(picker.startDate.format('YYYY-MM-DD HH:mm:ss') + ' - ' + picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
         $('#startDate').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
         $("#endDate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
@@ -172,7 +176,7 @@
             rateDesc: "required",
             startDate: "required",
             endDate: "required",
-            gameCostlyScore: { min: 1}
+            gameCostlyScore: {min: 1}
 
         },
         messages: {
@@ -205,13 +209,39 @@
             }
             $("#actDetail").valid();
             $("#actDetail").submit();
+        },
+        sendFile: function (file, editor, $editors, type) {
+            var data = new FormData();
+            data.append("btnFile", file);
+            data.append("customerId", customerId);
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/common/upload",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (data.result == 1) {
+                        if (type == 0) {
+                            ruleDetail.summernote('insertImage', data.fileUrl);
+                        } else {
+                            rateDetail.summernote('insertImage', data.fileUrl);
+                        }
+                    }
+                },
+                error: function (data) {
+                    hot.tip.error("上传图片失败！");
+                }
+            })
         }
     }
-        $('.js_summerNote').summernote({
+    $(function () {
+        ruleDetail = $('.rule_summerNote').summernote({
             height: 300,
             minHeight: 200,
             maxHeight: 400,
-            focus:true,
+            focus: true,
             lang: 'zh-CN',
             toolbar: [
                 // [groupName, [list of button]]
@@ -221,9 +251,40 @@
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
-                ['insert',['picture']]
-            ]
+                ['insert', ['picture']],
+                ['codeview', ['codeview']]
+            ],
+            callbacks: {
+                onImageUpload: function (files, editor, $editors) { //the onImageUpload API
+                    actDetailHandler.sendFile(files[0], editor, $editors, 0);
+                }
+            }
         });
+        rateDetail = $('.rate_summerNote').summernote({
+            height: 300,
+            minHeight: 200,
+            maxHeight: 400,
+            focus: true,
+            lang: 'zh-CN',
+            toolbar: [
+                // [groupName, [list of button]]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['insert', ['picture']],
+                ['codeview', ['codeview']]
+            ],
+            callbacks: {
+                onImageUpload: function (files, editor, $editors) { //the onImageUpload API
+                    actDetailHandler.sendFile(files[0], editor, $editors, 1);
+                }
+            }
+        });
+    });
+
 </script>
 </body>
 </html>

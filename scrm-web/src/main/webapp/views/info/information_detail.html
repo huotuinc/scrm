@@ -14,7 +14,14 @@
     <link rel="stylesheet" type="text/css" href="../../resources/css/weui.min-xz-diy.css"
           th:href="@{../../resources/css/weui.min-xz-diy.css}"/>
     <title>资讯详情</title>
+    <style>
+        .utext-content img {
+            max-width: 100%;
+            display: block;
+        }
+    </style>
 </head>
+
 <body class="grbg">
 <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
 <!--/*@thymesVar id="headImages" type="java.lang.List<scrm.service.entity.info.InfoBrowse>"*/-->
@@ -45,13 +52,14 @@
 
     <article style="margin-top:10px;" class="weui_article">
         <section>
-            <img src="../../resources/images/111.png" th:src="${info.imageUrl}" width="100%">
+            <!--<img src="../../resources/images/111.png" th:src="${info.imageUrl}" width="100%">-->
 
-            <div th:utext="${info.getContent()}">
+            <div th:utext="${info.getContent()}" class="utext-content">
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
                     quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat. Duis aute</p>
+                <img src="../../resources/images/111.png" th:src="${info.imageUrl}" width="1000px">
 
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                     tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,

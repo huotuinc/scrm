@@ -49,13 +49,6 @@ public class InfoDetailController extends SiteBaseController {
                              @RequestParam(value = "sourceUserId", required = false) Long sourceUserId,
                              Model model) throws URISyntaxException, ApiResultException {
         Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
-        //查询当前用户的类型
-        UserType readUserType = userRepository.findUserTypeById(userId);
-        //判断资讯对该类型用户是否启用
-        if(!((readUserType == UserType.normal && info.isStatus()) || (readUserType == UserType.buddy && info.isExtend()))){
-            throw new ApiResultException("资讯未开启");
-        }
-        //sourceUserId 不为空 时表示用户在浏览别人转发出来的资讯，这时候需要记录浏览记录。
         if(sourceUserId != null){
             infoTurnInRecord(infoId, userId, sourceUserId, customerId);
         }

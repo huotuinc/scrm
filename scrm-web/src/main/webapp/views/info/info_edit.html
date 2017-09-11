@@ -169,6 +169,7 @@
             data.append("btnFile", file);
             console.log(data);
             var mallSite = $('body').attr('mallSite');
+            hot.loading.show();
             $.ajax({
                 data: data,
                 type: "POST",
@@ -179,10 +180,13 @@
                 success: function(data) {
                     if(data.code==200){
                         infoDetail.summernote('insertImage', data.fileUrl);
+                        hot.tip.success("图片上传成功");
+                    }else {
+                        hot.loading.hide();
                     }
                 },
                 error:function(data){
-                    console.log(data);
+                    hot.loading.hide();
                 }
             });
         }
