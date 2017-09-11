@@ -169,8 +169,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
             viewResolver.setOrder(1);
             viewResolver.setViewNames(new String[]{"*.js", "*.JS"});
             viewResolver.setCharacterEncoding("UTF-8");
-            viewResolver.setContentType("application/javascript;charset=utf-8" +
-                    "");
+            viewResolver.setContentType("application/javascript;charset=utf-8");
             return viewResolver;
         }
     }
