@@ -58,24 +58,23 @@ public class ApiController {
             //查询当前用户的类型
             UserType readUserType = userRepository.findUserTypeById(sourceUserId);
             //判断资讯对该类型用户是否启用
-            if (!((readUserType == UserType.normal) && info.isStatus() && info.isExtend())) {
-                model.setViewName("api/info_empty.js");
-            } else {
-                //设置图片
-                if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
-                    URI imgUri = null;
-                    try {
-                        imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
-                    }
-                    info.setMallImageUrl(imgUri != null ? imgUri.toString() : null);
+
+            //设置图片
+            if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
+                URI imgUri = null;
+                try {
+                    imgUri = staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl());
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
                 }
-                model.setViewName("api/info_share.js");
-                model.addObject("customerId", customerId);
-                model.addObject("info", info);
+                info.setMallImageUrl(imgUri != null ? imgUri.toString() : null);
+            }
+            model.setViewName("api/info_share.js");
+            model.addObject("customerId", customerId);
+            model.addObject("info", info);
+            model.addObject("domain", SysConstant.COOKIE_DOMAIN);
+            if (!((readUserType == UserType.normal) && info.isStatus() && info.isExtend())) {
                 model.addObject("sourceUserId", sourceUserId);
-                model.addObject("domain", SysConstant.COOKIE_DOMAIN);
             }
 
         } else {
