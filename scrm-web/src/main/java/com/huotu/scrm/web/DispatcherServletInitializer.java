@@ -9,7 +9,7 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 /**
  * Created by helloztt on 2017-06-27.
  */
-public class DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class   DispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     protected Class<?>[] getRootConfigClasses() {
         return new Class<?>[]{MVCConfig.class};
     }
