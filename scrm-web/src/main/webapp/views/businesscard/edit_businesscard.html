@@ -31,12 +31,17 @@
             overflow: hidden;
             margin: 0 auto;
         }
+
+        .sl-ka li {
+            height: 40px;
+            line-height: 40px;
+        }
     </style>
 </head>
 
 <body class="ddbg" js-data-update-url="updateBusinessCardInfo">
     <div style="position: fixed;top:0px;left:0px;right:0px; z-index:99999">
-    <div class="sl-ka superli" style="font-size:12px">
+    <div class="sl-ka superli" style="font-size:14px">
         <ul class="sl-float-ul ka  pjf_5ge custom-paixu">
             <li >
                 <a th:href="@{${siteDomain}+'/UserCenter/UserSetting.aspx?customerid='+${businessCard.getCustomerId()}}">
