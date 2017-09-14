@@ -27,7 +27,7 @@ var scrm_wxShare_template = [
     "wxShare.InitShare({",
     "    title: '" + info.title + "',",
     "    desc: '"+info.introduce + "',",
-    "    link: '" + window.location.href + '&sourceUserId=' + sourceUserId + "',",//分享网址，一般在这里添加自己想要的参数
+    "    link: '" + window.location.href + ((sourceUserId!=undefined && sourceUserId != 'null' && sourceUserId!='') ? ('&sourceUserId=' + sourceUserId) :'') + "',",//分享网址，一般在这里添加自己想要的参数
     "    img_url: '"+info.mallImageUrl + "'",
     "});"
 ].join("\n");

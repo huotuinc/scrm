@@ -2,9 +2,13 @@ package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.web.CommonTestBase;
 import com.huotu.scrm.web.controller.page.mall.TestIndexPage;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -88,6 +92,15 @@ public class TestControllerTest extends CommonTestBase {
                 .andExpect(model().attributeExists("title"))
                 .andExpect(view().name("test"));
 
+    }
+
+    @Test
+    public void wxVerifyCode() throws Exception{
+        String randomCode = UUID.randomUUID().toString().replaceAll("-","").substring(0,10);
+        MvcResult result = mockMvc.perform(get("/MP_verify_" + randomCode + ".txt").accept("*/*"))
+                .andDo(print())
+                .andExpect(status().isOk()).andReturn();
+        Assert.assertEquals(randomCode,result.getResponse().getContentAsString());
     }
 
     @Test

@@ -13,9 +13,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
@@ -24,7 +24,6 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -63,9 +62,27 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON));
-        converters.add(converter);
+    }
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        //移除原来的Jackson Converter 加入新的MessageConverter
+        HttpMessageConverter mappingJackson2XmlHttpMessageConverter;
+        HttpMessageConverter mappingJackson2HttpMessageConverter = null;
+        if (converters.stream().anyMatch(converter -> converter instanceof MappingJackson2HttpMessageConverter)) {
+            mappingJackson2HttpMessageConverter = converters.stream()
+                    .filter(converter -> converter instanceof MappingJackson2HttpMessageConverter)
+                    .findAny().get();
+            converters.remove(mappingJackson2HttpMessageConverter);
+        }
+        if (converters.stream().anyMatch(converter -> converter instanceof MappingJackson2XmlHttpMessageConverter)) {
+            mappingJackson2XmlHttpMessageConverter = converters.stream()
+                    .filter(converter -> converter instanceof MappingJackson2XmlHttpMessageConverter)
+                    .findAny().get();
+            converters.remove(mappingJackson2XmlHttpMessageConverter);
+        }
+        if (mappingJackson2HttpMessageConverter != null && !converters.contains(mappingJackson2HttpMessageConverter))
+            converters.add(mappingJackson2HttpMessageConverter);
     }
 
     @Override
@@ -152,8 +169,7 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
             viewResolver.setOrder(1);
             viewResolver.setViewNames(new String[]{"*.js", "*.JS"});
             viewResolver.setCharacterEncoding("UTF-8");
-            viewResolver.setContentType("application/javascript;charset=utf-8" +
-                    "");
+            viewResolver.setContentType("application/javascript;charset=utf-8");
             return viewResolver;
         }
     }
