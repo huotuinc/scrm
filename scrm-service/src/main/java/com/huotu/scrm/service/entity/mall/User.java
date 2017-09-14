@@ -121,5 +121,10 @@ public class User {
      */
     @Column(name="UB_UserRealName",length = 100)
     private String realName;
+    /**
+     * 标记是否已经绑定了手机，0：表示已经绑定，1：表示未绑定
+     */
+    @Column(name="UB_MobileToBeBind")
+    private Integer mobileToBeBind;
 
 }
