@@ -48,6 +48,7 @@ public class InfoController extends MallBaseController {
         informationSearch.setCustomerId(customerId);
         Page<Info> page = infoService.infoList(informationSearch);
         model.addAttribute("infoListsPage", page);
+        model.addAttribute("customerId", customerId);
         return "info/info_list";
     }
 
@@ -109,7 +110,7 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping(value = "/info/edit")
     public String infoEditPage(@RequestParam(required = false, defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId) {
-        Info info = infoService.findOneById(id);
+        Info info = infoService.findOneByIdAndCustomerId(id,customerId);
         if (info.getId() != null && info.getId() != 0) {
             if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
                 URI imgUri = null;
