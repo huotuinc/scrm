@@ -40,6 +40,13 @@
     .fonthui .grsbg{ background-color: #2c2f38}
     .ddbg{ background-color: #e6e6e6}
     .detial-xx{ color: #707070; font-weight: normal}
+
+    .right-dds{background: #6b6e75;
+        border-radius: 10px 0px 0px 10px;
+        padding: 0px 12px 0px 15px;
+        margin: 0px 0px; text-align: right; position: absolute;
+        right:0px; }
+    .weui_cells.kl .weui_cell{ padding-left: 30px}
 </style>
 <body class="ddbg" js-cancelfollow-url="cancelFollow">
 
@@ -50,10 +57,10 @@
 <div class="fonthui" style="position:relative">
     <div class="right-xx">
         <p class="right-dd js-data-numberOfFollower" th:text="${'已关注'+businessCard.getNumberOfFollowers()+'人'}"></p>
-        <p class="right-dd js-data-cancelFollow-div"><a href="javascript:void(0);" style="color: #fff;" th:if="${businessCard.getIsFollowed()}" id="cancelFollow" >取消关注</a> </p>
+        <p class="right-dds js-data-cancelFollow-div"><a href="javascript:void(0);" style="color: #fff;" th:if="${businessCard.getIsFollowed()}" id="cancelFollow" >取消关注</a> </p>
     </div>
-    <div class="grsbg" style="padding:3rem 0px 1rem 0px;  ">
-        <img style="background-color: #fff; border:2px #fff solid;border-radius: 100%; width:60%;  height:60%;" th:src="${businessCard.getBusinessCard().getAvatar()}? (${businessCard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg' : ${businessCard.getBusinessCard().getAvatar()} ): '../../resources/images/mrtx.jpg'" >
+    <div class="grsbg" style="padding:2rem 0px 1rem 0px;  ">
+        <img style="background-color: #fff; border:3px #fff solid;border-radius: 100%; width:60%;  height:60%;" th:src="${businessCard.getBusinessCard().getAvatar()}? (${businessCard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg' : ${businessCard.getBusinessCard().getAvatar()} ): '../../resources/images/mrtx.jpg'" >
         <div class="grsname" style="margin-top: 8px">
             <p><b style="color: #fff; font-size: 1.2rem; line-height: 1;  font-weight: normal" th:text="${businessCard.getSalesman().getRealName()}">淡淡的</b>
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}">♂</i>&lt;!&ndash;♂切换性别&ndash;&gt;-->
@@ -63,7 +70,7 @@
 
                 <!--<i style="margin-left: 5px;color: #fff" th:text="${businessCard.getSalesman().getUserGender().equals('男')}?'♂':  ${businessCard.getSalesman().getUserGender().equals('女')} ? '♀': ${businessCard.getSalesman().getUserGender()}"></i>-->
             </p>
-            <p><b style="color: #fff;font-size: 0.9rem; font-weight: normal" th:text="${businessCard.getBusinessCard().getJob()}">说的是对的</b></p>
+            <p style="padding: 0px 30px;"><b style="color: #fff;font-size: 1.2rem; line-height: 1; font-weight: normal;" th:text="${businessCard.getBusinessCard().getJob()}">说的是对的</b></p>
         </div>
     </div>
 </div>
@@ -99,17 +106,15 @@
             <p>
                 <span style="display: block; width: 50px;float: left">地&nbsp;&nbsp;址&nbsp;&nbsp;</span>
 
-                <span style="float: left; width: 250px;" class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyAddress()}"></span></p>
+                <span style="float: left; width: 250px;line-height: 1.5;margin-top: -3px;" class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyAddress()}"></span></p>
         </div>
     </a>
 </div>
 
 </div>
 <!--end-->
-<p style="clear:both; height: 24px;"></p>
-<div style="text-align: center; width: 100%; padding: 6px 0px; background-color: #2c2f38; color: #dde0e7; font-size: 14px;">香樟大道技术支持
-</div>
-<p style="clear:both"></p>
+<p style="clear:both; height: 14px;"></p>
+
 
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js" ></script>
 <script>
