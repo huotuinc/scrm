@@ -186,23 +186,7 @@ public class BusinessCardController extends SiteBaseController {
         }
         SalesmanBusinessCard salesmanBusinessCard = businessCardService.getSalesmanBusinessCard(customerId, salesmanId, followerId);
         model.addAttribute("businessCard", salesmanBusinessCard);
-        model.addAttribute("mobile", getMobile(salesmanBusinessCard));
         return "businesscard/show_businesscard";
-    }
-
-    /**
-     * 获得用户绑定的手机号码
-     * @param salesmanBusinessCard
-     * @return
-     */
-    protected String getMobile( SalesmanBusinessCard salesmanBusinessCard) {
-        if (salesmanBusinessCard == null || salesmanBusinessCard.getSalesman() == null || salesmanBusinessCard.getSalesman().getMobileToBeBind()==null || salesmanBusinessCard.getSalesman().getMobileToBeBind() != 0)
-            return "";
-        String mobile = salesmanBusinessCard.getSalesman().getLoginName();
-        if (!StringUtils.isEmpty(salesmanBusinessCard.getSalesman().getUserMobile())) {
-            mobile = salesmanBusinessCard.getSalesman().getUserMobile();
-        }
-        return mobile;
     }
 
     /***

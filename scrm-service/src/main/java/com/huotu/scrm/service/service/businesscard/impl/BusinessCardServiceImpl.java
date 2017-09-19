@@ -62,8 +62,24 @@ public class BusinessCardServiceImpl implements BusinessCardService {
         userBusinessCard.setNumberOfFollowers(numberOfFollowers);
         userBusinessCard.setFollowerId(followerId);
         userBusinessCard.setIsFollowed(isFollowed);
+        userBusinessCard.setMobile( getMobile(user) );
 
         return userBusinessCard;
+    }
+
+    /**
+     * 获得用户绑定的手机号码
+     * @param user
+     * @return
+     */
+    protected String getMobile( User user) {
+        if (user == null || user.getMobileToBeBind()==null || user.getMobileToBeBind() != 0)
+            return "";
+        String mobile = user.getLoginName();
+        if (!StringUtils.isEmpty(user.getUserMobile())) {
+            mobile = user.getUserMobile();
+        }
+        return mobile;
     }
 
 
