@@ -47,6 +47,7 @@ public class InfoDetailController extends SiteBaseController {
                              @RequestParam(value = "infoId") Long infoId,
                              @RequestParam(value = "customerId") Long customerId,
                              @RequestParam(value = "sourceUserId", required = false) Long sourceUserId,
+                             @RequestParam(value = "type", required = false) int type,
                              Model model) throws URISyntaxException, ApiResultException {
         Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
         if(sourceUserId != null){
@@ -57,7 +58,9 @@ public class InfoDetailController extends SiteBaseController {
         }
         int turnNum = infoBrowseService.countByTurn(infoId);
         model.addAttribute("infoTurnNum", turnNum);
-        int browse = infoBrowseService.countByBrowse(infoId);
+        int browse = (type == 0) ? (infoBrowseService.countByBrowse(infoId)) :
+                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,sourceUserId))
+                ;
         model.addAttribute("browseNum", browse);
         model.addAttribute("customerId", customerId);
         model.addAttribute("userId", userId);

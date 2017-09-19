@@ -67,9 +67,25 @@ public interface InfoBrowseService {
 
 
     /**
+     * 根据获取某个用户转发资讯的浏览量
+     * @param infoId
+     * @param sourceUserId
+     * @return
+     */
+    int countBrowseByInfoIdAndSourceUserId(Long infoId,Long sourceUserId);
+
+    /**
      * 前端浏览头像
      * @param infoBrowseAndTurnSearch
      * @return
      */
     Page<InfoBrowse> infoSiteBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
+
+
+    /**
+     * 前端浏览头像
+     * @param infoBrowseAndTurnSearch
+     * @return
+     */
+    Page<InfoBrowse> infoSiteBrowseRecordBySourceUserId(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 }
