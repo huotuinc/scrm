@@ -5,6 +5,7 @@ import com.huotu.scrm.service.entity.mall.User;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 /**
@@ -34,4 +35,9 @@ public class SalesmanBusinessCard implements Serializable {
      * 关注者Id
      */
     private Long followerId;
+    /***
+     * 销售员的手机号码
+     * 由于商城那边的UB_UserMobile字段的内容不一定是手机号码，需要处理
+     */
+    private String mobile;
 }

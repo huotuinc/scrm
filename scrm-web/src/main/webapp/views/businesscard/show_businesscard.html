@@ -76,9 +76,9 @@
 </div>
 <!--end-->
 <div class="weui_cells weui_cells_access kl" style="background-color: transparent;">
-    <a class="weui_cell" th:href="${'tel:'+mobile}">
+    <a class="weui_cell" th:href="${'tel:'+ businessCard.getMobile() }">
         <div class="weui_cell_bd weui_cell_primary">
-            <p>手&nbsp;&nbsp;机&nbsp;&nbsp;<span class="detial-xx" th:text="${mobile}"></span><i class="title-num">一键保存或拨号</i></p>
+            <p>手&nbsp;&nbsp;机&nbsp;&nbsp;<span class="detial-xx" th:text="${businessCard.getMobile()}"></span><i class="title-num">一键保存或拨号</i></p>
         </div>
     </a>
     <a class="weui_cell" href="javascript:void(0)">
