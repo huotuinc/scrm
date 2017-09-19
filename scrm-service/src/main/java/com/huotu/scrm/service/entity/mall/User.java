@@ -126,5 +126,4 @@ public class User {
      */
     @Column(name="UB_MobileToBeBind")
     private Integer mobileToBeBind;
-
 }
