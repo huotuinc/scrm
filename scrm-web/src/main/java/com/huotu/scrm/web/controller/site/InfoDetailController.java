@@ -70,6 +70,7 @@ public class InfoDetailController extends SiteBaseController {
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
         infoBrowseAndTurnSearch.setInfoId(infoId);
+        infoBrowseAndTurnSearch.setSourceUserId(sourceUserId);
         Page<InfoBrowse> page;
         if(type==0){
             page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
@@ -90,7 +91,9 @@ public class InfoDetailController extends SiteBaseController {
                              Model model) throws URISyntaxException {
 
         //浏览记录
-        int browse = infoBrowseService.countByBrowse(infoId);
+        int browse = (type == 0) ? (infoBrowseService.countByBrowse(infoId)) :
+                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,userId))
+                ;
         model.addAttribute("browseNum", browse);
 
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
