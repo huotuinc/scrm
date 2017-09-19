@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -62,20 +63,31 @@ public class InfoDetailController extends SiteBaseController {
                 ;
         model.addAttribute("browseNum", browse);
         model.addAttribute("customerId", customerId);
+        model.addAttribute("sourceUserId", sourceUserId);
         model.addAttribute("userId", userId);
         model.addAttribute("info", info);
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
         infoBrowseAndTurnSearch.setInfoId(infoId);
-        Page<InfoBrowse> page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        Page<InfoBrowse> page;
+        if(type==0){
+            page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        }else {
+            page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
+        }
+        model.addAttribute("type",type);
         model.addAttribute("headImages", page.getContent());
         return "info/information_detail";
     }
 
     @RequestMapping(value = "/info/infoDetailBrowse")
     @SuppressWarnings("Duplicates")
-    public String infoBrowse(@ModelAttribute("userId") Long userId, Long infoId, Long customerId, Model model) throws URISyntaxException {
+    public String infoBrowse(@ModelAttribute("userId") Long userId,
+                             Long infoId,
+                             Long customerId,
+                             @RequestParam(value = "type", required = false, defaultValue = "0") int type,
+                             Model model) throws URISyntaxException {
 
         //浏览记录
         int browse = infoBrowseService.countByBrowse(infoId);
@@ -85,7 +97,13 @@ public class InfoDetailController extends SiteBaseController {
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(1);
         infoBrowseAndTurnSearch.setInfoId(infoId);
-        Page<InfoBrowse> page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        Page<InfoBrowse> page;
+        if(type==0){
+            page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        }else {
+            page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
+        }
+
         model.addAttribute("headImages", page.getContent());
         return "info/browse_log";
     }
