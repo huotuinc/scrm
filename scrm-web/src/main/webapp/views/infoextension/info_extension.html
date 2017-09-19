@@ -53,8 +53,9 @@
 </html>
 <script type="text/javascript" th:inline="javascript">
     var customerId = /*[[${customerId}]]*/ "1";
+    var userId = /*[[${userId}]]*/ "1";
     function getInfoDetail(infoId, customerId) {
-        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
+        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId+"&type=1&sourceId="+userId;
     }
     function getIntroduce(){
         window.location.href = window.location.origin + (/*[[@{/site/extension/getIntroducePage(customerId=${customerId})}]]*/ "/site/extension/getIntroducePage");

@@ -65,7 +65,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         } else {//小伙伴
             infoList = infoRepository.findByCustomerIdAndIsExtendTrueAndIsDisableFalseOrderByCreateTimeDesc(user.getCustomerId());
         }
-        return getInfoModes(infoList,user);
+        return getInfoModes(infoList,user,false);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             return new ArrayList<>();
         }
         List<Info> infoList = infoRepository.findInfoList(infoIdList);
-        return getInfoModes(infoList,user);
+        return getInfoModes(infoList,user,true);
     }
 
     @Override
@@ -281,10 +281,15 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * 统计访客量（资讯转发浏览量）
      *
      * @param infoId 资讯ID
+     * @param user
+     * @param status
      * @return
      */
-    private int getVisitorNum(Long infoId,Long sourceId) {
-        return infoBrowseRepository.countByInfoIdAndSourceUserId(infoId,sourceId);
+    private int getVisitorNum(Long infoId,User user,boolean status) {
+        if(status){
+            return infoBrowseRepository.countByInfoIdAndSourceUserId(infoId,user.getId());
+        }
+        return infoBrowseRepository.countByInfoId(infoId);
     }
 
     /**
@@ -366,7 +371,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @param user 用户
      * @return
      */
-    private List<InfoModel> getInfoModes(List<Info> infoList,User user) {
+    private List<InfoModel> getInfoModes(List<Info> infoList,User user,boolean status) {
         List<InfoModel> infoModels = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         infoList.forEach(info -> {
@@ -377,7 +382,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             infoModel.setIntroduce(info.getIntroduce());
             infoModel.setThumbnailImageUrl(info.getImageUrl());
             infoModel.setForwardNum(getInfoForwardNum(info.getId()));
-            infoModel.setVisitorNum(getVisitorNum(info.getId(),user.getId()));
+            infoModel.setVisitorNum(getVisitorNum(info.getId(),user,status));
             infoModel.setReleaseTime(DateUtil.compareLocalDateTime(info.getCreateTime(), now));
             infoModels.add(infoModel);
         });

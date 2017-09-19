@@ -38,9 +38,9 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (environment.acceptsProfiles("development")) {
             //小伙伴，非销售员
-//            request.setAttribute("userId", 1058823);
+            request.setAttribute("userId", 1058823);
             //小伙伴且是销售员
-            request.setAttribute("userId", 1058510);
+//            request.setAttribute("userId", 1058510);
             //普通会员
 //            request.setAttribute("userId",1043079);
 

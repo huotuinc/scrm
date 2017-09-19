@@ -1,6 +1,5 @@
 package com.huotu.scrm.web.controller.site;
 
-import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.exception.ApiResultException;
@@ -47,7 +46,7 @@ public class InfoDetailController extends SiteBaseController {
                              @RequestParam(value = "infoId") Long infoId,
                              @RequestParam(value = "customerId") Long customerId,
                              @RequestParam(value = "sourceUserId", required = false) Long sourceUserId,
-                             @RequestParam(value = "type", required = false) int type,
+                             @RequestParam(value = "type", required = false,defaultValue = "0") int type,
                              Model model) throws URISyntaxException, ApiResultException {
         Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
         if(sourceUserId != null){
