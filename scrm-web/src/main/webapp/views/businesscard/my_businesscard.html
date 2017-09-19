@@ -28,7 +28,7 @@
           <i class="title-name" th:if="${businesscard.getBusinessCard().getJob()}" th:text="${businesscard.getBusinessCard().getJob()}"></i>
         </h4>
       <p class="weui_media_desc" th:text="${businesscard.getBusinessCard().getCompanyName()}? ${'企业名称：'+ businesscard.getBusinessCard().getCompanyName()} :'企业名称：'"></p>
-        <p class="weui_media_desc" th:text="${ businesscard.getSalesman().getUserMobile()} ? ${'联系方式：'+businesscard.getSalesman().getUserMobile()} : '联系方式：' "></p>
+        <p class="weui_media_desc" th:text="${ businesscard.getMobile() } ? ${'联系方式：'+businesscard.getMobile()} : '联系方式：' "></p>
       </div>
     </div>
   </div>
