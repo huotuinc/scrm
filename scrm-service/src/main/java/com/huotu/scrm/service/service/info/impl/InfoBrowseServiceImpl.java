@@ -135,6 +135,11 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     }
 
     @Override
+    public int countBrowseByInfoIdAndSourceUserId(Long infoId, Long sourceUserId) {
+        return infoBrowseRepository.countByInfoIdAndSourceUserId(infoId,sourceUserId);
+    }
+
+    @Override
     public Page<InfoBrowse> infoSiteBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable;
         if (infoBrowseAndTurnSearch.getSourceType() == 0) {
@@ -144,6 +149,17 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         }
         return infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), pageable);
 
+    }
+
+    @Override
+    public Page<InfoBrowse> infoSiteBrowseRecordBySourceUserId(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        Pageable pageable;
+        if (infoBrowseAndTurnSearch.getSourceType() == 0) {
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 6);
+        } else {
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 12);
+        }
+        return infoBrowseRepository.findAllBrowseRecordBySourceUserIdByLimit(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), infoBrowseAndTurnSearch.getSourceUserId(),pageable);
     }
 
 
