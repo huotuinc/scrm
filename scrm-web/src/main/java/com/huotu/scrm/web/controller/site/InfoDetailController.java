@@ -64,6 +64,7 @@ public class InfoDetailController extends SiteBaseController {
                 ;
         model.addAttribute("browseNum", browse);
         model.addAttribute("customerId", customerId);
+        model.addAttribute("sourceUserId", sourceUserId);
         model.addAttribute("userId", userId);
         model.addAttribute("info", info);
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
@@ -76,7 +77,7 @@ public class InfoDetailController extends SiteBaseController {
         }else {
             page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
         }
-
+        model.addAttribute("type",type);
         model.addAttribute("headImages", page.getContent());
         return "info/information_detail";
     }
@@ -103,6 +104,7 @@ public class InfoDetailController extends SiteBaseController {
         }else {
             page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
         }
+
         model.addAttribute("headImages", page.getContent());
         return "info/browse_log";
     }

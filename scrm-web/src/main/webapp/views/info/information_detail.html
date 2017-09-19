@@ -100,11 +100,16 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/ajaxfileupload/ajaxfileupload.js"></script>
 <script th:src="@{/api/infoShare.js(customerId=${customerId},infoId=${info.id},sourceUserId=${userId})}"></script>
 <script>
+    var type = /*[[${type}]]*/ "0";
+    var sourceUserId = /*[[${"sourceUserId"}]]*/ "1";
     var infoListHandler = {
         seeMore:function (obj) {
+
+
             var infoId = $(obj).attr("infoId");
             var customerId = $(obj).attr("customerId");
-            window.location.href = "infoDetailBrowse?infoId="+infoId+"&customerId="+customerId;
+            window.location.href = "infoDetailBrowse?infoId="+infoId+"&customerId="+customerId+"&type="+type+"&sourceUserId="
+            +sourceUserId;
         }
     }
 </script>
