@@ -1,14 +1,11 @@
 package com.huotu.scrm.service.service.info;
 
-import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 /**
  * Created by luohaibo on 2017/7/12.

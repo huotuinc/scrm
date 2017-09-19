@@ -65,7 +65,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         } else {//小伙伴
             infoList = infoRepository.findByCustomerIdAndIsExtendTrueAndIsDisableFalseOrderByCreateTimeDesc(user.getCustomerId());
         }
-        return getInfoModes(infoList);
+        return getInfoModes(infoList,user);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             return new ArrayList<>();
         }
         List<Info> infoList = infoRepository.findInfoList(infoIdList);
-        return getInfoModes(infoList);
+        return getInfoModes(infoList,user);
     }
 
     @Override
@@ -283,8 +283,8 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @param infoId 资讯ID
      * @return
      */
-    private int getVisitorNum(Long infoId) {
-        return infoBrowseRepository.countByInfoId(infoId);
+    private int getVisitorNum(Long infoId,Long sourceId) {
+        return infoBrowseRepository.countByInfoIdAndSourceUserId(infoId,sourceId);
     }
 
     /**
@@ -363,9 +363,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * 获取资讯model
      *
      * @param infoList 资讯列表
+     * @param user 用户
      * @return
      */
-    private List<InfoModel> getInfoModes(List<Info> infoList) {
+    private List<InfoModel> getInfoModes(List<Info> infoList,User user) {
         List<InfoModel> infoModels = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         infoList.forEach(info -> {
@@ -376,7 +377,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             infoModel.setIntroduce(info.getIntroduce());
             infoModel.setThumbnailImageUrl(info.getImageUrl());
             infoModel.setForwardNum(getInfoForwardNum(info.getId()));
-            infoModel.setVisitorNum(getVisitorNum(info.getId()));
+            infoModel.setVisitorNum(getVisitorNum(info.getId(),user.getId()));
             infoModel.setReleaseTime(DateUtil.compareLocalDateTime(info.getCreateTime(), now));
             infoModels.add(infoModel);
         });

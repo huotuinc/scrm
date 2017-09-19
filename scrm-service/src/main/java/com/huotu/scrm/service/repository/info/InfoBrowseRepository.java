@@ -73,9 +73,11 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     @Query("SELECT COUNT(DISTINCT t.sourceUserId) from InfoBrowse t WHERE t.infoId=?1")
     int totalTurnCount(Long InfoId);
 
-    //获取资讯浏览浏览量
+    //获取资讯浏览量
     int countByInfoId(Long infoId);
 
+    //获取某个用户资讯浏览量
+    int countByInfoIdAndSourceUserId(Long infoId,Long sourceUserId);
 
     /**
      * 根据转发用户ID和转发日期查询转发咨询的访问量
