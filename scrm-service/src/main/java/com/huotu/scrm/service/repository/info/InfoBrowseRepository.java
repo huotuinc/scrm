@@ -55,7 +55,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,u.weixinImageUrl," +
             "u.wxNickName,t.customerId) " +
             "from InfoBrowse t left join User u  on  u.id = t.readUserId " +
-            "where t.infoId=?1 and t.customerId=?2 order by t.browseTime")
+            "where t.infoId=?1 and t.customerId=?2 order by t.browseTime DESC ")
     Page<InfoBrowse> findAllBrowseRecordByLimit(Long infoId, Long customerId, Pageable pageable);
 
 
@@ -69,7 +69,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,u.weixinImageUrl," +
             "u.wxNickName,t.customerId) " +
             "from InfoBrowse t left join User u  on  u.id = t.readUserId " +
-            "where t.infoId=?1 and t.customerId=?2 and t.sourceUserId=?3 order by t.browseTime")
+            "where t.infoId=?1 and t.customerId=?2 and t.sourceUserId=?3 order by t.browseTime DESC")
     Page<InfoBrowse> findAllBrowseRecordBySourceUserIdByLimit(Long infoId, Long customerId, Long sourceUserId,Pageable pageable);
 
     //删除转发记录
