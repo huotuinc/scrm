@@ -20,15 +20,33 @@
         position: absolute;
         right: 0px;
         color: #fff;
-        top: 17px;
+        top:0px;
     }
     .right-dd{
-        background: #9d9d9d;
+        background: #6b6e75;
         border-radius: 10px 0px 0px 10px;
         padding: 0px 10px 0px 20px;
         margin:15px 0px;
     }
+   .kl .weui_cell:before{ border-top: none;}
+    .kl.weui_cells:after {
+        border-bottom: none;
+    }
+    .kl.weui_cells:before {
+        border-top: none;
+    }
+    .title-num{ border-radius: 40px; padding: 8px 8px;margin-top: -10px; }
+    .kl.weui_cells{ line-height: 1}
+    .fonthui .grsbg{ background-color: #2c2f38}
+    .ddbg{ background-color: #e6e6e6}
+    .detial-xx{ color: #707070; font-weight: normal}
 
+    .right-dds{background: #6b6e75;
+        border-radius: 10px 0px 0px 10px;
+        padding: 0px 12px 0px 15px;
+        margin: 0px 0px; text-align: right; position: absolute;
+        right:0px; }
+    .weui_cells.kl .weui_cell{ padding-left: 30px}
 </style>
 <body class="ddbg" js-cancelfollow-url="cancelFollow">
 
@@ -39,62 +57,64 @@
 <div class="fonthui" style="position:relative">
     <div class="right-xx">
         <p class="right-dd js-data-numberOfFollower" th:text="${'已关注'+businessCard.getNumberOfFollowers()+'人'}"></p>
-        <p class="right-dd js-data-cancelFollow-div"><a href="javascript:void(0);" style="color: #fff" id="cancelFollow" th:if="${businessCard.getIsFollowed()}">取消关注</a> </p>
+        <p class="right-dds js-data-cancelFollow-div"><a href="javascript:void(0);" style="color: #fff;" th:if="${businessCard.getIsFollowed()}" id="cancelFollow" >取消关注</a> </p>
     </div>
-    <div class="grsbg" style="padding: 20px 0px;">
-        <img style="border-radius: 50px; width: 100px;  height: 100px;" th:src="${businessCard.getBusinessCard().getAvatar()}? (${businessCard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg' : ${businessCard.getBusinessCard().getAvatar()} ): '../../resources/images/mrtx.jpg'" >
-        <div class="grsname">
-            <p><b style="color: #fff;" th:text="${businessCard.getSalesman().getRealName()}"></b>
+    <div class="grsbg" style="padding:2rem 0px 1rem 0px;  ">
+        <img style="background-color: #fff; border:3px #fff solid;border-radius: 100%; width:60%;  height:60%;" th:src="${businessCard.getBusinessCard().getAvatar()}? (${businessCard.getBusinessCard().getAvatar().isEmpty()} ? '../../resources/images/mrtx.jpg' : ${businessCard.getBusinessCard().getAvatar()} ): '../../resources/images/mrtx.jpg'" >
+        <div class="grsname" style="margin-top: 8px">
+            <p><b style="color: #fff; font-size: 1.2rem; line-height: 1;  font-weight: normal" th:text="${businessCard.getSalesman().getRealName()}">淡淡的</b>
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}">♂</i>&lt;!&ndash;♂切换性别&ndash;&gt;-->
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('女')}">♀</i>-->
                 <!--<i style="margin-left:5px; color: #fff" th:if="${businessCard.getSalesman().getUserGender().equals('男')}" th:text="${businessCard.getSalesman().getUserGender()}"></i>-->
-                <i style="margin-left: 5px;color: #fff" th:text="${businessCard.getSalesman().getUserGender().equals('男')}? '♂' : (${businessCard.getSalesman().getUserGender().equals('女')} ? '♀' : ${businessCard.getSalesman().getUserGender()}) "></i>
+                <i style="margin-left: 5px;color: #fff;font-size: 1.2rem;" th:text="${businessCard.getSalesman().getUserGender().equals('男')}? '♂' : (${businessCard.getSalesman().getUserGender().equals('女')} ? '♀' : ${businessCard.getSalesman().getUserGender()}) "></i>
 
                 <!--<i style="margin-left: 5px;color: #fff" th:text="${businessCard.getSalesman().getUserGender().equals('男')}?'♂':  ${businessCard.getSalesman().getUserGender().equals('女')} ? '♀': ${businessCard.getSalesman().getUserGender()}"></i>-->
             </p>
-            <p><b style="color: #fff;" th:text="${businessCard.getBusinessCard().getJob()}"></b></p>
+            <p style="padding: 0px 30px;"><b style="color: #fff;font-size: 1.2rem; line-height: 1; font-weight: normal;" th:text="${businessCard.getBusinessCard().getJob()}">说的是对的</b></p>
         </div>
     </div>
 </div>
 <!--end-->
-<div class="weui_cells weui_cells_access">
-    <a class="weui_cell" th:href="${'tel:'+businessCard.getSalesman().getUserMobile()}">
+<div class="weui_cells weui_cells_access kl" style="background-color: transparent;">
+    <a class="weui_cell" th:href="${'tel:'+ businessCard.getMobile() }">
         <div class="weui_cell_bd weui_cell_primary">
-            <p>手机：<span class="detial-xx" th:text="${businessCard.getSalesman().getUserMobile()}"></span><i class="title-num">一键保存或拨号</i></p>
+            <p>手&nbsp;&nbsp;机&nbsp;&nbsp;<span class="detial-xx" th:text="${businessCard.getMobile()}"></span><i class="title-num">一键保存或拨号</i></p>
         </div>
     </a>
     <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
-            <p>电话：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getTel()}"></span></p>
+            <p>电&nbsp;&nbsp;话&nbsp;&nbsp;<span class="detial-xx" th:text="${businessCard.getBusinessCard().getTel()}"></span></p>
+        </div>
+    </a>
+    <!--<a class="weui_cell" href="javascript:void(0)">-->
+        <!--<div class="weui_cell_bd weui_cell_primary">-->
+            <!--<p>QQ：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getQq()}"></span></p>-->
+        <!--</div>-->
+    <!--</a>-->
+    <a class="weui_cell" href="javascript:void(0)">
+        <div class="weui_cell_bd weui_cell_primary">
+            <p>邮&nbsp;&nbsp;箱&nbsp;&nbsp;<span class="detial-xx" th:text="${businessCard.getBusinessCard().getEmail()}"></span></p>
         </div>
     </a>
     <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
-            <p>QQ：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getQq()}"></span></p>
+            <p>企&nbsp;&nbsp;业&nbsp;&nbsp;<span class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyName()}"></span></p>
         </div>
     </a>
     <a class="weui_cell" href="javascript:void(0)">
         <div class="weui_cell_bd weui_cell_primary">
-            <p>邮箱：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getEmail()}"></span></p>
-        </div>
-    </a>
-    <a class="weui_cell" href="javascript:void(0)">
-        <div class="weui_cell_bd weui_cell_primary">
-            <p>企业：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyName()}"></span></p>
-        </div>
-    </a>
-    <a class="weui_cell" href="javascript:void(0)">
-        <div class="weui_cell_bd weui_cell_primary">
-            <p>地址：<span class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyAddress()}"></span></p>
+            <p>
+                <span style="display: block; width: 50px;float: left">地&nbsp;&nbsp;址&nbsp;&nbsp;</span>
+
+                <span style="float: left; width: 250px;line-height: 1.5;margin-top: -3px;" class="detial-xx" th:text="${businessCard.getBusinessCard().getCompanyAddress()}"></span></p>
         </div>
     </a>
 </div>
 
 </div>
 <!--end-->
+<p style="clear:both; height: 14px;"></p>
 
-
-<p style="height:60px; clear:both"></p>
 
 <script src="http://resali.huobanplus.com/cdn/jquery/2.2.4/jquery.min.js" ></script>
 <script>

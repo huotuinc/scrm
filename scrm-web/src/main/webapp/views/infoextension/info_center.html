@@ -48,7 +48,7 @@
                 <p class="joinus">伙伴们,分享下列资讯可以可以赚取积分哦！积分可以抵现购买。</p>
             </div>
             <div class="weui_panel weui_panel_access" th:each="infoModel:${infoModes}"
-                 th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+                 th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+',0)'">
                 <div class="weui_panel_bd">
                     <div class="weui_media_box weui_media_appmsg">
                         <div class="weui_media_hd">
@@ -74,7 +74,7 @@
                         </div>
                         <div class="left-font">
                             <button type="button" class="tuiguang"
-                                    th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+                                    th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+',0)'">
                                 推广
                             </button>
                         </div>
@@ -133,7 +133,7 @@
             <p style="height: 10px"></p>
             <div class="xzdd-list">
                 <div class="weui_panel" th:each="infoModel:${forwardInfoList}"
-                     th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+                     th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+',1)'">
                     <div class="weui_panel_bd">
                         <div class="weui_media_box weui_media_text">
                             <div class="weui_media_hd">
@@ -170,7 +170,8 @@
 <script src="http://resali.huobanplus.com/cdn/jquery-weui/0.8.3/jquery-weui.min.js"></script>
 </html>
 <script type="text/javascript">
-    function getInfoDetail(infoId, customerId) {
-        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
+    var userId = [[${userId}]];
+    function getInfoDetail(infoId, customerId,type) {
+        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId+"&type="+type+"&sourceUserId="+userId;
     }
 </script>

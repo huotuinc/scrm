@@ -294,4 +294,49 @@ public class BusinessCardControllerTest extends CommonTestBase {
     public void cancelFollow() throws Exception {
 
     }
+
+//    @Test
+//    public void getMobile() throws Exception{
+//        BusinessCardController businessCardController = new BusinessCardController();
+//        String mobile = businessCardController.getMobile(null);
+//        Assert.assertEquals( "",mobile );
+//
+//        SalesmanBusinessCard salesmanBusinessCard =new SalesmanBusinessCard();
+//        salesmanBusinessCard.setSalesman(null);
+//        mobile = businessCardController.getMobile(salesmanBusinessCard);
+//        Assert.assertEquals("",mobile);
+//
+//        User user = new User();
+//        user.setLoginName(null);
+//        user.setUserMobile(null);
+//        user.setMobileToBeBind(null);
+//        salesmanBusinessCard.setSalesman(user);
+//        mobile = businessCardController.getMobile(salesmanBusinessCard);
+//        Assert.assertEquals("",mobile);
+//
+//        String expected = UUID.randomUUID().toString();
+//        user.setMobileToBeBind(1);
+//        user.setLoginName(expected);
+//        Assert.assertEquals("",mobile);
+//
+//        user.setMobileToBeBind(0);
+//        expected = UUID.randomUUID().toString();
+//        user.setUserMobile("");
+//        user.setLoginName(expected);
+//        mobile = businessCardController.getMobile(salesmanBusinessCard);
+//        Assert.assertEquals(expected , mobile);
+//
+//        expected = UUID.randomUUID().toString();
+//        user.setLoginName( expected );
+//        user.setUserMobile(null);
+//        mobile = businessCardController.getMobile(salesmanBusinessCard);
+//        Assert.assertEquals(expected , mobile);
+//
+//        user.setLoginName(expected);
+//        String expected2 = UUID.randomUUID().toString();
+//        user.setUserMobile( expected2);
+//        mobile = businessCardController.getMobile(salesmanBusinessCard);
+//        Assert.assertEquals(expected2, mobile);
+//
+//    }
 }

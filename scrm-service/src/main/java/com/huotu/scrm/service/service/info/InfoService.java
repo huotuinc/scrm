@@ -20,6 +20,14 @@ public interface InfoService {
      */
     Info findOneByIdAndCustomerId(Long id,Long CustomerId);
 
+
+    /**
+     * 通过ID查找到对应的资讯
+     * @param id
+     * @return
+     */
+    Info findOneById(Long id);
+
     /**
      * 根据Disable字段查询行数
      *

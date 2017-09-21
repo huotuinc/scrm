@@ -62,6 +62,7 @@ public class InfoExtensionController extends SiteBaseController {
         setInfoImg(infoModels);
         model.addAttribute("infoModes", infoModels);
         model.addAttribute("customerId",user.getCustomerId());
+        model.addAttribute("userId",user.getId());
         if (user.getUserType() == UserType.normal) {//普通会员
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(user.getCustomerId());
             model.addAttribute("infoConfigure", infoConfigure);

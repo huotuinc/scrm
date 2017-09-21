@@ -1,6 +1,5 @@
 package com.huotu.scrm.web.controller.site;
 
-import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.exception.ApiResultException;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -47,6 +47,7 @@ public class InfoDetailController extends SiteBaseController {
                              @RequestParam(value = "infoId") Long infoId,
                              @RequestParam(value = "customerId") Long customerId,
                              @RequestParam(value = "sourceUserId", required = false) Long sourceUserId,
+                             @RequestParam(value = "type", required = false,defaultValue = "0") int type,
                              Model model) throws URISyntaxException, ApiResultException {
         Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
         if(sourceUserId != null){
@@ -57,33 +58,56 @@ public class InfoDetailController extends SiteBaseController {
         }
         int turnNum = infoBrowseService.countByTurn(infoId);
         model.addAttribute("infoTurnNum", turnNum);
-        int browse = infoBrowseService.countByBrowse(infoId);
+        int browse = (type == 0) ? (infoBrowseService.countByBrowse(infoId)) :
+                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,sourceUserId))
+                ;
         model.addAttribute("browseNum", browse);
         model.addAttribute("customerId", customerId);
+        model.addAttribute("sourceUserId", sourceUserId);
         model.addAttribute("userId", userId);
         model.addAttribute("info", info);
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
         infoBrowseAndTurnSearch.setInfoId(infoId);
-        Page<InfoBrowse> page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        infoBrowseAndTurnSearch.setSourceUserId(sourceUserId);
+        Page<InfoBrowse> page;
+        if(type==0){
+            page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        }else {
+            page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
+        }
+        model.addAttribute("type",type);
         model.addAttribute("headImages", page.getContent());
         return "info/information_detail";
     }
 
     @RequestMapping(value = "/info/infoDetailBrowse")
     @SuppressWarnings("Duplicates")
-    public String infoBrowse(@ModelAttribute("userId") Long userId, Long infoId, Long customerId, Model model) throws URISyntaxException {
+    public String infoBrowse(@ModelAttribute("userId") Long userId,
+                             Long infoId,
+                             Long customerId,
+                             @RequestParam(value = "type", required = false, defaultValue = "0") int type,
+                             Model model) throws URISyntaxException {
 
         //浏览记录
-        int browse = infoBrowseService.countByBrowse(infoId);
+        int browse = (type == 0) ? (infoBrowseService.countByBrowse(infoId)) :
+                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,userId))
+                ;
         model.addAttribute("browseNum", browse);
 
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(1);
         infoBrowseAndTurnSearch.setInfoId(infoId);
-        Page<InfoBrowse> page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        infoBrowseAndTurnSearch.setSourceUserId(userId);
+        Page<InfoBrowse> page;
+        if(type==0){
+            page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        }else {
+            page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
+        }
+
         model.addAttribute("headImages", page.getContent());
         return "info/browse_log";
     }

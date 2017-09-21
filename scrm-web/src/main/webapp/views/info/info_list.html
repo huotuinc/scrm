@@ -17,7 +17,7 @@
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
 
-<body class="gray-bg" data-unitTest="false" data-prototype="true">
+<body class="gray-bg" data-unitTest="false" data-prototype="true" th:attr="customerId=${customerId}">
 <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
 <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
 <!--/*@thymesVar id="informationSearch" type="com.huotu.scrm.service.model.info.InformationSearch"*/-->
@@ -30,7 +30,7 @@
                 <div>
                     <label class="">资讯筛选</label>
                 </div>
-                <form class="search-panel" method="get" action="#" th:action="@{/mall/info/infoList}" id="searchForm">
+                <form class="search-panel" method="get" action="#" th:action="@{/mall/info/infoList(${customerId})}" id="searchForm">
                     <!--用来传递页码-->
                     <input type="hidden" name="pageNo" value="1" th:value="${informationSearch.pageNo}"/>
                     <div class="ibox-content p-m no-borders">
@@ -223,6 +223,8 @@
         infoListHandler.search(p);
     });
 
+    var customerId=$('body').attr('customerId');
+
     var infoListHandler = {
 
         detailInfo: function (obj) {
@@ -237,7 +239,7 @@
         },
 
         searchAll: function () {
-            window.location.href = "/mall/info/infoList";
+            window.location.href = "/mall/info/infoList?customerId="+customerId;
         },
 
         search: function (pageNo) {
@@ -247,17 +249,17 @@
 
         editInfo: function (obj) {
             var infoId = $(obj).attr("infoId");
-            window.location.href = "/mall/info/edit?id=" + infoId;
+            window.location.href = "/mall/info/edit?id=" + infoId+'&customerId='+customerId;
         },
 
         turnList: function (obj) {
             var infoId = $(obj).attr("infoId");
-            hot.iframeModal("/mall//info/turnRecord?infoId=" + infoId,"750px","700px");
+            hot.iframeModal("/mall//info/turnRecord?infoId=" + infoId+'&customerId='+customerId,"750px","700px");
         },
 
         browseList: function (obj) {
             var infoId = $(obj).attr("infoId");
-            hot.iframeModal("/mall/info/browseRecord?infoId=" + infoId,"750px","700px");
+            hot.iframeModal("/mall/info/browseRecord?infoId=" + infoId+'&customerId='+customerId,"750px","700px");
         },
 
         deleteInfo: function (obj) {
@@ -265,7 +267,8 @@
 
             var infoId = $(obj).attr("infoId");
             hot.ajax("/mall/info/deleteInfo", {
-                id: infoId
+                id: infoId,
+                customerId:customerId
             }, function (result) {
                 if (result.code == 200) {
                     hot.tip.success("删除成功");

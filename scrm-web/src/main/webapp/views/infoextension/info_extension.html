@@ -20,7 +20,7 @@
 </div>
 <div class="xzdd-list">
     <div class="weui_panel" th:each="infoModel:${infoModes}"
-         th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+')'">
+         th:onclick="'javascript:getInfoDetail('+${infoModel.infoId}+','+${infoModel.customerId}+',0)'">
         <div class="weui_panel_bd">
             <div class="weui_media_box weui_media_text">
                 <div class="weui_media_hd">
@@ -53,8 +53,9 @@
 </html>
 <script type="text/javascript" th:inline="javascript">
     var customerId = /*[[${customerId}]]*/ "1";
-    function getInfoDetail(infoId, customerId) {
-        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId;
+    var userId = /*[[${userId}]]*/ "1";
+    function getInfoDetail(infoId, customerId,type) {
+        window.location.href = "/site/info/infoDetail?infoId=" + infoId + "&customerId=" + customerId+"&type="+type+"&sourceUserId="+userId;
     }
     function getIntroduce(){
         window.location.href = window.location.origin + (/*[[@{/site/extension/getIntroducePage(customerId=${customerId})}]]*/ "/site/extension/getIntroducePage");

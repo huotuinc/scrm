@@ -53,6 +53,17 @@ public class InfoServiceImpl implements InfoService {
         return info;
     }
 
+    @Override
+    public Info findOneById(Long id) {
+        Info info;
+        if (id != null && id != 0){
+            info = infoRepository.findOneByIdAndIsDisableFalse(id);
+        }else {
+            info = new Info();
+        }
+        return info;
+    }
+
     public Info infoSave(Info info) {
         Info newInfo;
         if (info.getId() != null && info.getId() != 0) {

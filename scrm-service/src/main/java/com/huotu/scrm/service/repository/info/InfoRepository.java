@@ -18,6 +18,13 @@ public interface InfoRepository extends JpaRepository<Info, Long>, JpaSpecificat
 
     Info findOneByIdAndCustomerIdAndIsDisableFalse(Long id, Long customerId);
 
+    /**
+     * 通过id查找对应资讯
+     * @param id
+     * @return
+     */
+    Info findOneByIdAndIsDisableFalse(Long id);
+
     List<Info> findByTitleLike(String title);
 
     List<Info> findByCustomerIdAndIsStatusTrueAndIsDisableFalseOrderByCreateTimeDesc(Long customerId);

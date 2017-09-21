@@ -1,10 +1,12 @@
 package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.web.CommonTestBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -28,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class InfoControllerTest extends CommonTestBase {
 
     private Long customerId;
+
+    @Autowired
+    InfoService infoService;
 
     @Before
     public void init() {
@@ -105,7 +110,7 @@ public class InfoControllerTest extends CommonTestBase {
     @Test
     public void infoEditPage() throws Exception {
 
-        Info info = mockInfo(customerId);
+        Info info = infoService.findOneById(1L);
     }
 
 

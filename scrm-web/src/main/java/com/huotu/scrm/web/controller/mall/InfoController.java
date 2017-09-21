@@ -48,6 +48,7 @@ public class InfoController extends MallBaseController {
         informationSearch.setCustomerId(customerId);
         Page<Info> page = infoService.infoList(informationSearch);
         model.addAttribute("infoListsPage", page);
+        model.addAttribute("customerId", customerId);
         return "info/info_list";
     }
 
@@ -64,7 +65,7 @@ public class InfoController extends MallBaseController {
     public String infoDetail(@ModelAttribute("customerId") Long customerId,
                              @RequestParam Long infoId,
                              Model model) throws URISyntaxException {
-        Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
+        Info info = infoService.findOneByIdAndCustomerId(infoId,customerId);
         if (!StringUtils.isEmpty(info.getImageUrl())) {
             info.setImageUrl(staticResourceService.getResource(StaticResourceService.huobanmallMode, info.getImageUrl()).toString());
         }
@@ -109,7 +110,7 @@ public class InfoController extends MallBaseController {
      */
     @RequestMapping(value = "/info/edit")
     public String infoEditPage(@RequestParam(required = false, defaultValue = "0") Long id, Model model, @ModelAttribute("customerId") Long customerId) {
-        Info info = infoService.findOneByIdAndCustomerId(id, customerId);
+        Info info = infoService.findOneByIdAndCustomerId(id,customerId);
         if (info.getId() != null && info.getId() != 0) {
             if (info.getImageUrl() != null && !StringUtils.isEmpty(info.getImageUrl())) {
                 URI imgUri = null;
