@@ -31,6 +31,11 @@ public class ApiServiceImpl implements ApiService {
 
     @Override
     public String userLogin(Long customerId, String redirectUrl) {
+        return userLogin(customerId,null,redirectUrl);
+    }
+
+    @Override
+    public String userLogin(Long customerId, Long sourceUserId, String redirectUrl) {
         Customer customer = customerRepository.findOne(customerId);
         if (customer == null) {
             return null;
@@ -44,8 +49,11 @@ public class ApiServiceImpl implements ApiService {
         StringBuilder sb = new StringBuilder("http://");
         sb = sb.append(customer.getSubDomain()).append(SysConstant.COOKIE_DOMAIN)
                 .append("/OAuth2/XiangzhangAuthorize.aspx")
-                .append("?customerid=").append(customerId)
-                .append("&redirecturl=").append(redirectUrl);
+                .append("?customerid=").append(customerId);
+        if(sourceUserId != null){
+            sb.append("&gduid=").append(sourceUserId);
+        }
+        sb.append("&redirecturl=").append(redirectUrl);
         log.info("login url:" + sb.toString());
         return sb.toString();
     }
