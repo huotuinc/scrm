@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 public class UserInterceptor extends HandlerInterceptorAdapter {
     private static final Log log = LogFactory.getLog(ApiServiceImpl.class);
     private static final String CUSTOMER_ID = "customerId";
+    private static final String SOURCE_USER_ID = "sourceUserId";
     public static final String USER_ID_PREFIX = "mem_authcode_";
     public static final String USER_ID_SECRET_KEY = "XjvDhKLvCsm9y7G7";
     @Autowired
@@ -51,22 +52,25 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         if (StringUtils.isEmpty(customerId)) {
             return false;
         }
+        String sourceUserId = request.getParameter(SOURCE_USER_ID);
         //加密的userId
         String userIdKey = USER_ID_PREFIX + customerId;
         String userIdValue = CookieUtils.getCookieVal(request, userIdKey);
         if (StringUtils.isEmpty(userIdValue)) {
             //调用商城接口
-            Map<String, String[]> requestParameterMap =  request.getParameterMap();
+            Map<String, String[]> requestParameterMap = request.getParameterMap();
             String origin = requestParameterMap.entrySet().stream()
                     .map(pair -> {
                         try {
                             return pair.getKey() + "=" + URLDecoder.decode(pair.getValue()[0], "UTF-8");
                         } catch (UnsupportedEncodingException e) {
-                            throw  new IllegalStateException(e);
+                            throw new IllegalStateException(e);
                         }
                     })
                     .collect(Collectors.joining("&"));
-            String userLoginUrl = apiService.userLogin(Long.valueOf(customerId), request.getRequestURL().toString() + "?"+ origin);
+            String userLoginUrl = apiService.userLogin(Long.valueOf(customerId)
+                    , StringUtils.isEmpty(sourceUserId) ? null : Long.parseLong(sourceUserId)
+                    , request.getRequestURL().toString() + "?" + origin);
 
             response.sendRedirect(userLoginUrl);
             return false;

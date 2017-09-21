@@ -18,6 +18,15 @@ public interface ApiService {
     String userLogin(Long customerId, String redirectUrl);
 
     /**
+     * 微信登录，如果用户需要注册，就让它成为 sourceUserId 的下线
+     * @param customerId 商户ID
+     * @param sourceUserId 上线用户
+     * @param redirectUrl 执行成功后跳转的ID
+     * @return
+     */
+    String userLogin(Long customerId, Long sourceUserId, String redirectUrl);
+
+    /**
      * 用户增加积分
      *
      * @param customerId   商户ID
