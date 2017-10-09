@@ -134,6 +134,7 @@
     var pageIndex = [[${infoBrowseAndTurnSearch.pageNo}]];
     var totalPage = [[${infoBrowseListPage.totalPages}]];
     var customerId = [[${customerId}]];
+    var infoId = [[${infoId}]];
     //初始化分页
     var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
@@ -163,7 +164,6 @@
             }, 'post');
         },
         search: function (p) {
-            var infoId = $(obj).attr("infoId");
             window.location.href = "/mall/info/browseRecord?customerId="+customerId+"&pageNo="+p+"&infoId="+infoId;
         },
     }
