@@ -163,7 +163,8 @@
             }, 'post');
         },
         search: function (p) {
-            window.location.href = "/mall/info/browseRecord?customerId="+customerId+"&pageNo="+p;
+            var infoId = $(obj).attr("infoId");
+            window.location.href = "/mall/info/browseRecord?customerId="+customerId+"&pageNo="+p+"&infoId="+infoId;
         },
     }
 
