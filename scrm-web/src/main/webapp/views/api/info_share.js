@@ -23,11 +23,17 @@ info.introduce = info.introduce.replace('\n','');
 document.write('<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>');
 document.write('<script type="text/javascript" src="http://m' + domain + '/Weixin/JsSdk/RegConfig.aspx?customerid=' + customerId+ '&debug=0"></script>');
 document.write('<script src="http://m' + domain + '/Weixin/JsSdk/wxShare.js?20150112"></script>');
+var share_link = window.location.href;
+if(share_link.indexOf("&sourceUserId") > -1){
+    share_link = share_link.substr(0,share_link.indexOf("&sourceUserId"));
+}
+if(sourceUserId!=undefined && sourceUserId != 'null' && sourceUserId!='')
+    share_link += ('&sourceUserId=' + sourceUserId);
 var scrm_wxShare_template = [
     "wxShare.InitShare({",
     "    title: '" + info.title + "',",
     "    desc: '"+info.introduce + "',",
-    "    link: '" + window.location.href + ((sourceUserId!=undefined && sourceUserId != 'null' && sourceUserId!='') ? ('&sourceUserId=' + sourceUserId) :'') + "',",//分享网址，一般在这里添加自己想要的参数
+    "    link: '" + share_link + "',",//分享网址，一般在这里添加自己想要的参数
     "    img_url: '"+info.mallImageUrl + "'",
     "});"
 ].join("\n");
