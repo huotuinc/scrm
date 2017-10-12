@@ -127,6 +127,7 @@ public class InfoDetailController extends SiteBaseController {
         infoBrowse.setSourceUserId(sourceUserId);
         infoBrowse.setReadUserId(userId);
         infoBrowse.setInfoId(infoId);
+        infoBrowse.setCustomerId(customerId);
         try {
             infoBrowseService.infoTurnInSave(infoBrowse, customerId);
         } catch (UnsupportedEncodingException e) {
