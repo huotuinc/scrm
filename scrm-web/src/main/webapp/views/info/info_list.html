@@ -55,10 +55,11 @@
 
                             <div class="orm-group m-r-sm">
                                 <label class="control-label" for="searchCondition">资讯发布时间：</label>
-                                <input type="text" id="publishTimeJs" class="search-panel"
+                                <input type="text" id="publishTimeJs" class="search-panel" style="width: 200px"
                                        placeholder="开始时间-结束时间" required/>
-                                <input type="hidden" id="startDate" name="startDate"/>
-                                <input type="hidden" id="endDate" name="endDate"/>
+                                <!--资讯筛选开始时间-->
+                                <input type="hidden" id="infoStartDate" name="startDate" value=""/>
+                                <input type="hidden" id="infoEndDate" name="endDate" value=""/>
                             </div>
 
                             <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
@@ -242,18 +243,32 @@
     var totalPage = [[${infoListsPage.totalPages}]];
 
 
+    $("#publishTimeJs").on('cancel.daterangepicker', function () {
+        $("#publishTimeJs").val("");
+        $("#infoStartDate").val("");
+        $("#infoEndDate").val("");
+    });
+
+    $('#publishTimeJs').on('apply.daterangepicker', function (ev, picker) {
+        $('#infoStartDate').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+        $('#infoStartDate').val(start.format('YYYY-MM-DD HH:mm:ss'));
+        $("#endDate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
 
 
     $('#publishTimeJs').daterangepicker({
-        "singleDatePicker": true,
-        "timePicker": false, //是否显示小时和分钟
-        "format": 'YYYY-MM-DD', //控件中from和to 显示的日期格式
-        "showISOWeekNumbers": true,
-        "showDropdowns":true,
-
-    }, function(start,end,label) {
-        $('#publishTimeJs input').val(end.format('YYYY-MM-DD'));
+        locale: {
+            format: 'YYYY-MM-DD',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        },
+    }, function(start, end, label) {
+        console.log("New date range selected: " + start.format('YYYY-MM-DD') + " to " + end.format('YYYY-MM-DD') + " (predefined range: " + label + ")");
+        $('#infoStartDate').val(start.format('YYYY-MM-DD HH:mm:ss'));
+        $("#infoEndDate").val(end.format('YYYY-MM-DD HH:mm:ss'));
     });
+
+
 
 
 

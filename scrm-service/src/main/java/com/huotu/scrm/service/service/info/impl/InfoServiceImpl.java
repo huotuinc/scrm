@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,12 +108,15 @@ public class InfoServiceImpl implements InfoService {
             if (!StringUtils.isEmpty(informationSearch.getSearchCondition())){
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + informationSearch.getSearchCondition() + "%"));
             }
+            if((!StringUtils.isEmpty(informationSearch.getStartDate()))&&(!StringUtils.isEmpty(informationSearch.getEndDate()))){
+                list.add(criteriaBuilder.greaterThanOrEqualTo(root.get("createTime").as(LocalDateTime.class),informationSearch.getStartDate()));
+                list.add(criteriaBuilder.lessThanOrEqualTo(root.get("createTime").as(LocalDateTime.class),informationSearch.getEndDate()));
+            }
             list.add(criteriaBuilder.equal(root.get("customerId").as(Long.class), informationSearch.getCustomerId()));
             list.add(criteriaBuilder.equal(root.get("isDisable").as(boolean.class), informationSearch.getDisable()));
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }, pageable);
     }
-
 
 }
