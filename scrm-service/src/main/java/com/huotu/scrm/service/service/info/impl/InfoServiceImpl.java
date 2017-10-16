@@ -2,6 +2,7 @@ package com.huotu.scrm.service.service.info.impl;
 
 import com.huotu.scrm.service.model.info.InformationSearch;
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.service.info.InfoService;
 import org.apache.commons.logging.Log;
@@ -31,7 +32,8 @@ public class InfoServiceImpl implements InfoService {
 
     @Autowired
     private InfoRepository infoRepository;
-
+    @Autowired
+    private InfoBrowseRepository infoBrowseRepository;
 
 
     public long infoListsCount(boolean disable) {
@@ -103,7 +105,9 @@ public class InfoServiceImpl implements InfoService {
         Pageable pageable = new PageRequest(informationSearch.getPageNo()-1, informationSearch.getPageSize(),new Sort(
             new Sort.Order(Sort.Direction.DESC,"createTime")
         ));
-        return infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+
+        Page<Info> infoPage = infoRepository.findAll((root, criteriaQuery, criteriaBuilder) -> {
+
             List<Predicate> list = new ArrayList<>();
             if (!StringUtils.isEmpty(informationSearch.getSearchCondition())){
                 list.add(criteriaBuilder.like(root.get("title").as(String.class), "%" + informationSearch.getSearchCondition() + "%"));
@@ -117,6 +121,10 @@ public class InfoServiceImpl implements InfoService {
             Predicate[] p = new Predicate[list.size()];
             return criteriaBuilder.and(list.toArray(p));
         }, pageable);
+        infoPage.getContent().stream().forEach(s->{
+            s.setInfoBrowseNum(infoBrowseRepository.countByInfoId(s.getId()));
+        });
+        return infoPage;
     }
 
 }

@@ -97,8 +97,8 @@
                                 <th>创建时间</th>
                                 <th>发布状态</th>
                                 <th>推广状态</th>
+                                <th>浏览量</th>
                                 <th>操作</th>
-                                <th>浏览人数</th>
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
@@ -137,6 +137,9 @@
                                 </td>
                                 <td th:style="${info.isStatus()}?'color:green':'color:red;'" th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
                                 <td th:style="${info.isExtend()}?'color:green':'color:red;'" th:text="${info.isExtend()?'是':'否'}">是</td>
+                                <td th:text="${info.infoBrowseNum}">
+                                    1
+                                </td>
                                 <td>
                                     <span class="cursor-point" onclick="infoListHandler.editInfo(this)"
                                           th:attr="infoId=${info.id}">
