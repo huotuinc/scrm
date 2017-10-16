@@ -59,11 +59,8 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
                 } else {
                     addMallScore(customerId, infoBrowse, infoConfigure, score);
                 }
-
             }
-
             flag = true;
-
         } else {
             InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
                     infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());

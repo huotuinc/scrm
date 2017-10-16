@@ -40,9 +40,30 @@
                                 <input type="text" class="form-control input-sm mb10" id="searchCondition"
                                        name="searchCondition"
                                        th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>
-                                <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
-                                <button type="button" class="btn btn-sm  btn-success js-searchAll">显示全部</button>
+
+
+
+
+
+
+
+                                <!--<input type="text" class="form-control input-sm mb10" id="publishTimeJs"-->
+                                       <!--name="searchCondition"-->
+                                       <!--th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>-->
+
                             </div>
+
+                            <div class="orm-group m-r-sm">
+                                <label class="control-label" for="searchCondition">资讯发布时间：</label>
+                                <input type="text" id="publishTimeJs" class="search-panel"
+                                       placeholder="开始时间-结束时间" required/>
+                                <input type="hidden" id="startDate" name="startDate"/>
+                                <input type="hidden" id="endDate" name="endDate"/>
+                            </div>
+
+                            <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
+                            <button type="button" class="btn btn-sm  btn-success js-searchAll">显示全部</button>
+
                         </div>
                     </div>
                 </form>
@@ -76,6 +97,7 @@
                                 <th>发布状态</th>
                                 <th>推广状态</th>
                                 <th>操作</th>
+                                <th>浏览人数</th>
                             </tr>
                             </thead>
                             <tbody th:remove="all-but-first">
@@ -212,10 +234,29 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 
 <script type="text/javascript">
     var pageIndex = [[${informationSearch.pageNo}]];
     var totalPage = [[${infoListsPage.totalPages}]];
+
+
+
+
+    $('#publishTimeJs').daterangepicker({
+        "singleDatePicker": true,
+        "timePicker": false, //是否显示小时和分钟
+        "format": 'YYYY-MM-DD', //控件中from和to 显示的日期格式
+        "showISOWeekNumbers": true,
+        "showDropdowns":true,
+
+    }, function(start,end,label) {
+        $('#publishTimeJs input').val(end.format('YYYY-MM-DD'));
+    });
+
+
+
     //初始化分页
     var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
