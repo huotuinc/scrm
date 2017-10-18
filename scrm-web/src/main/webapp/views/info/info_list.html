@@ -40,20 +40,9 @@
                                 <input type="text" class="form-control input-sm mb10" id="searchCondition"
                                        name="searchCondition"
                                        th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>
-
-
-
-
-
-
-
-                                <!--<input type="text" class="form-control input-sm mb10" id="publishTimeJs"-->
-                                       <!--name="searchCondition"-->
-                                       <!--th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>-->
-
                             </div>
 
-                            <div class="orm-group m-r-sm">
+                            <div class="orm-group m-r-sm" style="margin-top: 5px">
                                 <label class="control-label" for="searchCondition">资讯发布时间：</label>
                                 <input type="text" id="publishTimeJs" class="search-panel" style="width: 200px"
                                        placeholder="开始时间-结束时间" required/>
@@ -83,10 +72,15 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
+                        <button id="outInfoDataJs" class="btn btn-sm btn-w-m btn-success js-edit" type="button"
+                                th:attr="infoId=0">导出EXCEL
+                        </button>
+
                         <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-edit" type="button"
                                 th:attr="infoId=0">添加资讯
                         </button>
                     </div>
+
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
@@ -270,11 +264,7 @@
         $('#infoStartDate').val(start.format('YYYY-MM-DD HH:mm:ss'));
         $("#infoEndDate").val(end.format('YYYY-MM-DD HH:mm:ss'));
     });
-
-
-
-
-
+    
     //初始化分页
     var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
@@ -313,7 +303,7 @@
 
         turnList: function (obj) {
             var infoId = $(obj).attr("infoId");
-            hot.iframeModal("/mall//info/turnRecord?infoId=" + infoId+'&customerId='+customerId,"750px","700px");
+            hot.iframeModal("/mall/info/turnRecord?infoId=" + infoId+'&customerId='+customerId,"750px","700px");
         },
 
         browseList: function (obj) {
@@ -322,8 +312,6 @@
         },
 
         deleteInfo: function (obj) {
-
-
             var infoId = $(obj).attr("infoId");
             hot.ajax("/mall/info/deleteInfo", {
                 id: infoId,
