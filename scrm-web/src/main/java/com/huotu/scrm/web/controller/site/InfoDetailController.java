@@ -50,7 +50,7 @@ public class InfoDetailController extends SiteBaseController {
                              @RequestParam(value = "type", required = false,defaultValue = "0") int type,
                              Model model) throws URISyntaxException, ApiResultException {
         Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
-        if(sourceUserId != null){
+        if(sourceUserId != null && sourceUserId !=0){
             infoTurnInRecord(infoId, userId, sourceUserId, customerId);
         }
         if (!StringUtils.isEmpty(info.getImageUrl())) {
