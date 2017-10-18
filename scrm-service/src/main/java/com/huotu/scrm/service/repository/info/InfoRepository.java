@@ -31,7 +31,7 @@ public interface InfoRepository extends JpaRepository<Info, Long>, JpaSpecificat
 
     List<Info> findByCustomerIdAndIsExtendTrueAndIsDisableFalseOrderByCreateTimeDesc(Long customerId);
 
-    @Query("select t from Info t where t.id  in ?1 order by t.createTime desc ")
+    @Query("select t from Info t where t.id in ?1")
     List<Info> findInfoList(List<Long> infoIdList);
 }
 
