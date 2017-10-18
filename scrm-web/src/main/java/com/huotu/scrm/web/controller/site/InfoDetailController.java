@@ -70,7 +70,7 @@ public class InfoDetailController extends SiteBaseController {
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
         infoBrowseAndTurnSearch.setInfoId(infoId);
-        infoBrowseAndTurnSearch.setSourceUserId(sourceUserId);
+        infoBrowseAndTurnSearch.setSourceUserId(userId);
         Page<InfoBrowse> page;
         if(type==0){
             page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
