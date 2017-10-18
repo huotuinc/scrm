@@ -65,6 +65,8 @@ public class InfoBrowseController extends MallBaseController{
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         Page<InfoBrowse> page =  infoBrowseService.infoBrowseRecord(infoBrowseAndTurnSearch);
         model.addAttribute("infoBrowseListPage",page);
+        model.addAttribute("customerId",customerId);
+        model.addAttribute("infoId",infoBrowseAndTurnSearch.getInfoId());
         return "info/info_browse";
     }
 
