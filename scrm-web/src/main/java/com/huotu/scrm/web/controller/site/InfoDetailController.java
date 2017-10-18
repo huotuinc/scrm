@@ -59,7 +59,7 @@ public class InfoDetailController extends SiteBaseController {
         int turnNum = infoBrowseService.countByTurn(infoId);
         model.addAttribute("infoTurnNum", turnNum);
         int browse = (type == 0) ? (infoBrowseService.countByBrowse(infoId)) :
-                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,sourceUserId))
+                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,userId))
                 ;
         model.addAttribute("browseNum", browse);
         model.addAttribute("customerId", customerId);
@@ -70,7 +70,11 @@ public class InfoDetailController extends SiteBaseController {
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
         infoBrowseAndTurnSearch.setInfoId(infoId);
-        infoBrowseAndTurnSearch.setSourceUserId(userId);
+        if(type == 0){
+            infoBrowseAndTurnSearch.setSourceUserId(sourceUserId);
+        }else {
+            infoBrowseAndTurnSearch.setSourceUserId(userId);
+        }
         Page<InfoBrowse> page;
         if(type==0){
             page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
