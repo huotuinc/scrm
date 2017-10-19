@@ -128,14 +128,14 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
     List<InfoBrowse> findForwardNumBySourceUserId(LocalDateTime beginTime, LocalDateTime endTime, Long userId);
 
     /**
-     * 查询某个用户转发的咨询
+     * 查询某个用户转发的资讯
      *
      * @param userId
      * @return
      */
-    @Query("select distinct t.infoId from InfoBrowse t where t.sourceUserId =?1")
-    List<Long> findUserForwardInfo(Long userId);
-
+    @Query("select new com.huotu.scrm.service.entity.info.InfoBrowse(t.infoId,t.sourceUserId,min (t.browseTime)) from InfoBrowse t " +
+            "group by t.infoId,t.sourceUserId having t.sourceUserId =?1 order by min (t.browseTime) desc")
+    List<InfoBrowse> findUserForwardInfo(Long userId);
 
     /**
      * 查询咨询的转发量

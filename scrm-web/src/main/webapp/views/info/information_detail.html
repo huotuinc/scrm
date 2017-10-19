@@ -18,7 +18,9 @@
         .utext-content img {
             max-width: 100%;
             display: block;
+            margin: 0 auto;
         }
+        .utext-content p{clear: both;}
         .demos-title{ font-size: 24px; font-family:-apple-system-font,"Helvetica Neue","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height: 1.4;
             font-weight: 400; }
         .demos-header{ padding-top:10px; padding-bottom: 10px;}
@@ -112,8 +114,7 @@
 
             var infoId = $(obj).attr("infoId");
             var customerId = $(obj).attr("customerId");
-            window.location.href = "infoDetailBrowse?infoId="+infoId+"&customerId="+customerId+"&type="+type+"&userId="
-            +sourceUserId;
+            window.location.href = "infoDetailBrowse?infoId="+infoId+"&customerId="+customerId+"&type="+type;
         }
     }
 </script>

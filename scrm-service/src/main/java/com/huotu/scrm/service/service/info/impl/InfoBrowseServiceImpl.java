@@ -46,7 +46,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         if (count == 0) {
             InfoConfigure infoConfigure = infoConfigureRepository.findOne(customerId);
             //转发开关
-            if (infoConfigure.isRewardSwitch()) {
+            if (infoConfigure !=null && infoConfigure.isRewardSwitch()) {
                 //转发能获取的积分
                 int score = infoConfigure.getRewardScore();
                 //转发奖励限制开启
@@ -59,8 +59,11 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
                 } else {
                     addMallScore(customerId, infoBrowse, infoConfigure, score);
                 }
+
             }
+
             flag = true;
+
         } else {
             InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
                     infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());

@@ -5,6 +5,7 @@ import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.common.utils.Constant;
 import com.huotu.scrm.common.utils.DateUtil;
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.entity.report.DayReport;
@@ -65,17 +66,26 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         } else {//小伙伴
             infoList = infoRepository.findByCustomerIdAndIsExtendTrueAndIsDisableFalseOrderByCreateTimeDesc(user.getCustomerId());
         }
-        return getInfoModes(infoList,user,false);
+        return getInfoModes(infoList, user, false);
     }
 
     @Override
     public List<InfoModel> findForwardInfo(User user) {
-        List<Long> infoIdList = infoBrowseRepository.findUserForwardInfo(user.getId());
-        if (infoIdList.isEmpty()) {
+        List<InfoBrowse> infoBrowseList = infoBrowseRepository.findUserForwardInfo(user.getId());
+        if (infoBrowseList.isEmpty()) {
             return new ArrayList<>();
         }
+        List<Long> infoIdList = infoBrowseList.stream().map(InfoBrowse::getInfoId).collect(Collectors.toList());
         List<Info> infoList = infoRepository.findInfoList(infoIdList);
-        return getInfoModes(infoList,user,true);
+        List<Info> resultList = new ArrayList<>();
+        for (Long infoId : infoIdList) {
+            for (Info info : infoList) {
+                if (info.getId() == infoId) {
+                    resultList.add(info);
+                }
+            }
+        }
+        return getInfoModes(resultList, user, true);
     }
 
     @Override
@@ -285,9 +295,9 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * @param status
      * @return
      */
-    private int getVisitorNum(Long infoId,User user,boolean status) {
-        if(status){
-            return infoBrowseRepository.countByInfoIdAndSourceUserId(infoId,user.getId());
+    private int getVisitorNum(Long infoId, User user, boolean status) {
+        if (status) {
+            return infoBrowseRepository.countByInfoIdAndSourceUserId(infoId, user.getId());
         }
         return infoBrowseRepository.countByInfoId(infoId);
     }
@@ -368,10 +378,10 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
      * 获取资讯model
      *
      * @param infoList 资讯列表
-     * @param user 用户
+     * @param user     用户
      * @return
      */
-    private List<InfoModel> getInfoModes(List<Info> infoList,User user,boolean status) {
+    private List<InfoModel> getInfoModes(List<Info> infoList, User user, boolean status) {
         List<InfoModel> infoModels = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         infoList.forEach(info -> {
@@ -382,7 +392,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
             infoModel.setIntroduce(info.getIntroduce());
             infoModel.setThumbnailImageUrl(info.getImageUrl());
             infoModel.setForwardNum(getInfoForwardNum(info.getId()));
-            infoModel.setVisitorNum(getVisitorNum(info.getId(),user,status));
+            infoModel.setVisitorNum(getVisitorNum(info.getId(), user, status));
             infoModel.setReleaseTime(DateUtil.compareLocalDateTime(info.getCreateTime(), now));
             infoModels.add(infoModel);
         });

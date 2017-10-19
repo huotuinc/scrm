@@ -104,6 +104,11 @@ public class InfoBrowse {
         this.infoId = infoId;
         this.sourceUserId = sourceUserId;
     }
+    public InfoBrowse(Long infoId,Long sourceUserId, LocalDateTime browseTime) {
+        this.infoId = infoId;
+        this.sourceUserId = sourceUserId;
+        this.browseTime = browseTime;
+    }
 
     public InfoBrowse(Long infoId, Long sourceUserId, LocalDateTime turnTime, String imgUrl, String wxNickName,String nickName) {
         this.infoId = infoId;
