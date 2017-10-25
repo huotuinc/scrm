@@ -80,7 +80,7 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         List<Info> resultList = new ArrayList<>();
         for (Long infoId : infoIdList) {
             for (Info info : infoList) {
-                if (info.getId() == infoId) {
+                if (infoId.equals(info.getId())) {
                     resultList.add(info);
                 }
             }
