@@ -19,6 +19,7 @@
 <body class="gray-bg" data-unitTest="false" data-prototype="true">
 <!--/*@thymesVar id="infoBrowseListPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.InfoBrowse>"*/-->
 <!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
+<!--/*@thymesVar id="infoId" type="java.lang.Long"*/-->
 <!--/*@thymesVar id="infoBrowseAndTurnSearch" type="com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch"*/-->
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <div class="row">
@@ -30,8 +31,8 @@
                     </div>
 
                     <div style="text-align:right;">
-                        <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-edit" type="button"
-                                th:attr="infoId=0">导出EXCEL
+                        <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-downloadBrowse" type="button"
+                                th:attr="infoId=0" th:data-infoId="${infoId}">导出EXCEL
                         </button>
                     </div>
 
@@ -174,6 +175,11 @@
             window.location.href = "/mall/info/browseRecord?customerId="+customerId+"&pageNo="+p+"&infoId="+infoId;
         },
     }
+
+    $(".js-downloadBrowse").click(function () {
+        var href = "/mall/info/downloadBrowse?customerId="+customerId+"&infoId="+infoId;
+        window.open(href);
+    });
 
 </script>
 </body>

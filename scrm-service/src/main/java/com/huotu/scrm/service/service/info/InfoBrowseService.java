@@ -2,10 +2,12 @@ package com.huotu.scrm.service.service.info;
 
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
+import com.huotu.scrm.service.model.mall.UserModel;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * Created by luohaibo on 2017/7/12.
@@ -37,6 +39,8 @@ public interface InfoBrowseService {
      * @return
      */
     Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
+
+    List<UserModel> infoBrowseRecordList(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch);
 
     /**
      * 删除浏览记录

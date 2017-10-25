@@ -16,7 +16,7 @@
     <!--datetimepick-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
-
+<!--/*@thymesVar id="customerId" type="java.lang.Long"*/-->
 <body class="gray-bg" data-unitTest="false" data-prototype="true" th:attr="customerId=${customerId}">
 <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
 <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
@@ -33,6 +33,7 @@
                 <form class="search-panel" method="get" action="#" th:action="@{/mall/info/infoList(${customerId})}" id="searchForm">
                     <!--用来传递页码-->
                     <input type="hidden" name="pageNo" value="1" th:value="${informationSearch.pageNo}"/>
+                    <input type="hidden" id="customerId" th:value="${customerId}">
                     <div class="ibox-content p-m no-borders">
                         <div class="form-inline ">
                             <div class="form-group m-r-sm">
@@ -47,8 +48,8 @@
                                 <input type="text" id="publishTimeJs" class="search-panel" style="width: 200px"
                                        placeholder="开始时间-结束时间" required/>
                                 <!--资讯筛选开始时间-->
-                                <input type="hidden" id="infoStartDate" name="startDate" value=""/>
-                                <input type="hidden" id="infoEndDate" name="endDate" value=""/>
+                                <input type="hidden" id="infoStartDate" name="startDate" value="" th:value="${informationSearch.startDate}"/>
+                                <input type="hidden" id="infoEndDate" name="endDate" value="" th:value="${informationSearch.endDate}"/>
                             </div>
 
                             <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
@@ -72,7 +73,7 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
-                        <button id="outInfoDataJs" class="btn btn-sm btn-w-m btn-success js-edit" type="button"
+                        <button id="outInfoDataJs" class="btn btn-sm btn-w-m btn-success js-download" type="button"
                                 th:attr="infoId=0">导出EXCEL
                         </button>
 
@@ -328,6 +329,12 @@
             }, function (result) {
                 hot.confirm("删除异常,请稍后再试");
             }, 'post');
+        },
+
+        download: function () {
+            var href = "/mall/info/download?customerId=" + $("#customerId").val() + "&searchCondition=" + $("#searchCondition").val()
+                + "&startDate=" + $("#infoStartDate").val() + "&endDate=" + $("#infoEndDate").val();
+            window.open(href);
         }
     }
 
@@ -342,6 +349,10 @@
     $('.js-edit').click(function () {
         infoListHandler.editInfo(this);
     });
+
+    $('.js-download').click(function () {
+        infoListHandler.download();
+    })
 </script>
 </body>
 

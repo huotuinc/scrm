@@ -126,4 +126,10 @@ public class User {
      */
     @Column(name="UB_MobileToBeBind")
     private Integer mobileToBeBind;
+
+    /**
+     * 所属上线id
+     */
+    @Column(name = "UB_BelongOne")
+    private Integer belongOne;
 }

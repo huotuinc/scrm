@@ -33,5 +33,11 @@ public interface InfoRepository extends JpaRepository<Info, Long>, JpaSpecificat
 
     @Query("select t from Info t where t.id  in ?1 order by t.createTime desc ")
     List<Info> findInfoList(List<Long> infoIdList);
+
+    /*@Query("SELECT i.title, i.introduce, i.createTime, i.isStatus, i.isExtend, count(*) AS infoBrowseNum\n" +
+            "FROM SCRM_Info i LEFT JOIN SCRM_InfoBrowseLog b ON i.id = b.infoId\n" +
+            "WHERE i.customerId = ?1 and i.title like CONCAT('%',?2,'%') and i.Create_Time >= ?3 AND i.Create_Time <= ?4 \n" +
+            "GROUP BY  i.Title, i.Introduce, i.Create_Time, i.Status, i.Extend")
+    List<Info> queryInfoWithBrower();*/
 }
 

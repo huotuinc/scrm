@@ -1,6 +1,7 @@
 package com.huotu.scrm.service.repository.info;
 
 import com.huotu.scrm.service.entity.info.InfoBrowse;
+import com.huotu.scrm.service.model.mall.UserModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -42,6 +43,13 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
             "from InfoBrowse t left join User u  on  u.id = t.readUserId " +
             "where t.infoId=?1 and t.customerId=?2 and t.browseDisable=false ")
     Page<InfoBrowse> findAllBrowseRecord(Long infoId, Long customerId, Pageable pageable);
+
+    @Query("select new com.huotu.scrm.service.model.mall.UserModel(u.wxNickName, t.browseTime, uc.wxNickName, ul.level) " +
+            "from InfoBrowse t left join User u on  u.id = t.readUserId" +
+            " left join User uc on u.belongOne = uc.id" +
+            " left join UserLevel ul on uc.levelId= ul.id " +
+            "where t.infoId=?1 and t.customerId=?2 and t.browseDisable=false ")
+    List<UserModel> findAllBrowseRecordList(Long infoId, Long customerId);
 
 
     /**
