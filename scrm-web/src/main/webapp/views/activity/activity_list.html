@@ -214,7 +214,7 @@
                 if (res.code == 200) {
                     window.location.reload();
                 } else {
-                    hot.tip.error("启用失败");
+                    hot.tip.error(res.msg);
                 }
             })
         },
