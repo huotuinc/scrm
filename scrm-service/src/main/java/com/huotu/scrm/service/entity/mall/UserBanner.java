@@ -33,7 +33,7 @@ public class UserBanner {
     /**
      * 商户号
      */
-    @Column(name = "Custom_Id")
+    @Column(name = "MUB_CustomerId")
     private Long customerId;
 
     @Column(name = "MUB_Order")
