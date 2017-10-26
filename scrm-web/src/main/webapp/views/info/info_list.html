@@ -16,7 +16,7 @@
     <!--datetimepick-->
     <link href="http://resali.huobanplus.com/cdn/hotui/css/plugins/datetimepick/daterangepicker.css" rel="stylesheet"/>
 </head>
-
+<!--/*@thymesVar id="customerId" type="java.lang.Long"*/-->
 <body class="gray-bg" data-unitTest="false" data-prototype="true" th:attr="customerId=${customerId}">
 <!--/*@thymesVar id="infoListsPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.Info>"*/-->
 <!--/*@thymesVar id="info" type="com.huotu.scrm.service.entity.info.Info"*/-->
@@ -33,6 +33,7 @@
                 <form class="search-panel" method="get" action="#" th:action="@{/mall/info/infoList(${customerId})}" id="searchForm">
                     <!--用来传递页码-->
                     <input type="hidden" name="pageNo" value="1" th:value="${informationSearch.pageNo}"/>
+                    <input type="hidden" id="customerId" th:value="${customerId}">
                     <div class="ibox-content p-m no-borders">
                         <div class="form-inline ">
                             <div class="form-group m-r-sm">
@@ -40,9 +41,20 @@
                                 <input type="text" class="form-control input-sm mb10" id="searchCondition"
                                        name="searchCondition"
                                        th:value="${informationSearch.searchCondition}" placeholder="资讯标题"/>
-                                <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
-                                <button type="button" class="btn btn-sm  btn-success js-searchAll">显示全部</button>
                             </div>
+
+                            <div class="orm-group m-r-sm" style="margin-top: 5px">
+                                <label class="control-label" for="searchCondition">资讯发布时间：</label>
+                                <input type="text" id="publishTimeJs" class="search-panel" style="width: 200px"
+                                       placeholder="开始时间-结束时间" required/>
+                                <!--资讯筛选开始时间-->
+                                <input type="hidden" id="infoStartDate" name="startDate" value="2017-10-23 00:00:00" th:value="${informationSearch.startDate}"/>
+                                <input type="hidden" id="infoEndDate" name="endDate" value="2017-10-27 00:00:00" th:value="${informationSearch.endDate}"/>
+                            </div>
+
+                            <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
+                            <button type="button" class="btn btn-sm  btn-success js-searchAll">显示全部</button>
+
                         </div>
                     </div>
                 </form>
@@ -61,10 +73,15 @@
                     </div>
                     <!--添加资讯按钮-->
                     <div style="text-align:right;">
+                        <button id="outInfoDataJs" class="btn btn-sm btn-w-m btn-success js-download" type="button"
+                                th:attr="infoId=0">导出EXCEL
+                        </button>
+
                         <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-edit" type="button"
                                 th:attr="infoId=0">添加资讯
                         </button>
                     </div>
+
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
@@ -75,6 +92,7 @@
                                 <th>创建时间</th>
                                 <th>发布状态</th>
                                 <th>推广状态</th>
+                                <th>浏览量</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -114,6 +132,9 @@
                                 </td>
                                 <td th:style="${info.isStatus()}?'color:green':'color:red;'" th:text="${info.isStatus()?'发布':'未发布'}">未发布</td>
                                 <td th:style="${info.isExtend()}?'color:green':'color:red;'" th:text="${info.isExtend()?'是':'否'}">是</td>
+                                <td th:text="${info.infoBrowseNum}">
+                                    1
+                                </td>
                                 <td>
                                     <span class="cursor-point" onclick="infoListHandler.editInfo(this)"
                                           th:attr="infoId=${info.id}">
@@ -212,10 +233,39 @@
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-validate.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/SearchableSelect/jquery.searchableSelect.js"></script>
 <script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/hot/bootstrap.hot.extra-init.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/moment.js"></script>
+<script src="http://resali.huobanplus.com/cdn/hotui/js/plugins/datetimepick/daterangepicker.js"></script>
 
 <script type="text/javascript">
     var pageIndex = [[${informationSearch.pageNo}]];
     var totalPage = [[${infoListsPage.totalPages}]];
+
+
+    $("#publishTimeJs").on('cancel.daterangepicker', function () {
+        $("#publishTimeJs").val("");
+        $("#infoStartDate").val("");
+        $("#infoEndDate").val("");
+    });
+
+    $('#publishTimeJs').on('apply.daterangepicker', function (ev, picker) {
+        $('#infoStartDate').val(picker.startDate.format('YYYY-MM-DD HH:mm:ss'));
+        $('#infoStartDate').val(start.format('YYYY-MM-DD HH:mm:ss'));
+        $("#endDate").val(picker.endDate.format('YYYY-MM-DD HH:mm:ss'));
+    });
+
+
+    $('#publishTimeJs').daterangepicker({
+        locale: {
+            format: 'YYYY-MM-DD',
+            daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        },
+    }, function(start, end, label) {
+        console.log("New date range selected: " + start.format('YYYY-MM-DD') + " to " + end.format('YYYY-MM-DD') + " (predefined range: " + label + ")");
+        $('#infoStartDate').val(start.format('YYYY-MM-DD HH:mm:ss'));
+        $("#infoEndDate").val(end.format('YYYY-MM-DD HH:mm:ss'));
+    });
+    
     //初始化分页
     var pageinate = new hot.paging(".pagination", pageIndex, totalPage, 7);
 
@@ -254,7 +304,7 @@
 
         turnList: function (obj) {
             var infoId = $(obj).attr("infoId");
-            hot.iframeModal("/mall//info/turnRecord?infoId=" + infoId+'&customerId='+customerId,"750px","700px");
+            hot.iframeModal("/mall/info/turnRecord?infoId=" + infoId+'&customerId='+customerId,"750px","700px");
         },
 
         browseList: function (obj) {
@@ -263,8 +313,6 @@
         },
 
         deleteInfo: function (obj) {
-
-
             var infoId = $(obj).attr("infoId");
             hot.ajax("/mall/info/deleteInfo", {
                 id: infoId,
@@ -281,6 +329,12 @@
             }, function (result) {
                 hot.confirm("删除异常,请稍后再试");
             }, 'post');
+        },
+
+        download: function () {
+            var href = "/mall/info/download?customerId=" + $("#customerId").val() + "&searchCondition=" + $("#searchCondition").val()
+                + "&startDate=" + $("#infoStartDate").val() + "&endDate=" + $("#infoEndDate").val();
+            window.open(href);
         }
     }
 
@@ -295,6 +349,10 @@
     $('.js-edit').click(function () {
         infoListHandler.editInfo(this);
     });
+
+    $('.js-download').click(function () {
+        infoListHandler.download();
+    })
 </script>
 </body>
 

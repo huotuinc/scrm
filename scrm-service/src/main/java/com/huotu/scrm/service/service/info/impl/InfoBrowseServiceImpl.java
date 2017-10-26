@@ -5,6 +5,7 @@ import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
+import com.huotu.scrm.service.model.mall.UserModel;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
@@ -59,11 +60,8 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
                 } else {
                     addMallScore(customerId, infoBrowse, infoConfigure, score);
                 }
-
             }
-
             flag = true;
-
         } else {
             InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
                     infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());
@@ -118,6 +116,11 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     public Page<InfoBrowse> infoBrowseRecord(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
         Pageable pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, infoBrowseAndTurnSearch.getPageSize());
         return infoBrowseRepository.findAllBrowseRecord(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), pageable);
+    }
+
+    @Override
+    public List<UserModel> infoBrowseRecordList(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        return infoBrowseRepository.findAllBrowseRecordList(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId());
     }
 
     @Override

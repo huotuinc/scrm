@@ -16,52 +16,56 @@
     <title>浏览记录</title>
 </head>
 <style>
-    .log-list {
-        padding: 20px;
-    }
 
-    .log-list li {
-        width: 23%;
+
+
+    .log-list.more li {
+        width: 14%;
         margin: 1%;
         float: left;
         text-align: center;
     }
-    .log-list li:nth-child(4n+1){ clear: both}
-    .log-img {
-        border-radius: 50px;
-        width: 60px;
-        height: 60px;
+    .more.log-list li:nth-child(7n+1){ clear: both}
+    .more .log-img {
+        border-radius: 100px;
+        width: 40px;
+        height: 40px;
     }
 
-    .log-name {
+    .more .log-name {
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         text-align: center;
-        width: 60px;
+        width: 40px; display: none;
         font-size: 12px; line-height: 1.2;
         margin: 0 auto;
     }
+    .log-list {
+        padding: 20px;
+    }
 
-    .imgkl{ width: 100%; margin: 0 auto; text-align: center}
+.imgkl{ width: 100%; margin: 0 auto; text-align: center}
     .imgkl img{ width: 100%; display: block}
-
 </style>
 <body class="grbg">
 <!--/*@thymesVar id="headImages" type="java.lang.List<scrm.service.entity.info.InfoBrowse>"*/-->
 <!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
 <!--/*@thymesVar id="browseNum" type="java.lang.Integer"*/-->
+<p style="text-align: center;padding: 10px;">已有<i style="color:red" th:text="${browseNum}">1401</i>人浏览该文章</p>
+
+<!--/*@thymesVar id="banner" type="com.huotu.scrm.service.entity.mall.UserBanner"*/-->
 <div class="imgkl">
     <img th:src="${banner.image}" th:href="${banner.linkUrl}">
 </div>
-<p style="text-align: center;padding: 10px;">已有<i style="color:red" th:text="${browseNum}">1401</i>人浏览该文章</p>
-<div class="log-list">
+
+<div class="log-list more">
     <ul class="log-ul" th:remove="all-but-first">
         <li class="lig-li" th:each="infoBrowse : ${headImages}" >
             <p><img class="log-img" src="../../resources/images/mrtx.jpg" th:src="${infoBrowse.imgUrl} != null ? ${infoBrowse.imgUrl} :'../../resources/images/mrtx.jpg'"></p>
-            <!--<p class="log-name" th:text="${infoBrowse.nickName}">昵称昵称昵称昵称昵称</p>-->
+            <p class="log-name" th:text="${infoBrowse.nickName}">昵称昵称昵称昵称昵称</p>
         </li>
         <li class="lig-li">
             <p><img class="log-img" src="../../resources/images/mrtx.jpg"></p>

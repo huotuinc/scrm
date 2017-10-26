@@ -253,6 +253,16 @@ public abstract class CommonTestBase extends SpringWebTest {
         infoBrowse.setBrowseTime(LocalDateTime.now());
         return infoBrowseRepository.saveAndFlush(infoBrowse);
     }
+
+    protected InfoBrowse mockInfoBrowse2(Long infoId, Long readUserId, Long customerId) {
+        InfoBrowse infoBrowse = new InfoBrowse();
+        infoBrowse.setInfoId(infoId);
+        infoBrowse.setSourceUserId(Long.valueOf(String.valueOf(random.nextInt())));
+        infoBrowse.setReadUserId(readUserId);
+        infoBrowse.setCustomerId(customerId);
+        infoBrowse.setBrowseTime(LocalDateTime.now());
+        return infoBrowseRepository.saveAndFlush(infoBrowse);
+    }
     protected InfoConfigure mockInfoConfigure(Long customerId, boolean exchangeSwitch, int type,int rate, boolean exchangeLimitSwitch, int dayExchangeLimit) {
         InfoConfigure infoConfigure = new InfoConfigure();
         infoConfigure.setCustomerId(customerId);
