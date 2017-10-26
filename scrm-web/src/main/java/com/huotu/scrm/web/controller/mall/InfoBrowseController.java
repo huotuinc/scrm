@@ -148,7 +148,7 @@ public class InfoBrowseController extends MallBaseController{
             LocalDateTime browseTime = userModel.getBrowseTime();
             mapValue.put("browseTime",browseTime == null? "": browseTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
             mapValue.put("belongOneNickName",userModel.getBelongOneNickName());
-            mapValue.put("belongOneLevel", userModel.getBelongOneLevel());
+            mapValue.put("belongOneLevel", userModel.getBelongOneLevelName());
             listmap.add(mapValue);
         }
         return listmap;
