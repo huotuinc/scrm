@@ -3,11 +3,13 @@ package com.huotu.scrm.web.controller.site;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
+import com.huotu.scrm.service.entity.mall.UserBanner;
 import com.huotu.scrm.service.exception.ApiResultException;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.info.InfoBrowseService;
 import com.huotu.scrm.service.service.info.InfoService;
+import com.huotu.scrm.service.service.mall.UserBannerService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -41,7 +42,8 @@ public class InfoDetailController extends SiteBaseController {
     private InfoBrowseService infoBrowseService;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private UserBannerService userBannerService;
 
     @RequestMapping(value = "/info/infoDetail")
     public String infoDetail(@ModelAttribute("userId") Long userId,
@@ -111,12 +113,19 @@ public class InfoDetailController extends SiteBaseController {
         Page<InfoBrowse> page;
         if(type==0){
             page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+
         }else {
             page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
         }
-
+        UserBanner userBanner = userBannerService.findUserBanner(customerId);
+        model.addAttribute("banner",userBanner);
         model.addAttribute("headImages", page.getContent());
-        return "info/browse_log";
+        if (type == 0){
+            return "info/browse_log";
+        }else {
+            return "info/browse_log_name";
+        }
+
     }
 
     /**

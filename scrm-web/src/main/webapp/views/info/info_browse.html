@@ -44,6 +44,8 @@
                                 <th>头像</th>
                                 <th>昵称</th>
                                 <th>浏览时间</th>
+                                <th>上线昵称</th>
+                                <th>上线等级</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -55,6 +57,8 @@
                                 </td>
                                 <td th:text="${infoBrowse.nickName}"></td>
                                 <td  th:text="${#temporals.format(infoBrowse.browseTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
+                                <td th:text="${infoBrowse.belongNickName}"> </td>
+                                <td th:text="${infoBrowse.belongLevel}"> </td>
                                 <td>
                                     <span onclick="infoListHandler.deleteBrowseRecord(this)" th:attr="infoId=${infoBrowse.infoId},readUserId=${infoBrowse.readUserId},
                                     sourceUserId=${infoBrowse.sourceUserId}"

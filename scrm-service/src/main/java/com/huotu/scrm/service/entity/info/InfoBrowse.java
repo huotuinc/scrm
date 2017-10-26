@@ -86,6 +86,21 @@ public class InfoBrowse {
     @Transient
     private String nickName;
 
+
+    /**
+     * 用户上线的昵称
+     */
+    @Transient
+    private String belongNickName;
+
+
+    /**
+     * 用户上线的level
+     */
+    @Transient
+    private String belongLevel;
+
+
     @Override
     public String toString() {
         return "InfoBrowse{" +
@@ -113,7 +128,9 @@ public class InfoBrowse {
         this.nickName = StringUtils.isEmpty(wxNickName) ? nickName : wxNickName;
     }
 
-    public InfoBrowse(Long infoId, Long sourceUserId, Long readUserId, LocalDateTime browseTime, String imgUrl, String wxNickName,String nickName, Long customerId) {
+
+    public InfoBrowse(Long infoId, Long sourceUserId, Long readUserId, LocalDateTime browseTime, String imgUrl, String wxNickName,String nickName, Long customerId
+                       ) {
         this.infoId = infoId;
         this.sourceUserId = sourceUserId;
         this.readUserId = readUserId;
@@ -121,7 +138,24 @@ public class InfoBrowse {
         this.imgUrl = imgUrl;
         this.nickName = StringUtils.isEmpty(wxNickName) ? nickName : wxNickName;
         this.customerId = customerId;
+
     }
+
+
+    public InfoBrowse(Long infoId, Long sourceUserId, Long readUserId, LocalDateTime browseTime, String imgUrl, String wxNickName,String nickName, Long customerId,
+                  String belongNickName, String belongLevel) {
+        this.infoId = infoId;
+        this.sourceUserId = sourceUserId;
+        this.readUserId = readUserId;
+        this.browseTime = browseTime;
+        this.imgUrl = imgUrl;
+        this.nickName = StringUtils.isEmpty(wxNickName) ? nickName : wxNickName;
+        this.customerId = customerId;
+        this.belongNickName = belongNickName;
+        this.belongLevel = belongLevel;
+
+    }
+
 
     public InfoBrowse() {
 
