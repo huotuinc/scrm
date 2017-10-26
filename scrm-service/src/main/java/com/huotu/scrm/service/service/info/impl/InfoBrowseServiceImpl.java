@@ -151,7 +151,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         if (infoBrowseAndTurnSearch.getSourceType() == 0) {
             pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 6);
         } else {
-            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 12);
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 150);
         }
         return infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), pageable);
 
@@ -163,7 +163,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         if (infoBrowseAndTurnSearch.getSourceType() == 0) {
             pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 6);
         } else {
-            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 12);
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 150);
         }
         return infoBrowseRepository.findAllBrowseRecordBySourceUserIdByLimit(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), infoBrowseAndTurnSearch.getSourceUserId(),pageable);
     }

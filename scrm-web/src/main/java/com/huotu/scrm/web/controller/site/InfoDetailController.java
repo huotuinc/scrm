@@ -109,6 +109,9 @@ public class InfoDetailController extends SiteBaseController {
                 ;
         model.addAttribute("browseNum", browse);
 
+
+
+
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(1);
@@ -124,10 +127,13 @@ public class InfoDetailController extends SiteBaseController {
         UserBanner userBanner = userBannerService.findUserBanner(customerId);
         model.addAttribute("banner",userBanner);
         model.addAttribute("headImages", page.getContent());
-        if (type == 0){
-            return "info/browse_log";
-        }else {
+
+        UserType  userType = userRepository.findUserTypeById(userId);
+
+        if (userType == UserType.buddy){
             return "info/browse_log_name";
+        }else {
+            return "info/browse_log";
         }
 
     }
