@@ -53,7 +53,7 @@
 <!--/*@thymesVar id="headImages" type="java.lang.List<scrm.service.entity.info.InfoBrowse>"*/-->
 <!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
 <!--/*@thymesVar id="browseNum" type="java.lang.Integer"*/-->
-<div class="imgkl">
+<div class="imgkl" th:if="${banner != null}">
     <img th:src="${banner.image}" th:href="${banner.linkUrl}">
 </div>
 <p style="text-align: center;padding: 10px;">已有<i style="color:red" th:text="${browseNum}">1401</i>人浏览该文章</p>
@@ -61,7 +61,7 @@
     <ul class="log-ul" th:remove="all-but-first">
         <li class="lig-li" th:each="infoBrowse : ${headImages}" >
             <p><img class="log-img" src="../../resources/images/mrtx.jpg" th:src="${infoBrowse.imgUrl} != null ? ${infoBrowse.imgUrl} :'../../resources/images/mrtx.jpg'"></p>
-            <!--<p class="log-name" th:text="${infoBrowse.nickName}">昵称昵称昵称昵称昵称</p>-->
+            <p class="log-name" th:text="${infoBrowse.nickName}">昵称昵称昵称昵称昵称</p>
         </li>
         <li class="lig-li">
             <p><img class="log-img" src="../../resources/images/mrtx.jpg"></p>

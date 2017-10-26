@@ -25,7 +25,7 @@
         float: left;
         text-align: center;
     }
-    .more.log-list li:nth-child(7n+1){ clear: both}
+    .more.log-list li:nth-child(6n+1){ clear: both}
     .more .log-img {
         border-radius: 100px;
         width: 40px;
@@ -65,7 +65,7 @@
     <ul class="log-ul" th:remove="all-but-first">
         <li class="lig-li" th:each="infoBrowse : ${headImages}" >
             <p><img class="log-img" src="../../resources/images/mrtx.jpg" th:src="${infoBrowse.imgUrl} != null ? ${infoBrowse.imgUrl} :'../../resources/images/mrtx.jpg'"></p>
-            <p class="log-name" th:text="${infoBrowse.nickName}">昵称昵称昵称昵称昵称</p>
+            <!--<p class="log-name" th:text="${infoBrowse.nickName}">昵称昵称昵称昵称昵称</p>-->
         </li>
         <li class="lig-li">
             <p><img class="log-img" src="../../resources/images/mrtx.jpg"></p>
@@ -91,7 +91,18 @@
             <p><img class="log-img" src="../../resources/images/mrtx.jpg"></p>
             <p class="log-name">昵称昵称昵称昵称昵称</p>
         </li>
-
+        <li class="lig-li">
+            <p><img class="log-img" src="../../resources/images/mrtx.jpg"></p>
+            <p class="log-name">昵称昵称昵称昵称昵称</p>
+        </li>
+        <li class="lig-li">
+            <p><img class="log-img" src="../../resources/images/mrtx.jpg"></p>
+            <p class="log-name">昵称昵称昵称昵称昵称</p>
+        </li>
+        <li class="lig-li">
+            <p><img class="log-img" src="../../resources/images/mrtx.jpg"></p>
+            <p class="log-name">昵称昵称昵称昵称昵称</p>
+        </li>
 
     </ul>
     <p style="clear:both;"></p>

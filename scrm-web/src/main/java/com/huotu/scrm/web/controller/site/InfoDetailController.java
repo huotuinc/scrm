@@ -130,10 +130,11 @@ public class InfoDetailController extends SiteBaseController {
 
         UserType  userType = userRepository.findUserTypeById(userId);
 
-        if (userType == UserType.buddy){
-            return "info/browse_log_name";
-        }else {
+        if (type == 1){
             return "info/browse_log";
+
+        }else {
+            return "info/browse_log_name";
         }
 
     }
