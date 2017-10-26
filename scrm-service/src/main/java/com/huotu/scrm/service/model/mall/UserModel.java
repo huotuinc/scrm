@@ -30,10 +30,15 @@ public class UserModel {
      */
     private int belongOneLevel;
 
-    public UserModel(String wxNickName, LocalDateTime browseTime, String belongOneNickName, int belongOneLevel) {
+    /**
+     * 所属上线等级名称
+     */
+    private String belongOneLevelName;
+
+    public UserModel(String wxNickName, LocalDateTime browseTime, String belongOneNickName, String belongOneLevelName) {
         this.wxNickName = wxNickName;
         this.browseTime = browseTime;
         this.belongOneNickName = belongOneNickName;
-        this.belongOneLevel = belongOneLevel;
+        this.belongOneLevelName = belongOneLevelName;
     }
 }

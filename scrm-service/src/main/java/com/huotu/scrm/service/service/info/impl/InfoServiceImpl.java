@@ -141,6 +141,7 @@ public class InfoServiceImpl implements InfoService {
             sql.append(" and i.createTime >= :startDate AND i.createTime <= :endDate ");
         }
         sql.append("GROUP BY  i.title, i.introduce, i.createTime, i.isStatus, i.isExtend ");
+        sql.append("ORDER BY i.createTime DESC ");
         Query query = entityManager.createQuery(sql.toString());
         query.setParameter("customerId", informationSearch.getCustomerId());
         if (!StringUtils.isEmpty(informationSearch.getSearchCondition()))

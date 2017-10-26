@@ -45,7 +45,7 @@ public interface InfoBrowseRepository extends JpaRepository<InfoBrowse, Long>, J
             "where t.infoId=?1 and t.customerId=?2 and t.browseDisable=false ")
     Page<InfoBrowse> findAllBrowseRecord(Long infoId, Long customerId, Pageable pageable);
 
-    @Query("select new com.huotu.scrm.service.model.mall.UserModel(u.wxNickName, t.browseTime, uc.wxNickName, ul.level) " +
+    @Query("select new com.huotu.scrm.service.model.mall.UserModel(u.wxNickName, t.browseTime, uc.wxNickName, ul.levelName) " +
             " from InfoBrowse t left join User u on  u.id = t.readUserId" +
             " left join User uc on u.belongOne = uc.id" +
             " left join UserLevel ul on uc.levelId= ul.id " +
