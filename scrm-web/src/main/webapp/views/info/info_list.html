@@ -48,8 +48,8 @@
                                 <input type="text" id="publishTimeJs" class="search-panel" style="width: 200px"
                                        placeholder="开始时间-结束时间" required/>
                                 <!--资讯筛选开始时间-->
-                                <input type="hidden" id="infoStartDate" name="startDate" value="2017-10-23 00:00:00" th:value="${informationSearch.startDate}"/>
-                                <input type="hidden" id="infoEndDate" name="endDate" value="2017-10-27 00:00:00" th:value="${informationSearch.endDate}"/>
+                                <input type="hidden" id="infoStartDate" name="startDate" value="2017-10-23 00:00:00" th:value="${informationSearch.startDate} ? ${#temporals.format(informationSearch.startDate, 'yyyy-MM-dd HH:mm:ss')}:''"/>
+                                <input type="hidden" id="infoEndDate" name="endDate" value="2017-10-27 00:00:00" th:value="${informationSearch.endDate}? ${#temporals.format(informationSearch.endDate, 'yyyy-MM-dd HH:mm:ss')}:''"/>
                             </div>
 
                             <button type="button" class="btn btn-sm btn-success js-search">筛选</button>
