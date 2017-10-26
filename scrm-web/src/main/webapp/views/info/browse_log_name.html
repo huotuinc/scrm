@@ -57,7 +57,7 @@
 <p style="text-align: center;padding: 10px;">已有<i style="color:red" th:text="${browseNum}">1401</i>人浏览该文章</p>
 
 <!--/*@thymesVar id="banner" type="com.huotu.scrm.service.entity.mall.UserBanner"*/-->
-<div class="imgkl">
+<div class="imgkl" th:if="${banner != null}">
     <img th:src="${banner.image}" th:href="${banner.linkUrl}">
 </div>
 
