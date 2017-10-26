@@ -99,8 +99,10 @@ public class InfoBrowseController extends MallBaseController{
         List<UserModel> userModelList = infoBrowseService.infoBrowseRecordList(infoBrowseAndTurnSearch);
         String fileName = "资讯浏览记录列表";
         List<Map<String, Object>> mapList = createExcelRecord(userModelList);
-        String columnNames[]={"微信昵称","浏览时间","所属上线昵称","所属上线等级"};//列名
-        String keys[]    =     {"wxNickName","browseTime","belongOneNickName","belongOneLevel"};//map中的key
+        //列名
+        String [] columnNames={"微信昵称","浏览时间","所属上线昵称","所属上线等级"};
+        //map中的key
+        String [] keys ={"wxNickName","browseTime","belongOneNickName","belongOneLevel"};
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             ExcelUtil.createWorkBook(mapList,keys,columnNames).write(os);
