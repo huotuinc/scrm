@@ -125,7 +125,12 @@ public class InfoDetailController extends SiteBaseController {
             page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
         }
         UserBanner userBanner = userBannerService.findUserBanner(customerId);
-        model.addAttribute("banner",userBanner);
+        if (!StringUtils.isEmpty(userBanner.getImage())) {
+            userBanner.setImage(staticResourceService.getResource(StaticResourceService.huobanmallMode, userBanner.getImage()).toString());
+            userBanner.setLinkUrl(staticResourceService.getResource(StaticResourceService.huobanmallMode, userBanner.getLinkUrl()).toString());
+            model.addAttribute("banner",userBanner);
+        }
+
         model.addAttribute("headImages", page.getContent());
 
         UserType  userType = userRepository.findUserTypeById(userId);
