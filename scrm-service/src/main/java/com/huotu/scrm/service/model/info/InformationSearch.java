@@ -4,6 +4,10 @@ import com.huotu.scrm.common.utils.Constant;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -20,14 +24,10 @@ public class InformationSearch {
     private int pageSize = Constant.PAGE_SIZE;
     private String searchCondition;
     private Long customerId;
-    @Override
-    public String toString() {
-        return "InformationSearch{" +
-                "extend=" + extend +
-                ", status=" + status +
-                ", disable=" + disable +
-                ", pageNo=" + pageNo +
-                ", pageSize=" + pageSize +
-                '}';
-    }
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startDate;
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime  endDate;
+
+
 }

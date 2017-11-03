@@ -1,6 +1,10 @@
 package com.huotu.scrm.web.controller.mall;
 
 import com.huotu.scrm.service.entity.info.Info;
+import com.huotu.scrm.service.entity.info.InfoBrowse;
+import com.huotu.scrm.service.entity.mall.Customer;
+import com.huotu.scrm.service.entity.mall.User;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.web.CommonTestBase;
 import org.junit.Assert;
@@ -10,9 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,6 +127,58 @@ public class InfoControllerTest extends CommonTestBase {
     @Test
     public void deleteInfo() throws Exception {
 
+    }
+
+    @Test
+    public void downloadToExcel() throws Exception {
+        //模拟资讯
+        Info info1 = mockInfo(customerId);
+        Info info2 = mockInfo(customerId);
+        //模拟用户等级
+        UserLevel userLevel = mockUserLevel(customerId, null, true);
+        //模拟用户
+        User user1 = mockUser(customerId, userLevel);
+        User user2 = mockUser(customerId, userLevel);
+        User user3 = mockUser(customerId, userLevel);
+        //模拟浏览记录
+        InfoBrowse infoBrowse1 = mockInfoBrowse2(info1.getId(), user1.getId(), customerId);
+        InfoBrowse infoBrowse2 = mockInfoBrowse2(info1.getId(), user2.getId(), customerId);
+        InfoBrowse infoBrowse3 = mockInfoBrowse2(info2.getId(), user3.getId(), customerId);
+
+        byte[] contentAsByteArray = mockMvc.perform(post("/mall/info/download")
+                .param("customerId", customerId.toString())
+        )
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsByteArray();
+
+
+        File dir = new File("D:\\");
+        if (!dir.exists() && dir.isDirectory()) {//判断文件目录是否存在
+            dir.mkdirs();
+        }
+        File file = new File(dir + "资讯列表.xls");
+        FileOutputStream fos = new FileOutputStream(file);
+        BufferedOutputStream bos = new BufferedOutputStream(fos);
+        bos.write(contentAsByteArray);
+        bos.flush();
+
+        //模拟时间不在查询范围内的资讯
+        Info info3 = mockInfo(customerId);
+        info3.setCreateTime(LocalDateTime.now().plusMonths(-3));
+        info3 = infoRepository.saveAndFlush(info3);
+        byte[] contentAsByteArray2 = mockMvc.perform(post("/mall/info/download")
+                .param("customerId", customerId.toString())
+                .param("startDate", "2017-10-22 00:00:00")
+                .param("endDate", "2017-10-27 00:00:00")
+        )
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsByteArray();
+
+        File file2 = new File(dir + "资讯列表2.xls");
+        fos = new FileOutputStream(file2);
+        bos = new BufferedOutputStream(fos);
+        bos.write(contentAsByteArray2);
+        bos.flush();
     }
 
 }

@@ -54,4 +54,6 @@ public class InfoModel implements Serializable {
      * 发布时间距现在多少时间（默认小时数，超过24小时提示天数）
      */
     private String releaseTime;
+
+
 }

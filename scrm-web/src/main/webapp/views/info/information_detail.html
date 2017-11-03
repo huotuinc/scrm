@@ -108,6 +108,7 @@
 <script th:src="@{/api/infoShare.js(customerId=${customerId},infoId=${info.id},sourceUserId=${userId})}"></script>
 <script th:inline="javascript">
     var type = /*[[${type}]]*/ "0";
+    var baseUrl = /*[[@{/}]]*/ "/";
     var sourceUserId = /*[[${sourceUserId}]]*/ "1";
     var infoListHandler = {
         seeMore:function (obj) {

@@ -57,7 +57,9 @@ public class Info {
     @Column(name = "Image")
     private String imageUrl;
 
-    @Transient
+
+
+    @Transient //不存入数据库的注解
     private String mallImageUrl;
 
 
@@ -96,11 +98,11 @@ public class Info {
     private boolean isDisable;
 
 
-//    /**
-//     * 资讯点赞数量
-//     */
-//    @Column(name = "Good_Num")
-//    private int goodNum;
+    /**
+     * 资讯浏览量
+     */
+    @Transient //不存入数据库的注解
+    private int infoBrowseNum;
 
 
 }
