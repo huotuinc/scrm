@@ -76,7 +76,7 @@ public class DayReportServiceTest extends CommonTestBase {
     public void testGetMonthVisitorNum() {
         LocalDate now = LocalDate.now();
         Info info = mockInfo(customer.getId());
-        mockDayReport(userBuddy, 1, 1, 1, now.withDayOfMonth(random.nextInt(LocalDate.now().getDayOfMonth())));
+        mockDayReport(userBuddy, 1, 1, 1, now.minusDays(random.nextInt(LocalDate.now().getDayOfMonth())));
         mockDayReport(userBuddy, 2, 2, 2, now.minusDays(random.nextInt(LocalDate.now().getDayOfMonth())));
         mockInfoBrowse(info.getId(), userBuddy.getId(), userBuddy.getId(), customer.getId());
         int monthVisitorNum = dayReportService.getMonthVisitorNum(userBuddy);
