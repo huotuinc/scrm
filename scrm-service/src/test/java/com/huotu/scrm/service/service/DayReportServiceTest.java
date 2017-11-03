@@ -76,8 +76,8 @@ public class DayReportServiceTest extends CommonTestBase {
     public void testGetMonthVisitorNum() {
         LocalDate now = LocalDate.now();
         Info info = mockInfo(customer.getId());
-        mockDayReport(userBuddy, 1, 1, 1, now.withDayOfMonth(1));
-        mockDayReport(userBuddy, 2, 2, 2, now.minusDays(1));
+        mockDayReport(userBuddy, 1, 1, 1, now.withDayOfMonth(random.nextInt(LocalDate.now().getDayOfMonth())));
+        mockDayReport(userBuddy, 2, 2, 2, now.minusDays(random.nextInt(LocalDate.now().getDayOfMonth())));
         mockInfoBrowse(info.getId(), userBuddy.getId(), userBuddy.getId(), customer.getId());
         int monthVisitorNum = dayReportService.getMonthVisitorNum(userBuddy);
         Assert.assertEquals(4, monthVisitorNum);
@@ -89,9 +89,9 @@ public class DayReportServiceTest extends CommonTestBase {
     @Test
     public void testGetMonthEstimateScore() {
         LocalDate now = LocalDate.now();
-        mockDayReport(userBuddy, 1, 1, 1, now.minusDays(1));
-        mockDayReport(userBuddy, 1, 1, 2, now.minusDays(2));
-        mockDayReport(userBuddy, 1, 1, 3, now.minusDays(3));
+        mockDayReport(userBuddy, 1, 1, 1, now.minusDays(random.nextInt(LocalDate.now().getDayOfMonth())));
+        mockDayReport(userBuddy, 1, 1, 2, now.minusDays(random.nextInt(LocalDate.now().getDayOfMonth())));
+        mockDayReport(userBuddy, 1, 1, 3, now.minusDays(random.nextInt(LocalDate.now().getDayOfMonth())));
         int monthEstimateScore = dayReportService.getMonthEstimateScore(userBuddy);
         Assert.assertEquals(6, monthEstimateScore);
     }
