@@ -5,6 +5,7 @@ import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
 import com.huotu.scrm.service.entity.info.InfoConfigure;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
+import com.huotu.scrm.service.model.mall.UserModel;
 import com.huotu.scrm.service.repository.info.InfoBrowseRepository;
 import com.huotu.scrm.service.repository.info.InfoConfigureRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
@@ -59,11 +60,8 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
                 } else {
                     addMallScore(customerId, infoBrowse, infoConfigure, score);
                 }
-
             }
-
             flag = true;
-
         } else {
             InfoBrowse infoBrowseData = infoBrowseRepository.findOneByInfoIdAndSourceUserIdAndReadUserId(infoBrowse.getInfoId(),
                     infoBrowse.getSourceUserId(), infoBrowse.getReadUserId());
@@ -121,6 +119,11 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
     }
 
     @Override
+    public List<UserModel> infoBrowseRecordList(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
+        return infoBrowseRepository.findAllBrowseRecordList(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId());
+    }
+
+    @Override
     public int updateInfoBrowse(InfoBrowseAndTurnSearch infoBrowseAndTurnSearch) {
 
         return infoBrowseRepository.updateBrowseInfo(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getReadUserId(), infoBrowseAndTurnSearch.getSourceUserId(), true);
@@ -148,7 +151,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         if (infoBrowseAndTurnSearch.getSourceType() == 0) {
             pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 6);
         } else {
-            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 12);
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 150);
         }
         return infoBrowseRepository.findAllBrowseRecordByLimit(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), pageable);
 
@@ -160,7 +163,7 @@ public class InfoBrowseServiceImpl implements InfoBrowseService {
         if (infoBrowseAndTurnSearch.getSourceType() == 0) {
             pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 6);
         } else {
-            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 12);
+            pageable = new PageRequest(infoBrowseAndTurnSearch.getPageNo() - 1, 150);
         }
         return infoBrowseRepository.findAllBrowseRecordBySourceUserIdByLimit(infoBrowseAndTurnSearch.getInfoId(), infoBrowseAndTurnSearch.getCustomerId(), infoBrowseAndTurnSearch.getSourceUserId(),pageable);
     }

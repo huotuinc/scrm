@@ -47,6 +47,11 @@ public interface InfoService {
      */
     Page<Info> infoList(InformationSearch informationSearch);
 
+    /**
+     * 查询所有的资讯列表及记录总数
+     */
+    List<Object[]> queryInfoWithBrowse(InformationSearch informationSearch);
+
 
     /**
      * jpa 自带可以不用自己写  saveAndFlush

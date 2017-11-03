@@ -19,6 +19,7 @@
 <body class="gray-bg" data-unitTest="false" data-prototype="true">
 <!--/*@thymesVar id="infoBrowseListPage" type="org.springframework.data.domain.Page<com.huotu.scrm.service.entity.info.InfoBrowse>"*/-->
 <!--/*@thymesVar id="infoBrowse" type="com.huotu.scrm.service.entity.info.InfoBrowse"*/-->
+<!--/*@thymesVar id="infoId" type="java.lang.Long"*/-->
 <!--/*@thymesVar id="infoBrowseAndTurnSearch" type="com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch"*/-->
 <div class="wrapper wrapper-content animated fadeInRight tooltip-demo">
     <div class="row">
@@ -28,6 +29,13 @@
                     <div>
                         <label class="">资讯浏览列表</label>
                     </div>
+
+                    <div style="text-align:right;">
+                        <button id="btnAddArticle" class="btn btn-sm btn-w-m btn-success js-downloadBrowse" type="button"
+                                th:attr="infoId=0" th:data-infoId="${infoId}">导出EXCEL
+                        </button>
+                    </div>
+
                     <div class="panel-body">
                         <table class="table table-bordered table-hover table-center">
                             <thead>
@@ -36,6 +44,8 @@
                                 <th>头像</th>
                                 <th>昵称</th>
                                 <th>浏览时间</th>
+                                <th>上线昵称</th>
+                                <th>上线等级</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
@@ -47,6 +57,8 @@
                                 </td>
                                 <td th:text="${infoBrowse.nickName}"></td>
                                 <td  th:text="${#temporals.format(infoBrowse.browseTime, 'yyyy-MM-dd HH:mm:ss')}">2017-07-12 12:12:34</td>
+                                <td th:text="${infoBrowse.belongNickName}"> </td>
+                                <td th:text="${infoBrowse.belongLevel}"> </td>
                                 <td>
                                     <span onclick="infoListHandler.deleteBrowseRecord(this)" th:attr="infoId=${infoBrowse.infoId},readUserId=${infoBrowse.readUserId},
                                     sourceUserId=${infoBrowse.sourceUserId}"
@@ -167,6 +179,11 @@
             window.location.href = "/mall/info/browseRecord?customerId="+customerId+"&pageNo="+p+"&infoId="+infoId;
         },
     }
+
+    $(".js-downloadBrowse").click(function () {
+        var href = "/mall/info/downloadBrowse?customerId="+customerId+"&infoId="+infoId;
+        window.open(href);
+    });
 
 </script>
 </body>
