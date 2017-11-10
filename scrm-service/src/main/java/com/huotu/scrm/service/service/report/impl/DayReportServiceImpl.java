@@ -87,7 +87,13 @@ public class DayReportServiceImpl implements DayReportService {
             if (userLevel == null) {
                 continue;
             }
-            log.info("用户编号userId："+sourceUserId);
+            log.info("用户编号userId：" + sourceUserId);
+            //判断之前是否有记录。有的话不执行
+            DayReport report = dayReportRepository.findByUserIdAndReportDay(user.getId(), lastDay);
+            if (report != null) {
+                log.info("数据库中已有记录");
+                continue;
+            }
             //昨日咨询转发量
             int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTime, todayBeginTime, sourceUserId).size();
             //昨日访客量（uv）
@@ -286,10 +292,10 @@ public class DayReportServiceImpl implements DayReportService {
         userIdList.forEach((Long userId) -> {
             User user = userRepository.findOne(userId);
             int visitorScore = getVisitorScore(user, lastBeginTime, todayBeginTime);
-            log.info("用户浏览积分："+visitorScore);
+            log.info("用户浏览积分：" + visitorScore);
             try {
                 if (visitorScore > 0) {
-                    log.info("用户编号userId："+userId);
+                    log.info("用户编号userId：" + userId);
                     apiService.rechargePoint(user.getCustomerId(), user.getId(), (long) visitorScore, IntegralTypeEnum.BROWSE_INFO);
                 }
             } catch (UnsupportedEncodingException e) {
