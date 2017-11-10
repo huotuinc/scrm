@@ -71,6 +71,7 @@ public class DayReportServiceImpl implements DayReportService {
     @Transactional
     @Scheduled(cron = "0 15 0 * * *")
     public void saveDayReport() {
+        log.info("昨日信息统计：start");
         LocalDate today = LocalDate.now();
         LocalDate lastDay = today.minusDays(1);
         LocalDateTime todayBeginTime = today.atStartOfDay();
@@ -86,6 +87,7 @@ public class DayReportServiceImpl implements DayReportService {
             if (userLevel == null) {
                 continue;
             }
+            log.info("用户编号userId："+sourceUserId);
             //昨日咨询转发量
             int forwardNum = infoBrowseRepository.findForwardNumBySourceUserId(lastBeginTime, todayBeginTime, sourceUserId).size();
             //昨日访客量（uv）
@@ -116,6 +118,7 @@ public class DayReportServiceImpl implements DayReportService {
         setRanking(1, customerIdList, lastDay);
         //设置每日关注排名（默认设置前200名）
         setRanking(2, customerIdList, lastDay);
+        log.info("昨日信息统计：end");
     }
 
     /**
@@ -275,7 +278,7 @@ public class DayReportServiceImpl implements DayReportService {
     @Override
     @Scheduled(cron = "0 5 0 * * *")
     public void saveDayVisitorScore() {
-        log.info("每日统计浏览奖励积分开始");
+        log.info("每日统计浏览奖励积分：start");
         LocalDate today = LocalDate.now();
         LocalDateTime todayBeginTime = today.atStartOfDay();
         LocalDateTime lastBeginTime = todayBeginTime.minusDays(1);
@@ -286,12 +289,13 @@ public class DayReportServiceImpl implements DayReportService {
             log.info("用户浏览积分："+visitorScore);
             try {
                 if (visitorScore > 0) {
-                    log.info("浏览奖励积分记录成功！");
+                    log.info("用户编号userId："+userId);
                     apiService.rechargePoint(user.getCustomerId(), user.getId(), (long) visitorScore, IntegralTypeEnum.BROWSE_INFO);
                 }
             } catch (UnsupportedEncodingException e) {
                 log.error("每日浏览积分统计有误：" + e.getMessage());
             }
         });
+        log.info("每日统计浏览奖励积分：end");
     }
 }

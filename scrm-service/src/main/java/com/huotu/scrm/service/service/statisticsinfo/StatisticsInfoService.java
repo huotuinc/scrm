@@ -13,12 +13,21 @@ import java.time.LocalDate;
 public interface StatisticsInfoService {
     /**
      * 获取每日统计数据
+     *
      * @param searchCondition 查询条件
-     * @param pageIndex 页数
+     * @param pageIndex       页数
      * @return
      */
     Page<DayReport> getDayReportList(SearchCondition searchCondition, int pageIndex);
 
+
+    /**
+     * 重新统计用户的每日信息（积分、浏览量、排名等）没有放到后台页面中
+     *
+     * @param userId 用户编号
+     * @param date   日期
+     * @return
+     */
     @Transactional
-    boolean againStatistic(Long userId,LocalDate date);
+    boolean againStatistic(Long userId, LocalDate date);
 }
