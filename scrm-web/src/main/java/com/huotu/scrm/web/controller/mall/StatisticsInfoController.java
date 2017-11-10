@@ -38,6 +38,12 @@ public class StatisticsInfoController extends MallBaseController {
         return "statisticsinfo/statistics_info";
     }
 
+    /**
+     * 重新统计用户的每日信息（积分、浏览量、排名等）没有放到后台页面中
+     * @param userId 用户编号
+     * @param date 日期
+     * @return
+     */
     @RequestMapping("/Statistics/againStatistic")
     @ResponseBody
     public ApiResult againStatistic(Long userId, String date) {
