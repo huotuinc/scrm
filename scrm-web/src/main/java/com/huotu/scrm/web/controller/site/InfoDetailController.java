@@ -50,13 +50,17 @@ public class InfoDetailController extends SiteBaseController {
                              @RequestParam(value = "infoId") Long infoId,
                              @RequestParam(value = "customerId") Long customerId,
                              @RequestParam(value = "sourceUserId", required = false) Long sourceUserId,
-                             @RequestParam(value = "type", required = false,defaultValue = "0") int type,
+                             @RequestParam(value = "type", required = false, defaultValue = "0") int type,
                              Model model) throws URISyntaxException, ApiResultException {
         //获取用户类型
         UserType userType = userRepository.findUserTypeById(userId);
 
         Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
-        if(sourceUserId != null && sourceUserId !=0){
+        if (info == null || info.isDisable()){
+            return "info/info_delete.html";
+        }
+
+        if (sourceUserId != null && sourceUserId != 0) {
             infoTurnInRecord(infoId, userId, sourceUserId, customerId);
         }
         if (!StringUtils.isEmpty(info.getImageUrl())) {
@@ -66,31 +70,30 @@ public class InfoDetailController extends SiteBaseController {
         model.addAttribute("infoTurnNum", turnNum);
         //0 表示所以的 1 表示按某个人的
         int browse = (type == 0) ? (infoBrowseService.countByBrowse(infoId)) :
-                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,userId))
-                ;
+                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId, userId));
         model.addAttribute("browseNum", browse);
         model.addAttribute("customerId", customerId);
         model.addAttribute("sourceUserId", sourceUserId);
         model.addAttribute("userId", userId);
         model.addAttribute("info", info);
         //给前端传递用户类型
-        model.addAttribute("userType",userType);
+        model.addAttribute("userType", userType);
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
         infoBrowseAndTurnSearch.setCustomerId(customerId);
         infoBrowseAndTurnSearch.setSourceType(0);
         infoBrowseAndTurnSearch.setInfoId(infoId);
-        if(type == 0){
+        if (type == 0) {
             infoBrowseAndTurnSearch.setSourceUserId(sourceUserId);
-        }else {
+        } else {
             infoBrowseAndTurnSearch.setSourceUserId(userId);
         }
         Page<InfoBrowse> page;
-        if(type==0){
-            page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
-        }else {
-            page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
+        if (type == 0) {
+            page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        } else {
+            page = infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
         }
-        model.addAttribute("type",type);
+        model.addAttribute("type", type);
         model.addAttribute("headImages", page.getContent());
         return "info/information_detail";
     }
@@ -105,11 +108,8 @@ public class InfoDetailController extends SiteBaseController {
 
         //浏览记录
         int browse = (type == 0) ? (infoBrowseService.countByBrowse(infoId)) :
-                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId,userId))
-                ;
+                (infoBrowseService.countBrowseByInfoIdAndSourceUserId(infoId, userId));
         model.addAttribute("browseNum", browse);
-
-
 
 
         InfoBrowseAndTurnSearch infoBrowseAndTurnSearch = new InfoBrowseAndTurnSearch();
@@ -118,22 +118,22 @@ public class InfoDetailController extends SiteBaseController {
         infoBrowseAndTurnSearch.setInfoId(infoId);
         infoBrowseAndTurnSearch.setSourceUserId(userId);
         Page<InfoBrowse> page;
-        if(type==0){
-            page =  infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
+        if (type == 0) {
+            page = infoBrowseService.infoSiteBrowseRecord(infoBrowseAndTurnSearch);
 
-        }else {
-            page =  infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
+        } else {
+            page = infoBrowseService.infoSiteBrowseRecordBySourceUserId(infoBrowseAndTurnSearch);
         }
         UserBanner userBanner = userBannerService.findUserBanner(customerId);
         if (userBanner != null && !StringUtils.isEmpty(userBanner.getImage())) {
             userBanner.setImage(staticResourceService.getResource(StaticResourceService.huobanmallMode, userBanner.getImage()).toString());
-            model.addAttribute("banner",userBanner);
+            model.addAttribute("banner", userBanner);
         }
         model.addAttribute("headImages", page.getContent());
-        if (type == 1){
+        if (type == 1) {
             return "info/browse_log";
 
-        }else {
+        } else {
             return "info/browse_log_name";
         }
 
@@ -150,16 +150,22 @@ public class InfoDetailController extends SiteBaseController {
     private void infoTurnInRecord(Long infoId, Long userId,
                                   Long sourceUserId
             , Long customerId) {
-        InfoBrowse infoBrowse = new InfoBrowse();
-        infoBrowse.setSourceUserId(sourceUserId);
-        infoBrowse.setReadUserId(userId);
-        infoBrowse.setInfoId(infoId);
-        infoBrowse.setCustomerId(customerId);
-        try {
-            infoBrowseService.infoTurnInSave(infoBrowse, customerId);
-        } catch (UnsupportedEncodingException e) {
-            logger.error("添加积分失败", e);
+
+        //获取用户类型
+        UserType userType = userRepository.findUserTypeById(userId);
+        if (UserType.normal == userType) {
+            InfoBrowse infoBrowse = new InfoBrowse();
+            infoBrowse.setSourceUserId(sourceUserId);
+            infoBrowse.setReadUserId(userId);
+            infoBrowse.setInfoId(infoId);
+            infoBrowse.setCustomerId(customerId);
+            try {
+                infoBrowseService.infoTurnInSave(infoBrowse, customerId);
+            } catch (UnsupportedEncodingException e) {
+                logger.error("添加积分失败", e);
+            }
         }
+
     }
 
 

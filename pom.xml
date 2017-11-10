@@ -167,6 +167,12 @@
         </dependency>
         <!--LOG END-->
 
+        <dependency>
+            <groupId>org.apache.geronimo.javamail</groupId>
+            <artifactId>geronimo-javamail_1.4_mail</artifactId>
+            <version>1.7</version>
+        </dependency>
+
     </dependencies>
 
     <build>
