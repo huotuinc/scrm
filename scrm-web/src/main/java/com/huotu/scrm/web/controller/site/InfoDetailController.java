@@ -3,13 +3,17 @@ package com.huotu.scrm.web.controller.site;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.Info;
 import com.huotu.scrm.service.entity.info.InfoBrowse;
+import com.huotu.scrm.service.entity.mall.User;
 import com.huotu.scrm.service.entity.mall.UserBanner;
+import com.huotu.scrm.service.entity.mall.UserLevel;
 import com.huotu.scrm.service.exception.ApiResultException;
 import com.huotu.scrm.service.model.info.InfoBrowseAndTurnSearch;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.service.service.info.InfoBrowseService;
 import com.huotu.scrm.service.service.info.InfoService;
 import com.huotu.scrm.service.service.mall.UserBannerService;
+import com.huotu.scrm.service.service.mall.UserLevelService;
+import com.huotu.scrm.service.service.mall.UserService;
 import com.huotu.scrm.web.service.StaticResourceService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,6 +48,10 @@ public class InfoDetailController extends SiteBaseController {
     private UserRepository userRepository;
     @Autowired
     private UserBannerService userBannerService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private UserLevelService userLevelService;
 
     @RequestMapping(value = "/info/infoDetail")
     public String infoDetail(@ModelAttribute("userId") Long userId,
@@ -151,9 +159,11 @@ public class InfoDetailController extends SiteBaseController {
                                   Long sourceUserId
             , Long customerId) {
 
+
+        User user =  userService.getByIdAndCustomerId(userId,customerId);
+        UserLevel userLevel = userLevelService.findByLevelAndCustomerId(user.getLevelId(),customerId);
         //获取用户类型
-        UserType userType = userRepository.findUserTypeById(userId);
-        if (UserType.normal == userType) {
+        if (!userLevel.isSalesman()) {
             InfoBrowse infoBrowse = new InfoBrowse();
             infoBrowse.setSourceUserId(sourceUserId);
             infoBrowse.setReadUserId(userId);
