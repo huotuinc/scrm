@@ -12,7 +12,6 @@ package com.huotu.scrm.web.controller.api;
 import com.huotu.scrm.common.SysConstant;
 import com.huotu.scrm.common.ienum.UserType;
 import com.huotu.scrm.service.entity.info.Info;
-import com.huotu.scrm.service.exception.ApiResultException;
 import com.huotu.scrm.service.repository.info.InfoRepository;
 import com.huotu.scrm.service.repository.mall.UserRepository;
 import com.huotu.scrm.web.service.StaticResourceService;
@@ -71,7 +70,10 @@ public class ApiController {
             }
             model.setViewName("api/info_share.js");
             model.addObject("customerId", customerId);
-            model.addObject("info", info);
+            model.addObject("title",info.getTitle());
+            model.addObject("introduce",info.getIntroduce());
+            model.addObject("mallImageUrl",info.getMallImageUrl());
+//            model.addObject("info", info);
             model.addObject("domain", SysConstant.COOKIE_DOMAIN);
             if (!((readUserType == UserType.normal) && info.isStatus() && info.isExtend())) {
                 model.addObject("sourceUserId", sourceUserId);

@@ -12,7 +12,10 @@
  */
 <!--JSSDK分享接口BEGIN-->
 var domain = [[${domain}]],customerId= [[${customerId}]],sourceUserId= [[${sourceUserId}]];
-var info = eval([[${info}]]);
+var info = {};
+info.title=[[${title}]];
+info.introduce=[[${introduce}]];
+info.mallImageUrl=[[${mallImageUrl}]];
 //过滤单引号和回车
 info.title = info.title.replace('\'','');
 info.title = info.title.replace(/\s/g,'');
