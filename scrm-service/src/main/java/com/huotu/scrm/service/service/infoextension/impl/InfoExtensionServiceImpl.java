@@ -459,17 +459,19 @@ public class InfoExtensionServiceImpl implements InfoExtensionService {
         userIdList.forEach((Long userId) -> {
             //设置今日和本月预计积分(浏览+转发)
             User user = userRepository.findOne(userId);
-            int dayScore = dayReportService.getEstimateScore(user, todayBegin, now);
-            int monthScore = dayReportService.getMonthEstimateScore(user);
-            int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, todayBegin, now);
-            if (dayVisitorNum > 0) {
-                mapDayVisitorNum.put(userId, dayVisitorNum);
-            }
-            if (dayScore > 0) {
-                mapDayScore.put(userId, dayScore);
-            }
-            if (monthScore > 0) {
-                mapMonthScore.put(userId, monthScore);
+            if(user != null){
+                int dayScore = dayReportService.getEstimateScore(user, todayBegin, now);
+                int monthScore = dayReportService.getMonthEstimateScore(user);
+                int dayVisitorNum = infoBrowseRepository.countBySourceUserIdAndBrowseTimeBetween(userId, todayBegin, now);
+                if (dayVisitorNum > 0) {
+                    mapDayVisitorNum.put(userId, dayVisitorNum);
+                }
+                if (dayScore > 0) {
+                    mapDayScore.put(userId, dayScore);
+                }
+                if (monthScore > 0) {
+                    mapMonthScore.put(userId, monthScore);
+                }
             }
         });
         mapList.add(mapDayVisitorNum);

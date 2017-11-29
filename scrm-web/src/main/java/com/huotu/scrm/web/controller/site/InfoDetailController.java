@@ -65,7 +65,7 @@ public class InfoDetailController extends SiteBaseController {
 
         Info info = infoService.findOneByIdAndCustomerId(infoId, customerId);
         if (info == null || info.isDisable()){
-            return "info/info_delete.html";
+            return "info/info_delete";
         }
 
         if (sourceUserId != null && sourceUserId != 0) {
