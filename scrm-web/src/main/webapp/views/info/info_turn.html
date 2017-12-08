@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://security.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -161,6 +161,9 @@
                 }
             }, function () {
             }, 'post');
+        },
+        search:function(p){
+            window.location.href = "/mall/info/turnRecord?customerId="+customerId+"&pageNo="+p+"&infoId="+infoId;
         }
     }
 //
